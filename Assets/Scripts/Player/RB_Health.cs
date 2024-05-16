@@ -10,12 +10,22 @@ public class RB_Health : MonoBehaviour {
 
     public UnityEvent EventDeath;
 
-    public void TakeDamage(float amount) { 
-        _hp -= amount;
+    public void TakeDamage(float amount) {
+        if(_hp - amount > 0) {
+            _hp -= amount;
+        }
+        else { 
+            EventDeath.Invoke();
+        }
     }
 
-    public void Heal(float amount) { 
-        _hp += amount;
+    public void Heal(float amount) {
+        if(_hp + amount < _hpMax) {
+            _hp += amount;
+        }
+        else { 
+            _hp = _hpMax;
+        }
     }
     
     public void Heal() {

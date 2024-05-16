@@ -22,20 +22,39 @@ public enum SCENENAMES
     Boss3,
 }
 
+// ~~~~~~~~~~ TYPES ~~~~~~~~~~
+
 public enum FADETYPE
 {
     Fade,
+    Rift,
     BubbleOpen,
     WooshRight,
     WooshUp,
 }
 
- public enum HUDTYPE
+public enum ZOOMTYPES
+{
+    Linear,
+    FadeIn,
+    FadeOut,
+}
+
+public enum SPEEDTYPES
+{
+    Linear,
+    Exponential,
+    Logarithm,
+}
+
+public enum HUDTYPE
 {
     Level,
     Boss,
     Menu,
 }
+
+// ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES
 {

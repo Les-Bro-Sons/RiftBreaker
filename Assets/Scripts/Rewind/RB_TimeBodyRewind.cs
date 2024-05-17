@@ -9,9 +9,7 @@ public class RB_TimeBodyRewind : MonoBehaviour
     private bool _isRewinding = false;
 
     private Rigidbody _rb;
-    public  List<RB_PointInTime> _pointsInTime = new();
-
-
+    public  List<RB_PointInTime> PointsInTime = new();
     
 
     private void Start()
@@ -67,12 +65,12 @@ public class RB_TimeBodyRewind : MonoBehaviour
                 break;
             
             case ENTITYTYPES.Player:
-                if (_pointsInTime.Count > 0)
+                if (PointsInTime.Count > 0)
                 {
-                    RB_PointInTime pit = _pointsInTime[0];
+                    RB_PointInTime pit = PointsInTime[0];
                     transform.position = pit.Position;
                     transform.rotation = pit.Rotation;
-                    _pointsInTime.RemoveAt(0);
+                    PointsInTime.RemoveAt(0);
                 }
                 break;
                 
@@ -85,10 +83,10 @@ public class RB_TimeBodyRewind : MonoBehaviour
     private void Record()
     {
         // Si il y a deja "recordTime" points enregistres alors on enleve le plus ancien
-        if (_pointsInTime.Count > Mathf.Round(_recordTime / Time.fixedDeltaTime))
-            _pointsInTime.RemoveAt(_pointsInTime.Count - 1);
+        if (PointsInTime.Count > Mathf.Round(_recordTime / Time.fixedDeltaTime))
+            PointsInTime.RemoveAt(PointsInTime.Count - 1);
 
         // On ajoute un nouveau point
-        _pointsInTime.Insert(0, new RB_PointInTime(transform.position, transform.rotation));
+        PointsInTime.Insert(0, new RB_PointInTime(transform.position, transform.rotation));
     }
 }

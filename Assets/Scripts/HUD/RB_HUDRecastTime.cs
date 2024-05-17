@@ -6,6 +6,16 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class RB_HUDRecastTime : MonoBehaviour {
+    public enum RECASTTYPE
+    {
+        Dash,
+        AttackBase,
+        AttackCharged,
+        AttackSpecial
+    }
+
+    public RECASTTYPE Type;
+
     [SerializeField] TextMeshProUGUI _timerText;
     [SerializeField] Image _fillImage;
     [SerializeField] Image _displayCast;
@@ -21,10 +31,23 @@ public class RB_HUDRecastTime : MonoBehaviour {
         _multiplierFactor = 1f / _remainTime;
         _fillImage.fillAmount = 0;
         _timerText.text = "";
+        switch (Type) {
+            case RECASTTYPE.Dash:
+                RB_PlayerMovement.Instance.EventDash.AddListener(delegate { RecastTimerStart(RB_PlayerMovement.Instance.DashCooldown); });
+                break;
+            case RECASTTYPE.AttackBase:
+                break;
+            case RECASTTYPE.AttackCharged:
+                break;
+            case RECASTTYPE.AttackSpecial:
+                break;
+        }
+
     }
 
     //Initilisation du system de Recast Time
     public void RecastTimerStart(float timer) {
+        Debug.Log(timer);
         _multiplierFactor = 1f/timer;
         _remainTime = timer;
         _timerText.text = _remainTime.ToString();

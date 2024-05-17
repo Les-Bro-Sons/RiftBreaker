@@ -9,10 +9,7 @@ public class RB_HUDHourglass : MonoBehaviour {
         _animator = GetComponent<Animator>();
     }
 
-    public void ResetAnim() { 
-    
-    }
-
+    //Pour lancer le renversement du sablier
     public void StartAnim() {
         _animator.SetTrigger("IsReversed");
     }

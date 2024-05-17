@@ -4,7 +4,6 @@ public class RB_SpriteFadeOut : MonoBehaviour
 {
     //Dash fade out properties
     [HideInInspector] public float FadeForce;
-    private bool _isFading = false;
     
 
     //Components

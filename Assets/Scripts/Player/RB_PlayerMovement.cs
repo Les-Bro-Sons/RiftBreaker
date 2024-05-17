@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class RB_PlayerMovement : MonoBehaviour
 {
+    //Enums
+    public enum Direction { Up, Down, Left, Right}
+
     //Player movement properties
     [Header("Player movement properties")]
     [HideInInspector] public Vector3 LastDirection;
@@ -11,6 +14,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _movementMaxSpeed;
     [SerializeField] private float _movementFrictionForce;
     [SerializeField] private Vector3 _directionToMove;
+    public Direction ActualDirection;
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
     private bool _canMove = true;
@@ -73,6 +77,22 @@ public class RB_PlayerMovement : MonoBehaviour
     private void GetDirection(Vector3 direction)
     {
         _directionToMove = new Vector3(direction.x, 0, direction.y);
+
+        //setting the right direction in the state
+        if (Mathf.Abs(_directionToMove.x) > Mathf.Abs(_directionToMove.y))
+        {
+            if (_directionToMove.x > 0)
+                ActualDirection = Direction.Right;
+            else
+                ActualDirection = Direction.Left;
+        }
+        else
+        {
+            if (_directionToMove.z > 0)
+                ActualDirection = Direction.Up;
+            else
+                ActualDirection = Direction.Down;
+        }
         //Setting the direction to the player
         _transform.forward = _directionToMove;
     }
@@ -104,7 +124,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanMove()
     {
         //if is moving and not dashing
-        return _isMoving && !_isDashing && !_playerAction.IsAttacking;
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsAttacking;
     }
 
     private void SetSpeed()
@@ -191,8 +211,10 @@ public class RB_PlayerMovement : MonoBehaviour
         //Calling the speed calcul in real time
         SetSpeed();
 
+        
+
         //If the player can move
-        if(CanMove())
+        if (CanMove())
         {
             //Get the direction to move
             GetDirection(RB_InputManager.Instance.MoveValue);

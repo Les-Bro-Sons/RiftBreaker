@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 
 public class RB_TimeBodyRewind : MonoBehaviour
@@ -10,15 +9,20 @@ public class RB_TimeBodyRewind : MonoBehaviour
 
     private Rigidbody _rb;
     public  List<RB_PointInTime> PointsInTime = new();
-    
+
+    int _pointCountFrame = 0;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewind); //POUR TESTER
+        RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewind); //POUR TESTER
+
     }
 
     private void Update()
     {
+        Debug.Log($"_pointCountFrame : {_pointCountFrame}");
 
         // a mettre dans le player controller
 
@@ -71,6 +75,7 @@ public class RB_TimeBodyRewind : MonoBehaviour
                     transform.position = pit.Position;
                     transform.rotation = pit.Rotation;
                     PointsInTime.RemoveAt(0);
+                    _pointCountFrame--;
                 }
                 break;
                 
@@ -88,5 +93,6 @@ public class RB_TimeBodyRewind : MonoBehaviour
 
         // On ajoute un nouveau point
         PointsInTime.Insert(0, new RB_PointInTime(transform.position, transform.rotation));
+        _pointCountFrame++;
     }
 }

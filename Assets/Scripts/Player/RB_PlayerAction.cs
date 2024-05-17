@@ -19,25 +19,8 @@ public class RB_PlayerAction : MonoBehaviour
         _playerMovement = GetComponent<RB_PlayerMovement>();
 
     }
-    private void Start()
-    {
-        RB_InputManager.Instance.EventMovePerformed.AddListener(StartMove);
-        RB_InputManager.Instance.EventMoveCanceled.AddListener(StopMove);
-        RB_InputManager.Instance.EventDashStarted.AddListener(StartDash);
-    }
 
-    private void StartMove()
-    {
-        _playerMovement.StartMove();
-        print("start");
-    }
-
-    private void StopMove()
-    {
-        _playerMovement.StopMove();
-    }
-
-    private void StartDash()
+    public void StartDash()
     {
         if (_playerMovement.CanDash())
         {

@@ -7,35 +7,54 @@ public enum PHASES
 
 public enum SCENENAMES
 {
-    Level1, 
-    Level2, 
-    Level3, 
-    Level4, 
-    Level5, 
+    Level1,
+    Level2,
+    Level3,
+    Level4,
+    Level5,
     Level6,
-    Level7, 
-    Level8, 
-    Level9, 
+    Level7,
+    Level8,
+    Level9,
 
-    Boss1, 
-    Boss2, 
+    Boss1,
+    Boss2,
     Boss3,
 }
+
+// ~~~~~~~~~~ TYPES ~~~~~~~~~~
 
 public enum FADETYPE
 {
     Fade,
+    Rift,
     BubbleOpen,
     WooshRight,
     WooshUp,
 }
 
- public enum HUDTYPE
+public enum ZOOMTYPES
+{
+    Linear,
+    FadeIn,
+    FadeOut,
+}
+
+public enum SPEEDTYPES
+{
+    Linear,
+    Exponential,
+    Logarithm,
+}
+
+public enum HUDTYPE
 {
     Level,
     Boss,
     Menu,
 }
+
+// ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES
 {

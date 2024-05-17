@@ -29,17 +29,17 @@ public class RB_InputManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(transform.root.gameObject);
+            DontDestroyOnLoad(transform.root.gameObject); //make this object last parent don't destroy on load
         }
         else
         {
-            DestroyImmediate(gameObject);
+            DestroyImmediate(gameObject); //destroy if another RB_InputManager is already in the scene
         }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        MoveValue = context.ReadValue<Vector2>();
+        MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
             EventMoveStarted?.Invoke();
         else if (context.performed)

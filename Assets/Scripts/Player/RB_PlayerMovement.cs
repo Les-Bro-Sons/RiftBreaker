@@ -173,17 +173,14 @@ public class RB_PlayerMovement : MonoBehaviour
         
     }
 
-    private void Update()
-    {  
+    private void FixedUpdate()
+    {
         //Clamping the speed to the max speed
         ClampingSpeed();
 
         //Adding friction force
         FrictionForce();
-    }
 
-    private void FixedUpdate()
-    {
         //Calling the speed calcul in real time
         SetSpeed();
 

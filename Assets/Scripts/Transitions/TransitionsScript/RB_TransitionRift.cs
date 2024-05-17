@@ -5,64 +5,55 @@ using UnityEngine.UI;
 public class RB_TransitionRift : RB_Transition
 {
     [Header("Parameters")]
-    [SerializeField] private Image _imageFront;
-    [SerializeField] private Image _imageBackground;
-    public float _duration = 5f;
-    //private float fadeInDuration = FadeInTime > 0 ? FadeInTime : _duration;
-
-    void Awake()
-    {
-        if (_imageFront.color.a != 0)
-        {
-            Color newColor = _imageFront.color;
-            newColor.a = 0;
-            _imageFront.color = newColor;
-        }
-        if (_imageBackground.color.a != 0)
-        {
-            Color newColor = _imageBackground.color;
-            newColor.a = 0;
-            _imageBackground.color = newColor;
-        }
-    }
+    [SerializeField] private Material _material;
 
     void Start()
     {
-        StartCoroutine(Fade("SampleScene", _duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        _material.SetFloat("_MaskAmount", -0.1f);
+        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
     public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
     {
-        return base.Fade(nameScene, duration, speedType);
+        yield return new WaitForSeconds(1);
+
+        yield return StartCoroutine(FadeMaterial(_material, true, duration * 0.5f, speedType)); // Fade in for half the duration.
+        RB_SceneTransitionManager.Instance.NewScene(nameScene);
+
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+
+        RB_SceneTransitionManager.Instance.TransitionCanvas.worldCamera = Camera.main;
+
+
+        //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
+        //RZ_AudioSettings.Instance.InitAudio();
+
+        yield return StartCoroutine(FadeMaterial(_material, false, duration * 0.5f, speedType)); // Fade out for the remaining duration.
+
+        Destroy(gameObject);
     }
 
-    public override IEnumerator FadeIn(float duration, SPEEDTYPES speedType)
+    public override IEnumerator FadeImage(Image image, bool fadeIn, float duration, SPEEDTYPES speedType)
     {
-        float targetAlpha = 1f;
-        float startAlpha = _imageFront.color.a;
-        float startTime = Time.time;
-
-        while (_imageFront.color.a < 1f) // Continue fading in until the alpha is 1.
-        {
-            float elapsedTime = (Time.time - startTime) / duration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
-            _imageFront.color = new Color(_imageFront.color.r, _imageFront.color.g, _imageFront.color.b, newAlpha);
-            yield return null;
-        }
+        return base.FadeImage(image, fadeIn, duration, speedType);
     }
 
-    public override IEnumerator FadeOut(float duration, SPEEDTYPES speedType)
+    private IEnumerator FadeMaterial(Material material, bool fadeIn, float duration, SPEEDTYPES speedType)
     {
-        float targetAlpha = 0f;
-        float startAlpha = _imageFront.color.a;
+        float targetValue = fadeIn ? 0.7f : -.1f;
+        float maskAmount = material.GetFloat("_MaskAmount");
+        float startValue = maskAmount;
         float startTime = Time.time;
 
-        while (_imageFront.color.a > 0f) // Continue fading out until the alpha is 0.
+        while (Mathf.Abs(targetValue - maskAmount) > 0.01f)
         {
             float elapsedTime = (Time.time - startTime) / duration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
-            _imageFront.color = new Color(_imageFront.color.r, _imageFront.color.g, _imageFront.color.b, newAlpha);
+            maskAmount = Mathf.Lerp(startValue, targetValue, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime)); // avec le speed value
+            material.SetFloat("_MaskAmount", maskAmount);
             yield return null;
         }
+
+        material.SetFloat("_MaskAmount", targetValue);
     }
 }

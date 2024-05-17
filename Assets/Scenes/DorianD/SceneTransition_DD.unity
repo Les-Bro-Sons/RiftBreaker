@@ -397,9 +397,9 @@ Canvas:
   m_GameObject: {fileID: 1563992793}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 0.3
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -442,6 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a4858e149620448848ad5143ed9e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TransitionCanvas: {fileID: 0}
   SpeedType: 0
   FadeType: 1
   CurrentTransition: {fileID: 0}

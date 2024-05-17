@@ -6,7 +6,6 @@ public class RB_TransitionFade : RB_Transition
 {
     [Header("Parameters")]
     [SerializeField] private Image _fadeImage;
-    public float _duration = 5f;
     //private float fadeInDuration = FadeInTime > 0 ? FadeInTime : _duration;
 
     void Awake()
@@ -21,41 +20,27 @@ public class RB_TransitionFade : RB_Transition
 
     void Start()
     {
-        StartCoroutine(Fade("SampleScene", _duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
     public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
     {
-        return base.Fade(nameScene, duration, speedType);
+        yield return StartCoroutine(FadeImage(_fadeImage, true, duration * 0.5f, speedType)); // Fade in for half the duration.
+        RB_SceneTransitionManager.Instance.NewScene(nameScene);
+
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+
+        //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
+        //RZ_AudioSettings.Instance.InitAudio();
+
+        yield return StartCoroutine(FadeImage(_fadeImage, false, duration * 0.5f, speedType)); // Fade out for the remaining duration.
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+        Destroy(gameObject);
     }
 
-    public override IEnumerator FadeIn(float duration, SPEEDTYPES speedType)
+    public override IEnumerator FadeImage(Image image, bool fadeIn, float duration, SPEEDTYPES speedType)
     {
-        float targetAlpha = 1f;
-        float startAlpha = _fadeImage.color.a;
-        float startTime = Time.time;
-
-        while (_fadeImage.color.a < 1f) // Continue fading in until the alpha is 1.
-        {
-            float elapsedTime = (Time.time - startTime) / duration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
-            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, newAlpha);
-            yield return null;
-        }
-    }
-
-    public override IEnumerator FadeOut(float duration, SPEEDTYPES speedType)
-    {
-        float targetAlpha = 0f;
-        float startAlpha = _fadeImage.color.a;
-        float startTime = Time.time;
-
-        while (_fadeImage.color.a > 0f) // Continue fading out until the alpha is 0.
-        {
-            float elapsedTime = (Time.time - startTime) / duration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
-            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, newAlpha);
-            yield return null;
-        }
+        return base.FadeImage(image, fadeIn, duration, speedType);
     }
 }

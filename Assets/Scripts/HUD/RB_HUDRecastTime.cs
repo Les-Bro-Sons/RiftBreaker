@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class RB_HUDRecast : MonoBehaviour {
+public class RB_HUDRecastTime : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _timerText;
     [SerializeField] Image _fillImage;
     [SerializeField] Image _displayCast;
@@ -16,11 +16,14 @@ public class RB_HUDRecast : MonoBehaviour {
 
     public UnityEvent EventTimerEnd;
 
+    //Par Défaut le système de RecastTime (ou rechargement des compétences) n'est pas activé
     private void Start() {
         _multiplierFactor = 1f / _remainTime;
+        _fillImage.fillAmount = 0;
         _timerText.text = "";
     }
 
+    //Initilisation du system de Recast Time
     public void RecastTimerStart(float timer) {
         _multiplierFactor = 1f/timer;
         _remainTime = timer;
@@ -32,6 +35,7 @@ public class RB_HUDRecast : MonoBehaviour {
     void Update() { 
         if (!_isTimerStarted) { return; }
 
+        //Défilement du Recast Time
         if(_remainTime > 0f) {
             _displayCast.color = Color.gray;
             _remainTime -= Time.deltaTime;
@@ -43,6 +47,7 @@ public class RB_HUDRecast : MonoBehaviour {
         }
     }
 
+    //Fonction qui se fait appeler quand la compétence à totalement rechargé. 
     void RecastTimerEnd() {
         _timerText.text = "";
         EventTimerEnd?.Invoke();

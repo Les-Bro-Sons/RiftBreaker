@@ -9,7 +9,8 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }
     public float Armor;
 
-    [SerializeField] string _name; public string Name { get { return _name; } }
+    //Nom de l'entité qui possède le script
+    string _name; public string Name { get { return _name; } }
 
     public UnityEvent EventDeath;
     public UnityEvent EventTakeDamage;
@@ -17,10 +18,12 @@ public class RB_Health : MonoBehaviour {
 
 
 
-    void Awake() { 
+    void Awake() {
+        _name = gameObject.name;
         Heal();
     }
 
+    //Fonction de prise de dégâts
     public void TakeDamage(float amount) {
         if(_hp - amount > 0) {
             _hp -= amount;
@@ -32,6 +35,7 @@ public class RB_Health : MonoBehaviour {
         EventTakeDamage.Invoke();
     }
 
+    //Fonction de soin
     public void Heal(float amount) {
         if(_hp + amount > _hpMax) {
             _hp += amount;
@@ -42,11 +46,13 @@ public class RB_Health : MonoBehaviour {
         EventHeal.Invoke();
     }
     
+    //Fonction de soin Maximum
     public void Heal() {
         _hp = _hpMax;
         EventHeal.Invoke();
     }
 
+    //Permet d'empêcher que les pv soit supérieur au pv max
     void Update() {
         if(_hp > _hpMax) { 
             _hp = _hpMax;

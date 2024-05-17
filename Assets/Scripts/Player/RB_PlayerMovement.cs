@@ -9,6 +9,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _movementAcceleration;
     [SerializeField] private float _movementMaxSpeed;
     [SerializeField] private float _movementFrictionForce;
+    [SerializeField] private Vector3 _directionToMove;
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
     private bool _canMove = true;
@@ -47,10 +48,6 @@ public class RB_PlayerMovement : MonoBehaviour
     }
     private void Start()
     {
-        RB_InputManager.Instance.EventMovePerformed.AddListener(StartMove);
-        RB_InputManager.Instance.EventMoveCanceled.AddListener(StopMove);
-        RB_InputManager.Instance.EventDashStarted.AddListener(StartDash);
-        //Dash cooldown
         Invoke("DebugSpeed", 0);
     }
 
@@ -66,31 +63,41 @@ public class RB_PlayerMovement : MonoBehaviour
         _isMoving = false;
     }
 
-    //Moving the player
-    public void Move(Vector3 direction)
+    private void GetDirection(Vector3 direction)
     {
-        //Getting the direction of the movement
-        Vector3 directionToMove = new Vector3(direction.x, 0, direction.y);
-        if (_isMoving)
-        {
-            if (_canMove)
-            {
-                if(_currentVelocity.magnitude < _movementMaxSpeed)
-                {
-                    //Adding velocity to player
-                    _rb.AddForce(directionToMove * _movementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
-                }
-            }
-            //Setting the direction to the player
-            _transform.forward = directionToMove;
-        }
-        Vector3 frictionForce = (-_rb.velocity) * Time.fixedDeltaTime * _movementFrictionForce;
-        _rb.AddForce(new Vector3(frictionForce.x, 0, frictionForce.z)); //Friction force (stop the movement)
+        _directionToMove = new Vector3(direction.x, 0, direction.y);
+        //Setting the direction to the player
+        _transform.forward = _directionToMove;
+    }
 
+    private void ClampingSpeed()
+    {
         //Clamping to max speed in the x and z axes
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+    }
+
+    private void FrictionForce()
+    {
+        Vector3 frictionForce = (-_rb.velocity) * Time.fixedDeltaTime * _movementFrictionForce;
+        _rb.AddForce(new Vector3(frictionForce.x, 0, frictionForce.z)); //Friction force (stop the movement)
+    }
+
+    //Moving the player
+    public void Move()
+    {
+        if(_currentVelocity.magnitude < _movementMaxSpeed)
+        {
+            //Adding velocity to player
+            _rb.AddForce(_directionToMove * _movementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
+        }
+    }
+
+    public bool CanMove()
+    {
+        //if is moving and not dashing
+        return _isMoving && !_isDashing;
     }
 
     private void SetSpeed()
@@ -121,15 +128,12 @@ public class RB_PlayerMovement : MonoBehaviour
     public void StartDash()
     {
         //Starting dash
-        if (CanDash()){
-            _dashEndPos = _transform.position + _transform.forward * _dashDistance;
-            _dashDirection = _transform.forward;
-            _lastUsedDashTime = Time.time;
-            _isDashing = true;
-            //Starting dash animation
-            DashAnim();
-            _canMove = false;
-        }
+        _dashEndPos = _transform.position + _transform.forward * _dashDistance;
+        _dashDirection = _transform.forward;
+        _lastUsedDashTime = Time.time;
+        _isDashing = true;
+        //Starting dash animation
+        DashAnim();
     }
 
     
@@ -137,7 +141,6 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         //Stopping dash
         _isDashing = false;
-        _canMove = true;
     }
 
     public void Dash()
@@ -162,8 +165,21 @@ public class RB_PlayerMovement : MonoBehaviour
     private void DebugSpeed()
     {
         //Printing debug speed to screen
-        _debugSpeedText.text = ((int)_currentVelocity.magnitude).ToString();
-        Invoke("DebugSpeed", 0.1f);
+        if(_debugSpeedText != null)
+        {
+            _debugSpeedText.text = ((int)_currentVelocity.magnitude).ToString();
+            Invoke("DebugSpeed", 0.1f);
+        }
+        
+    }
+
+    private void Update()
+    {  
+        //Clamping the speed to the max speed
+        ClampingSpeed();
+
+        //Adding friction force
+        FrictionForce();
     }
 
     private void FixedUpdate()
@@ -171,8 +187,15 @@ public class RB_PlayerMovement : MonoBehaviour
         //Calling the speed calcul in real time
         SetSpeed();
 
-        //Call the movement function
-        Move(RB_InputManager.Instance.MoveValue);
+        //If the player can move
+        if(CanMove())
+        {
+            //Get the direction to move
+            GetDirection(RB_InputManager.Instance.MoveValue);
+
+            //Call the movement function
+            Move();
+        }
 
         //Call the dash function
         Dash();

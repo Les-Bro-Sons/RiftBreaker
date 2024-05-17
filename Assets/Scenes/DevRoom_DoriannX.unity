@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 743174432}
   - component: {fileID: 743174433}
   - component: {fileID: 743174434}
+  - component: {fileID: 743174435}
   m_Layer: 0
   m_Name: SpriteRenderer
   m_TagString: Untagged
@@ -499,6 +500,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &743174435
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743174431}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db10472cbf2f9ae43969450b1dbb9e5c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &756183942
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +939,7 @@ GameObject:
   - component: {fileID: 1767514889}
   - component: {fileID: 1767514888}
   - component: {fileID: 1767514890}
+  - component: {fileID: 1767514891}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -988,6 +1011,18 @@ MonoBehaviour:
   _dashSpeed: 20
   _dashDistance: 5
   _debugSpeedText: {fileID: 1861383140}
+--- !u!114 &1767514891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767514887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c25e5aec5670a419dc4c33dd57eadd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861383138
 GameObject:
   m_ObjectHideFlags: 0

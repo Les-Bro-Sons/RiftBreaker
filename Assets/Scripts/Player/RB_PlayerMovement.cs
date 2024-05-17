@@ -89,12 +89,17 @@ public class RB_PlayerMovement : MonoBehaviour
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
     }
 
-    public void SetSpeed()
+    private void SetSpeed()
     {
         //Calculating the real time speed
         _currentPosition = transform.position;
         _currentVelocity = (_currentPosition - _previousPosition) / Time.deltaTime;
         _previousPosition = _currentPosition;
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return _currentVelocity;
     }
 
     

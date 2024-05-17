@@ -35,6 +35,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
+    private RB_PlayerAction _playerAction;
 
     //Debug components
     [Header("Debug Components")]
@@ -50,6 +51,7 @@ public class RB_PlayerMovement : MonoBehaviour
         Instance = this;
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
+        _playerAction = GetComponent<RB_PlayerAction>();
     }
     private void Start()
     {
@@ -102,7 +104,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanMove()
     {
         //if is moving and not dashing
-        return _isMoving && !_isDashing;
+        return _isMoving && !_isDashing && !_playerAction.IsAttacking;
     }
 
     private void SetSpeed()

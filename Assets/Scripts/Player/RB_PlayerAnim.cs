@@ -4,13 +4,12 @@ using UnityEngine;
 public class RB_PlayerAnim : MonoBehaviour
 {
     //Components
-    Animator _playerAnimator;
+    [SerializeField] Animator _playerAnimator;
     RB_PlayerMovement _playerMovement;
     Transform _transform;
 
     private void Awake()
     {
-        _playerAnimator = GetComponentInChildren<Animator>();
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _transform = transform;
     }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class RB_PlayerAction : MonoBehaviour
 {
@@ -13,10 +14,12 @@ public class RB_PlayerAction : MonoBehaviour
 
     //Components
     private RB_PlayerMovement _playerMovement;
+    RB_Items _items;
 
     private void Awake()
     {
         _playerMovement = GetComponent<RB_PlayerMovement>();
+        _items = GetComponentInChildren<RB_Items>();
 
     }
 
@@ -33,8 +36,14 @@ public class RB_PlayerAction : MonoBehaviour
         if (CanAttack())
         {
             IsAttacking = true;
+            _items.Attack();
             //Attack
         }
+    }
+
+    public void StopAttack()
+    {
+        IsAttacking = false;
     }
 
     public void StartChargeAttack()
@@ -62,7 +71,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanAttack()
     {
         //If there's no cooldown left and is not attacking
-        return !(IsOnCooldown && (IsAttacking || IsChargingAttack));
+        return !IsAttacking;
     }
 
     public bool CanSpecialAttack()

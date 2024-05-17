@@ -22,6 +22,8 @@ public class RB_InputManager : MonoBehaviour
     public UnityEvent EventRewindStarted;
     public UnityEvent EventRewindCanceled;
 
+    public Vector2 MoveValue;
+
     private void Awake()
     {
         if (Instance == null)
@@ -37,6 +39,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        MoveValue = context.ReadValue<Vector2>();
         if (context.started)
             EventMoveStarted?.Invoke();
         else if (context.performed)

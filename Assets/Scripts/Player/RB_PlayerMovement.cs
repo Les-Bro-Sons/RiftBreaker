@@ -18,6 +18,10 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _dashCooldown;
     [SerializeField] private float _dashSpeed;
     [SerializeField] private float _dashDistance;
+    [SerializeField] private float _fadeOutInterval;
+    [SerializeField] private float _fadeForce;
+    [SerializeField] private float _zFadeOffset;
+    [SerializeField] private GameObject _spritePrefab;
     private Vector3 _dashEndPos;
     private Vector3 _dashDirection;
     private bool _canDash = true;
@@ -102,6 +106,17 @@ public class RB_PlayerMovement : MonoBehaviour
         return _currentVelocity;
     }
 
+    public void DashAnim()
+    {
+        //Create animation for dashing
+        if (_isDashing)
+        {
+            //Spawn a "white shadow" behind the player
+            GameObject spawnedSprite =  Instantiate(_spritePrefab, new Vector3(_transform.position.x, 1, _previousPosition.z + _zFadeOffset), Quaternion.identity);
+            spawnedSprite.GetComponent<RB_SpriteFadeOut>().FadeForce = _fadeForce;
+            Invoke("DashAnim", _fadeOutInterval);
+        }
+    }
     
     public void StartDash()
     {
@@ -111,6 +126,8 @@ public class RB_PlayerMovement : MonoBehaviour
             _dashDirection = _transform.forward;
             _lastUsedDashTime = Time.time;
             _isDashing = true;
+            //Starting dash animation
+            DashAnim();
             _canMove = false;
         }
     }

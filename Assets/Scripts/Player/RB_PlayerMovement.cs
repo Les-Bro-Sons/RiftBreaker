@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_PlayerMovement : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class RB_PlayerMovement : MonoBehaviour
 
     //Dash properties
     [Header("Dash properties")]
-    [SerializeField] private float _dashCooldown;
+    [SerializeField] private float _dashCooldown; public float DashCooldown { get { return _dashCooldown; } }
     [SerializeField] private float _dashSpeed;
     [SerializeField] private float _dashDistance;
     [SerializeField] private float _fadeOutInterval;
@@ -27,6 +28,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private bool _canDash = true;
     private bool _isDashing = false;
     private float _lastUsedDashTime = 0;
+    public UnityEvent EventDash;
 
     //Components
     [Header("Components")]
@@ -40,8 +42,11 @@ public class RB_PlayerMovement : MonoBehaviour
     //Debug properties
     private Vector3 _previousPosition;
     private Vector3 _currentPosition;
+
+    public static RB_PlayerMovement Instance;
     private void Awake()
-    {
+    {   
+        Instance = this;
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
     }
@@ -149,6 +154,7 @@ public class RB_PlayerMovement : MonoBehaviour
             if (Vector3.Distance(_rb.position, _dashEndPos) < 0.5f)
             {
                 StopDash();
+                EventDash.Invoke();
             }
         }
     }
@@ -162,7 +168,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private void DebugSpeed()
     {
         //Printing debug speed to screen
-        _debugSpeedText.text = ((int)_currentVelocity.magnitude).ToString();
+/*        _debugSpeedText.text = ((int)_currentVelocity.magnitude).ToString();*/
         Invoke("DebugSpeed", 0.1f);
     }
 

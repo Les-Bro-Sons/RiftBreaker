@@ -3,9 +3,9 @@ using UnityEngine;
 public class RB_PlayerAction : MonoBehaviour
 {
     //Conditions
-    public bool IsChargingAttack;
-    public bool IsAttacking;
-    public bool IsOnCooldown; //Cannot attack
+    [HideInInspector] public bool IsChargingAttack;
+    [HideInInspector] public bool IsAttacking;
+    [HideInInspector] public bool IsOnCooldown; //Cannot attack
 
 
     public float SpecialAttackCharge; //from 0 to 100

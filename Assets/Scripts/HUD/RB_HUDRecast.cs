@@ -11,32 +11,32 @@ public class RB_HUDRecast : MonoBehaviour {
     [SerializeField] Image _displayCast;
 
     float _remainTime;
-    bool startTimer;
-    float multiplierFactor;
+    bool _isTimerStarted;
+    float _multiplierFactor;
 
-    public UnityEvent _timerEnd;
+    public UnityEvent EventTimerEnd;
 
     private void Start() {
-        multiplierFactor = 1f / _remainTime;
+        _multiplierFactor = 1f / _remainTime;
         _timerText.text = "";
     }
 
     public void RecastTimerStart(float timer) {
-        multiplierFactor = 1f/timer;
+        _multiplierFactor = 1f/timer;
         _remainTime = timer;
         _timerText.text = _remainTime.ToString();
-        startTimer = true;
-        _fillImage.fillAmount = _remainTime * multiplierFactor;
+        _isTimerStarted = true;
+        _fillImage.fillAmount = _remainTime * _multiplierFactor;
     }
 
     void Update() { 
-        if (!startTimer) { return; }
+        if (!_isTimerStarted) { return; }
 
         if(_remainTime > 0f) {
             _displayCast.color = Color.gray;
             _remainTime -= Time.deltaTime;
             _timerText.text = _remainTime.ToString("0.0");
-            _fillImage.fillAmount = _remainTime * multiplierFactor;
+            _fillImage.fillAmount = _remainTime * _multiplierFactor;
         }
         else { 
             RecastTimerEnd();
@@ -45,7 +45,7 @@ public class RB_HUDRecast : MonoBehaviour {
 
     void RecastTimerEnd() {
         _timerText.text = "";
-        _timerEnd?.Invoke();
+        EventTimerEnd?.Invoke();
         _displayCast.color = Color.white;
     }
 

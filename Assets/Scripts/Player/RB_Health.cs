@@ -9,6 +9,8 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }
     public float Armor;
 
+    [SerializeField] string _name; public string Name { get { return _name; } }
+
     public UnityEvent EventDeath;
     public UnityEvent EventTakeDamage;
     public UnityEvent EventHeal;

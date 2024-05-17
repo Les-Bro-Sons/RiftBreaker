@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+
 
 public class RB_Health : MonoBehaviour {
-    [SerializeField] float _hp;
-    [SerializeField] float _hpMax;
+    [SerializeField] float _hp; public float Hp { get { return _hp; } }
+    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }
     public float Armor;
 
     public UnityEvent EventDeath;
+    public UnityEvent EventTakeDamage;
+    public UnityEvent EventHeal;
 
-    [SerializeField] Slider _hpBar;
-    [SerializeField] TextMeshProUGUI _hpText;
+
 
     void Awake() { 
         Heal();
@@ -24,8 +24,10 @@ public class RB_Health : MonoBehaviour {
             _hp -= amount;
         }
         else { 
+            _hp = 0;
             EventDeath.Invoke();
         }
+        EventTakeDamage.Invoke();
     }
 
     public void Heal(float amount) {
@@ -35,17 +37,18 @@ public class RB_Health : MonoBehaviour {
         else {
             Heal();
         }
+        EventHeal.Invoke();
     }
     
     public void Heal() {
         _hp = _hpMax;
+        EventHeal.Invoke();
     }
 
     void Update() {
-        if (_hp > _hpMax) {
-            Heal();
+        if(_hp > _hpMax) { 
+            _hp = _hpMax;
         }
-        _hpBar.value = _hp / _hpMax;
-        _hpText.text = _hp.ToString()+" / "+_hpMax.ToString();
     }
+
 }

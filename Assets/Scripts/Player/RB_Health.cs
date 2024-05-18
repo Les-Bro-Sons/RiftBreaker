@@ -24,39 +24,30 @@ public class RB_Health : MonoBehaviour {
 
     void Awake() {
         _name = gameObject.name;
-        Heal();
+        _hp = _hpMax;
     }
 
     //Fonction de prise de dégâts
     public void TakeDamage(float amount) {
-        if(_hp - amount > 0) {
-            _hp -= amount;
-        }
-        else { 
-            _hp = 0;
-            EventDeath.Invoke();
-        }
-        EventTakeDamage.Invoke();
+        _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
+        EventTakeDamage.Invoke();
+        if (_hp <= 0)
+            EventDeath.Invoke();
     }
 
     //Fonction de soin
     public void Heal(float amount) {
-        if(_hp + amount > _hpMax) {
-            _hp += amount;
-        }
-        else {
-            Heal();
-        }
-        EventHeal.Invoke();
+        _hp = Mathf.Clamp(_hp + amount, 0, _hpMax);
         LerpTimer = 0.0f;
+        EventHeal.Invoke();
     }
 
     //Fonction de soin Maximum
     public void Heal() {
         _hp = _hpMax;
-        EventHeal.Invoke();
         LerpTimer = 0.0f;
+        EventHeal.Invoke();
     }
 
     //Permet d'empêcher que les pv soit supérieur au pv max

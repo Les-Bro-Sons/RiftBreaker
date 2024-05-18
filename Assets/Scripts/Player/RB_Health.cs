@@ -17,6 +17,10 @@ public class RB_Health : MonoBehaviour {
     public UnityEvent EventHeal;
 
 
+    // ~~~~~~~~~~ UX ~~~~~~~~~~
+    public float LerpTimer;
+
+
 
     void Awake() {
         _name = gameObject.name;
@@ -33,6 +37,7 @@ public class RB_Health : MonoBehaviour {
             EventDeath.Invoke();
         }
         EventTakeDamage.Invoke();
+        LerpTimer = 0.0f;
     }
 
     //Fonction de soin
@@ -44,19 +49,27 @@ public class RB_Health : MonoBehaviour {
             Heal();
         }
         EventHeal.Invoke();
+        LerpTimer = 0.0f;
     }
-    
+
     //Fonction de soin Maximum
     public void Heal() {
         _hp = _hpMax;
         EventHeal.Invoke();
+        LerpTimer = 0.0f;
     }
 
     //Permet d'empêcher que les pv soit supérieur au pv max
     void Update() {
-        if(_hp > _hpMax) { 
-            _hp = _hpMax;
-        }
-    }
 
+        if (Input.GetKeyUp(KeyCode.H))
+            TakeDamage(15);
+
+        if (Input.GetKeyUp(KeyCode.J))
+            Heal(15);
+
+        if(_hp >= _hpMax)
+            _hp = _hpMax;
+
+    }
 }

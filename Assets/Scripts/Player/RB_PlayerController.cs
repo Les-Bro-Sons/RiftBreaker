@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_PlayerController : MonoBehaviour
 {
+    public static RB_PlayerController Instance;
+
     //Components
     RB_PlayerMovement _playerMovement;
     RB_PlayerAction _playerAction;
@@ -11,6 +14,11 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            DestroyImmediate(gameObject);
+
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerAction = GetComponent<RB_PlayerAction>();
     }
@@ -21,8 +29,9 @@ public class RB_PlayerController : MonoBehaviour
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
+        RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
+        RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
     }
-
 
 
     public void OnAttackStart()
@@ -49,5 +58,13 @@ public class RB_PlayerController : MonoBehaviour
         _playerMovement.StopMove();
     }
 
+    public void OnStartRewind()
+    {
+        //start rewind in playeraction
+    }
 
+    public void OnStopRewind()
+    {
+        //stop rewind in playeraction
+    }
 }

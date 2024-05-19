@@ -54,6 +54,12 @@ public enum HUDTYPE
     Menu,
 }
 
+public enum ENTITYTYPES
+{
+    Ai,
+    Player,
+}
+
 // ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES

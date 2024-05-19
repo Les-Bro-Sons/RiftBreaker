@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,19 +17,100 @@ public class RB_HUDHealthBar : MonoBehaviour {
         if (_isBoss && _rb_Health.Name != null) { 
             _bossName.text = _rb_Health.Name;
         }
-        //Le joueur ne possède pas de système d'affichage de son nom
+        //Le joueur ne possÃ¨de pas de systÃ¨me d'affichage de son nom
         else if( _bossName != null) {
             _bossName.text = "";
         }
 
-        //Quand les Event sont Invoke on Mets à jour la barre de vie
+        /*      
+        //Quand les Event sont Invoke on Mets Ã  jour la barre de vie
         _rb_Health.EventTakeDamage.AddListener(RefreshHealth);
         _rb_Health.EventHeal.AddListener(RefreshHealth);
+        */
+
+
+        UxStart();
     }
 
-    //Mise à jour de la barre de vie
+    //Mise Ã  jour de la barre de vie
+    /*  
     void RefreshHealth(){
         _hpBar.value = _rb_Health.Hp / _rb_Health.HpMax;
-        _hpText.text = _rb_Health.Hp.ToString() + " / " + _rb_Health.HpMax.ToString();
+        _hpText.text = _rb_Health.Hp.ToString() + " / " + _rb_Health.HpMax.ToString() + " â™¥";
+    }*/
+
+    private void Update()
+    {
+        UxUpdateXHealthBar();
+    }
+
+
+
+
+    // ~~~~~~~~~~ UX ~~~~~~~~~~
+
+    [Header("UX")]
+    [SerializeField] private float _chipSpeed = 2.0f;
+    
+
+    [SerializeField] private Image _frontHealthBar;
+    [SerializeField] private Image _backHealthBar;
+    [SerializeField] private TMP_Text _healthTextPlayer;
+    private float _displayedHealth;
+
+
+    private void UxStart()
+    {
+        _displayedHealth = _rb_Health.Hp;
+
+        _frontHealthBar.fillAmount = _rb_Health.Hp / _rb_Health.HpMax;
+        _backHealthBar.fillAmount = _rb_Health.Hp / _rb_Health.HpMax;
+    }
+
+    private void UxUpdateXHealthBar()
+    {
+        UxUpdateCheck();
+        UxRefreshText();
+    }
+
+    private void UxUpdateCheck()
+    {
+        float fillF = _frontHealthBar.fillAmount;
+        float fillB = _backHealthBar.fillAmount;
+        float hFraction = _rb_Health.Hp / _rb_Health.HpMax; // decimal 0 to 1
+
+        if (fillB > hFraction) // background
+        {
+            _frontHealthBar.fillAmount = hFraction;
+            _backHealthBar.color = Color.red;
+            _rb_Health.LerpTimer += Time.deltaTime;
+
+            float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+            percentComplete = percentComplete * percentComplete;
+
+            _backHealthBar.fillAmount = Mathf.Lerp(fillB, hFraction, percentComplete);
+        }
+        if (fillF < hFraction) // front
+        {
+            _backHealthBar.color = Color.green;
+            _backHealthBar.fillAmount = hFraction;
+            _rb_Health.LerpTimer += Time.deltaTime;
+
+            float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+            percentComplete = percentComplete * percentComplete;
+
+            _frontHealthBar.fillAmount = Mathf.Lerp(fillF, hFraction, percentComplete);
+        }
+    }
+
+    private void UxRefreshText()
+    {
+        _rb_Health.LerpTimer += Time.deltaTime;
+
+        float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+        percentComplete = percentComplete * percentComplete;
+
+        _displayedHealth = Mathf.Lerp(_displayedHealth, _rb_Health.Hp, percentComplete);
+        _healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} â™¥";
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class RB_SpriteFadeOut : MonoBehaviour
 {
     //Dash fade out properties
-    [HideInInspector] public float FadeForce;
+    public float FadeForce;
     
 
     //Components

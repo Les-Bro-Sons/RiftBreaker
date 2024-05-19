@@ -19,14 +19,19 @@ public class RB_PlayerAction : MonoBehaviour
     //Components
     private RB_PlayerMovement _playerMovement;
     private RB_PlayerController _playerController;
+    [SerializeField] private GameObject _ChargedAttackReadyMark;
+    private Transform _transform;
     RB_Items _item;
+
+    //Charge attack
+    private Coroutine _currentChargedAttack;
 
     private void Awake()
     {
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerController = GetComponent<RB_PlayerController>();
         _item = GetComponentInChildren<RB_Items>();
-
+        _transform = transform;
     }
 
     public void StartDash()
@@ -75,7 +80,9 @@ public class RB_PlayerAction : MonoBehaviour
             //Start charging attack
             IsChargingAttack = true;
             _chargeAttackPressTime = 0;
-            StartCoroutine(ChargeAttack());
+            if(_currentChargedAttack != null)
+                StopCoroutine(_currentChargedAttack);
+            _currentChargedAttack = StartCoroutine(ChargeAttack());
         }
     }
 
@@ -89,7 +96,8 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //Stop charging attack
         IsChargingAttack = false;
-        StopCoroutine(ChargeAttack());
+        if(_currentChargedAttack != null)
+            StopCoroutine(_currentChargedAttack);
         if(_chargeAttackPressTime < _item.ChargeTime)
         {
             //If the player didn't press long enough, normal attack
@@ -107,6 +115,8 @@ public class RB_PlayerAction : MonoBehaviour
         yield return new WaitForSeconds(_item.ChargeTime);
         if (IsChargingAttack)
         {
+            GameObject instantiatedChargedAttackReadyMark = Instantiate(_ChargedAttackReadyMark, _transform);
+            instantiatedChargedAttackReadyMark.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             //When the charge of the attack is ready
             print("attaque chargée prête");
         }
@@ -123,7 +133,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanAttack()
     {
         //If there's no cooldown left and is not attacking
-        return !IsAttacking && !IsChargingAttack;
+        return !IsAttacking && !IsChargingAttack && !IsChargedAttacking;
     }
 
     public bool CanSpecialAttack()

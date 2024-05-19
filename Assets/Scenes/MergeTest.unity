@@ -581,9 +581,9 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 45
-  orthographic: 1
-  orthographic size: 5.5
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -938,10 +938,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1767514889}
   - component: {fileID: 1767514888}
-  - component: {fileID: 1767514892}
   - component: {fileID: 1767514890}
   - component: {fileID: 1767514891}
-  - component: {fileID: 1767514893}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1006,10 +1004,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LastDirection: {x: 0, y: 0, z: 0}
-  _movementAcceleration: 250
+  _movementAcceleration: 100
   _movementMaxSpeed: 12
   _movementFrictionForce: 200
-  _directionToMove: {x: 0, y: 0, z: 0}
   _dashCooldown: 0.5
   _dashSpeed: 20
   _dashDistance: 5
@@ -1031,35 +1028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c25e5aec5670a419dc4c33dd57eadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1767514892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767514887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc75fefb1bcd1e543a486542f6c3a51f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentState: 0
---- !u!114 &1767514893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767514887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c63913282eebbc4b85397f2c40edad0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsChargingAttack: 0
-  IsAttacking: 0
-  IsOnCooldown: 0
-  SpecialAttackCharge: 0
 --- !u!1 &1861383138
 GameObject:
   m_ObjectHideFlags: 0

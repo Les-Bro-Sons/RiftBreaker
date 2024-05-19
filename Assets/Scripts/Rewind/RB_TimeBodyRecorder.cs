@@ -9,10 +9,15 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private bool _isRewinding = false;
 
+    [SerializeField] private ENTITYTYPES _entityType = ENTITYTYPES.Ai;
+    private RB_UXRewindManager _uxRewind;
+
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         transform = GetComponent<Transform>(); // to reduce performance cost of calling transform
+        _uxRewind = FindObjectOfType<RB_UXRewindManager>();
     }
 
     private void Start()
@@ -42,6 +47,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         {
             _rb.isKinematic = true;
         }
+        UxStartRewind();
     }
 
     private void StopRewinding()
@@ -52,6 +58,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = false;
         }
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
+
+        UxStopRewind();
     }
 
     private void Rewind()
@@ -101,5 +109,17 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private void UxStartRewind()
+    {
+        if (_entityType == ENTITYTYPES.Player)
+            _uxRewind?.StartRewindTransition();
+    }
+
+    private void UxStopRewind()
+    {
+        if (_entityType == ENTITYTYPES.Player)
+        _uxRewind?.StopRewindTransition();
     }
 }

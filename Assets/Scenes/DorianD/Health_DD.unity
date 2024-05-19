@@ -632,6 +632,8 @@ GameObject:
   - component: {fileID: 756183944}
   - component: {fileID: 756183943}
   - component: {fileID: 756183946}
+  - component: {fileID: 756183947}
+  - component: {fileID: 756183948}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -736,7 +738,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -757,6 +759,35 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &756183947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756183942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 7edff938d563989439fa3ee5e841b571, type: 2}
+--- !u!114 &756183948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756183942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bf4bfc56ae10f049aeed74276fde8a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1612959120
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +833,8 @@ GameObject:
   - component: {fileID: 1767514890}
   - component: {fileID: 1767514891}
   - component: {fileID: 1767514892}
+  - component: {fileID: 1767514894}
+  - component: {fileID: 1767514893}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -919,6 +952,35 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0
+--- !u!114 &1767514893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767514887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc75fefb1bcd1e543a486542f6c3a51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+--- !u!114 &1767514894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767514887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c63913282eebbc4b85397f2c40edad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsChargingAttack: 0
+  IsAttacking: 0
+  IsOnCooldown: 0
+  SpecialAttackCharge: 0
 --- !u!1001 &2775933970902335917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -937,6 +999,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4397000861611670726, guid: 8d7618397cb70de478a03ad26229ca78,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 756183944}
     - target: {fileID: 5033974693342378992, guid: 8d7618397cb70de478a03ad26229ca78,
         type: 3}
       propertyPath: m_Pivot.x

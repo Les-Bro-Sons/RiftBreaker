@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RB_TimeBodyRewind : MonoBehaviour
 {
@@ -12,12 +14,17 @@ public class RB_TimeBodyRewind : MonoBehaviour
 
     int _pointCountFrame = 0;
 
-    private void Start()
+    RB_UXRewindManager _uxRewind;
+
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
         RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewind); //POUR TESTER
         RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewind); //POUR TESTER
-
     }
 
     private void Update()
@@ -28,12 +35,12 @@ public class RB_TimeBodyRewind : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
+            print("R");
             StartRewind();
         }
 
         if (Input.GetKeyUp(KeyCode.R))
         { 
-            Debug.Log("Relache");
             StopRewind();
         }
     }
@@ -50,13 +57,17 @@ public class RB_TimeBodyRewind : MonoBehaviour
     {
         _isRewinding = true;
         _rb.isKinematic = true;
+        
+        //UxStartRewind();
         // Play SFX
     }
-    
+
     private void StopRewind()
     {
         _isRewinding = false;
         _rb.isKinematic = false;
+
+        //UxStopRewind();
         // Play SFX
     }
 
@@ -94,5 +105,19 @@ public class RB_TimeBodyRewind : MonoBehaviour
         // On ajoute un nouveau point
         PointsInTime.Insert(0, new RB_PointInTime(transform.position, transform.rotation));
         _pointCountFrame++;
+    }
+
+
+
+
+
+    private void UxStartRewind()
+    {
+        _uxRewind?.StartRewindTransition();
+    }
+
+    private void UxStopRewind()
+    {
+        _uxRewind?.StopRewindTransition();
     }
 }

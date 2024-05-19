@@ -1135,7 +1135,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 66.262, y: 6.3701}
+  m_AnchoredPosition: {x: 66.26199, y: 6.370102}
   m_SizeDelta: {x: 8.507, y: -35.088}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9098087852668914197
@@ -1511,19 +1511,19 @@ Canvas:
   m_GameObject: {fileID: 3850184061935284723}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 0.31
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 90
   m_TargetDisplay: 0
 --- !u!114 &7359708187008187733
 MonoBehaviour:
@@ -2188,7 +2188,7 @@ MonoBehaviour:
   _rb_Health: {fileID: 0}
   _isBoss: 0
   _bossName: {fileID: 0}
-  _chipSpeed: 2
+  _chipSpeed: 5
   _frontHealthBar: {fileID: 5050729479259567222}
   _backHealthBar: {fileID: 4562418005154998824}
   _healthTextPlayer: {fileID: 1238004328774996327}
@@ -2809,7 +2809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 66.262, y: 6.3700027}
+  m_AnchoredPosition: {x: 66.26199, y: 6.3700027}
   m_SizeDelta: {x: 8.507, y: -35.088}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &319128061776516886
@@ -3477,7 +3477,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 66.262, y: 7.242996}
+  m_AnchoredPosition: {x: 66.26199, y: 7.242996}
   m_SizeDelta: {x: 8.507, y: -33.342}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &184193838818590476

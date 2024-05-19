@@ -18,7 +18,7 @@ public class RB_SpriteFadeOut : MonoBehaviour
     {
         //Fading out the alpha
         if(_spriteRenderer.color.a > 0)
-            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, _spriteRenderer.color.a - FadeForce);
+            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, _spriteRenderer.color.a - FadeForce * Time.deltaTime);
         else
             Destroy(gameObject);
     }

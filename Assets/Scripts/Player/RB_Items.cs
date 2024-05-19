@@ -8,6 +8,7 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _attackDamage;
     private float _lastUsedAttackTime;
     public float CurrentAttackCombo;
+    public float ChargeTime;
 
     //Components
     [SerializeField] private Animator _playerAnimator;
@@ -21,8 +22,11 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ResetAttack()
     {
+        //Turning off all attack animations
         _playerAnimator.SetBool("Attacking", false);
+        _playerAnimator.SetBool("ChargeAttack", false);
         _playerAction.StopAttack();
+        _playerAction.StopChargedAttack();
     }
 
     public virtual void Attack()
@@ -32,13 +36,13 @@ public class RB_Items : MonoBehaviour
 
         //Starting and resetting the attack animation
         _playerAnimator.SetBool("Attacking", true);
-        StartCoroutine("WaitForEndOfFrame");
+        StartCoroutine(WaitToResetAttacks());
 
         //Degats
         //KBs
     }
 
-    private IEnumerator WaitForEndOfFrame()
+    private IEnumerator WaitToResetAttacks()
     {
         //Wait for the end of the frame 
         yield return new WaitForEndOfFrame();
@@ -54,6 +58,9 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ChargedAttack()
     {
+        //Starting charge attack animations
+        _playerAnimator.SetBool("ChargeAttack", true);
+        StartCoroutine(WaitToResetAttacks());
         //A COMPLETER
     }
 

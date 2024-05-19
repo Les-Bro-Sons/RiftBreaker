@@ -123,8 +123,8 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public bool CanMove()
     {
-        //if is moving and not dashing
-        return _canMove && _isMoving && !_isDashing && !_playerAction.IsAttacking;
+        //if is moving, not dashing and not attacking
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyAttack();
     }
 
     private void SetSpeed()
@@ -137,6 +137,7 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
+        //Get the current velocity that we can convert to speed
         return _currentVelocity;
     }
 
@@ -186,8 +187,8 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public bool CanDash()
     {
-        //Cooldown dash
-        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown);
+        //Cooldown dash and not attacking
+        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown) && !_playerAction.IsDoingAnyAttack();
     }
 
     private void DebugSpeed()

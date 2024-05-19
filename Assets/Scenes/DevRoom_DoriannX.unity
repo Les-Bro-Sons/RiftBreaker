@@ -987,8 +987,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackCooldown: 0.1
   _attackDamage: 0
-  _playerAnimator: {fileID: 743174435}
   CurrentAttackCombo: 0
+  ChargeTime: 3
+  _playerAnimator: {fileID: 743174435}
   HudSprite: {fileID: 0}
 --- !u!1 &1612959120
 GameObject:
@@ -1104,6 +1105,7 @@ MonoBehaviour:
   _movementMaxSpeed: 12
   _movementFrictionForce: 200
   _directionToMove: {x: 0, y: 0, z: 0}
+  ActualDirection: 0
   _dashCooldown: 0.5
   _dashSpeed: 20
   _dashDistance: 5

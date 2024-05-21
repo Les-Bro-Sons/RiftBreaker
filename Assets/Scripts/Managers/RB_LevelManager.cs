@@ -1,17 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class RB_LevelManager : MonoBehaviour
 {
-    public PHASES Phase;
-    public SCENENAMES CurrentScene;
     public static RB_LevelManager Instance;
 
-    public static event Action OnGameStarted;
-    public static event Action OnGamePhase1Ended;
+    public PHASES CurrentPhase;
+    public SCENENAMES CurrentScene;
+
+    [HideInInspector] public UnityEvent EventPlayerLost;
+    [HideInInspector] public UnityEvent EventPlayerWon;
+
+    public Dictionary<PHASES, List<GameObject>> _savedEnemiesInPhase;
 
     private void Awake()
     {
@@ -21,50 +22,51 @@ public class RB_LevelManager : MonoBehaviour
         }
         else
         {
+            DestroyImmediate(gameObject);
             return;
         }
     }
 
-    private void Start()
-    {
-        OnGameStarted?.Invoke();
-    }
     public void SwitchPhase()
     {
-        if (CurrentScene != SCENENAMES.Boss1 && CurrentScene != SCENENAMES.Boss2 && CurrentScene != SCENENAMES.Boss3)
+        switch(CurrentPhase)
         {
-            Phase = PHASES.Infiltration;
+            case PHASES.Infiltration:
+                CurrentPhase = PHASES.Combat;
+                break;
         }
-        else
-        {
-            Phase = PHASES.Boss;
-        }
+        SpawnEnemiesInPhase(CurrentPhase);
+    }
+
+    public void SwitchPhase(PHASES phaseToSwitch)
+    {
+        CurrentPhase = phaseToSwitch;
+        SpawnEnemiesInPhase(CurrentPhase);
+    }
+
+    public void SaveEnemyToPhase(PHASES phase, GameObject enemy)
+    {
+        _savedEnemiesInPhase[phase].Add(enemy);
+        enemy.SetActive(false);
     }
     
-    public void SpawnCombatEnemies()
+    public void SpawnEnemiesInPhase(PHASES phase)
     {
-        if (Phase == PHASES.Combat)
+        foreach (GameObject enemy in _savedEnemiesInPhase[phase])
         {
-            //Spawn combat ennemies
+            enemy.SetActive(true);
+            enemy.GetComponent<RB_Enemy>().Spawned();
         }
+        _savedEnemiesInPhase[phase].Clear();
     }
 
     public void PlayerLost() 
     {
-        
+        EventPlayerLost?.Invoke();
     }
 
     public void PlayerWon()
     {
-
-    }
-
-    public void Rewinding()
-    {
-
-    }
-    public void StopRewinding() 
-    {
-
+        EventPlayerWon?.Invoke();
     }
 }

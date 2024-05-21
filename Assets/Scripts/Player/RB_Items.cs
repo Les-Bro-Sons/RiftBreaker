@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class RB_Items : MonoBehaviour
@@ -55,7 +56,7 @@ public class RB_Items : MonoBehaviour
 
     public virtual void DealDamage()
     {
-        foreach (GameObject detectedObject in _collisionDetection.DetectedObjects)
+        foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
         {
             if (detectedObject.transform.root.TryGetComponent<RB_Health>(out RB_Health _enemyHealth))
             {

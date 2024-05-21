@@ -8,11 +8,12 @@ public class RB_PlayerAction : MonoBehaviour
     //Conditions
     [HideInInspector] public bool IsChargingAttack;
     [HideInInspector] public bool IsChargedAttacking;
+    [HideInInspector] public bool IsSpecialAttacking;
     [HideInInspector] public bool IsAttacking;
     [HideInInspector] public bool IsOnCooldown; //Cannot attack
 
 
-    public float SpecialAttackCharge; //from 0 to 100
+    [Range(0, 100)] public float SpecialAttackCharge; //from 0 to 100
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
 
@@ -89,7 +90,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool IsDoingAnyAttack()
     {
         //If the player is attacking in any way possible (normal attack, charging attack, charged attack or special attack)
-        return IsChargingAttack || IsAttacking || IsChargedAttacking;
+        return IsChargingAttack || IsAttacking || IsChargedAttacking || IsSpecialAttacking;
     }
 
     public void StopChargeAttack()
@@ -127,7 +128,15 @@ public class RB_PlayerAction : MonoBehaviour
         if(CanAttack() && SpecialAttackCharge >= 100)
         {
             //Special Attack
+            IsSpecialAttacking = true;
+            SpecialAttackCharge = 0;
+            _item.SpecialAttack();
         }
+    }
+
+    public void StopSpecialAttack()
+    {
+        IsSpecialAttacking = false;
     }
 
     public bool CanAttack()

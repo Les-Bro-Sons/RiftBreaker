@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class RB_PlayerMovement : MonoBehaviour
 {
     //Enums
-    public enum Direction { Up, Down, Left, Right}
+    public enum Direction { Back, Face, Left, Right}
 
     //Player movement properties
     [Header("Player movement properties")]
@@ -34,7 +34,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private bool _canDash = true;
     private bool _isDashing = false;
     private float _lastUsedDashTime = 0;
-    public UnityEvent EventDash;
+    [HideInInspector] public UnityEvent EventDash;
 
     //Components
     [Header("Components")]
@@ -90,9 +90,9 @@ public class RB_PlayerMovement : MonoBehaviour
         else
         {
             if (_directionToMove.z > 0)
-                ActualDirection = Direction.Up;
+                ActualDirection = Direction.Back;
             else
-                ActualDirection = Direction.Down;
+                ActualDirection = Direction.Face;
         }
         //Setting the direction to the player
         _transform.forward = _directionToMove;

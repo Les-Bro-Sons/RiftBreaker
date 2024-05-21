@@ -26,6 +26,7 @@ public class RB_PlayerController : MonoBehaviour
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
+        RB_InputManager.Instance.EventSpecialAttackStarted.AddListener(OnSpecialAttack);
     }
 
     public void OnChargeAttackStart()
@@ -56,6 +57,12 @@ public class RB_PlayerController : MonoBehaviour
     {
         //Stop movement
         _playerMovement.StopMove();
+    }
+
+    public void OnSpecialAttack()
+    {
+        //Start special attack
+        _playerAction.SpecialAttack();
     }
 
 

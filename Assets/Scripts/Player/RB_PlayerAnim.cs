@@ -14,19 +14,19 @@ public class RB_PlayerAnim : MonoBehaviour
     private void UpdateAnimation()
     {
         // Reset all directions to false
-        _playerAnimator.SetBool("Up", false);
-        _playerAnimator.SetBool("Down", false);
+        _playerAnimator.SetBool("Back", false);
+        _playerAnimator.SetBool("Face", false);
         _playerAnimator.SetBool("Right", false);
         _playerAnimator.SetBool("Left", false);
 
         // Set the actual direction to true
         switch (_playerMovement.ActualDirection)
         {
-            case RB_PlayerMovement.Direction.Up:
-                _playerAnimator.SetBool("Up", true);
+            case RB_PlayerMovement.Direction.Back:
+                _playerAnimator.SetBool("Back", true);
                 break;
-            case RB_PlayerMovement.Direction.Down:
-                _playerAnimator.SetBool("Down", true);
+            case RB_PlayerMovement.Direction.Face:
+                _playerAnimator.SetBool("Face", true);
                 break;
             case RB_PlayerMovement.Direction.Left:
                 _playerAnimator.SetBool("Left", true);

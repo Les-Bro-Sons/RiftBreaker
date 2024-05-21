@@ -25,8 +25,10 @@ public class RB_Items : MonoBehaviour
         //Turning off all attack animations
         _playerAnimator.SetBool("Attacking", false);
         _playerAnimator.SetBool("ChargeAttack", false);
+        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopAttack();
         _playerAction.StopChargedAttack();
+        _playerAction.StopSpecialAttack();
     }
 
     public virtual void Attack()
@@ -66,6 +68,9 @@ public class RB_Items : MonoBehaviour
 
     public virtual void SpecialAttack()
     {
+        //Starting special attack
+        _playerAnimator.SetBool("SpecialAttack", true);
+        StartCoroutine(WaitToResetAttacks());
         //A COMPLETER
     }
 

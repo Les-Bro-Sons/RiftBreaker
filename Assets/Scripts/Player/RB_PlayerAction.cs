@@ -90,7 +90,12 @@ public class RB_PlayerAction : MonoBehaviour
     public bool IsDoingAnyAttack()
     {
         //If the player is attacking in any way possible (normal attack, charging attack, charged attack or special attack)
-        return IsChargingAttack || IsAttacking || IsChargedAttacking || IsSpecialAttacking;
+        return IsChargingAttack  || IsChargedAttacking || IsSpecialAttacking || IsAttacking;
+    }
+
+    public bool IsDoingAnyNotNormalAttack()
+    {
+        return IsChargingAttack || IsChargedAttacking || IsSpecialAttacking;
     }
 
     public void StopChargeAttack()
@@ -107,6 +112,7 @@ public class RB_PlayerAction : MonoBehaviour
         else
         {
             //Otherwise do the charged attack
+            _playerMovement.ResetDirection();
             ChargedAttack();
         }
     }

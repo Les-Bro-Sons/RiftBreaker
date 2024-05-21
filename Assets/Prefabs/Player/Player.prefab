@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2202761430501876019}
   - component: {fileID: 7262178411359263179}
   - component: {fileID: 3669966155072335375}
+  - component: {fileID: 8199144125740249035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -156,6 +157,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 1
+--- !u!114 &8199144125740249035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2838961826420885278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49c47ea0b9c4fc24e97e0075b378e657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackCooldown: 0.1
+  _attackDamage: 0
+  CurrentAttackCombo: 0
+  ChargeTime: 1
+  _playerAnimator: {fileID: 8084658731439982951}
+  HudSprite: {fileID: 0}
 --- !u!1 &3765942318610055652
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,6 +281,7 @@ GameObject:
   - component: {fileID: 1323381627611396866}
   - component: {fileID: 6834408167172327982}
   - component: {fileID: 8084658731439982951}
+  - component: {fileID: 8422390959443899889}
   m_Layer: 0
   m_Name: SpriteRenderer
   m_TagString: Untagged
@@ -369,6 +389,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &8422390959443899889
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530706795670888469}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5236527546103129424
 GameObject:
   m_ObjectHideFlags: 0

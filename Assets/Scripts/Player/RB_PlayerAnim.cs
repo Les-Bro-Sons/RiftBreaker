@@ -1,14 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_PlayerAnim : MonoBehaviour
 {
     //Components
-    [SerializeField] Animator _playerAnimator;
-    RB_PlayerMovement _playerMovement;
+    Animator _playerAnimator;
+    [SerializeField] RB_PlayerMovement _playerMovement;
+    [SerializeField] Animator _collisionAnimations;
 
     private void Awake()
     {
-        _playerMovement = GetComponent<RB_PlayerMovement>();
+        _playerAnimator = GetComponent<Animator>();
     }
 
     private void UpdateAnimation()
@@ -43,6 +45,16 @@ public class RB_PlayerAnim : MonoBehaviour
             _playerAnimator.SetBool("Idle", true);
         else
             _playerAnimator.SetBool("Idle", false);
+    }
+
+    public void StartColliderAnimation(string AttackToStart)
+    {
+        _collisionAnimations.SetBool(AttackToStart, true);
+    }
+
+    public void StopColliderAnimation(string AttackToStop)
+    {
+        _collisionAnimations.SetBool(AttackToStop, false);
     }
 
     private void Update()

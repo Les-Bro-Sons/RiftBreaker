@@ -11,16 +11,16 @@ namespace BehaviorTree
 
     public class RB_BTNode
     {
-        protected BTNodeState state;
+        protected BTNodeState _state;
 
-        public RB_BTNode parent;
-        protected List<RB_BTNode> children = new List<RB_BTNode>();
+        public RB_BTNode Parent;
+        protected List<RB_BTNode> _children = new();
 
-        private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
+        private Dictionary<string, object> _dataContext = new();
 
         public RB_BTNode()
         {
-            parent = null;
+            Parent = null;
         }
 
         public RB_BTNode(List<RB_BTNode> children)
@@ -31,8 +31,8 @@ namespace BehaviorTree
 
         private void _Attach(RB_BTNode BTNode)
         {
-            BTNode.parent = this;
-            children.Add(BTNode);
+            BTNode.Parent = this;
+            _children.Add(BTNode);
         }
 
         public virtual BTNodeState Evaluate() => BTNodeState.FAILURE;
@@ -48,13 +48,13 @@ namespace BehaviorTree
             if (_dataContext.TryGetValue(key, out value))
                 return value;
 
-            RB_BTNode BTNode = parent;
+            RB_BTNode BTNode = Parent;
             while (BTNode != null)
             {
                 value = BTNode.GetData(key);
                 if (value != null)
                     return value;
-                BTNode = BTNode.parent;
+                BTNode = BTNode.Parent;
             }
             return null;
         }
@@ -67,13 +67,13 @@ namespace BehaviorTree
                 return true;
             }
 
-            RB_BTNode BTNode = parent;
+            RB_BTNode BTNode = Parent;
             while (BTNode != null)
             {
                 bool cleared = BTNode.ClearData(key);
                 if (cleared)
                     return true;
-                BTNode = BTNode.parent;
+                BTNode = BTNode.Parent;
             }
             return false;
         }

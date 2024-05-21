@@ -9,7 +9,7 @@ namespace BehaviorTree
 
         public override BTNodeState Evaluate()
         {
-            foreach (RB_BTNode BTNode in children)
+            foreach (RB_BTNode BTNode in _children)
             {
                 switch (BTNode.Evaluate())
                 {
@@ -17,20 +17,20 @@ namespace BehaviorTree
                         continue;
 
                     case BTNodeState.SUCCESS:
-                        state = BTNodeState.SUCCESS;
-                        return state;
+                        _state = BTNodeState.SUCCESS;
+                        return _state;
 
                     case BTNodeState.RUNNING:
-                        state = BTNodeState.RUNNING;
-                        return state;
+                        _state = BTNodeState.RUNNING;
+                        return _state;
 
                     default:
                         continue;
                 }
             }
 
-            state = BTNodeState.FAILURE;
-            return state;
+            _state = BTNodeState.FAILURE;
+            return _state;
         }
     }
 }

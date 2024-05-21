@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RB_TimeBodyRewind : MonoBehaviour
 {
@@ -29,7 +27,7 @@ public class RB_TimeBodyRewind : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"_pointCountFrame : {_pointCountFrame}");
+        //Debug.Log($"_pointCountFrame : {_pointCountFrame}");
 
         // a mettre dans le player controller
 

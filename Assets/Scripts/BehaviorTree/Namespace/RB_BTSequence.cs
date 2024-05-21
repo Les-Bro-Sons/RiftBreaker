@@ -11,13 +11,13 @@ namespace BehaviorTree
         {
             bool anyChildIsRunning = false;
 
-            foreach (RB_BTNode BTNode in children)
+            foreach (RB_BTNode BTNode in _children)
             {
                 switch (BTNode.Evaluate())
                 {
                     case BTNodeState.FAILURE:
-                        state = BTNodeState.FAILURE;
-                        return state;
+                        _state = BTNodeState.FAILURE;
+                        return _state;
 
                     case BTNodeState.SUCCESS:
                         continue;
@@ -27,13 +27,13 @@ namespace BehaviorTree
                         continue;
 
                     default:
-                        state = BTNodeState.SUCCESS;
-                        return state;
+                        _state = BTNodeState.SUCCESS;
+                        return _state;
                 }
             }
 
-            state = anyChildIsRunning ? BTNodeState.RUNNING : BTNodeState.SUCCESS;
-            return state;
+            _state = anyChildIsRunning ? BTNodeState.RUNNING : BTNodeState.SUCCESS;
+            return _state;
         }
     }
 }

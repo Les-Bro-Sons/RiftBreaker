@@ -28,6 +28,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _fadeForce;
     [SerializeField] private float _zFadeOffset;
     [SerializeField] private GameObject _spritePrefab;
+    [SerializeField] private float _totalDashTime;
     private Vector3 _dashDirection;
     private Vector3 _firstDashPosition;
     private bool _canDash = true;
@@ -176,13 +177,13 @@ public class RB_PlayerMovement : MonoBehaviour
         if(_isDashing)
         {
             //Dashing
-            _rb.velocity = _dashSpeed * _dashDirection;
             float distanceThisFrame = Vector3.Distance(_firstDashPosition, _transform.position);
-            if (distanceThisFrame >= _dashDistance)
+            if (distanceThisFrame >= _dashDistance || (Time.time >= _lastUsedDashTime + _totalDashTime && _currentVelocity.magnitude <= 1))
             {
                 StopDash();
                 EventDash.Invoke();
             }
+            _rb.velocity = _dashSpeed * _dashDirection;
         }
     }
 

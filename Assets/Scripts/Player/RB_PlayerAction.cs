@@ -20,7 +20,7 @@ public class RB_PlayerAction : MonoBehaviour
     //Components
     private RB_PlayerMovement _playerMovement;
     private RB_PlayerController _playerController;
-    [SerializeField] private GameObject _ChargedAttackReadyMark;
+    [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
     RB_Items _item;
 
@@ -116,7 +116,7 @@ public class RB_PlayerAction : MonoBehaviour
         yield return new WaitForSeconds(_item.ChargeTime);
         if (IsChargingAttack)
         {
-            GameObject instantiatedChargedAttackReadyMark = Instantiate(_ChargedAttackReadyMark, _transform);
+            GameObject instantiatedChargedAttackReadyMark = Instantiate(_chargedAttackReadyMark, _transform);
             instantiatedChargedAttackReadyMark.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             //When the charge of the attack is ready
             print("attaque chargée prête");

@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class RB_PlayerMovement : MonoBehaviour
 {
+    //Enums
+    public enum Direction { Back, Face, Left, Right}
+
     //Player movement properties
     [Header("Player movement properties")]
     [HideInInspector] public Vector3 LastDirection;
@@ -11,6 +14,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _movementMaxSpeed;
     [SerializeField] private float _movementFrictionForce;
     [SerializeField] private Vector3 _directionToMove;
+    public Direction ActualDirection;
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
     private bool _canMove = true;
@@ -24,17 +28,19 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _fadeForce;
     [SerializeField] private float _zFadeOffset;
     [SerializeField] private GameObject _spritePrefab;
-    private Vector3 _dashEndPos;
+    [SerializeField] private float _totalDashTime;
     private Vector3 _dashDirection;
+    private Vector3 _firstDashPosition;
     private bool _canDash = true;
     private bool _isDashing = false;
     private float _lastUsedDashTime = 0;
-    public UnityEvent EventDash;
+    [HideInInspector] public UnityEvent EventDash;
 
     //Components
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
+    private RB_PlayerAction _playerAction;
 
     //Debug components
     [Header("Debug Components")]
@@ -50,6 +56,7 @@ public class RB_PlayerMovement : MonoBehaviour
         Instance = this;
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
+        _playerAction = GetComponent<RB_PlayerAction>();
     }
     private void Start()
     {
@@ -71,6 +78,22 @@ public class RB_PlayerMovement : MonoBehaviour
     private void GetDirection(Vector3 direction)
     {
         _directionToMove = new Vector3(direction.x, 0, direction.y);
+
+        //setting the right direction in the state
+        if (Mathf.Abs(_directionToMove.x) > Mathf.Abs(_directionToMove.y))
+        {
+            if (_directionToMove.x > 0)
+                ActualDirection = Direction.Right;
+            else
+                ActualDirection = Direction.Left;
+        }
+        else
+        {
+            if (_directionToMove.z > 0)
+                ActualDirection = Direction.Back;
+            else
+                ActualDirection = Direction.Face;
+        }
         //Setting the direction to the player
         _transform.forward = _directionToMove;
     }
@@ -101,8 +124,8 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public bool CanMove()
     {
-        //if is moving and not dashing
-        return _isMoving && !_isDashing;
+        //if is moving, not dashing and not attacking
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyAttack();
     }
 
     private void SetSpeed()
@@ -115,6 +138,7 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
+        //Get the current velocity that we can convert to speed
         return _currentVelocity;
     }
 
@@ -133,7 +157,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public void StartDash()
     {
         //Starting dash
-        _dashEndPos = _transform.position + _transform.forward * _dashDistance;
+        _firstDashPosition = _transform.position;
         _dashDirection = _transform.forward;
         _lastUsedDashTime = Time.time;
         _isDashing = true;
@@ -153,19 +177,20 @@ public class RB_PlayerMovement : MonoBehaviour
         if(_isDashing)
         {
             //Dashing
-            _rb.velocity = _dashSpeed * _dashDirection;
-            if (Vector3.Distance(_rb.position, _dashEndPos) < 0.5f)
+            float distanceThisFrame = Vector3.Distance(_firstDashPosition, _transform.position);
+            if (distanceThisFrame >= _dashDistance || (Time.time >= _lastUsedDashTime + _totalDashTime && _currentVelocity.magnitude <= 1))
             {
                 StopDash();
                 EventDash.Invoke();
             }
+            _rb.velocity = _dashSpeed * _dashDirection;
         }
     }
 
     public bool CanDash()
     {
-        //Cooldown dash
-        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown);
+        //Cooldown dash and not attacking
+        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown) && !_playerAction.IsDoingAnyAttack();
     }
 
     private void DebugSpeed()
@@ -189,8 +214,10 @@ public class RB_PlayerMovement : MonoBehaviour
         //Calling the speed calcul in real time
         SetSpeed();
 
+        
+
         //If the player can move
-        if(CanMove())
+        if (CanMove())
         {
             //Get the direction to move
             GetDirection(RB_InputManager.Instance.MoveValue);

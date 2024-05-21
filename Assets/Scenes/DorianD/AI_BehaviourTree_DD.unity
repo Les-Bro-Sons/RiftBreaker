@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recordTime: 5
-  _entityType: 1
+  _entityType: 0
 --- !u!54 &100886961
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -499,7 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 439278642}
   - component: {fileID: 439278643}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1489,7 +1489,7 @@ GameObject:
   - component: {fileID: 1767514893}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

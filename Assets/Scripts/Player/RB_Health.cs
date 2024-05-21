@@ -6,19 +6,19 @@ using UnityEngine.Events;
 
 public class RB_Health : MonoBehaviour {
     [SerializeField] float _hp; public float Hp { get { return _hp; } }
-    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }
+    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }        
     public float Armor;
 
     //Nom de l'entité qui possède le script
     string _name; public string Name { get { return _name; } }
+    
+    [HideInInspector] public UnityEvent EventDeath;
+    [HideInInspector] public UnityEvent EventTakeDamage;
+    [HideInInspector] public UnityEvent EventHeal;
 
-    public UnityEvent EventDeath;
-    public UnityEvent EventTakeDamage;
-    public UnityEvent EventHeal;
-
-
+    
     // ~~~~~~~~~~ UX ~~~~~~~~~~
-    public float LerpTimer;
+    public float LerpTimer; //A METTRE DANS LE HUD
 
 
 

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 public class RB_Items : MonoBehaviour
@@ -27,7 +26,7 @@ public class RB_Items : MonoBehaviour
 
     private void Start()
     {
-        _collisionDetection.EventOnObjectEntered.AddListener(DealDamage);
+        _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
     }
 
     public virtual void ResetAttack()

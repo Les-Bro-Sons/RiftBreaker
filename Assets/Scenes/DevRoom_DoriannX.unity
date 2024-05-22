@@ -171,6 +171,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &65807656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 65807658}
+  - component: {fileID: 65807657}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &65807657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65807656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed80171e47ae914fbcd1efb134a2b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentPhase: 0
+  CurrentScene: 0
+  EventPlayerLost:
+    m_PersistentCalls:
+      m_Calls: []
+  EventPlayerWon:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &65807658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65807656}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &145176217
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +372,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0
+  _particleDamage: {fileID: 0}
+  _particleDeath: {fileID: 0}
+  _particleHeal: {fileID: 0}
 --- !u!1 &399056235
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +610,7 @@ GameObject:
   - component: {fileID: 506108726}
   - component: {fileID: 506108725}
   - component: {fileID: 506108727}
+  - component: {fileID: 506108728}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -637,6 +693,19 @@ MonoBehaviour:
   EventOnObjectExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &506108728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506108723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fdb331c5427614abed6975eadba364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collisionAnimations: {fileID: 506108726}
 --- !u!1 &756183942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,3 +1460,4 @@ SceneRoots:
   - {fileID: 399056239}
   - {fileID: 1473978487}
   - {fileID: 14003904}
+  - {fileID: 65807658}

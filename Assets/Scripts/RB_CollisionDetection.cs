@@ -8,17 +8,22 @@ public class RB_CollisionDetection : MonoBehaviour
 
     //Detection
     private List<GameObject> _detectedObjects = new();
+    private List<GameObject> _detectedEnemies = new();
 
     //Events
     [HideInInspector] public UnityEvent EventOnObjectEntered;
     [HideInInspector] public UnityEvent EventOnObjectExit;
+        //Enemy
+    [HideInInspector] public UnityEvent EventOnEnemyEntered;
+    [HideInInspector] public UnityEvent EventOnEnemyExit;
 
     private void OnTriggerEnter(Collider other)
     {
         //When an object is entering the trigger and has a life script add it to the list
         if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
-            _detectedObjects.Add(enemyHealth.gameObject);
+            _detectedEnemies.Add(enemyHealth.gameObject);
+            EventOnEnemyEntered?.Invoke();
         }
         EventOnObjectEntered?.Invoke();
     }
@@ -28,13 +33,15 @@ public class RB_CollisionDetection : MonoBehaviour
         //When an object is exiting the trigger, if it's in the DetectedObjects list then remove it
         if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
-            if (_detectedObjects.Contains(enemyHealth.gameObject))
+            if (_detectedEnemies.Contains(enemyHealth.gameObject))
             {
-                _detectedObjects.Remove(enemyHealth.gameObject);
-                EventOnObjectExit?.Invoke();
+                _detectedEnemies.Remove(enemyHealth.gameObject);
+                EventOnEnemyExit?.Invoke();
             }
         }
-        
+        EventOnObjectExit?.Invoke();
+
+
     }
 
     public List<GameObject> GetDetectedObjects()
@@ -42,17 +49,17 @@ public class RB_CollisionDetection : MonoBehaviour
         //Getter to have the detected objects
         //Destroy all empty objects before getting the list
         DestroyDeletedObject();
-        return _detectedObjects;
+        return _detectedEnemies;
     }
 
     public void DestroyDeletedObject()
     {
-        foreach (GameObject detectedObject in _detectedObjects.ToList())
+        foreach (GameObject detectedObject in _detectedEnemies.ToList())
         {
             if (detectedObject == null)
             {
                 //If something in the list is empty then destroy it
-                _detectedObjects.Remove(detectedObject);
+                _detectedEnemies.Remove(detectedObject);
             }
         }
     }

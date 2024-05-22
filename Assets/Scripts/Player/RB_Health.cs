@@ -24,11 +24,13 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] private GameObject _particleDeath;
     [SerializeField] private GameObject _particleHeal;
 
-
+    //Components
+    Rigidbody _rb;
 
     void Awake() {
         _name = gameObject.name;
         _hp = _hpMax;
+        _rb = GetComponent<Rigidbody>();
     }
 
     //Fonction de prise de dégâts
@@ -45,6 +47,12 @@ public class RB_Health : MonoBehaviour {
         }
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
+    }
+
+    public void TakeKnockback(Vector3 direction, float knockbackForce)
+    {
+        //push the enemy away when getting hit
+        _rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
     }
 
     //Fonction de soin

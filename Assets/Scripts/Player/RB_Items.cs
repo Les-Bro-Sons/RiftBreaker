@@ -1,33 +1,44 @@
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 public class RB_Items : MonoBehaviour
 {
     //Attack
+    private float _lastUsedAttackTime;
+    private float _currentDamage;
+    private float _currentKnockbackForce;
+    [HideInInspector] public float CurrentAttackCombo;
+    public float ChargeTime;
+    
     [SerializeField] private float _attackCooldown;
+
+    [Header("Damages")]
     [SerializeField] private float _attackDamage;
     [SerializeField] private float _chargedAttackDamage;
     [SerializeField] private float _specialAttackDamage;
-    private float _lastUsedAttackTime;
-    private float _currentDamage;
-    public float CurrentAttackCombo;
-    public float ChargeTime;
+
+    [Header("Knockback")]
+    [SerializeField] private float _normalKnockbackForce;
+    [SerializeField] private float _chargeAttackKnockbackForce;
+    [SerializeField] private float _specialAttackKnockbackForce;
 
     //Components
+    [Header("Components")]
     [SerializeField] private Animator _playerAnimator;
-    [SerializeField] private RB_CollisionDetection _collisionDetection; 
+    [SerializeField] private RB_CollisionDetection _collisionDetection;
+    private Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
 
     private void Awake()
     {
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+        _transform = transform;
     }
 
     private void Start()
     {
-        _collisionDetection.EventOnObjectEntered.AddListener(DealDamage);
+        _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
     }
 
     public virtual void ResetAttack()
@@ -45,6 +56,7 @@ public class RB_Items : MonoBehaviour
     {
         //Cooldown for attack
         _currentDamage = _attackDamage;
+        _currentKnockbackForce = _normalKnockbackForce;
         _lastUsedAttackTime = Time.time;
         //Starting and resetting the attack animation
         _playerAnimator.SetBool("Attacking", true);
@@ -62,7 +74,8 @@ public class RB_Items : MonoBehaviour
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
                 _enemyHealth.TakeDamage(_currentDamage);
-                print(_enemyHealth.gameObject.name + "took damage");
+                _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _transform.position).normalized, _currentKnockbackForce);
+                print(detectedObject.name + "took damage");
             }
         }
     }
@@ -85,6 +98,7 @@ public class RB_Items : MonoBehaviour
     {
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
+        _currentKnockbackForce = _chargeAttackKnockbackForce;
         _playerAnimator.SetBool("ChargeAttack", true);
         StartCoroutine(WaitToResetAttacks());
         //A COMPLETER
@@ -94,6 +108,7 @@ public class RB_Items : MonoBehaviour
     {
         //Starting special attack
         _currentDamage = _specialAttackDamage;
+        _currentKnockbackForce = _specialAttackKnockbackForce;
         _playerAnimator.SetBool("SpecialAttack", true);
         StartCoroutine(WaitToResetAttacks());
         //A COMPLETER

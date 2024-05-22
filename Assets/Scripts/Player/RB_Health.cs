@@ -6,19 +6,25 @@ using UnityEngine.Events;
 
 public class RB_Health : MonoBehaviour {
     [SerializeField] float _hp; public float Hp { get { return _hp; } }
-    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }
+    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }        
     public float Armor;
+
+    public bool Dead = false;
 
     //Nom de l'entité qui possède le script
     string _name; public string Name { get { return _name; } }
+    
+    [HideInInspector] public UnityEvent EventDeath;
+    [HideInInspector] public UnityEvent EventTakeDamage;
+    [HideInInspector] public UnityEvent EventHeal;
 
-    public UnityEvent EventDeath;
-    public UnityEvent EventTakeDamage;
-    public UnityEvent EventHeal;
-
-
+    
     // ~~~~~~~~~~ UX ~~~~~~~~~~
-    public float LerpTimer;
+    public float LerpTimer; //A METTRE DANS LE HUD
+
+    [SerializeField] private GameObject _particleDamage;
+    [SerializeField] private GameObject _particleDeath;
+    [SerializeField] private GameObject _particleHeal;
 
 
 
@@ -32,8 +38,15 @@ public class RB_Health : MonoBehaviour {
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
-        if (_hp <= 0)
+        if (_hp <= 0 && !Dead)
+        {
+            Dead = true;
+            if (_particleDeath)
+                Instantiate(_particleDeath, transform.position, Quaternion.identity);
             EventDeath.Invoke();
+        }
+        if (_particleDamage)
+            Instantiate(_particleDamage, transform.position, Quaternion.identity);
     }
 
     //Fonction de soin
@@ -41,26 +54,11 @@ public class RB_Health : MonoBehaviour {
         _hp = Mathf.Clamp(_hp + amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventHeal.Invoke();
+        Instantiate(_particleHeal, transform.position, Quaternion.identity);
     }
 
     //Fonction de soin Maximum
     public void Heal() {
-        _hp = _hpMax;
-        LerpTimer = 0.0f;
-        EventHeal.Invoke();
-    }
-
-    //Permet d'empêcher que les pv soit supérieur au pv max
-    void Update() {
-
-        if (Input.GetKeyUp(KeyCode.H))
-            TakeDamage(15);
-
-        if (Input.GetKeyUp(KeyCode.J))
-            Heal(15);
-
-        if(_hp >= _hpMax)
-            _hp = _hpMax;
-
+        Heal(_hpMax);
     }
 }

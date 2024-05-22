@@ -62,7 +62,7 @@ public class RB_Items : MonoBehaviour
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
                 _enemyHealth.TakeDamage(_currentDamage);
-                print(detectedObject.name + "took damage");
+                print(_enemyHealth.gameObject.name + "took damage");
             }
         }
     }

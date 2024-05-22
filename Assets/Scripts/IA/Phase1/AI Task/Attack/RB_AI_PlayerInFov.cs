@@ -3,13 +3,16 @@ using UnityEngine;
 
 public class RB_AI_PlayerInFov : RB_BTNode
 {
+    private RB_AIInf_BTTree _btParent;
+
     private Transform _transform;
     private static int _layerMask = 1 << 7;
     //private Animator _animator;
 
-    public RB_AI_PlayerInFov(Transform transform)
+    public RB_AI_PlayerInFov(RB_AIInf_BTTree BtParent)
     {
-        _transform = transform;
+        _btParent = BtParent;
+        _transform = _btParent.transform;
         //Debug.Log("PlayerInRange" + _transform);
         // _animator = transform.GetComponent<Animator>();
     }
@@ -19,28 +22,28 @@ public class RB_AI_PlayerInFov : RB_BTNode
         object t = GetData("target");
         if (t == null)
         {
-            Debug.Log("Recherche de la cible...");
-            Collider[] colliders = Physics.OverlapSphere(_transform.position, RB_AIInf_BTTree.FovRange, _layerMask);
+            //Debug.Log("Recherche de la cible...");
+            Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMask);
             if (colliders.Length > 0)
             {
-                Debug.Log("Cible trouvée, assignation en cours...");
+                //Debug.Log("Cible trouvée, assignation en cours...");
                 Parent.Parent.SetData("target", colliders[0].transform);
                 //t = colliders[0].transform;
             }
-            else
-                Debug.Log("Aucune cible trouvée dans la portée.");
+            //else
+            //    Debug.Log("Aucune cible trouvée dans la portée.");
         }
 
         Transform target = (Transform)t;
 
         if (target == null)
         {
-            Debug.Log("target est toujours null après la recherche.");
+            //Debug.Log("target est toujours null après la recherche.");
             _state = BTNodeState.FAILURE;
             return _state;
         }
-        else
-            Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
+        //else
+        //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
 
 
         if (SeesPlayer(target))
@@ -60,12 +63,12 @@ public class RB_AI_PlayerInFov : RB_BTNode
     {
         Vector3 targetDir = target.position - _transform.position;
         float angle = Vector3.Angle(targetDir, _transform.forward);
-        if (angle >= -RB_AIInf_BTTree.FovAngle / 2 && angle <= RB_AIInf_BTTree.FovAngle / 2)
+        if (angle >= -_btParent.FovAngle / 2 && angle <= _btParent.FovAngle / 2)
         {
             RaycastHit hit;
 
-            Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * RB_AIInf_BTTree.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, RB_AIInf_BTTree.FovRange, _layerMask))
+            Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, _layerMask))
             {
                 if (hit.transform == target.parent)
                 {

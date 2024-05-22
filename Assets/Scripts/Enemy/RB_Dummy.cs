@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class RB_Dummy : RB_Enemy
 {
@@ -7,7 +6,7 @@ public class RB_Dummy : RB_Enemy
     protected override void Death()
     {
         EventDead?.Invoke();
-        Instantiate(DeathSpawnPrefab, transform.position, transform.rotation);
+        //Instantiate(DeathSpawnPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }

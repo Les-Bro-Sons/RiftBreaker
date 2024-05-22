@@ -35,8 +35,8 @@ public class RB_VisualSettings : MonoBehaviour {
 
         //Création du drop-down avec les résolution filtrée
         List<string> dropdownOptions = new List<string>();
-        for( int u = 0; u < _filteredResolutions.Count; u++) { 
-            string resolutionOption = _filteredResolutions[u].width + "x" + _filteredResolutions[u].height;
+        for( int u = 0; u < _filteredResolutions.Count; ++u) { 
+            string resolutionOption = _filteredResolutions[u].width + " x " + _filteredResolutions[u].height;
             dropdownOptions.Add(resolutionOption);
             if (_filteredResolutions[u].width == Screen.width && _filteredResolutions[u].height == Screen.height) {
                 _oldResolutionID = u;
@@ -44,6 +44,7 @@ public class RB_VisualSettings : MonoBehaviour {
         }
 
         _resolutionDropdown.AddOptions(dropdownOptions);
+        _resolutionDropdown.RefreshShownValue();
 
         StartResolution();
         ApplyResolution();
@@ -70,7 +71,6 @@ public class RB_VisualSettings : MonoBehaviour {
             _currentResolutionID = PlayerPrefs.GetInt("ResolutionID");
         }
         _resolutionDropdown.value = _currentResolutionID;
-        _resolutionDropdown.RefreshShownValue();
     }
 
     public void SetDisplayMode(int displayID) {
@@ -105,18 +105,16 @@ public class RB_VisualSettings : MonoBehaviour {
             _currentDisplayID = PlayerPrefs.GetInt("DisplayID");
         }
         _displayDropdown.value = _currentDisplayID;
-        _displayDropdown.RefreshShownValue();
     }
 
     public void Default() {
         _currentDisplayID = 0;
         _displayDropdown.value = _currentDisplayID;
-        _displayDropdown.RefreshShownValue();
+
         ApplyDisplayMode();
 
         _currentResolutionID = _oldResolutionID;
         _resolutionDropdown.value = _currentResolutionID;
-        _resolutionDropdown.RefreshShownValue();
         ApplyResolution();
     }
 }

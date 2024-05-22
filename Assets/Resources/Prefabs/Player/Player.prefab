@@ -156,12 +156,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c47ea0b9c4fc24e97e0075b378e657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentAttackCombo: 0
+  ChargeTime: 1
   _attackCooldown: 0.1
   _attackDamage: 20
   _chargedAttackDamage: 50
   _specialAttackDamage: 100
-  CurrentAttackCombo: 0
-  ChargeTime: 1
+  _normalKnockbackForce: 5
+  _chargeAttackKnockbackForce: 8
+  _specialAttackKnockbackForce: 10
   _playerAnimator: {fileID: 8084658731439982951}
   _collisionDetection: {fileID: 1560718448460901250}
   HudSprite: {fileID: 0}
@@ -180,6 +183,7 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   Armor: 0
+  Dead: 0
   EventDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -190,6 +194,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0
+  _particleDamage: {fileID: 0}
+  _particleDeath: {fileID: 0}
+  _particleHeal: {fileID: 0}
 --- !u!1 &4530706795670888469
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,6 +365,7 @@ GameObject:
   - component: {fileID: 5829882146575898177}
   - component: {fileID: 9201907525385420816}
   - component: {fileID: 1560718448460901250}
+  - component: {fileID: 3650759193627221759}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -440,6 +448,25 @@ MonoBehaviour:
   EventOnObjectExit:
     m_PersistentCalls:
       m_Calls: []
+  EventOnEnemyEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3650759193627221759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675164330776585405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fdb331c5427614abed6975eadba364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collisionAnimations: {fileID: 5829882146575898177}
 --- !u!1 &5236527546103129424
 GameObject:
   m_ObjectHideFlags: 0

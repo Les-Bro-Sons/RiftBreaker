@@ -12,7 +12,7 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     [Header("Spline Parameters")]
     public SplineContainer SplineContainer;
-    public float _waitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
+    public float WaitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
     public int PatrolSplineIndex = 0;
 
     public bool HasAnInterval = false;

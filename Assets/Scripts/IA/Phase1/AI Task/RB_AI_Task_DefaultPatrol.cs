@@ -54,7 +54,7 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
             _waitCounter += Time.deltaTime;
             Debug.Log($" waitcounter : {_waitCounter}");
             
-            if (_waitCounter >= _btParent._waitBeforeToMoveToNextWaypoint)
+            if (_waitCounter >= _btParent.WaitBeforeToMoveToNextWaypoint)
             {
                 _isWaiting = false;
                 //_animator.SetBool("Walking", true);

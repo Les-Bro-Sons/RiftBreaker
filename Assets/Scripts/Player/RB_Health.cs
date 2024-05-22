@@ -9,6 +9,8 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }        
     public float Armor;
 
+    public bool Dead = false;
+
     //Nom de l'entité qui possède le script
     string _name; public string Name { get { return _name; } }
     
@@ -36,8 +38,9 @@ public class RB_Health : MonoBehaviour {
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
-        if (_hp <= 0)
+        if (_hp <= 0 && !Dead)
         {
+            Dead = true;
             if (_particleDeath)
                 Instantiate(_particleDeath, transform.position, Quaternion.identity);
             EventDeath.Invoke();

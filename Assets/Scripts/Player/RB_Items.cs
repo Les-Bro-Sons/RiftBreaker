@@ -8,6 +8,7 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _attackDamage;
     [SerializeField] private float _chargedAttackDamage;
     [SerializeField] private float _specialAttackDamage;
+    [SerializeField] private float _knockbackForce;
     private float _lastUsedAttackTime;
     private float _currentDamage;
     public float CurrentAttackCombo;
@@ -15,13 +16,15 @@ public class RB_Items : MonoBehaviour
 
     //Components
     [SerializeField] private Animator _playerAnimator;
-    [SerializeField] private RB_CollisionDetection _collisionDetection; 
+    [SerializeField] private RB_CollisionDetection _collisionDetection;
+    private Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
 
     private void Awake()
     {
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+        _transform = transform;
     }
 
     private void Start()
@@ -61,6 +64,7 @@ public class RB_Items : MonoBehaviour
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
                 _enemyHealth.TakeDamage(_currentDamage);
+                _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _transform.position).normalized, _knockbackForce);
                 print(detectedObject.name + "took damage");
             }
         }

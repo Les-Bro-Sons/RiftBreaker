@@ -362,6 +362,7 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   Armor: 0
+  Dead: 0
   EventDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -691,6 +692,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &506108728
@@ -1391,6 +1398,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _attackDamage
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8199144125740249035, guid: f045d7b917debd74190631e500515f69,
+        type: 3}
+      propertyPath: _knockbackForce
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8199144125740249035, guid: f045d7b917debd74190631e500515f69,
         type: 3}

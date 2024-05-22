@@ -37,9 +37,11 @@ public class RB_Health : MonoBehaviour {
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
         if (_hp <= 0)
+        {
             if (_particleDeath)
                 Instantiate(_particleDeath, transform.position, Quaternion.identity);
             EventDeath.Invoke();
+        }
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
     }

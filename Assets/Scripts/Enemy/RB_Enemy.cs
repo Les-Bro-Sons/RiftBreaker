@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Enemy : MonoBehaviour
 {
+    public UnityEvent EventDead;
     [Header("Spawn")]
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
     [SerializeField] private PHASES _spawnInPhase = PHASES.Infiltration;
@@ -34,6 +36,7 @@ public class RB_Enemy : MonoBehaviour
 
     protected virtual void Death()
     {
+        EventDead?.Invoke();
         Destroy(gameObject);
     }
 }

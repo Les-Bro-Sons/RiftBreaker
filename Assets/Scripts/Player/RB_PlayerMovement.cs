@@ -78,24 +78,33 @@ public class RB_PlayerMovement : MonoBehaviour
     private void GetDirection(Vector3 direction)
     {
         _directionToMove = new Vector3(direction.x, 0, direction.y);
+        if (!_playerAction.IsAttacking)
+        {
+            //setting the right direction in the state
+            if (Mathf.Abs(_directionToMove.x) > Mathf.Abs(_directionToMove.y))
+            {
+                if (_directionToMove.x > 0)
+                    ActualDirection = Direction.Right;
+                else
+                    ActualDirection = Direction.Left;
+            }
+            else
+            {
+                if (_directionToMove.z > 0)
+                    ActualDirection = Direction.Back;
+                else
+                    ActualDirection = Direction.Face;
+            }
+            //Setting the direction to the player
+            _transform.forward = _directionToMove;
+        }
+        
+    }
 
-        //setting the right direction in the state
-        if (Mathf.Abs(_directionToMove.x) > Mathf.Abs(_directionToMove.y))
-        {
-            if (_directionToMove.x > 0)
-                ActualDirection = Direction.Right;
-            else
-                ActualDirection = Direction.Left;
-        }
-        else
-        {
-            if (_directionToMove.z > 0)
-                ActualDirection = Direction.Back;
-            else
-                ActualDirection = Direction.Face;
-        }
-        //Setting the direction to the player
-        _transform.forward = _directionToMove;
+    public void ResetDirection()
+    {
+        ActualDirection = Direction.Face;
+        _transform.forward = -Vector3.forward;
     }
 
     private void ClampingSpeed()
@@ -125,7 +134,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanMove()
     {
         //if is moving, not dashing and not attacking
-        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyAttack();
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack();
     }
 
     private void SetSpeed()
@@ -190,7 +199,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanDash()
     {
         //Cooldown dash and not attacking
-        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown) && !_playerAction.IsDoingAnyAttack();
+        return _canDash && Time.time > (_lastUsedDashTime + _dashCooldown) && !_playerAction.IsDoingAnyNotNormalAttack();
     }
 
     private void DebugSpeed()

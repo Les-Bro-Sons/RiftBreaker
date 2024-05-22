@@ -106,7 +106,7 @@ MonoBehaviour:
   _zFadeOffset: 0.2
   _spritePrefab: {fileID: 3992129241645934838, guid: 45f13f2e2fb7cae41992addd80f3f556,
     type: 3}
-  _totalDashTime: 0.1
+  _totalDashTime: 0.2
   EventDash:
     m_PersistentCalls:
       m_Calls: []
@@ -131,6 +131,7 @@ MonoBehaviour:
   SpecialAttackCharge: 100
   _chargedAttackReadyMark: {fileID: 2153901776240351120, guid: 169cc00ad32ba9a4583b9d37aac39158,
     type: 3}
+  _startChargingDelay: 0.1
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0

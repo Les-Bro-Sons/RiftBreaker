@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_PlayerAnim : MonoBehaviour
@@ -7,10 +6,12 @@ public class RB_PlayerAnim : MonoBehaviour
     Animator _playerAnimator;
     [SerializeField] RB_PlayerMovement _playerMovement;
     [SerializeField] Animator _collisionAnimations;
+    private Transform _transform;
 
     private void Awake()
     {
         _playerAnimator = GetComponent<Animator>();
+        _transform = transform;
     }
 
     private void UpdateAnimation()
@@ -49,12 +50,20 @@ public class RB_PlayerAnim : MonoBehaviour
 
     public void StartColliderAnimation(string AttackToStart)
     {
+        //Start the collider animation
         _collisionAnimations.SetBool(AttackToStart, true);
     }
 
     public void StopColliderAnimation(string AttackToStop)
     {
+        //Stop the collider animation
         _collisionAnimations.SetBool(AttackToStop, false);
+    }
+
+    public void SpawnPrefab(string prefabToSpawn)
+    {
+        //Spawn the prefab by his name
+        Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _transform.position + _transform.right, _transform.rotation);
     }
 
     private void Update()

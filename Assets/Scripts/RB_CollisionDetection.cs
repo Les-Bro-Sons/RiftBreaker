@@ -15,23 +15,32 @@ public class RB_CollisionDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //When an object is entering the trigger add it to the list
-        _detectedObjects.Add(other.transform.root.gameObject);
+        //When an object is entering the trigger and has a life script add it to the list
+        if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
+        {
+            _detectedObjects.Add(enemyHealth.gameObject);
+        }
         EventOnObjectEntered?.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
         //When an object is exiting the trigger, if it's in the DetectedObjects list then remove it
-        if (_detectedObjects.Contains(other.transform.root.gameObject))
+        if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
-            _detectedObjects.Remove(other.transform.root.gameObject);
-            EventOnObjectExit?.Invoke();
+            if (_detectedObjects.Contains(enemyHealth.gameObject))
+            {
+                _detectedObjects.Remove(enemyHealth.gameObject);
+                EventOnObjectExit?.Invoke();
+            }
         }
+        
     }
 
     public List<GameObject> GetDetectedObjects()
     {
+        //Getter to have the detected objects
+        //Destroy all empty objects before getting the list
         DestroyDeletedObject();
         return _detectedObjects;
     }
@@ -42,6 +51,7 @@ public class RB_CollisionDetection : MonoBehaviour
         {
             if (detectedObject == null)
             {
+                //If something in the list is empty then destroy it
                 _detectedObjects.Remove(detectedObject);
             }
         }

@@ -631,7 +631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb5b1e692bde7f4aaff6e7404b85673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetectedObjects: []
   EventOnObjectEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1308,6 +1307,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262178411359263179, guid: f045d7b917debd74190631e500515f69,
+        type: 3}
+      propertyPath: SpecialAttackCharge
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8199144125740249035, guid: f045d7b917debd74190631e500515f69,
         type: 3}

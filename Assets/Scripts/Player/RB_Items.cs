@@ -58,7 +58,8 @@ public class RB_Items : MonoBehaviour
     {
         foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
         {
-            if (detectedObject.transform.root.TryGetComponent<RB_Health>(out RB_Health _enemyHealth))
+            //If on the detected object, there's life script, it deals damage
+            if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
                 _enemyHealth.TakeDamage(_currentDamage);
                 print(detectedObject.name + "took damage");

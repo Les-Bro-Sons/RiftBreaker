@@ -24,6 +24,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     //Charge attack
     private Coroutine _currentChargedAttack;
+    [SerializeField] private float _startChargingDelay;
+    private bool _isChargingAnimation = false;
 
     private void Awake()
     {
@@ -74,10 +76,11 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StartChargeAttack()
     {
-        if(CanAttack())
+        if (CanAttack())
         {
             //Start charging attack
             IsChargingAttack = true;
+            _isChargingAnimation = false;
             _chargeAttackPressTime = 0;
             if(_currentChargedAttack != null)
                 StopCoroutine(_currentChargedAttack);
@@ -105,6 +108,7 @@ public class RB_PlayerAction : MonoBehaviour
         if(_chargeAttackPressTime < _item.ChargeTime)
         {
             //If the player didn't press long enough, normal attack
+            _item.StopChargingAttack();
             Attack();
         }
         else
@@ -122,6 +126,7 @@ public class RB_PlayerAction : MonoBehaviour
         {
             GameObject instantiatedChargedAttackReadyMark = Instantiate(_chargedAttackReadyMark, _transform);
             instantiatedChargedAttackReadyMark.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            _item.FinishChargingAttack();
             //When the charge of the attack is ready
             print("attaque chargée prête");
         }
@@ -173,6 +178,11 @@ public class RB_PlayerAction : MonoBehaviour
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;
+            if (_chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation)
+            {
+                _item.StartChargingAttack();
+                _isChargingAnimation = true;
+            } 
         }
     }
 }

@@ -114,5 +114,23 @@ public class RB_Items : MonoBehaviour
         //A COMPLETER
     }
 
+    public virtual void StartChargingAttack()
+    {
+        //Start the charge animation
+        _playerAnimator.SetBool("ChargingAttack", true);
+    }
+
+    public virtual void StopChargingAttack()
+    {
+        //Stop the charge animation
+        _playerAnimator.SetBool("ChargingAttack", false);
+    }
+
+    public virtual void FinishChargingAttack()
+    {
+        //start the finish charge animation
+        _playerAnimator.SetBool("ChargingAttackFinished", true);
+    }
+
 
 }

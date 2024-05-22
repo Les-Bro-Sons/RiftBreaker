@@ -60,6 +60,12 @@ public class RB_PlayerAnim : MonoBehaviour
         _collisionAnimations.SetBool(AttackToStop, false);
     }
 
+    public void StopPlayerAnimation(string AnimationToStop)
+    {
+        //Stop the animation wanted
+        _playerAnimator.SetBool(AnimationToStop, false);
+    }
+
     public void SpawnPrefab(string prefabToSpawn)
     {
         //Spawn the prefab by his name

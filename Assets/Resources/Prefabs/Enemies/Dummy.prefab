@@ -144,7 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c872619fc01de84cafd7076ad47b34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeathSpawnPrefab: {fileID: 3453180199176938183}
+  EventDead:
+    m_PersistentCalls:
+      m_Calls: []
+  _isAttachedToAPhase: 1
+  _spawnInPhase: 0
+  DeathSpawnPrefabName: Dummy
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +175,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0
+  _particleDamage: {fileID: 827747827748336171, guid: 6f1309b1a7e1f9b4e97af0d4ed517342,
+    type: 3}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

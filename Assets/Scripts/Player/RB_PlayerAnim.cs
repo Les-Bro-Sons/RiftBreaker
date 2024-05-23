@@ -39,6 +39,7 @@ public class RB_PlayerAnim : MonoBehaviour
     public void SpawnPrefab(string prefabToSpawn)
     {
         //Spawn the prefab by his name
+        print("spawned one prefab");
         Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _playerTransform.position + new Vector3(0, -.5f, 0), _playerTransform.rotation);
     }
 

@@ -58,6 +58,7 @@ public class RB_PlayerAction : MonoBehaviour
     public void ChargedAttack()
     {
         //Charge attack
+        _playerMovement.ResetDirection();
         _item.ChargedAttack();
         IsChargedAttacking = true;
     }
@@ -79,6 +80,7 @@ public class RB_PlayerAction : MonoBehaviour
         if (CanAttack())
         {
             //Start charging attack
+            print("IsChargedAttacking : " + IsChargedAttacking + ", Starting charge attack");
             IsChargingAttack = true;
             _isChargingAnimation = false;
             _chargeAttackPressTime = 0;
@@ -102,21 +104,23 @@ public class RB_PlayerAction : MonoBehaviour
     public void StopChargeAttack()
     {
         //Stop charging attack
-        IsChargingAttack = false;
         if(_currentChargedAttack != null)
             StopCoroutine(_currentChargedAttack);
         if(_chargeAttackPressTime < _item.ChargeTime)
         {
             //If the player didn't press long enough, normal attack
             _item.StopChargingAttack();
+            IsChargingAttack = false;
             Attack();
         }
-        else
+        else if(IsChargingAttack)
         {
             //Otherwise do the charged attack
             _playerMovement.ResetDirection();
             ChargedAttack();
         }
+        _item.StopChargingAttack();
+        IsChargingAttack = false;
     }
 
     private IEnumerator ChargeAttack()
@@ -151,7 +155,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanAttack()
     {
         //If there's no cooldown left and is not attacking
-        return !IsAttacking && !IsChargingAttack && !IsChargedAttacking;
+        return !IsDoingAnyAttack();
     }
 
     public bool CanSpecialAttack()

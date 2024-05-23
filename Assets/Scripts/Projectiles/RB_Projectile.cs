@@ -61,7 +61,7 @@ public class RB_Projectile : MonoBehaviour
             if (_traveledDistance < _totalDistance)
             {
                 //While the distance traveled is less than the total distance wanted
-                _rb.velocity = _transform.right * _speed;
+                _rb.velocity = _transform.forward * _speed;
             }
             else
             {

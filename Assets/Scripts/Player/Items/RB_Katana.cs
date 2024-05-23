@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class RB_Katana : RB_Items
 {
-    
+    protected override void Start()
+    {
+        base.Start();
+        _playerAnimator.SetFloat("WeaponID", 0);
+    }
 }

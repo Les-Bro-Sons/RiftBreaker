@@ -24,7 +24,8 @@ public class RB_Items : MonoBehaviour
 
     //Components
     [Header("Components")]
-    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] protected Animator _playerAnimator;
+    [SerializeField] protected Animator _colliderAnimator;
     [SerializeField] private RB_CollisionDetection _collisionDetection;
     private Transform _transform;
     RB_PlayerAction _playerAction;
@@ -36,7 +37,7 @@ public class RB_Items : MonoBehaviour
         _transform = transform;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
     }
@@ -44,7 +45,6 @@ public class RB_Items : MonoBehaviour
     public virtual void ResetAttack()
     {
         //Turning off all attack animations
-        _playerAnimator.SetBool("Attacking", false);
         _playerAnimator.SetBool("ChargeAttack", false);
         _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopAttack();
@@ -59,7 +59,8 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _normalKnockbackForce;
         _lastUsedAttackTime = Time.time;
         //Starting and resetting the attack animation
-        _playerAnimator.SetBool("Attacking", true);
+        _playerAnimator.SetTrigger("Attack");
+        _colliderAnimator.SetTrigger("Attack");
         StartCoroutine(WaitToResetAttacks());
 
         //Degats
@@ -99,7 +100,8 @@ public class RB_Items : MonoBehaviour
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;
-        _playerAnimator.SetBool("ChargeAttack", true);
+        _playerAnimator.SetTrigger("ChargeAttack");
+        _colliderAnimator.SetTrigger("ChargeAttack");
         StartCoroutine(WaitToResetAttacks());
         //A COMPLETER
     }
@@ -109,7 +111,8 @@ public class RB_Items : MonoBehaviour
         //Starting special attack
         _currentDamage = _specialAttackDamage;
         _currentKnockbackForce = _specialAttackKnockbackForce;
-        _playerAnimator.SetBool("SpecialAttack", true);
+        _playerAnimator.SetTrigger("SpecialAttack");
+        _colliderAnimator.SetTrigger("SpecialAttack");
         StartCoroutine(WaitToResetAttacks());
         //A COMPLETER
     }
@@ -129,7 +132,7 @@ public class RB_Items : MonoBehaviour
     public virtual void FinishChargingAttack()
     {
         //start the finish charge animation
-        _playerAnimator.SetBool("ChargingAttackFinished", true);
+        _playerAnimator.SetTrigger("FinishChargingAttack");
     }
 
 

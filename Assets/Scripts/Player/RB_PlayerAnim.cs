@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RB_PlayerAnim : MonoBehaviour
@@ -39,8 +40,11 @@ public class RB_PlayerAnim : MonoBehaviour
     public void SpawnPrefab(string prefabToSpawn)
     {
         //Spawn the prefab by his name
-        print("spawned one prefab");
-        Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _playerTransform.position + new Vector3(0, -.5f, 0), _playerTransform.rotation);
+        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _playerTransform.position + new Vector3(0, -.5f, 0), _playerTransform.rotation) as GameObject;
+        if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+        {
+            projectile.Team = TEAMS.Player;
+        }
     }
 
     private void Update()

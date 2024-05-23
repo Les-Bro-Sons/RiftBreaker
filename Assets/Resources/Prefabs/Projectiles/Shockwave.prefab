@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2220141390852814850}
   - component: {fileID: 7512073466893847374}
   - component: {fileID: 1892518645855474828}
+  - component: {fileID: 6230509986263376554}
   m_Layer: 8
   m_Name: Shockwave
   m_TagString: Untagged
@@ -106,14 +107,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a2af8c374782e41a94b7c6f02fcec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _speed: 10
   _totalDistance: 10
   _projectileType: 1
   _launchForce: {x: 10, y: 10, z: 10}
   _totalLifeTime: 2
+  Team: 0
   _followParticles: {fileID: 5559467424925952968, guid: 55fef1c9bfb97d645b2a346b16f239c1,
     type: 3}
   _destroyParticles: {fileID: 0}
+  _damage: 10
+  _knockback: {x: 0, y: 0, z: 10}
+  _isDealingDamageMultipleTime: 0
+  _isDealingKnockbackMultipleTime: 0
+  _canDamageAlly: 0
+  _canKnockbackAlly: 0
+--- !u!114 &6230509986263376554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366644426979502515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb5b1e692bde7f4aaff6e7404b85673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventOnObjectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2846878979076408478
 GameObject:
   m_ObjectHideFlags: 0

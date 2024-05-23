@@ -10,14 +10,14 @@ namespace MANAGERS
 		public static RB_AudioManager Instance;
 
 		[Header("Audio")]
-		public List<AudioClip> _musicClips = new List<AudioClip>();
+		[SerializeField] private string _nameMusicGame = "SheathingSound";
 
 		[Header("Mixer")]
 		[SerializeField] private AudioMixer _mixer;
 		[SerializeField] private AudioSource _musicSource; public AudioSource MusicSource { get { return _musicSource; } }
 		[SerializeField] private AudioSource _sfxSource; public AudioSource SfxSource { get { return _sfxSource; } }
 		/*[SerializeField] private AudioSource _eatSource;
-    [SerializeField] private List<AudioClip> _eatClips = new();*/
+ï¿½ï¿½ï¿½ï¿½[SerializeField] private List<AudioClip> _eatClips = new();*/
 
 
 		[Header("Animation")]
@@ -46,18 +46,17 @@ namespace MANAGERS
 			//LoadVolume();
 		}
 		/*
-    public void EatSFX()
-    {
-      AudioClip clip = _eatClips[Random.Range(0, _eatClips.Count)];
+ï¿½ï¿½ï¿½ï¿½public void EatSFX()
+ï¿½ï¿½ï¿½ï¿½{
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AudioClip clip = _eatClips[Random.Range(0, _eatClips.Count)];
 
-      _eatSource.PlayOneShot(clip);
-    }
-    */
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_eatSource.PlayOneShot(clip);
+ï¿½ï¿½ï¿½ï¿½}
+ï¿½ï¿½ï¿½ï¿½*/
 
 		private void Start()
 		{
-			//Ajout des musiques
-			_musicClips.Add(Resources.Load<AudioClip>($"{ROOT_PATH}/Music/SheathingSound")); // Assuming "Test" is the name of the music clip
+			PlayMusic(_nameMusicGame);
 		}
 
 		public void PlayMusic(string nameClip)
@@ -66,10 +65,7 @@ namespace MANAGERS
 			{
 				_musicSource.Stop();
 			}
-
-			// Search for the music clip in the list
-			AudioClip musicClip = _musicClips.Find(clip => clip.name == nameClip);
-
+			AudioClip musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
 			if (musicClip != null)
 			{
 				_musicSource.clip = musicClip;

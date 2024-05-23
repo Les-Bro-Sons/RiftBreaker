@@ -22,8 +22,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private bool _isUnloadingCanvas = false;
     private bool _isLoadingSpotBar = false;
     private bool _isUnloadingSpotBar = false;
-
-
+    
     public RB_AI_PlayerInFov(RB_AIInf_BTTree BtParent)
     {
         _btParent = BtParent;
@@ -40,19 +39,19 @@ public class RB_AI_PlayerInFov : RB_BTNode
             Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
             if (colliders.Length > 0)
             {
-                //Debug.Log("Cible trouvée, assignation en cours...");
+                //Debug.Log("Cible trouvÃ©e, assignation en cours...");
                 Parent.Parent.SetData("target", colliders[0].transform);
                 //t = colliders[0].transform;
             }
             //else
-            //    Debug.Log("Aucune cible trouvée dans la portée.");
+            //    Debug.Log("Aucune cible trouvÃ©e dans la portÃ©e.");
         }
 
         Transform target = (Transform)t;
 
         if (target == null)
         {
-            //Debug.Log("target est toujours null après la recherche.");
+            //Debug.Log("target est toujours null aprÃ¨s la recherche.");
             _state = BTNodeState.FAILURE;
             return _state;
         }
@@ -68,7 +67,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
             _btParent.ImageSpotBar.fillAmount = 0.0f;
             _btParent.CanvasUi.alpha = 0.0f;
-
+            
             _state = BTNodeState.SUCCESS;
             return _state;
         }
@@ -90,7 +89,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             {
                 if (hit.transform == target.parent)
                 {
-                    // Dessine un rayon vert si le joueur est détecté.
+                    // Dessine un rayon vert si le joueur est dÃ©tectÃ©.
                     Debug.DrawLine(_transform.position, hit.point, Color.green);
 
                     if (!_hasACorrectView)
@@ -107,7 +106,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 }
                 else
                 {
-                    // Dessine un rayon jaune si un autre objet est touché.
+                    // Dessine un rayon jaune si un autre objet est touchÃ©.
                     Debug.DrawLine(_transform.position, hit.point, Color.yellow);
                 }
             }

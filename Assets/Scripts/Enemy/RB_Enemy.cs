@@ -8,6 +8,8 @@ public class RB_Enemy : MonoBehaviour
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
     [SerializeField] private PHASES _spawnInPhase = PHASES.Infiltration;
 
+    
+
     protected virtual void Awake()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(Death);

@@ -1,10 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.Events;
 
 public class RB_PlayerAction : MonoBehaviour
 {
+    public static RB_PlayerAction Instance;
+
     //Conditions
     [HideInInspector] public bool IsChargingAttack;
     [HideInInspector] public bool IsChargedAttacking;
@@ -22,13 +23,23 @@ public class RB_PlayerAction : MonoBehaviour
     private RB_PlayerController _playerController;
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
-    RB_Items _item;
+    RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }
 
     //Charge attack
     private Coroutine _currentChargedAttack;
+    [SerializeField] private float _startChargingDelay; public float StartChargingDelay { get { return _startChargingDelay; } }
+    private bool _isChargingAnimation = false;
+
+    public UnityEvent EventBasicAttack;
+    public UnityEvent EventChargedAttack;
+    public UnityEvent EventStartChargingAttack;
+    public UnityEvent EventStopChargingAttack;
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerController = GetComponent<RB_PlayerController>();
         _item = GetComponentInChildren<RB_Items>();
@@ -46,20 +57,23 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (CanAttack())
+        if (CanAttack() && _item.CanAttack())
         {
             //Attack
             IsAttacking = true;
             _item.Attack();
-            print("charge attack annulé et attaque commencé");
+            EventBasicAttack?.Invoke();
+            print("charge attack annulÃ© et attaque commencÃ©");
         }
     }
 
     public void ChargedAttack()
     {
         //Charge attack
+        _playerMovement.ResetDirection();
         _item.ChargedAttack();
         IsChargedAttacking = true;
+        EventChargedAttack?.Invoke();
     }
 
     public void StopChargedAttack()
@@ -76,10 +90,12 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StartChargeAttack()
     {
-        if(CanAttack())
+        if (CanAttack())
         {
             //Start charging attack
+            print("IsChargedAttacking : " + IsChargedAttacking + ", Starting charge attack");
             IsChargingAttack = true;
+            _isChargingAnimation = false;
             _chargeAttackPressTime = 0;
             if(_currentChargedAttack != null)
                 StopCoroutine(_currentChargedAttack);
@@ -101,20 +117,24 @@ public class RB_PlayerAction : MonoBehaviour
     public void StopChargeAttack()
     {
         //Stop charging attack
-        IsChargingAttack = false;
         if(_currentChargedAttack != null)
             StopCoroutine(_currentChargedAttack);
         if(_chargeAttackPressTime < _item.ChargeTime)
         {
             //If the player didn't press long enough, normal attack
+            _item.StopChargingAttack();
+            IsChargingAttack = false;
             Attack();
         }
-        else
+        else if(IsChargingAttack)
         {
             //Otherwise do the charged attack
             _playerMovement.ResetDirection();
             ChargedAttack();
         }
+        _item.StopChargingAttack();
+        IsChargingAttack = false;
+        EventStopChargingAttack?.Invoke();
     }
 
     private IEnumerator ChargeAttack()
@@ -124,8 +144,9 @@ public class RB_PlayerAction : MonoBehaviour
         {
             GameObject instantiatedChargedAttackReadyMark = Instantiate(_chargedAttackReadyMark, _transform);
             instantiatedChargedAttackReadyMark.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            _item.FinishChargingAttack();
             //When the charge of the attack is ready
-            print("attaque chargée prête");
+            print("attaque chargÃ©e prÃªte");
         }
     }
 
@@ -148,7 +169,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanAttack()
     {
         //If there's no cooldown left and is not attacking
-        return !IsAttacking && !IsChargingAttack && !IsChargedAttacking;
+        return !IsDoingAnyAttack();
     }
 
     public bool CanSpecialAttack()
@@ -175,6 +196,12 @@ public class RB_PlayerAction : MonoBehaviour
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;
+            if (_chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation)
+            {
+                _item.StartChargingAttack();
+                _isChargingAnimation = true;
+                EventStartChargingAttack?.Invoke();
+            } 
         }
     }
 }

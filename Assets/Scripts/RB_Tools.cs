@@ -8,16 +8,21 @@ public class RB_Tools
         GameObject currentObject = selfObject;
         int maxIter = 20;
         int currentIter = 0;
-        while (componentToGet == null && selfObject.transform.parent != null)
+        while (componentToGet == null && currentObject.transform.parent != null)
         {
             //Trying to get component on current object
             if(currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("component found on " + currentObject.name);
                 return true;
             }
             //If not found then trying on its parent
-            currentObject = currentObject.transform.parent.gameObject;
+            if (currentObject.transform.parent.gameObject != null)
+            {
+                currentObject = currentObject.transform.parent.gameObject;
+            }
+            else
+                return false;
+            
 
             //Security max iteration to not crash
             currentIter++;
@@ -33,12 +38,10 @@ public class RB_Tools
         {
             if (currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("Component found on " + currentObject.name);
                 return true;
             }
             else
             {
-                Debug.Log("Component not found");
                 return false;
             }
         }

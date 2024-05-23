@@ -13,7 +13,6 @@ public class RB_Tools
             //Trying to get component on current object
             if(currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("component found on " + currentObject.name);
                 return true;
             }
             //If not found then trying on its parent
@@ -39,12 +38,10 @@ public class RB_Tools
         {
             if (currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("Component found on " + currentObject.name);
                 return true;
             }
             else
             {
-                Debug.Log("Component not found");
                 return false;
             }
         }

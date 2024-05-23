@@ -101,10 +101,16 @@ public class RB_PlayerMovement : MonoBehaviour
         
     }
 
+    public Vector3 GetDirectionToMove()
+    {
+        return _directionToMove;
+    }
+
     public void ResetDirection()
     {
         ActualDirection = Direction.Face;
         _transform.forward = -Vector3.forward;
+        _directionToMove = -Vector3.forward;
     }
 
     private void ClampingSpeed()

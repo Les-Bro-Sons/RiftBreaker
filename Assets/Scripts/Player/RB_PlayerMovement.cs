@@ -57,6 +57,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _playerAction = GetComponent<RB_PlayerAction>();
+        ResetDirection();
     }
     private void Start()
     {
@@ -95,10 +96,10 @@ public class RB_PlayerMovement : MonoBehaviour
                 else
                     ActualDirection = Direction.Face;
             }
-            //Setting the direction to the player
-            _transform.forward = _directionToMove;
         }
-        
+        //Setting the direction to the player
+        _transform.forward = _directionToMove;
+
     }
 
     public Vector3 GetDirectionToMove()
@@ -109,8 +110,8 @@ public class RB_PlayerMovement : MonoBehaviour
     public void ResetDirection()
     {
         ActualDirection = Direction.Face;
-        _transform.forward = -Vector3.forward;
-        _directionToMove = -Vector3.forward;
+        _transform.forward = Vector3.back;
+        _directionToMove = Vector3.back;
     }
 
     private void ClampingSpeed()

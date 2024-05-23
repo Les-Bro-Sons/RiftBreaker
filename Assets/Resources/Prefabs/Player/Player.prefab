@@ -132,6 +132,18 @@ MonoBehaviour:
   _chargedAttackReadyMark: {fileID: 2153901776240351120, guid: 169cc00ad32ba9a4583b9d37aac39158,
     type: 3}
   _startChargingDelay: 0.1
+  EventBasicAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventChargedAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventStartChargingAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventStopChargingAttack:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,13 +240,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4530706795670888469}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2159113513237132384}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!212 &1323381627611396866
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -333,7 +345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovement: {fileID: 9054077203260257630}
-  _collisionAnimations: {fileID: 0}
 --- !u!95 &461484540895704965
 Animator:
   serializedVersion: 5
@@ -409,8 +420,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: -0.25}
+  m_Size: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1560718448460901250
 MonoBehaviour:
   m_ObjectHideFlags: 0

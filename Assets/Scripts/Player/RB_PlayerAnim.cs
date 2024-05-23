@@ -45,7 +45,6 @@ public class RB_PlayerAnim : MonoBehaviour
         {
             projectile.Team = TEAMS.Player;
         }
-            
     }
 
     private void Update()

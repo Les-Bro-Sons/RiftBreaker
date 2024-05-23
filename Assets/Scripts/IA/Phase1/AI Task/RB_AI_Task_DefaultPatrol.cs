@@ -48,11 +48,9 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
 
     public override BTNodeState Evaluate()
     {
-        Debug.Log(_currentWaypointIndex);
         if (_isWaiting)
         {
             _waitCounter += Time.deltaTime;
-            Debug.Log($" waitcounter : {_waitCounter}");
             
             if (_waitCounter >= _btParent.WaitBeforeToMoveToNextWaypoint)
             {

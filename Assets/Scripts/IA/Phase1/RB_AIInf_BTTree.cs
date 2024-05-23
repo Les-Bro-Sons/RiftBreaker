@@ -2,6 +2,7 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.UI;
 
 public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 {
@@ -18,12 +19,23 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
 
-
     [Header("FOV Parameters")]
     public bool InFov = false;
     public float FovRange = 10f;
     public float FovAngle = 75f;
 
+    [Header("UI")]
+    public CanvasGroup CanvasUi;
+    public Image ImageSpotBar;
+    public float DurationAlphaCanvas = 0.5f;
+    public float DurationToLoadSpotBar = 1f;
+    public float DurationToUnloadSpotBar = 0.5f;
+
+    private void Awake()
+    {
+        if (CanvasUi.alpha > 0f)
+            CanvasUi.alpha = 0;
+    }
 
     protected override RB_BTNode SetupTree()
     {
@@ -35,7 +47,7 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 //new TaskAttack(transform),
             }),
 
-            new RB_AI_Task_DefaultPatrol(this),  // task attack
+            new RB_AI_Task_DefaultPatrol(this),  // task default
         });
 
         return root;

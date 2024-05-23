@@ -9,8 +9,9 @@ public class RB_Items : MonoBehaviour
     private float _currentKnockbackForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
-    
-    [SerializeField] private float _attackCooldown;
+
+    [Header("Cooldowns")]
+    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
 
     [Header("Damages")]
     [SerializeField] private float _attackDamage;

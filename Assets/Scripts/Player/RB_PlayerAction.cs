@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_PlayerAction : MonoBehaviour
 {
+    public static RB_PlayerAction Instance;
+
     //Conditions
     [HideInInspector] public bool IsChargingAttack;
     [HideInInspector] public bool IsChargedAttacking;
@@ -20,15 +23,23 @@ public class RB_PlayerAction : MonoBehaviour
     private RB_PlayerController _playerController;
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
-    RB_Items _item;
+    RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }
 
     //Charge attack
     private Coroutine _currentChargedAttack;
-    [SerializeField] private float _startChargingDelay;
+    [SerializeField] private float _startChargingDelay; public float StartChargingDelay { get { return _startChargingDelay; } }
     private bool _isChargingAnimation = false;
+
+    public UnityEvent EventBasicAttack;
+    public UnityEvent EventChargedAttack;
+    public UnityEvent EventStartChargingAttack;
+    public UnityEvent EventStopChargingAttack;
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerController = GetComponent<RB_PlayerController>();
         _item = GetComponentInChildren<RB_Items>();
@@ -46,12 +57,13 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (CanAttack())
+        if (CanAttack() && _item.CanAttack())
         {
             //Attack
             IsAttacking = true;
             _item.Attack();
-            print("charge attack annulé et attaque commencé");
+            EventBasicAttack?.Invoke();
+            print("charge attack annulÃ© et attaque commencÃ©");
         }
     }
 
@@ -61,6 +73,7 @@ public class RB_PlayerAction : MonoBehaviour
         _playerMovement.ResetDirection();
         _item.ChargedAttack();
         IsChargedAttacking = true;
+        EventChargedAttack?.Invoke();
     }
 
     public void StopChargedAttack()
@@ -121,6 +134,7 @@ public class RB_PlayerAction : MonoBehaviour
         }
         _item.StopChargingAttack();
         IsChargingAttack = false;
+        EventStopChargingAttack?.Invoke();
     }
 
     private IEnumerator ChargeAttack()
@@ -132,7 +146,7 @@ public class RB_PlayerAction : MonoBehaviour
             instantiatedChargedAttackReadyMark.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             _item.FinishChargingAttack();
             //When the charge of the attack is ready
-            print("attaque chargée prête");
+            print("attaque chargÃ©e prÃªte");
         }
     }
 
@@ -186,6 +200,7 @@ public class RB_PlayerAction : MonoBehaviour
             {
                 _item.StartChargingAttack();
                 _isChargingAnimation = true;
+                EventStartChargingAttack?.Invoke();
             } 
         }
     }

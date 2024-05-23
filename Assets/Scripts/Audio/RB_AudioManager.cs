@@ -21,8 +21,8 @@ namespace MANAGERS
 
 
 		[Header("Animation")]
-		public Animator animatorSetting;
-		public GameObject settingsCanvas;
+		public Animator AnimatorSetting;
+		public GameObject SettingsCanvas;
 
 
 		public const string ROOT_PATH = "Audio";

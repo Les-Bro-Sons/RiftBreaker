@@ -16,6 +16,10 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
 
+    [Header("Particles")]
+    [SerializeField] private GameObject _followParticles;
+    [SerializeField] private GameObject _destroyParticles;
+
     //Components
     private Rigidbody _rb;
     private Transform _transform;
@@ -30,6 +34,9 @@ public class RB_Projectile : MonoBehaviour
     {
         _transform = transform;
         _rb = GetComponent<Rigidbody>();
+
+        if (_followParticles)
+            Instantiate(_followParticles, _transform.position, _transform.rotation).GetComponent<RB_Particles>().FollowObject = _transform;
     }
 
     private void Start()
@@ -66,6 +73,8 @@ public class RB_Projectile : MonoBehaviour
             else
             {
                 //When it reaches the total distance, destroy the projectile
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
                 Destroy(gameObject);
             }
         }
@@ -74,6 +83,8 @@ public class RB_Projectile : MonoBehaviour
             if(Time.time > (_creationTime + _totalLifeTime))
             {
                 //If the projectile is meant to be launched, when its life time is finished, destroy it
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
                 Destroy(gameObject);
             }
         }

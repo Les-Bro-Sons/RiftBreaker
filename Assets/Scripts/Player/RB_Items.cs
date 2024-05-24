@@ -25,9 +25,9 @@ public class RB_Items : MonoBehaviour
 
     //Components
     [Header("Components")]
-    [SerializeField] protected Animator _playerAnimator;
-    [SerializeField] protected Animator _colliderAnimator;
-    [SerializeField] private RB_CollisionDetection _collisionDetection;
+    protected Animator _playerAnimator;
+    protected Animator _colliderAnimator;
+    private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
     private Transform _transform;
     RB_PlayerAction _playerAction;
@@ -36,6 +36,9 @@ public class RB_Items : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
+        _playerAnimator = RB_PlayerAction.Instance.PlayerAnimator;
+        _colliderAnimator = RB_PlayerAction.Instance.ColliderAnimator;
+        _collisionDetection = RB_PlayerAction.Instance.CollisionDetection;
     }
 
     protected virtual void Start()

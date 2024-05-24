@@ -36,14 +36,15 @@ public class RB_Items : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
-        _playerAnimator = RB_PlayerAction.Instance.PlayerAnimator;
-        _colliderAnimator = RB_PlayerAction.Instance.ColliderAnimator;
-        _collisionDetection = RB_PlayerAction.Instance.CollisionDetection;
     }
 
     protected virtual void Start()
     {
+        _playerAnimator = RB_PlayerAction.Instance.PlayerAnimator;
+        _colliderAnimator = RB_PlayerAction.Instance.ColliderAnimator;
+        _collisionDetection = RB_PlayerAction.Instance.CollisionDetection;
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
+
     }
 
     public void Bind()

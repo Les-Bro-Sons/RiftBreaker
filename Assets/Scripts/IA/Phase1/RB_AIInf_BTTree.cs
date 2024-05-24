@@ -34,11 +34,15 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float DurationToUnloadSpotBar = 0.5f;
     [SerializeField] private GameObject _prefabUxDetectedReadyMark;
 
+    [Header("Components")]
+    public RB_AiMovement AiMovement;
+
 
     private void Awake()
     {
         if (CanvasUi.alpha > 0f)
             CanvasUi.alpha = 0;
+        AiMovement = GetComponent<RB_AiMovement>();
     }
 
     public void UxFocus()

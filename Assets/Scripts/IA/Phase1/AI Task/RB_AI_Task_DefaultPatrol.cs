@@ -91,9 +91,9 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
 
             //int t = (_currentWaypointIndex + 1) / _splinePointsPos.Count; // t => periode
 
-            if (Vector3.Distance(_transform.position, targetPosition) < 0.01f)
+            if (Vector3.Distance(_transform.position, targetPosition) < 1f)
             {
-                _transform.position = targetPosition;
+                //_transform.position = targetPosition;
                 _currentInterval += 1;
                 if (_btParent.HasAnInterval && _currentInterval >= _btParent.StartWaitingWaypointInterval)
                 {
@@ -127,8 +127,9 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
             }
             else
             {
-                _transform.position = Vector3.MoveTowards(_transform.position, targetPosition, _btParent.MovementSpeed * Time.deltaTime);
-                _transform.LookAt(targetPosition);
+                _btParent.AiMovement.MoveIntoDirection(targetPosition - _transform.position, _btParent.MovementSpeed);
+                //_transform.position = Vector3.MoveTowards(_transform.position, targetPosition, _btParent.MovementSpeed * Time.deltaTime);
+                //_transform.LookAt(targetPosition);
             }
         }
 

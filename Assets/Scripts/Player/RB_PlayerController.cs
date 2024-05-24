@@ -63,8 +63,6 @@ public class RB_PlayerController : MonoBehaviour
     public void BindToAttack()
     {
         _item = GetComponentInChildren<RB_Items>();
-        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-        RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
         RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         _playerAction.Rebind();
     }

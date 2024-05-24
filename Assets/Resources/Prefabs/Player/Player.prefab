@@ -163,6 +163,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 1
+  _spriteRenderer: {fileID: 1323381627611396866}
+  _animator: {fileID: 461484540895704965}
 --- !u!114 &7810650786347569942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +180,7 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   Armor: 0
+  Team: 1
   Dead: 0
   EventDeath:
     m_PersistentCalls:

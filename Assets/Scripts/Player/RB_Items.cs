@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RB_Items : MonoBehaviour
 {
@@ -37,6 +38,10 @@ public class RB_Items : MonoBehaviour
     {
         _transform = transform;
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+        if(_playerAction != null )
+        {
+            Bind();
+        }
     }
 
     protected virtual void Start()
@@ -45,13 +50,13 @@ public class RB_Items : MonoBehaviour
         _colliderAnimator = RB_PlayerAction.Instance.ColliderAnimator;
         _collisionDetection = RB_PlayerAction.Instance.CollisionDetection;
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
-
     }
 
-    public void Bind()
+    public virtual void Bind()
     {
         _transform = transform;
-        Destroy(_objectToRemove);
+        _playerAction = GetComponentInParent<RB_PlayerAction>();
+        _objectToRemove.SetActive(false);
     }
 
     public virtual void ResetAttack()

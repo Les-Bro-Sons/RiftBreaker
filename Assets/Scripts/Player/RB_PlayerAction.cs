@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,6 +40,7 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
 
+    public bool IsItemNearby;
     //Interacts
     [SerializeField] private float _interactRange;
 
@@ -81,6 +83,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Interact()
     {
+        IsItemNearby = false;
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _interactRange))
         {
             print("trying to gather item");
@@ -88,9 +91,14 @@ public class RB_PlayerAction : MonoBehaviour
             {
                 print("item gathered");
                 itemGathered.transform.parent = _transform;
-                itemGathered.Bind();
                 EventItemGathered?.Invoke();
+                itemGathered.Bind();
+                IsItemNearby = true;
             }
+        }
+        if (!IsItemNearby)
+        {
+            _playerController.OnChargeAttackStart();
         }
     }
 
@@ -147,7 +155,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StopChargeAttack()
     {
-        if(_item != null)
+        if(_item != null && !IsItemNearby)
         {
             //Stop charging attack
             if(_currentChargedAttack != null)

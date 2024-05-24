@@ -42,7 +42,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             {
                 //Debug.Log("Cible trouvée, assignation en cours...");
                 Parent.Parent.SetData("target", colliders[0].transform);
-                //t = colliders[0].transform;
+                t = colliders[0].transform;
             }
             //else
             //    Debug.Log("Aucune cible trouvée dans la portée.");
@@ -63,8 +63,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             // _animator.SetBool("Attacking", true);
             // _animator.SetBool("Walking", false);
-
-            // attendre la fin de 
 
             _btParent.ImageSpotBar.fillAmount = 0.0f;
             _btParent.CanvasUi.alpha = 0.0f;
@@ -133,12 +131,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 UnloadCanvas();
         }
 
-/*        // Reset the focus flag when the player is out of view
-        if (_hasACorrectView)
-        {
-            _hasACorrectView = false;
-            _hasFocusedUx = false;
-        }*/
         return false;
     }
 

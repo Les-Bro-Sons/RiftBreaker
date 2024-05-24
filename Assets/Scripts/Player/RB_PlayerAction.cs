@@ -21,6 +21,9 @@ public class RB_PlayerAction : MonoBehaviour
     //Components
     private RB_PlayerMovement _playerMovement;
     private RB_PlayerController _playerController;
+    public Animator PlayerAnimator;
+    public Animator ColliderAnimator;
+    public RB_CollisionDetection CollisionDetection;
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
     RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }

@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class RB_TimeBodyRecorder : MonoBehaviour
 {
+    
     new Transform transform; // to reduce performance cost of calling transform
     private Rigidbody _rb;
-    private List<RB_PointInTime> _pointsInTime = new();
+    private List<PointInTime> _pointsInTime = new();
 
     private bool _isRewinding = false;
 
@@ -14,12 +15,21 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Animator _animator;
+    [SerializeField] private RB_Health _health;
+    [SerializeField] private RB_Enemy _enemy;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         transform = GetComponent<Transform>(); // to reduce performance cost of calling transform
         _uxRewind = FindObjectOfType<RB_UXRewindManager>();
+        if (!_health)
+            _health = GetComponent<RB_Health>();
+        if (!_enemy)
+            _enemy = GetComponent<RB_Enemy>();
+        if (!_particleSystem)
+            _particleSystem = GetComponent<ParticleSystem>();
     }
 
     private void Start()
@@ -39,11 +49,50 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
-        switch (_entityType)
+        PointInTime newPoint = new PointInTime();
+        newPoint.Time = time;
+        newPoint.Position = transform.position;
+        newPoint.Rotation = transform.rotation;
+        if (_spriteRenderer)
+            newPoint.Sprite = _spriteRenderer.sprite;
+        if (_health)
         {
-            default:
-                _pointsInTime.Add(new RB_PointInTime(time, transform.position, transform.rotation, _spriteRenderer.sprite));
-                break;
+            newPoint.Health = _health.Hp;
+            newPoint.Dead = _health.Dead;
+        }
+
+        _pointsInTime.Add(newPoint);
+    }
+
+    private void Rewind()
+    {
+        if (_pointsInTime.Count <= 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        float currentTime = RB_TimeManager.Instance.CurrentTime;
+
+        PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
+        transform.position = closestPointInTime.Position;
+        transform.rotation = closestPointInTime.Rotation;
+        if (closestPointInTime.Sprite) _spriteRenderer.sprite = closestPointInTime.Sprite;
+        if (_health)
+        {
+            _health.Hp = closestPointInTime.Health;
+            if (_health.Dead != closestPointInTime.Dead && _enemy)
+            {
+                if (closestPointInTime.Dead) //die
+                {
+                    _enemy.Tombstone();
+                }
+                else //revive
+                {
+                    _enemy.UnTombstone();
+                }
+                _health.Dead = closestPointInTime.Dead;
+            }
         }
     }
 
@@ -69,27 +118,14 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         UxStopRewind();
     }
 
-    private void Rewind()
-    {
-        if (_pointsInTime.Count == 0)
-            return;
-
-        float currentTime = RB_TimeManager.Instance.CurrentTime;
-
-        RB_PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
-        transform.position = closestPointInTime.Position;
-        transform.rotation = closestPointInTime.Rotation;    
-        if (closestPointInTime.Sprite) _spriteRenderer.sprite = closestPointInTime.Sprite;
-    }
-
-    private RB_PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore
+    private PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore
     {
         if (_pointsInTime.Count == 1)
             return _pointsInTime[0];
 
         float timeDifference = 0;
-        RB_PointInTime lastPoint = _pointsInTime[_pointsInTime.Count - 1];
-        RB_PointInTime beforeLastPoint = _pointsInTime[_pointsInTime.Count - 2];
+        PointInTime lastPoint = _pointsInTime[_pointsInTime.Count - 1];
+        PointInTime beforeLastPoint = _pointsInTime[_pointsInTime.Count - 2];
 
         timeDifference = Mathf.Abs(currentTime - lastPoint.Time); // time difference between last point and now
 
@@ -108,7 +144,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void RemoveFuturePointsInTime(float currentTime)
     {
-        foreach (RB_PointInTime point in _pointsInTime)
+        foreach (PointInTime point in _pointsInTime)
         {
             if (point.Time > currentTime)
             {

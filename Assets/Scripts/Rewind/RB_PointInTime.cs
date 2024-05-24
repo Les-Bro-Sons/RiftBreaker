@@ -1,30 +1,33 @@
 using UnityEngine;
 
-public class RB_PointInTime
+public struct PointInTime
 {
     public float Time;
+
+    //TRANSFORM//
     public Vector3 Position;
     public Quaternion Rotation;
+    /////////////
+
     public Sprite Sprite;
 
-    public RB_PointInTime(Vector3 position, Quaternion rotation)
-    {
-        this.Position = position;
-        this.Rotation = rotation;
-    }
+    //RB_Health//
+    public float Health;
+    public bool Dead;
+    /////////////
+}
 
-    public RB_PointInTime(float time, Vector3 position, Quaternion rotation)
-    {
-        this.Time = time;
-        this.Position = position;
-        this.Rotation = rotation;
-    }
+public struct EventInTime
+{
+    public TYPETIMEEVENT TypeEvent;
 
-    public RB_PointInTime(float time, Vector3 position, Quaternion rotation, Sprite sprite)
-    {
-        this.Time = time;
-        this.Position = position;
-        this.Rotation = rotation;
-        this.Sprite = sprite;
-    }
+    public float Time;
+
+    public Vector3 Position;
+    public Quaternion Rotation;
+}
+
+public enum TYPETIMEEVENT
+{
+    DestroyedPrefab,
 }

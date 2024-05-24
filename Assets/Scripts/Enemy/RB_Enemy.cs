@@ -54,8 +54,9 @@ public class RB_Enemy : MonoBehaviour
         if (!_isTombstoned)
         {
             _isTombstoned = true;
-            SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/PlaceHolder/TombstonePlaceholder"); //PLACEHOLDER
+            SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
             _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
+            _rb.velocity = Vector3.zero;
         }
     }
 

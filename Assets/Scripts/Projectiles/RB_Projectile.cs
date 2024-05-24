@@ -67,13 +67,13 @@ public class RB_Projectile : MonoBehaviour
 
         bool isAlly = (enemyHealth.Team == Team);
 
-        if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
-        {
-            enemyHealth.TakeDamage(_damage);
-        }
         if ((_isDealingKnockbackMultipleTime || !isAlreadyDamaged) && (_canKnockbackAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
             enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
+        }
+        if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
+        {
+            enemyHealth.TakeDamage(_damage);
         }
     }
 

@@ -8,7 +8,9 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 {
     [Header("Main Parameters")]
     public float MovementSpeed = 4f;
-    public float AttackRange = 1f;
+    public float RotationSpeed = 4f;
+    public float MovementSpeedAttack = 8f;
+    [Range (1f, 10f)] public float AttackRange = 2f;
     public float AttackSpeed = 2f;
 
     [Header("Spline Parameters")]
@@ -52,7 +54,7 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
             new RB_BTSequence(new List<RB_BTNode> // Sequence Attack
             {
                 new RB_AI_PlayerInFov(this),
-                //new TaskAttack(transform),
+                new RB_AI_GoToTarget(this),
             }),
 
             new RB_AI_Task_DefaultPatrol(this),  // task default

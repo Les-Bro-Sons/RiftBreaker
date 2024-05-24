@@ -78,6 +78,25 @@ MonoBehaviour:
   EventRewindCanceled:
     m_PersistentCalls:
       m_Calls: []
+  EventItem1Started:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItem1Canceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItem2Started:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItem2Canceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItem3Started:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItem3Canceled:
+    m_PersistentCalls:
+      m_Calls: []
+  MoveValue: {x: 0, y: 0}
 --- !u!114 &5636846860869108747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +203,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b11ac813-e112-4d6b-913b-ae5253f1b086
     m_ActionName: Player/Rewind[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8940931488551022478}
+        m_TargetAssemblyTypeName: RB_InputManager, Assembly-CSharp
+        m_MethodName: OnItem1
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7007dc53-fcbf-4ab9-8c7a-68fe76273418
+    m_ActionName: Player/Item1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8940931488551022478}
+        m_TargetAssemblyTypeName: RB_InputManager, Assembly-CSharp
+        m_MethodName: OnItem2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b6225744-391f-4712-9a07-a17f8727710e
+    m_ActionName: Player/Item2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8940931488551022478}
+        m_TargetAssemblyTypeName: RB_InputManager, Assembly-CSharp
+        m_MethodName: OnItem3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bec4db36-c8b4-4fad-9823-fbb7c8314a79
+    m_ActionName: Player/Item3[/Keyboard/3]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

@@ -86,8 +86,8 @@ public class RB_Items : MonoBehaviour
             //If on the detected object, there's life script, it deals damage
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
-                _enemyHealth.TakeDamage(_currentDamage);
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
+                _enemyHealth.TakeDamage(_currentDamage);
                 print(detectedObject.name + "took damage");
             }
         }

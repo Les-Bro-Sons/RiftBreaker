@@ -17,6 +17,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private float _currentValueFillSpotBar = 0.0f;
     
     private bool _hasACorrectView = false;
+    private bool _hasFocusedUx = false;
 
     private bool _isLoadingCanvas = false;
     private bool _isUnloadingCanvas = false;
@@ -41,7 +42,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             {
                 //Debug.Log("Cible trouvée, assignation en cours...");
                 Parent.Parent.SetData("target", colliders[0].transform);
-                //t = colliders[0].transform;
+                t = colliders[0].transform;
             }
             //else
             //    Debug.Log("Aucune cible trouvée dans la portée.");
@@ -63,15 +64,14 @@ public class RB_AI_PlayerInFov : RB_BTNode
             // _animator.SetBool("Attacking", true);
             // _animator.SetBool("Walking", false);
 
-            // attendre la fin de 
-
             _btParent.ImageSpotBar.fillAmount = 0.0f;
             _btParent.CanvasUi.alpha = 0.0f;
-            
+
             _state = BTNodeState.SUCCESS;
             return _state;
         }
-
+        
+        _hasFocusedUx = false;
         _state = BTNodeState.FAILURE;
         return _state;
     }
@@ -101,6 +101,11 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     }
                     else
                     {
+                        if (!_hasFocusedUx)
+                        {
+                            _btParent.UxFocus();
+                            _hasFocusedUx = true;
+                        }
                         return true;
                     }
                 }
@@ -110,6 +115,13 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     Debug.DrawLine(_transform.position, hit.point, Color.yellow);
                 }
             }
+            else
+            {
+                UnloadSpotBar();
+
+                if (_currentValueFillSpotBar <= 0)
+                    UnloadCanvas();
+            }
         }
         else
         {
@@ -117,8 +129,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
             
             if (_currentValueFillSpotBar <= 0)
                 UnloadCanvas();
-            
         }
+
         return false;
     }
 
@@ -145,8 +157,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
     {
         if (!_isUnloadingCanvas)
         {
-            _isUnloadingCanvas = true;
             _isLoadingCanvas = false;
+            _isUnloadingCanvas = true;
         }
 
         _btParent.CanvasUi.alpha -= Time.deltaTime / _btParent.DurationAlphaCanvas;
@@ -187,8 +199,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
         
         if (!_isUnloadingSpotBar)
         {
-            _isUnloadingSpotBar = true; 
             _isLoadingSpotBar = false;
+            _isUnloadingSpotBar = true; 
         }
 
         _btParent.ImageSpotBar.fillAmount -= Time.deltaTime / _btParent.DurationToUnloadSpotBar; 

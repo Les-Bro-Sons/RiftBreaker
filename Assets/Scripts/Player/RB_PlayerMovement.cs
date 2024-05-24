@@ -97,9 +97,16 @@ public class RB_PlayerMovement : MonoBehaviour
                     ActualDirection = Direction.Face;
             }
         }
-        //Setting the direction to the player
-        _transform.forward = _directionToMove;
+    }
 
+    public void SetDirection()
+    {
+        if (!_playerAction.IsDoingAnyAttack())
+        {
+            //Setting the direction to the player
+            _transform.forward = _directionToMove;
+        }
+        
     }
 
     public Vector3 GetDirectionToMove()
@@ -219,6 +226,12 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        //Set the direction
+        SetDirection();
+    }
+
     private void FixedUpdate()
     {
         //Clamping the speed to the max speed
@@ -231,6 +244,7 @@ public class RB_PlayerMovement : MonoBehaviour
         SetSpeed();
 
         
+
 
         //If the player can move
         if (CanMove())

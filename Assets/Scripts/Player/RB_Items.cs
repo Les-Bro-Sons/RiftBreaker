@@ -37,7 +37,7 @@ public class RB_Items : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
-        _playerAction = GetComponentInParent<RB_PlayerAction>();
+        
         if(_playerAction != null )
         {
             Bind();
@@ -46,16 +46,20 @@ public class RB_Items : MonoBehaviour
 
     protected virtual void Start()
     {
-        _playerAnimator = RB_PlayerAction.Instance.PlayerAnimator;
-        _colliderAnimator = RB_PlayerAction.Instance.ColliderAnimator;
-        _collisionDetection = RB_PlayerAction.Instance.CollisionDetection;
+        _playerAction = RB_PlayerAction.Instance;
+        _playerAnimator = _playerAction.PlayerAnimator;
+        _colliderAnimator = _playerAction.ColliderAnimator;
+        _collisionDetection = _playerAction.CollisionDetection;
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
     }
 
     public virtual void Bind()
     {
+        //Reset the current transform
         _transform = transform;
+        //When the item is gathered get the playerAction
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+        //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
     }
 

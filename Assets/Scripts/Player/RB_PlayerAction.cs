@@ -1,5 +1,6 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,22 +28,32 @@ public class RB_PlayerAction : MonoBehaviour
     public RB_CollisionDetection CollisionDetection;
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
-    RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }
+    
 
     //Charge attack
     private Coroutine _currentChargedAttack;
     [SerializeField] private float _startChargingDelay; public float StartChargingDelay { get { return _startChargingDelay; } }
     private bool _isChargingAnimation = false;
 
+    //Events
     public UnityEvent EventBasicAttack;
     public UnityEvent EventChargedAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
 
-    public bool IsItemNearby;
     //Interacts
     [SerializeField] private float _interactRange;
+
+    //item
+    public List<RB_Items> Items = new();
+    public bool IsItemNearby;
+    private int _itemId = 0;
+    RB_Items _item; public RB_Items CurrentItem { get { return _item; } }
+
+    //Debug
+    [Header("Debug")]
+    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback; 
 
     private void Awake()
     {
@@ -55,8 +66,18 @@ public class RB_PlayerAction : MonoBehaviour
         _item = GetComponentInChildren<RB_Items>();
     }
 
+    public void SetCurrentWeapon(string currentWeapon)
+    {
+        if(_debugCurrentWeaponFeedback != null)
+        {
+            //set a debug feedback to know the current weapon
+            _debugCurrentWeaponFeedback.text = currentWeapon;
+        }
+    }
+
     public void Rebind()
     {
+        //When the item is gathered, get it
         _item = GetComponentInChildren<RB_Items>();
     }
 
@@ -89,15 +110,22 @@ public class RB_PlayerAction : MonoBehaviour
             print("trying to gather item");
             if(RB_Tools.TryGetComponentInParent<RB_Items>(collider.gameObject, out RB_Items itemGathered))
             {
+                //For each object around the player, verify if it's an item
                 print("item gathered");
+                //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
                 EventItemGathered?.Invoke();
                 itemGathered.Bind();
                 IsItemNearby = true;
+                //Add the item gathered to the items
+                Items.Add(itemGathered);
+                _playerController.ChoseItem(_itemId);
+                _itemId++;
             }
         }
         if (!IsItemNearby)
         {
+            //if there's no item around then attack
             _playerController.OnChargeAttackStart();
         }
     }
@@ -107,7 +135,6 @@ public class RB_PlayerAction : MonoBehaviour
         if(_item != null)
         {
             //Charge attack
-            _playerMovement.ResetDirection();
             _item.ChargedAttack();
             IsChargedAttacking = true;
             EventChargedAttack?.Invoke();
@@ -170,7 +197,6 @@ public class RB_PlayerAction : MonoBehaviour
             else if(IsChargingAttack)
             {
                 //Otherwise do the charged attack
-                _playerMovement.ResetDirection();
                 ChargedAttack();
             }
             _item.StopChargingAttack();

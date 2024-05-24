@@ -25,7 +25,7 @@ public class RB_SpriteBillBoard : MonoBehaviour
         _transform.rotation = _defaultRotation;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         //Constantly looking at camera in y axe
         LookAtCamera();

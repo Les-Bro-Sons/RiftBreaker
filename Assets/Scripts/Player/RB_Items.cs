@@ -28,19 +28,26 @@ public class RB_Items : MonoBehaviour
     [SerializeField] protected Animator _playerAnimator;
     [SerializeField] protected Animator _colliderAnimator;
     [SerializeField] private RB_CollisionDetection _collisionDetection;
+    [SerializeField] private GameObject _objectToRemove;
     private Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
 
     private void Awake()
     {
-        _playerAction = GetComponentInParent<RB_PlayerAction>();
         _transform = transform;
     }
 
     protected virtual void Start()
     {
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
+    }
+
+    public void Bind()
+    {
+        _transform = transform;
+        _playerAction = GetComponentInParent<RB_PlayerAction>();
+        Destroy(_objectToRemove);
     }
 
     public virtual void ResetAttack()
@@ -76,7 +83,7 @@ public class RB_Items : MonoBehaviour
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
             {
                 _enemyHealth.TakeDamage(_currentDamage);
-                _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _transform.position).normalized, _currentKnockbackForce);
+                _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
                 print(detectedObject.name + "took damage");
             }
         }

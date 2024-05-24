@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 9054077203260257630}
   - component: {fileID: 7262178411359263179}
   - component: {fileID: 3669966155072335375}
-  - component: {fileID: 8199144125740249035}
   - component: {fileID: 7810650786347569942}
   m_Layer: 0
   m_Name: Player
@@ -144,6 +143,10 @@ MonoBehaviour:
   EventStopChargingAttack:
     m_PersistentCalls:
       m_Calls: []
+  EventItemGathered:
+    m_PersistentCalls:
+      m_Calls: []
+  _interactRange: 1
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,31 +160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 1
---- !u!114 &8199144125740249035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838961826420885278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c47ea0b9c4fc24e97e0075b378e657, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentAttackCombo: 0
-  ChargeTime: 1
-  _attackCooldown: 0.1
-  _attackDamage: 20
-  _chargedAttackDamage: 50
-  _specialAttackDamage: 100
-  _normalKnockbackForce: 5
-  _chargeAttackKnockbackForce: 8
-  _specialAttackKnockbackForce: 10
-  _playerAnimator: {fileID: 461484540895704965}
-  _colliderAnimator: {fileID: 7873082402642551729}
-  _collisionDetection: {fileID: 1560718448460901250}
-  HudSprite: {fileID: 0}
 --- !u!114 &7810650786347569942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +358,7 @@ GameObject:
   - component: {fileID: 3650759193627221759}
   - component: {fileID: 7873082402642551729}
   m_Layer: 0
-  m_Name: Weapon
+  m_Name: WeaponCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

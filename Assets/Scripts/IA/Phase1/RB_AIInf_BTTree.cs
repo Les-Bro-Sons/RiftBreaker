@@ -30,11 +30,23 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float DurationAlphaCanvas = 0.5f;
     public float DurationToLoadSpotBar = 1f;
     public float DurationToUnloadSpotBar = 0.5f;
+    [SerializeField] private GameObject _prefabUxDetectedReadyMark;
+
 
     private void Awake()
     {
         if (CanvasUi.alpha > 0f)
             CanvasUi.alpha = 0;
+    }
+
+    public void UxFocus()
+    {
+        GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
+        spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+/*        GameObject spawnedSprite = Instantiate(_spritePrefab, new Vector3(_transform.position.x, 1, _previousPosition.z + _zFadeOffset), Quaternion.identity);
+        spawnedSprite.GetComponent<RB_SpriteFadeOut>().FadeForce = _fadeForce;
+        Invoke("UxFocus", _fadeOutInterval);*/
     }
 
     protected override RB_BTNode SetupTree()

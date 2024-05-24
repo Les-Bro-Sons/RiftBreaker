@@ -25,6 +25,7 @@ public class RB_CollisionDetection : MonoBehaviour
             _detectedEnemies.Add(enemyHealth.gameObject);
             EventOnEnemyEntered?.Invoke();
         }
+        _detectedObjects.Add(other.gameObject);
         EventOnObjectEntered?.Invoke();
     }
 
@@ -39,6 +40,7 @@ public class RB_CollisionDetection : MonoBehaviour
                 EventOnEnemyExit?.Invoke();
             }
         }
+        _detectedObjects.Remove(other.gameObject);
         EventOnObjectExit?.Invoke();
 
 
@@ -54,7 +56,15 @@ public class RB_CollisionDetection : MonoBehaviour
 
     public void DestroyDeletedObject()
     {
-        foreach (GameObject detectedObject in _detectedEnemies.ToList())
+        foreach (GameObject detectedEnemy in _detectedEnemies.ToList())
+        {
+            if (detectedEnemy == null)
+            {
+                //If something in the list is empty then destroy it
+                _detectedEnemies.Remove(detectedEnemy);
+            }
+        }
+        foreach (GameObject detectedObject in _detectedObjects.ToList())
         {
             if (detectedObject == null)
             {

@@ -51,7 +51,6 @@ public class RB_Items : MonoBehaviour
     public void Bind()
     {
         _transform = transform;
-        _playerAction = GetComponentInParent<RB_PlayerAction>();
         Destroy(_objectToRemove);
     }
 

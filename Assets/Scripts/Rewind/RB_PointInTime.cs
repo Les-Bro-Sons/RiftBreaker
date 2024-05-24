@@ -5,6 +5,7 @@ public class RB_PointInTime
     public float Time;
     public Vector3 Position;
     public Quaternion Rotation;
+    public Sprite Sprite;
 
     public RB_PointInTime(Vector3 position, Quaternion rotation)
     {
@@ -17,5 +18,13 @@ public class RB_PointInTime
         this.Time = time;
         this.Position = position;
         this.Rotation = rotation;
+    }
+
+    public RB_PointInTime(float time, Vector3 position, Quaternion rotation, Sprite sprite)
+    {
+        this.Time = time;
+        this.Position = position;
+        this.Rotation = rotation;
+        this.Sprite = sprite;
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_Projectile : MonoBehaviour
@@ -15,6 +16,20 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private ProjectileType _projectileType;
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
+    [SerializeField] public TEAMS Team;
+
+    [Header("Particles")]
+    [SerializeField] private GameObject _followParticles;
+    [SerializeField] private GameObject _destroyParticles;
+
+    [Header("Damage")]
+    [SerializeField] private float _damage = 10;
+    [SerializeField] private Vector3 _knockback = Vector3.forward;
+    [SerializeField] private bool _isDealingDamageMultipleTime = false;
+    [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
+    [SerializeField] private bool _canDamageAlly = false;
+    [SerializeField] private bool _canKnockbackAlly = false;
+    private List<GameObject> _alreadyDamaged = new(); 
 
     //Components
     private Rigidbody _rb;
@@ -30,6 +45,36 @@ public class RB_Projectile : MonoBehaviour
     {
         _transform = transform;
         _rb = GetComponent<Rigidbody>();
+        RB_CollisionDetection collision = GetComponent<RB_CollisionDetection>();
+        if (collision)
+        {
+            collision.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(collision.GetDetectedObjects()[collision.GetDetectedObjects().Count-1]); });
+        }
+
+        if (_followParticles)
+            Instantiate(_followParticles, _transform.position, _transform.rotation).GetComponent<RB_Particles>().FollowObject = _transform;
+    }
+
+    private void EnemyEntered(GameObject enemy)
+    {
+        bool isAlreadyDamaged = true;
+        if (!_alreadyDamaged.Contains(enemy))
+        {
+            _alreadyDamaged.Add(enemy);
+            isAlreadyDamaged = false;
+        }
+        RB_Health enemyHealth = enemy.GetComponent<RB_Health>();
+
+        bool isAlly = (enemyHealth.Team == Team);
+
+        if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
+        {
+            enemyHealth.TakeDamage(_damage);
+        }
+        if ((_isDealingKnockbackMultipleTime || !isAlreadyDamaged) && (_canKnockbackAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
+        {
+            enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
+        }
     }
 
     private void Start()
@@ -66,6 +111,8 @@ public class RB_Projectile : MonoBehaviour
             else
             {
                 //When it reaches the total distance, destroy the projectile
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
                 Destroy(gameObject);
             }
         }
@@ -74,6 +121,8 @@ public class RB_Projectile : MonoBehaviour
             if(Time.time > (_creationTime + _totalLifeTime))
             {
                 //If the projectile is meant to be launched, when its life time is finished, destroy it
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
                 Destroy(gameObject);
             }
         }

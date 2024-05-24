@@ -132,6 +132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 0
+  _spriteRenderer: {fileID: 9101173564990518349}
+  _animator: {fileID: 7214748225881584283}
 --- !u!114 &2387686529390378546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +151,7 @@ MonoBehaviour:
       m_Calls: []
   _isAttachedToAPhase: 1
   _spawnInPhase: 0
+  SpriteRenderer: {fileID: 9101173564990518349}
   DeathSpawnPrefabName: Dummy
 --- !u!114 &263053956299020696
 MonoBehaviour:
@@ -165,6 +168,8 @@ MonoBehaviour:
   _hp: 100
   _hpMax: 100
   Armor: 0
+  Team: 0
+  Dead: 0
   EventDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -177,6 +182,8 @@ MonoBehaviour:
   LerpTimer: 0
   _particleDamage: {fileID: 827747827748336171, guid: 6f1309b1a7e1f9b4e97af0d4ed517342,
     type: 3}
+  _particleDeath: {fileID: 0}
+  _particleHeal: {fileID: 0}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

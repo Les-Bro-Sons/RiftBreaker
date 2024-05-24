@@ -34,6 +34,10 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventChargedAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
+    public UnityEvent EventItemGathered;
+
+    //Interacts
+    [SerializeField] private float _interactRange;
 
     private void Awake()
     {
@@ -42,8 +46,13 @@ public class RB_PlayerAction : MonoBehaviour
 
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerController = GetComponent<RB_PlayerController>();
-        _item = GetComponentInChildren<RB_Items>();
         _transform = transform;
+        _item = GetComponentInChildren<RB_Items>();
+    }
+
+    public void Rebind()
+    {
+        _item = GetComponentInChildren<RB_Items>();
     }
 
     public void StartDash()
@@ -57,7 +66,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (CanAttack() && _item.CanAttack())
+        if (_item != null && CanAttack() && _item.CanAttack())
         {
             //Attack
             IsAttacking = true;
@@ -67,13 +76,32 @@ public class RB_PlayerAction : MonoBehaviour
         }
     }
 
+    public void Interact()
+    {
+        foreach (Collider collider in Physics.OverlapSphere(_transform.position, _interactRange))
+        {
+            print("trying to gather item");
+            if(RB_Tools.TryGetComponentInParent<RB_Items>(collider.gameObject, out RB_Items itemGathered))
+            {
+                print("item gathered");
+                itemGathered.transform.parent = _transform;
+                itemGathered.Bind();
+                EventItemGathered?.Invoke();
+            }
+        }
+    }
+
     public void ChargedAttack()
     {
-        //Charge attack
-        _playerMovement.ResetDirection();
-        _item.ChargedAttack();
-        IsChargedAttacking = true;
-        EventChargedAttack?.Invoke();
+        if(_item != null)
+        {
+            //Charge attack
+            _playerMovement.ResetDirection();
+            _item.ChargedAttack();
+            IsChargedAttacking = true;
+            EventChargedAttack?.Invoke();
+        }
+        
     }
 
     public void StopChargedAttack()
@@ -90,7 +118,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StartChargeAttack()
     {
-        if (CanAttack())
+        if (_item != null && CanAttack())
         {
             //Start charging attack
             print("IsChargedAttacking : " + IsChargedAttacking + ", Starting charge attack");
@@ -116,25 +144,29 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StopChargeAttack()
     {
-        //Stop charging attack
-        if(_currentChargedAttack != null)
-            StopCoroutine(_currentChargedAttack);
-        if(_chargeAttackPressTime < _item.ChargeTime)
+        if(_item != null)
         {
-            //If the player didn't press long enough, normal attack
+            //Stop charging attack
+            if(_currentChargedAttack != null)
+                StopCoroutine(_currentChargedAttack);
+            if(_chargeAttackPressTime < _item.ChargeTime)
+            {
+                //If the player didn't press long enough, normal attack
+                _item.StopChargingAttack();
+                IsChargingAttack = false;
+                Attack();
+            }
+            else if(IsChargingAttack)
+            {
+                //Otherwise do the charged attack
+                _playerMovement.ResetDirection();
+                ChargedAttack();
+            }
             _item.StopChargingAttack();
             IsChargingAttack = false;
-            Attack();
+            EventStopChargingAttack?.Invoke();
         }
-        else if(IsChargingAttack)
-        {
-            //Otherwise do the charged attack
-            _playerMovement.ResetDirection();
-            ChargedAttack();
-        }
-        _item.StopChargingAttack();
-        IsChargingAttack = false;
-        EventStopChargingAttack?.Invoke();
+        
     }
 
     private IEnumerator ChargeAttack()
@@ -152,7 +184,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void SpecialAttack()
     {
-        if(CanAttack() && SpecialAttackCharge >= 100)
+        if(_item != null && CanAttack() && SpecialAttackCharge >= 100)
         {
             //Special Attack
             IsSpecialAttacking = true;
@@ -192,7 +224,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     private void TimerChargeAttack()
     {
-        if (IsChargingAttack)
+        if (_item != null && IsChargingAttack)
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;

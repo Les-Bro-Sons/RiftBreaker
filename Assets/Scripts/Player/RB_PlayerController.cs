@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class RB_PlayerController : MonoBehaviour
 {
@@ -28,21 +26,47 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Start()
     {
-
-        RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
-        RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
+        if(_item != null)
+        {
+            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+            RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
+        }
+        else
+        {
+            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+            RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
+        }
+        
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
         RB_InputManager.Instance.EventSpecialAttackStarted.AddListener(OnSpecialAttack);
         RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
         RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
+
+        _playerAction.EventItemGathered.AddListener(BindToAttack);
     }
 
     public void OnChargeAttackStart()
     {
         //Start charging attack
+        print("attacking");
         _playerAction.StartChargeAttack();
+    }
+
+    public void Interact()
+    {
+        _playerAction.Interact();
+    }
+
+    public void BindToAttack()
+    {
+        _item = GetComponentInChildren<RB_Items>();
+        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+        RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+        RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
+        _playerAction.Rebind();
     }
 
     public void OnChargeAttackStop()

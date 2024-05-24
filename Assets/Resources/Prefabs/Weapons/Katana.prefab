@@ -57,14 +57,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4244062485352682178}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -2, y: -0.5, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8241562237352362998}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &3150792290815004498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,15 +80,12 @@ MonoBehaviour:
   CurrentAttackCombo: 0
   ChargeTime: 1
   _attackCooldown: 0.1
-  _attackDamage: 20
-  _chargedAttackDamage: 50
-  _specialAttackDamage: 100
+  _attackDamage: 30
+  _chargedAttackDamage: 45
+  _specialAttackDamage: 90
   _normalKnockbackForce: 5
   _chargeAttackKnockbackForce: 8
   _specialAttackKnockbackForce: 10
-  _playerAnimator: {fileID: 0}
-  _colliderAnimator: {fileID: 0}
-  _collisionDetection: {fileID: 0}
   _objectToRemove: {fileID: 8480078606098514397}
   HudSprite: {fileID: 0}
 --- !u!1 &5193897555094522839

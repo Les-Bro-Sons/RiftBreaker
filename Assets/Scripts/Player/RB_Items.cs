@@ -36,6 +36,7 @@ public class RB_Items : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
+        _playerAction = GetComponentInParent<RB_PlayerAction>();
     }
 
     protected virtual void Start()

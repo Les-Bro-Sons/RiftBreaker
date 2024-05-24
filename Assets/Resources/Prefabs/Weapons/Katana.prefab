@@ -86,9 +86,6 @@ MonoBehaviour:
   _normalKnockbackForce: 5
   _chargeAttackKnockbackForce: 8
   _specialAttackKnockbackForce: 10
-  _playerAnimator: {fileID: 0}
-  _colliderAnimator: {fileID: 0}
-  _collisionDetection: {fileID: 0}
   _objectToRemove: {fileID: 8480078606098514397}
   HudSprite: {fileID: 0}
 --- !u!1 &5193897555094522839
@@ -257,7 +254,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8549684315420695012}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

@@ -12,6 +12,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     [SerializeField] private ENTITYTYPES _entityType = ENTITYTYPES.Ai;
     private RB_UXRewindManager _uxRewind;
 
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Animator _animator;
 
     private void Awake()
     {
@@ -37,16 +39,21 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
-        _pointsInTime.Add(new RB_PointInTime(time, transform.position, transform.rotation));
+        switch (_entityType)
+        {
+            default:
+                _pointsInTime.Add(new RB_PointInTime(time, transform.position, transform.rotation, _spriteRenderer.sprite));
+                break;
+        }
     }
 
     private void StartRewinding()
     {
         _isRewinding = true;
         if (_rb)
-        {
             _rb.isKinematic = true;
-        }
+        if (_animator)
+            _animator.enabled = false;
         UxStartRewind();
     }
 
@@ -54,9 +61,9 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     {
         _isRewinding = false;
         if (_rb)
-        {
             _rb.isKinematic = false;
-        }
+        if (_animator)
+            _animator.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
 
         UxStopRewind();
@@ -72,6 +79,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         RB_PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
         transform.position = closestPointInTime.Position;
         transform.rotation = closestPointInTime.Rotation;    
+        if (closestPointInTime.Sprite) _spriteRenderer.sprite = closestPointInTime.Sprite;
     }
 
     private RB_PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore

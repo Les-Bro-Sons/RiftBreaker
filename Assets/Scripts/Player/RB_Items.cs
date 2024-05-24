@@ -36,6 +36,7 @@ public class RB_Items : MonoBehaviour
     private void Awake()
     {
         _transform = transform;
+        _playerAction = GetComponentInParent<RB_PlayerAction>();
     }
 
     protected virtual void Start()
@@ -50,7 +51,6 @@ public class RB_Items : MonoBehaviour
     public void Bind()
     {
         _transform = transform;
-        _playerAction = GetComponentInParent<RB_PlayerAction>();
         Destroy(_objectToRemove);
     }
 

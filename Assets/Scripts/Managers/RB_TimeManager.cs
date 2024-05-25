@@ -6,6 +6,8 @@ public class RB_TimeManager : MonoBehaviour
     public static RB_TimeManager Instance;
 
     public UnityEvent EventRecordFrame;
+    public UnityEvent EventStartRewinding;
+    public UnityEvent EventStopRewinding;
 
     [SerializeField] private float _recordDelay = 0.1f;
     private float _timeWaited = 9999f; // used for delay, it's set at 9999 so it record the first frame
@@ -70,16 +72,32 @@ public class RB_TimeManager : MonoBehaviour
 
     private void StartRewinding()
     {
+        EventRecordFrame?.Invoke(); // used for interpolation
         _isRewinding = true;
+        UxStartRewind();
+        EventStartRewinding?.Invoke();
     }
 
     private void StopRewinding()
     {
+        EventStopRewinding?.Invoke();
         _isRewinding = false;
+        UxStopRewind();
+        EventRecordFrame?.Invoke(); // used for interpolation
     }
 
     private void Rewind()
     {
         _currentTime -= Time.fixedDeltaTime;
+    }
+
+    private void UxStartRewind()
+    {
+        RB_UXRewindManager.Instance.StartRewindTransition();
+    }
+
+    private void UxStopRewind()
+    {
+        RB_UXRewindManager.Instance.StopRewindTransition();
     }
 }

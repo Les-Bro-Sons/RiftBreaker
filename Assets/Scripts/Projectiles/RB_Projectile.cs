@@ -30,8 +30,8 @@ public class RB_Projectile : MonoBehaviour
 
     [Header("Damage")]
     [SerializeField] private float _damage = 10;
-    [SerializeField] private float _knocbackExplosionForce = 3;
-    [SerializeField] private Vector3 _knockback = Vector3.forward;
+    [SerializeField] private float _knocbackExplosionForce = 0;
+    [SerializeField] private Vector3 _knockback = Vector3.zero;
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;

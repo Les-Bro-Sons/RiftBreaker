@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,6 +27,7 @@ public class RB_PlayerAction : MonoBehaviour
     public RB_CollisionDetection CollisionDetection;
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
+    private CinemachineImpulseSource _impulseSource;
     RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }
 
     //Charge attack
@@ -51,6 +53,7 @@ public class RB_PlayerAction : MonoBehaviour
         _playerController = GetComponent<RB_PlayerController>();
         _transform = transform;
         _item = GetComponentInChildren<RB_Items>();
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     public void Rebind()
@@ -76,6 +79,7 @@ public class RB_PlayerAction : MonoBehaviour
             _item.Attack();
             EventBasicAttack?.Invoke();
             print("charge attack annulé et attaque commencé");
+            //_impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(0.1f, 0.2f));
         }
     }
 

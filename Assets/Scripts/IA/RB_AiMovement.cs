@@ -75,6 +75,7 @@ public class RB_AiMovement : MonoBehaviour
 
     private void UpdateAnimator()
     {
+        //Updating the enemy animator
         if(_enemyAnimator != null)
         {
             _enemyAnimator.SetFloat("Horizontal", WalkDirection.x);

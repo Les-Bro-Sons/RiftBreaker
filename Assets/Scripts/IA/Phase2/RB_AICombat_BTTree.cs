@@ -23,6 +23,7 @@ public class RB_AICombat_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Range (1f, 10f)] public float AttackRange = 2f;
     public float AttackSpeed = 2f;
     public float AttackDamage = 2f;
+    public float WaitBeforeAttack = 0.5f;
 
 
     [Header("Spline Parameters")]
@@ -36,7 +37,6 @@ public class RB_AICombat_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Header("FOV Parameters")]
     public bool InRange = false;
     [Range(1f, 50f)] public float FovRange = 10f;
-    public float WaitBeforeAttack = 1f;
 
 /*    [Header("UI")]
     public CanvasGroup CanvasUi;

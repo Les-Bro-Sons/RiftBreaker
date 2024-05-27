@@ -55,7 +55,7 @@ public class RB_PlayerController : MonoBehaviour
     public void OnChargeAttackStart()
     {
         //Start charging attack
-        print("attacking");
+        //print("attacking");
         _playerAction.StartChargeAttack();
     }
 

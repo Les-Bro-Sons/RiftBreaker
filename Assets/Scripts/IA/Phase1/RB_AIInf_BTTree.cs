@@ -12,6 +12,9 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MovementSpeedAttack = 8f;
     [Range (1f, 10f)] public float AttackRange = 2f;
     public float AttackSpeed = 2f;
+    public float AttackDamage = 2f;
+    public float WaitBeforeAttack = 0.5f;
+     public bool IsAttacking = false;
 
     [Header("Spline Parameters")]
     public SplineContainer SplineContainer;
@@ -45,6 +48,8 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         AiMovement = GetComponent<RB_AiMovement>();
     }
 
+
+
     public void UxFocus()
     {
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
@@ -57,8 +62,9 @@ public class RB_AIInf_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         {
             new RB_BTSequence(new List<RB_BTNode> // Sequence Attack
             {
-                new RB_AI_PlayerInFov(this),
-                new RB_AI_GoToTarget(this),
+                new RB_AIInf_PlayerInFov(this),
+                new RB_AIInf_GoToTarget(this),
+                new RB_AIInf_Attack(this),
             }),
 
             new RB_AI_Task_DefaultPatrol(this),  // task default

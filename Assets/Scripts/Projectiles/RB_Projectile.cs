@@ -142,7 +142,7 @@ public class RB_Projectile : MonoBehaviour
     {
         //Move the projectile
         MoveLinear();
-        if (Physics.Raycast(_transform.position, _rb.velocity.normalized, _wallDetectionLength))
+        if (_destroyOnWall && Physics.Raycast(_transform.position, _rb.velocity.normalized, _wallDetectionLength, 1 << 3))
         {
             if (_damageOnExplosion)
             {

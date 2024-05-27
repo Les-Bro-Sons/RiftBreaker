@@ -19,6 +19,7 @@ public class RB_Mega_knight : RB_Boss
     public float JumpHeight = 5f;
     public float DamageRadius = 5f;
     private bool isGrounded;
+    private RB_AiMovement _mouvement;
 
     void Start()
     {
@@ -30,6 +31,8 @@ public class RB_Mega_knight : RB_Boss
         CooldownAttack1 = CooldownAttack1 - Time.deltaTime;
         CooldownAttack2 = CooldownAttack2 - Time.deltaTime; 
         CooldownAttack3 = CooldownAttack3 - Time.deltaTime;
+        //_mouvement.MoveIntoDirection(PlayerPosition.position);
+        
 
     }
     public void BaseAttack() 
@@ -64,21 +67,25 @@ public class RB_Mega_knight : RB_Boss
 
     public void JumpAttack()
     {
-        if (DistanceFromPlayer > 10f)
+        if (DistanceFromPlayer > 10f && isGrounded)
         {
             Vector3 Direction = (PlayerPosition.position - transform.position).normalized;
             float distance = Vector3.Distance(transform.position, PlayerPosition.position);
 
-            //Vector3 jumpDirection = new Vector3(Direction.x, CalculateVerticalJumpSpeed(float distance), 0);
+            Vector3 jumpDirection = new Vector3(Direction.x, CalculateVerticalJumpSpeed(distance), Direction.z);
+            BossRB.AddForce(jumpDirection * JumpForce, ForceMode.Impulse);
+            isGrounded = false;
+
             CooldownAttack3 = 1f;
             Health.TakeDamage(50f);
         }
     }
 
-   //float CalculateVerticalJumpSpeed(float distance)
-   //{
-   //
-   //}
+    float CalculateVerticalJumpSpeed(float distance)
+    {
+        float verticalSpeed = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * JumpHeight);
+        return verticalSpeed;
+    }
     private void SwitchBossState()
     {
         switch (CurrentState)
@@ -143,9 +150,35 @@ public class RB_Mega_knight : RB_Boss
 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            DealDamageToPlayer();
+        }
+    }
+    void DealDamageToPlayer()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, DamageRadius, PlayerLayer);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            RB_PlayerController player = hitCollider.GetComponent<RB_PlayerController>();
+            if (player != null)
+            {
+                Health.TakeDamage(50f);
+            }
+        }
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(transform.position, _rangeOfAttack);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, DamageRadius);
     }
 }

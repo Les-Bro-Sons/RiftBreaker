@@ -23,7 +23,7 @@ public class RB_Boss : RB_Enemy
     public float CooldownAttack2 = 0f;
     public float CooldownAttack3 = 0f;
 
-    private Rigidbody BossRB;
+    public Rigidbody BossRB;
 
     [Header("PlayerInfos")]
     public Transform PlayerPosition;
@@ -36,10 +36,20 @@ public class RB_Boss : RB_Enemy
     {
         BossRB = GetComponent<Rigidbody>();
     }
+
+    private void Update()
+    {
+        
+    }
     private bool isPlayerInRange()
     {
         return Vector3.Distance(transform.position, PlayerPosition.position) <= DetectionRadius;
     }
 
+    
+    public void CalculateDistanceFromPlayer()
+    {
+        DistanceFromPlayer = Vector3.Distance(transform.position, PlayerPosition.position);
+    }
     
 } 

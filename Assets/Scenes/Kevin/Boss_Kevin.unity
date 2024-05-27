@@ -391,6 +391,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mega_Knight
       objectReference: {fileID: 0}
+    - target: {fileID: 5424571959079900752, guid: f4f863f9616382e4a88bcc93eec0164a,
+        type: 3}
+      propertyPath: BossRB
+      value: 
+      objectReference: {fileID: 1932945478}
+    - target: {fileID: 5424571959079900752, guid: f4f863f9616382e4a88bcc93eec0164a,
+        type: 3}
+      propertyPath: PlayerPosition
+      value: 
+      objectReference: {fileID: 1070500095}
     - target: {fileID: 7043983935662915794, guid: f4f863f9616382e4a88bcc93eec0164a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -446,6 +456,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f863f9616382e4a88bcc93eec0164a, type: 3}
+--- !u!4 &1070500095 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
+    type: 3}
+  m_PrefabInstance: {fileID: 1269184382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1269184382
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -508,6 +524,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3669966155072335375, guid: f045d7b917debd74190631e500515f69,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717196483469701569, guid: f045d7b917debd74190631e500515f69,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -620,6 +646,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1932945478 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7950358798519079587, guid: f4f863f9616382e4a88bcc93eec0164a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1011021377}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -68,6 +68,7 @@ GameObject:
   - component: {fileID: 4403257837153332557}
   - component: {fileID: 263053956299020696}
   - component: {fileID: 5424571959079900752}
+  - component: {fileID: 7939403144304551523}
   m_Layer: 0
   m_Name: Mega_Knight
   m_TagString: Untagged
@@ -132,6 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 0
+  _spriteRenderer: {fileID: 0}
+  _animator: {fileID: 0}
+  _health: {fileID: 0}
+  _enemy: {fileID: 0}
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +152,7 @@ MonoBehaviour:
   _hp: 3000
   _hpMax: 3000
   Armor: 0
+  Team: 0
   Dead: 0
   EventDeath:
     m_PersistentCalls:
@@ -179,17 +185,47 @@ MonoBehaviour:
       m_Calls: []
   _isAttachedToAPhase: 1
   _spawnInPhase: 2
+  SpriteRenderer: {fileID: 0}
   MovementSpeed: 4
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
+  DetectionRadius: 100
   CooldownAttack1: 1
   CooldownAttack2: 1
   CooldownAttack3: 1
+  BossRB: {fileID: 7950358798519079587}
+  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
+    type: 3}
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 128
   Health: {fileID: 0}
   CurrentState: 0
-  NumberOfProjectiles: 0
   Spikes: {fileID: 2961350032249756260, guid: 0622cd3023ddc6042985be73f21414c2, type: 3}
+  RowsOfSpikes: 5
+  ColumnsOfSpikes: 5
+  JumpForce: 10
+  JumpHeight: 5
+  DamageRadius: 5
+--- !u!114 &7939403144304551523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3453180199176938183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df13b3e2f13008489581e799e347d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkDirection: {x: 0, y: 0, z: 0}
+  LastDirection: {x: 0, y: 0, z: 0}
+  _movementAcceleration: 150
+  _movementMaxSpeed: 12
+  _movementFrictionForce: 75
+  _enemyAnimator: {fileID: 0}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

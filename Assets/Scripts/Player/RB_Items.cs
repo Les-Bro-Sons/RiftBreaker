@@ -12,6 +12,8 @@ public class RB_Items : MonoBehaviour
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
 
+    [SerializeField] private float _chargeZoom = 0.85f;
+
     [Header("Cooldowns")]
     [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
 
@@ -169,7 +171,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetBool("ChargingAttack", true);
 
         /////UX/////
-        RB_Camera.Instance.Zoom(0.7f);
+        RB_Camera.Instance.Zoom(_chargeZoom);
     }
 
     public virtual void StopChargingAttack()

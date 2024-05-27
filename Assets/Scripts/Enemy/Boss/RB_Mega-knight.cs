@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RB_Mega_knight : RB_Boss
 {
@@ -9,11 +10,15 @@ public class RB_Mega_knight : RB_Boss
 
     [Header("Projectiles")]
     public GameObject Spikes;
-
     private Vector2 _rangeOfAttack = new Vector2(200, 50);
-    private int _rows = 5;
-    private int _columns = 5;
-    
+    public int RowsOfSpikes = 5;
+    public int ColumnsOfSpikes = 5;
+
+    [Header("Jump")]
+    public float JumpForce = 10f;
+    public float JumpHeight = 5f;
+    public float DamageRadius = 5f;
+    private bool isGrounded;
 
     void Start()
     {
@@ -41,13 +46,13 @@ public class RB_Mega_knight : RB_Boss
         if (DistanceFromPlayer <= 10f && DistanceFromPlayer >= 5f)
         {
             float startX = transform.position.x - _rangeOfAttack.x / 2;
-            float startY = transform.position.y - DistanceFromPlayer / 2;
-            float spacingX = _rangeOfAttack.x / _rows;
-            float spacingY = DistanceFromPlayer / _columns;
+            float startY = transform.position.y - _rangeOfAttack.y / 2;
+            float spacingX = _rangeOfAttack.x / RowsOfSpikes;
+            float spacingY = _rangeOfAttack.y / ColumnsOfSpikes;
 
-            for (int i = 0; i < _rows; i++)
+            for (int i = 0; i < RowsOfSpikes; i++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int j = 0; j < ColumnsOfSpikes; j++)
                 {
                     Vector3 SpawnPosition = new Vector3(startX + j * spacingX, startY + i * spacingY, 0);
                     Instantiate(Spikes, SpawnPosition, Quaternion.identity, transform);
@@ -61,11 +66,19 @@ public class RB_Mega_knight : RB_Boss
     {
         if (DistanceFromPlayer > 10f)
         {
+            Vector3 Direction = (PlayerPosition.position - transform.position).normalized;
+            float distance = Vector3.Distance(transform.position, PlayerPosition.position);
+
+            //Vector3 jumpDirection = new Vector3(Direction.x, CalculateVerticalJumpSpeed(float distance), 0);
             CooldownAttack3 = 1f;
             Health.TakeDamage(50f);
         }
     }
 
+   //float CalculateVerticalJumpSpeed(float distance)
+   //{
+   //
+   //}
     private void SwitchBossState()
     {
         switch (CurrentState)

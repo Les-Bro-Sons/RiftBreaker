@@ -57,6 +57,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _playerAction = GetComponent<RB_PlayerAction>();
+        ResetDirection();
     }
     private void Start()
     {
@@ -95,16 +96,29 @@ public class RB_PlayerMovement : MonoBehaviour
                 else
                     ActualDirection = Direction.Face;
             }
+        }
+    }
+
+    public void SetDirection()
+    {
+        if (!_playerAction.IsDoingAnyAttack())
+        {
             //Setting the direction to the player
             _transform.forward = _directionToMove;
         }
         
     }
 
+    public Vector3 GetDirectionToMove()
+    {
+        return _directionToMove;
+    }
+
     public void ResetDirection()
     {
         ActualDirection = Direction.Face;
-        _transform.forward = -Vector3.forward;
+        _transform.forward = Vector3.back;
+        _directionToMove = Vector3.back;
     }
 
     private void ClampingSpeed()
@@ -167,7 +181,7 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         //Starting dash
         _firstDashPosition = _transform.position;
-        _dashDirection = _transform.forward;
+        _dashDirection = new Vector3(RB_InputManager.Instance.MoveValue.x, 0, RB_InputManager.Instance.MoveValue.y);
         _lastUsedDashTime = Time.time;
         _isDashing = true;
         //Starting dash animation
@@ -212,6 +226,12 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        //Set the direction
+        SetDirection();
+    }
+
     private void FixedUpdate()
     {
         //Clamping the speed to the max speed
@@ -224,6 +244,7 @@ public class RB_PlayerMovement : MonoBehaviour
         SetSpeed();
 
         
+
 
         //If the player can move
         if (CanMove())

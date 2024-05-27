@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2609254105981578870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,10 @@ GameObject:
   - component: {fileID: 2220141390852814850}
   - component: {fileID: 7512073466893847374}
   - component: {fileID: 1892518645855474828}
-  m_Layer: 0
+  - component: {fileID: 6230509986263376554}
+  - component: {fileID: 2878214133727113795}
+  - component: {fileID: 499330220030018901}
+  m_Layer: 8
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,11 +109,119 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a2af8c374782e41a94b7c6f02fcec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _speed: 10
   _totalDistance: 10
   _projectileType: 1
   _launchForce: {x: 10, y: 10, z: 10}
   _totalLifeTime: 2
+  Team: 0
+  _followParticles: {fileID: 5559467424925952968, guid: 55fef1c9bfb97d645b2a346b16f239c1,
+    type: 3}
+  _destroyParticles: {fileID: 0}
+  _continuousForceScreenshake: 0.2
+  _continuousDelayScreenshake: 0
+  _damage: 10
+  _knocbackExplosionForce: 3
+  _knockback: {x: 0, y: 2, z: 10}
+  _isDealingDamageMultipleTime: 0
+  _isDealingKnockbackMultipleTime: 1
+  _canDamageAlly: 0
+  _canKnockbackAlly: 0
+--- !u!114 &6230509986263376554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366644426979502515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb5b1e692bde7f4aaff6e7404b85673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventOnObjectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2878214133727113795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366644426979502515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956c35150b281de40be91d869fc9ac99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entityType: 0
+  _spriteRenderer: {fileID: 0}
+  _animator: {fileID: 0}
+  _health: {fileID: 0}
+  _enemy: {fileID: 0}
+  _particleSystem: {fileID: 0}
+--- !u!114 &499330220030018901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366644426979502515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 4
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 1
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &2846878979076408478
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8784574667949833415}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512897187903689357}
   - component: {fileID: 7737484830375429682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,13 +318,13 @@ GameObject:
   - component: {fileID: 8818528346138245202}
   - component: {fileID: 51475666157638321}
   - component: {fileID: 889213294269136375}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8818528346138245202
 Transform:
   m_ObjectHideFlags: 0

@@ -7,13 +7,19 @@ public class RB_Enemy : MonoBehaviour
     [Header("Spawn")]
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
     [SerializeField] private PHASES _spawnInPhase = PHASES.Infiltration;
+    public SpriteRenderer SpriteRenderer; //PLACEHOLDER
+    private Rigidbody _rb;
 
-    
+    private bool _isTombstoned = false;
+
+    private LayerMask _originalExcludeLayer;
 
     protected virtual void Awake()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(Death);
         GetComponent<RB_Health>().EventTakeDamage.AddListener(TakeDamage);
+        _rb = GetComponent<Rigidbody>();
+        _originalExcludeLayer = _rb.excludeLayers;
     }
 
     protected virtual void Start()
@@ -39,6 +45,27 @@ public class RB_Enemy : MonoBehaviour
     protected virtual void Death()
     {
         EventDead?.Invoke();
-        Destroy(gameObject);
+        Tombstone();
+        //Destroy(gameObject);
+    }
+
+    public virtual void Tombstone() // make the enemy a tombstone (dead)
+    {
+        if (!_isTombstoned)
+        {
+            _isTombstoned = true;
+            SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
+            _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
+            _rb.velocity = Vector3.zero;
+        }
+    }
+
+    public virtual void UnTombstone() // make the enemy alive again
+    {
+        if (_isTombstoned)
+        {
+            _isTombstoned = false;
+            _rb.excludeLayers = _originalExcludeLayer;
+        }
     }
 }

@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class RB_Tools
 {
+    public static Vector3 GetRandomVector(float min, float max, bool x = true, bool y = true, bool z = true)
+    {
+        return new Vector3((x)? Random.Range(min, max) : 0, (y)? Random.Range(min, max) : 0, (z)? Random.Range(min, max) : 0);
+    }
+
     public static bool TryGetComponentInParent<T>(GameObject selfObject, out T componentToGet) where T : Component
     {
         componentToGet = null;
@@ -13,7 +18,6 @@ public class RB_Tools
             //Trying to get component on current object
             if(currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("component found on " + currentObject.name);
                 return true;
             }
             //If not found then trying on its parent
@@ -39,12 +43,10 @@ public class RB_Tools
         {
             if (currentObject.TryGetComponent<T>(out componentToGet))
             {
-                Debug.Log("Component found on " + currentObject.name);
                 return true;
             }
             else
             {
-                Debug.Log("Component not found");
                 return false;
             }
         }

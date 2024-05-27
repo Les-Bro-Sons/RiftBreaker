@@ -3,9 +3,10 @@ using UnityEngine.Events;
 
 
 public class RB_Health : MonoBehaviour {
-    [SerializeField] float _hp; public float Hp { get { return _hp; } }
+    [SerializeField] float _hp; public float Hp { get { return _hp; } set { _hp = value; } }
     [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }        
     public float Armor;
+    public TEAMS Team = TEAMS.Ai;
 
     public bool Dead = false;
 

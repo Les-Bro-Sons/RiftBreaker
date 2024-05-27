@@ -60,6 +60,13 @@ public enum ENTITYTYPES
     Player,
 }
 
+public enum TEAMS
+{
+    Ai,
+    Player,
+    Neutral,
+}
+
 // ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES

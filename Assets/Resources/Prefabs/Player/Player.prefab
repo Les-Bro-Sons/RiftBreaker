@@ -150,6 +150,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _interactRange: 1
+  Items: []
+  IsItemNearby: 0
+  _debugCurrentWeaponFeedback: {fileID: 0}
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +168,9 @@ MonoBehaviour:
   _entityType: 1
   _spriteRenderer: {fileID: 1323381627611396866}
   _animator: {fileID: 461484540895704965}
+  _health: {fileID: 0}
+  _enemy: {fileID: 0}
+  _particleSystem: {fileID: 0}
 --- !u!114 &7810650786347569942
 MonoBehaviour:
   m_ObjectHideFlags: 0

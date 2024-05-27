@@ -1,10 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_MenuManager : MonoBehaviour {
-    public void Play() { 
-    
+
+    private void Start()
+    {
+    }
+
+    public void Play() {
     }
 
     public void Options() { 
@@ -26,5 +28,7 @@ public class RB_MenuManager : MonoBehaviour {
     public void BackMainMenu() { 
     
     }
+
+
 
 }

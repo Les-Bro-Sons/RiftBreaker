@@ -78,3 +78,4 @@ public enum SETTINGSTATES
     Graphics,
     Controls
 }
+

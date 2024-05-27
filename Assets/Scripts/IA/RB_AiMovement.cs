@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RB_AiMovement : MonoBehaviour
 {
+    [HideInInspector] public Vector3 WalkDirection;
 
     [Header("IA movement properties")]
     [HideInInspector] public Vector3 LastDirection;
@@ -42,6 +43,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == -1) speed = _movementMaxSpeed;
         if (acceleration == -1) acceleration = _movementAcceleration;
         direction = direction.normalized;
+        WalkDirection = direction.normalized;
 
         if (deltaTime == -1)
         {
@@ -75,8 +77,8 @@ public class RB_AiMovement : MonoBehaviour
     {
         if(_enemyAnimator != null)
         {
-            _enemyAnimator.SetFloat("Horizontal", _rb.velocity.normalized.x);
-            _enemyAnimator.SetFloat("Vertical", _rb.velocity.normalized.z);
+            _enemyAnimator.SetFloat("Horizontal", WalkDirection.x);
+            _enemyAnimator.SetFloat("Vertical", WalkDirection.z);
             _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
         }
         

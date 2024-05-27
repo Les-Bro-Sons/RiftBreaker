@@ -1,20 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RB_HUDHealthBar : MonoBehaviour {
+    enum MODE
+    {
+        Player,
+        Boss,
+        Other
+    }
+
+    [SerializeField] private MODE _mode = MODE.Other;
+
     [SerializeField] Slider _hpBar;
     [SerializeField] TextMeshProUGUI _hpText;
     [SerializeField] RB_Health _rb_Health;
 
-    [SerializeField] bool _isBoss;
     [SerializeField] TextMeshProUGUI _bossName;
 
     private void Start() {
         //Pour avoir le nom du boss au dessus de sa barre de vie
-        if (_isBoss && _rb_Health.Name != null) { 
+        if (_mode == MODE.Boss && _rb_Health.Name != null) { 
             _bossName.text = _rb_Health.Name;
         }
         //Le joueur ne possède pas de système d'affichage de son nom
@@ -28,6 +37,12 @@ public class RB_HUDHealthBar : MonoBehaviour {
         _rb_Health.EventHeal.AddListener(RefreshHealth);
         */
 
+        switch (_mode)
+        {
+            case MODE.Player:
+                _rb_Health = RB_PlayerController.Instance.GetComponent<RB_Health>();
+                break;
+        }
 
         UxStart();
     }
@@ -43,9 +58,6 @@ public class RB_HUDHealthBar : MonoBehaviour {
     {
         UxUpdateXHealthBar();
     }
-
-
-
 
     // ~~~~~~~~~~ UX ~~~~~~~~~~
 

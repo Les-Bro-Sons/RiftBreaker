@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,8 +9,11 @@ public class RB_Items : MonoBehaviour
     private float _lastUsedAttackTime;
     private float _currentDamage;
     private float _currentKnockbackForce;
+    protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
+
+    [SerializeField] private float _chargeZoom = 0.85f;
 
     [Header("Cooldowns")]
     [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
@@ -24,6 +28,15 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _chargeAttackKnockbackForce;
     [SerializeField] private float _specialAttackKnockbackForce;
 
+    [Header("Screenshake")]
+    [SerializeField] protected float _normalAttackScreenshakeForce;
+    [SerializeField] protected float _normalHitScreenshakeForce;
+    [SerializeField] protected float _chargedAttackScreenshakeForce;
+    [SerializeField] protected float _chargedHitScreenshakeForce;
+    [SerializeField] protected float _specialAttackScreenshakeForce;
+    [SerializeField] protected float _specialHitScreenshakeForce;
+    
+
     //Components
     [Header("Components")]
     protected Animator _playerAnimator;
@@ -33,6 +46,7 @@ public class RB_Items : MonoBehaviour
     private Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
+    protected CinemachineImpulseSource _impulseSource;
 
     private void Awake()
     {
@@ -51,6 +65,8 @@ public class RB_Items : MonoBehaviour
         _colliderAnimator = _playerAction.ColliderAnimator;
         _collisionDetection = _playerAction.CollisionDetection;
         _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
+        if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
+            _impulseSource = impulseSource;
     }
 
     public virtual void Bind()
@@ -84,6 +100,10 @@ public class RB_Items : MonoBehaviour
         _colliderAnimator.SetTrigger("Attack");
         StartCoroutine(WaitToResetAttacks());
 
+        /////UX/////
+        if (_impulseSource)
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_normalAttackScreenshakeForce * 0.9f, _normalAttackScreenshakeForce * 1.1f));
+        _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
     }
@@ -98,6 +118,10 @@ public class RB_Items : MonoBehaviour
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
                 _enemyHealth.TakeDamage(_currentDamage);
                 print(detectedObject.name + "took damage");
+
+                /////UX/////
+                if (_impulseSource)
+                    _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_currentHitScreenshakeForce * 0.9f, _currentHitScreenshakeForce * 1.1f));
             }
         }
     }
@@ -124,6 +148,12 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
         StartCoroutine(WaitToResetAttacks());
+
+        /////UX/////
+        if (_impulseSource)
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_chargedAttackScreenshakeForce * 0.9f, _chargedAttackScreenshakeForce * 1.1f));
+        RB_Camera.Instance.Zoom(1);
+        _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
     }
 
@@ -135,6 +165,12 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
         StartCoroutine(WaitToResetAttacks());
+
+        /////UX/////
+        if (_impulseSource)
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_specialAttackScreenshakeForce * 0.9f, _specialAttackScreenshakeForce * 1.1f));
+        _currentHitScreenshakeForce = _specialHitScreenshakeForce;
+
         //A COMPLETER
     }
 
@@ -142,12 +178,18 @@ public class RB_Items : MonoBehaviour
     {
         //Start the charge animation
         _playerAnimator.SetBool("ChargingAttack", true);
+
+        /////UX/////
+        RB_Camera.Instance.Zoom(_chargeZoom);
     }
 
     public virtual void StopChargingAttack()
     {
         //Stop the charge animation
         _playerAnimator.SetBool("ChargingAttack", false);
+
+        //////UX/////
+        RB_Camera.Instance.Zoom(1);
     }
 
     public virtual void FinishChargingAttack()

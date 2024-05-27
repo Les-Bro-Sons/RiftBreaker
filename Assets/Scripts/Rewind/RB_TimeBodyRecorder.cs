@@ -1,3 +1,5 @@
+using Cinemachine.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +19,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private RB_Health _health;
     [SerializeField] private RB_Enemy _enemy;
-    [SerializeField] private ParticleSystem _particleSystem;
+
+    private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
 
     private void Awake()
     {
@@ -28,14 +31,12 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _health = GetComponent<RB_Health>();
         if (!_enemy)
             _enemy = GetComponent<RB_Enemy>();
-        if (!_particleSystem)
-            _particleSystem = GetComponent<ParticleSystem>();
     }
 
     private void Start()
     {
-        RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewinding); // TO TEST
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewinding); // TO TEST
+        RB_TimeManager.Instance.EventStartRewinding.AddListener(StartRewinding);
+        RB_TimeManager.Instance.EventStopRewinding.AddListener(StopRewinding);
         RB_TimeManager.Instance.EventRecordFrame.AddListener(delegate { RecordTimeFrame(RB_TimeManager.Instance.CurrentTime); });
     }
 
@@ -60,6 +61,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             newPoint.Health = _health.Hp;
             newPoint.Dead = _health.Dead;
         }
+        if (_rb) newPoint.Velocity = _rb.velocity;
 
         _pointsInTime.Add(newPoint);
     }
@@ -74,16 +76,45 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
         float currentTime = RB_TimeManager.Instance.CurrentTime;
 
-        PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
-        transform.position = closestPointInTime.Position;
-        transform.rotation = closestPointInTime.Rotation;
-        if (closestPointInTime.Sprite) _spriteRenderer.sprite = closestPointInTime.Sprite;
+        //PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
+
+        RemoveLastPointIfFuture(currentTime);
+
+        PointInTime currentP;
+        PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
+        if (_pointsInTime.Count > 1) 
+        {
+            ///////INTERPOLATION////////
+            PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
+            currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime);
+            ///////////////////////////
+        }
+        else
+        {
+            currentP = closestPointInTime;
+        }
+
+        if (!currentP.Position.IsNaN())
+        {
+            if (_rb)
+            {
+                _rb.MovePosition(currentP.Position) ;
+                _rb.rotation = currentP.Rotation;
+                _savedVelocity = currentP.Velocity;
+            }
+            else
+            {
+                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation);
+            }
+        }
+        
+        if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {
-            _health.Hp = closestPointInTime.Health;
-            if (_health.Dead != closestPointInTime.Dead && _enemy)
+            _health.Hp = currentP.Health;
+            if (_health.Dead != currentP.Dead && _enemy)
             {
-                if (closestPointInTime.Dead) //die
+                if (currentP.Dead) //die
                 {
                     _enemy.Tombstone();
                 }
@@ -91,7 +122,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 {
                     _enemy.UnTombstone();
                 }
-                _health.Dead = closestPointInTime.Dead;
+                _health.Dead = currentP.Dead;
             }
         }
     }
@@ -103,19 +134,19 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = true;
         if (_animator)
             _animator.enabled = false;
-        UxStartRewind();
     }
 
     private void StopRewinding()
     {
         _isRewinding = false;
         if (_rb)
+        {
             _rb.isKinematic = false;
+            _rb.velocity = _savedVelocity;
+        }
         if (_animator)
             _animator.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
-
-        UxStopRewind();
     }
 
     private PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore
@@ -155,15 +186,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
-    private void UxStartRewind()
+    private void RemoveLastPointIfFuture(float currentTime)
     {
-        if (_entityType == ENTITYTYPES.Player)
-            _uxRewind?.StartRewindTransition();
-    }
-
-    private void UxStopRewind()
-    {
-        if (_entityType == ENTITYTYPES.Player)
-        _uxRewind?.StopRewindTransition();
+        if (_pointsInTime[_pointsInTime.Count - 2].Time > currentTime) //if the last point is completely in the future, it deletes it
+        {
+            _pointsInTime.RemoveAt(_pointsInTime.Count - 1);
+        }
     }
 }

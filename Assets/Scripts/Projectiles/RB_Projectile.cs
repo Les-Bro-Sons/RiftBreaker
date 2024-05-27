@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,9 +23,15 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private GameObject _followParticles;
     [SerializeField] private GameObject _destroyParticles;
 
+    [Header("Screenshake")]
+    [SerializeField] private float _continuousForceScreenshake;
+    [SerializeField] private float _continuousDelayScreenshake;
+    private float _currentContinousDelayScreenshake = 9999; // set at 9999 so it impulse at the start
+
     [Header("Damage")]
     [SerializeField] private float _damage = 10;
-    [SerializeField] private Vector3 _knockback = Vector3.forward;
+    [SerializeField] private float _knocbackExplosionForce = 0;
+    [SerializeField] private Vector3 _knockback = Vector3.zero;
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;
@@ -34,6 +41,7 @@ public class RB_Projectile : MonoBehaviour
     //Components
     private Rigidbody _rb;
     private Transform _transform;
+    private CinemachineImpulseSource _impulseSource;
 
     //Movements
     private float _traveledDistance;
@@ -53,6 +61,8 @@ public class RB_Projectile : MonoBehaviour
 
         if (_followParticles)
             Instantiate(_followParticles, _transform.position, _transform.rotation).GetComponent<RB_Particles>().FollowObject = _transform;
+
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     private void EnemyEntered(GameObject enemy)
@@ -70,6 +80,7 @@ public class RB_Projectile : MonoBehaviour
         if ((_isDealingKnockbackMultipleTime || !isAlreadyDamaged) && (_canKnockbackAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
             enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
+            enemyHealth.TakeKnockback(enemy.transform.position - _transform.position, _knocbackExplosionForce);
         }
         if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
@@ -134,5 +145,19 @@ public class RB_Projectile : MonoBehaviour
         //Launch the projectile
         _rb.constraints = ~RigidbodyConstraints.FreezePosition;
         _rb.AddForce(_transform.TransformDirection(_launchForce), ForceMode.Impulse);
+    }
+
+    private void Update()
+    {
+        if (_continuousForceScreenshake != 0) //continuous screenshake
+        {
+            if (_currentContinousDelayScreenshake >= _continuousDelayScreenshake + _impulseSource.m_ImpulseDefinition.m_ImpulseDuration) //apply screenshake if the delay is met
+            {
+                _impulseSource.GenerateImpulse(_continuousForceScreenshake);
+                _currentContinousDelayScreenshake = 0;
+            }
+
+            _currentContinousDelayScreenshake += Time.deltaTime;
+        }
     }
 }

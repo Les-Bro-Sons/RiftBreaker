@@ -49,7 +49,7 @@ public class RB_Enemy : MonoBehaviour
         //Destroy(gameObject);
     }
 
-    public virtual void Tombstone()
+    public virtual void Tombstone() // make the enemy a tombstone (dead)
     {
         if (!_isTombstoned)
         {
@@ -60,7 +60,7 @@ public class RB_Enemy : MonoBehaviour
         }
     }
 
-    public virtual void UnTombstone()
+    public virtual void UnTombstone() // make the enemy alive again
     {
         if (_isTombstoned)
         {

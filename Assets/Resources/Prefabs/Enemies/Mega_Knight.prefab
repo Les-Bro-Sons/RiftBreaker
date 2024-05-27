@@ -192,7 +192,7 @@ MonoBehaviour:
   DetectionRadius: 100
   CooldownAttack1: 1
   CooldownAttack2: 1
-  CooldownAttack3: 1
+  CooldownAttack3: 3
   CooldownBetweenAttacks: 1
   WaitInIdle: 1
   BossRB: {fileID: 7950358798519079587}
@@ -207,7 +207,11 @@ MonoBehaviour:
   RowsOfSpikes: 5
   ColumnsOfSpikes: 5
   _slashDamage: 40
+  _slashKnockback: 15
   _slashRange: 3
+  _slashDelay: 0.5
+  _slashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
+    type: 3}
   _spikesLength: 10
   _spikesSpaces: 1.5
   _spikeDamage: 10
@@ -247,9 +251,9 @@ MonoBehaviour:
       outWeight: 0.66232646
     - serializedVersion: 3
       time: 1
-      value: -0.000011444092
-      inSlope: -5.4438376
-      outSlope: -5.4438376
+      value: 0.0036201477
+      inSlope: -5.421845
+      outSlope: -5.421845
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -261,6 +265,8 @@ MonoBehaviour:
   _landingRadius: 4
   _landingDamage: 20
   _landingKnockback: 10
+  _landingParticles: {fileID: 5863619617303975607, guid: 5016fd15725d98343b6da7d931c9df1b,
+    type: 3}
 --- !u!114 &7939403144304551523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,8 +281,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WalkDirection: {x: 0, y: 0, z: 0}
   LastDirection: {x: 0, y: 0, z: 0}
-  _movementAcceleration: 100
-  _movementMaxSpeed: 3
+  _movementAcceleration: 150
+  _movementMaxSpeed: 5
   _movementFrictionForce: 75
   _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!1 &6172118446137551482

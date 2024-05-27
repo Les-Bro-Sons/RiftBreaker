@@ -133,10 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityType: 0
-  _spriteRenderer: {fileID: 0}
-  _animator: {fileID: 0}
-  _health: {fileID: 0}
-  _enemy: {fileID: 0}
+  _spriteRenderer: {fileID: 9101173564990518349}
+  _animator: {fileID: 7214748225881584283}
+  _health: {fileID: 263053956299020696}
+  _enemy: {fileID: 5424571959079900752}
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   EventHeal:
     m_PersistentCalls:
       m_Calls: []
-  LerpTimer: 0
+  LerpTimer: 0.15
   _particleDamage: {fileID: 827747827748336171, guid: 6f1309b1a7e1f9b4e97af0d4ed517342,
     type: 3}
   _particleDeath: {fileID: 0}
@@ -185,8 +185,7 @@ MonoBehaviour:
       m_Calls: []
   _isAttachedToAPhase: 1
   _spawnInPhase: 2
-  SpriteRenderer: {fileID: 0}
-  MovementSpeed: 4
+  SpriteRenderer: {fileID: 9101173564990518349}
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -194,6 +193,8 @@ MonoBehaviour:
   CooldownAttack1: 1
   CooldownAttack2: 1
   CooldownAttack3: 1
+  CooldownBetweenAttacks: 1
+  WaitInIdle: 1
   BossRB: {fileID: 7950358798519079587}
   PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
     type: 3}
@@ -205,9 +206,61 @@ MonoBehaviour:
   Spikes: {fileID: 2961350032249756260, guid: 0622cd3023ddc6042985be73f21414c2, type: 3}
   RowsOfSpikes: 5
   ColumnsOfSpikes: 5
-  JumpForce: 10
-  JumpHeight: 5
+  _slashDamage: 40
+  _slashRange: 3
+  _spikesLength: 10
+  _spikesSpaces: 1.5
+  _spikeDamage: 10
+  _spikeKnockback: 10
+  _canSpikeDamageMultipleTime: 0
+  JumpHeight: 4
   DamageRadius: 5
+  _jumpAttackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.294303
+      outSlope: 2.294303
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.42086735
+      value: 0.9655972
+      inSlope: 0.36873752
+      outSlope: 0.36873752
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.83487105
+      value: 0.8989237
+      inSlope: -0.62261194
+      outSlope: -0.62261194
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.66232646
+    - serializedVersion: 3
+      time: 1
+      value: -0.000011444092
+      inSlope: -5.4438376
+      outSlope: -5.4438376
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _jumpDuration: 1
+  _landingRadius: 4
+  _landingDamage: 20
+  _landingKnockback: 10
 --- !u!114 &7939403144304551523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,10 +275,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WalkDirection: {x: 0, y: 0, z: 0}
   LastDirection: {x: 0, y: 0, z: 0}
-  _movementAcceleration: 150
-  _movementMaxSpeed: 12
+  _movementAcceleration: 100
+  _movementMaxSpeed: 3
   _movementFrictionForce: 75
-  _enemyAnimator: {fileID: 0}
+  _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

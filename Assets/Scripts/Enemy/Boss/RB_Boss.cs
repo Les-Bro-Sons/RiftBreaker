@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -14,7 +12,6 @@ public enum BOSSSTATES
 public class RB_Boss : RB_Enemy
 {
     [Header("Main Parameters")]
-    public float MovementSpeed = 4f;
     public float AttackRange = 1f;
     public float AttackSpeed = 2f;
     public float DistanceFromPlayer = 0f;
@@ -22,6 +19,13 @@ public class RB_Boss : RB_Enemy
     public float CooldownAttack1 = 0f;
     public float CooldownAttack2 = 0f;
     public float CooldownAttack3 = 0f;
+    public float CooldownBetweenAttacks = 0f;
+    public float WaitInIdle = 1;
+    protected float _currentCooldownAttack1;
+    protected float _currentCooldownAttack2;
+    protected float _currentCooldownAttack3;
+    protected float _currentCooldownBetweenAttacks;
+    protected float _currentWaitInIdle;
 
     public Rigidbody BossRB;
 
@@ -32,24 +36,25 @@ public class RB_Boss : RB_Enemy
 
     [HideInInspector] public RB_Health Health;
 
-    private void Start()
+    protected virtual void Start()
     {
+        Health = GetComponent<RB_Health>();
         BossRB = GetComponent<Rigidbody>();
+        GetTarget();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         
     }
-    private bool isPlayerInRange()
+
+    protected bool isPlayerInRange()
     {
         return Vector3.Distance(transform.position, PlayerPosition.position) <= DetectionRadius;
     }
 
     
-    public void CalculateDistanceFromPlayer()
-    {
-        DistanceFromPlayer = Vector3.Distance(transform.position, PlayerPosition.position);
-    }
+
+    
     
 } 

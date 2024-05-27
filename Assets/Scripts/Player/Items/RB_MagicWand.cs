@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class RB_MagicWand : RB_Items
 {
-    protected override void Start()
+    public override void Bind()
     {
-        base.Start();
+        base.Bind();
+        //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 1);
+        _colliderAnimator.SetFloat("WeaponID", 1);
     }
 }

@@ -38,6 +38,7 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;
     [SerializeField] private bool _canKnockbackAlly = false;
+    [SerializeField] private bool _isDestroyingOnDamage = false;
     private List<GameObject> _alreadyDamaged = new();
 
     [Header("Explosion")]
@@ -97,6 +98,13 @@ public class RB_Projectile : MonoBehaviour
         if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
             enemyHealth.TakeDamage(_damage);
+        }
+
+        if (_isDestroyingOnDamage)
+        {
+            if (_destroyParticles)
+                Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+            Destroy(gameObject);
         }
     }
 

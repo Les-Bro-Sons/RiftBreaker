@@ -30,7 +30,6 @@ public class RB_PlayerAction : MonoBehaviour
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
-    RB_Items _item; public RB_Items CurrentItem {  get { return _item; } }
 
     //Charge attack
     private Coroutine _currentChargedAttack;

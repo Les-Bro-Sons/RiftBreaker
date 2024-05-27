@@ -24,9 +24,11 @@ public class RB_PlayerAnim : MonoBehaviour
 
         if (!_playerAction.IsDoingAnyAttack())
         {
+            //Constantly update the direction of the player to the animators if he's not attacking
             _playerAnimator.SetFloat("Horizontal", _playerMovement.GetDirectionToMove().x);
             _playerAnimator.SetFloat("Vertical", _playerMovement.GetDirectionToMove().z);
         }
+        //Constantly set the speed of the player to the player animator
         _playerAnimator.SetFloat("Speed", _playerMovement.GetVelocity().magnitude);
 
     }

@@ -45,6 +45,10 @@ public class RB_PlayerController : MonoBehaviour
         RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
         RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
 
+        RB_InputManager.Instance.EventItem1Started.AddListener(delegate { ChoseItem(0); });
+        RB_InputManager.Instance.EventItem2Started.AddListener(delegate { ChoseItem(1); });
+        RB_InputManager.Instance.EventItem3Started.AddListener(delegate { ChoseItem(2); });
+
         _playerAction.EventItemGathered.AddListener(BindToAttack);
     }
 
@@ -55,16 +59,28 @@ public class RB_PlayerController : MonoBehaviour
         _playerAction.StartChargeAttack();
     }
 
+    public void ChoseItem(int id)
+    {
+        //Chose the item wanted
+        if(_playerAction.Items.Count-1 >= id)
+        {
+            _playerAction.SetCurrentWeapon(_playerAction.Items[id].name);
+            _playerAction.Items[id].Bind();
+        }
+        
+    }
+
     public void Interact()
     {
+        //Interact with the object nearby
         _playerAction.Interact();
     }
 
     public void BindToAttack()
     {
+        //When the item is gathed, get it
         _item = GetComponentInChildren<RB_Items>();
-        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-        RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+        //Set the attack event to the charge attack
         RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         _playerAction.Rebind();
     }

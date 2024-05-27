@@ -31,10 +31,10 @@ public class RB_Enemy : MonoBehaviour
 
     }
 
-    protected virtual void TakeDamage()
-    {
-
-    }
+     protected virtual void TakeDamage()
+     {
+    
+     }
 
     protected virtual void Death()
     {

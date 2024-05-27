@@ -1,6 +1,5 @@
 using BehaviorTree;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RB_AI_PlayerInFov : RB_BTNode
 {

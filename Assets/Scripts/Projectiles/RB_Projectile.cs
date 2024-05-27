@@ -18,6 +18,8 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
     [SerializeField] public TEAMS Team;
+    [SerializeField] private bool _destroyOnWall;
+    [SerializeField] private float _wallDetectionLength = 1;
 
     [Header("Particles")]
     [SerializeField] private GameObject _followParticles;
@@ -36,7 +38,11 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;
     [SerializeField] private bool _canKnockbackAlly = false;
-    private List<GameObject> _alreadyDamaged = new(); 
+    private List<GameObject> _alreadyDamaged = new();
+
+    [Header("Explosion")]
+    [SerializeField] private bool _damageOnExplosion = false;
+    [SerializeField] private float _explosionRadius = 1;
 
     //Components
     private Rigidbody _rb;
@@ -67,6 +73,12 @@ public class RB_Projectile : MonoBehaviour
 
     private void EnemyEntered(GameObject enemy)
     {
+        if (_damageOnExplosion)
+        {
+            Explode();
+            return;
+        }
+
         bool isAlreadyDamaged = true;
         if (!_alreadyDamaged.Contains(enemy))
         {
@@ -88,6 +100,22 @@ public class RB_Projectile : MonoBehaviour
         }
     }
 
+    private void Explode()
+    {
+        foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
+        {
+            if (TryGetComponent<RB_Health>(out RB_Health enemyHealth))
+            {
+                enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
+                enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
+                enemyHealth.TakeDamage(_damage);
+            }
+        }
+        if (_destroyParticles)
+            Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+        Destroy(gameObject);
+    }
+
     private void Start()
     {
         //If the projectile is meant to be launched
@@ -106,6 +134,20 @@ public class RB_Projectile : MonoBehaviour
     {
         //Move the projectile
         MoveLinear();
+        if (Physics.Raycast(_transform.position, _rb.velocity.normalized, _wallDetectionLength))
+        {
+            if (_damageOnExplosion)
+            {
+                Explode();
+            }
+            else
+            {
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+                Destroy(gameObject);
+            }
+            
+        }
     }
 
     private void MoveLinear()

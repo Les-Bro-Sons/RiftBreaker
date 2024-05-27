@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 9054077203260257630}
   - component: {fileID: 7262178411359263179}
   - component: {fileID: 3669966155072335375}
-  - component: {fileID: 7810650786347569942}
   - component: {fileID: 2053965204843859603}
   m_Layer: 0
   m_Name: Player
@@ -171,36 +170,6 @@ MonoBehaviour:
   _animator: {fileID: 461484540895704965}
   _health: {fileID: 0}
   _enemy: {fileID: 0}
-  _particleSystem: {fileID: 0}
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838961826420885278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463989f15a02a4a4099000ec1868306e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 0
-  _hpMax: 100
-  Armor: 0
-  Team: 1
-  Dead: 0
-  EventDeath:
-    m_PersistentCalls:
-      m_Calls: []
-  EventTakeDamage:
-    m_PersistentCalls:
-      m_Calls: []
-  EventHeal:
-    m_PersistentCalls:
-      m_Calls: []
-  LerpTimer: 0
-  _particleDamage: {fileID: 0}
-  _particleDeath: {fileID: 0}
-  _particleHeal: {fileID: 0}
 --- !u!114 &2053965204843859603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +244,7 @@ GameObject:
   - component: {fileID: 8422390959443899889}
   - component: {fileID: 597239710910792771}
   - component: {fileID: 461484540895704965}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: SpriteRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,7 +398,7 @@ GameObject:
   - component: {fileID: 1560718448460901250}
   - component: {fileID: 3650759193627221759}
   - component: {fileID: 7873082402642551729}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WeaponCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -595,7 +564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2159113513237132384}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}

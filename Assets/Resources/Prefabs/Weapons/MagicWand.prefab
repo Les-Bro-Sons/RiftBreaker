@@ -80,6 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 0
   _chargedAttackDamage: 0
@@ -87,6 +88,12 @@ MonoBehaviour:
   _normalKnockbackForce: 0
   _chargeAttackKnockbackForce: 0
   _specialAttackKnockbackForce: 0
+  _normalAttackScreenshakeForce: 0
+  _normalHitScreenshakeForce: 0
+  _chargedAttackScreenshakeForce: 0
+  _chargedHitScreenshakeForce: 0
+  _specialAttackScreenshakeForce: 0
+  _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 303180539450567437}
   HudSprite: {fileID: 0}
 --- !u!1 &1836797541521782879
@@ -183,7 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3188348242935613551}
-  - component: {fileID: 1615439431743201542}
+  - component: {fileID: 8467008959152295244}
   m_Layer: 0
   m_Name: weaponSprite
   m_TagString: Untagged
@@ -206,7 +213,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7623240866140023961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1615439431743201542
+--- !u!212 &8467008959152295244
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

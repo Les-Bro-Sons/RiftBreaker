@@ -13,6 +13,9 @@ public class RB_AiMovement : MonoBehaviour
     private Rigidbody _rb;
     private Transform _transform;
 
+    [Header("Animation")]
+    [SerializeField] private Animator _enemyAnimator;
+
     private void Awake()
     {
         _rb = GetComponentInChildren<Rigidbody>();
@@ -26,6 +29,11 @@ public class RB_AiMovement : MonoBehaviour
 
         //Adding friction force
         FrictionForce();
+    }
+
+    private void Update()
+    {
+        UpdateAnimator();
     }
 
     public void MoveIntoDirection(Vector3 direction, float speed = -1, float acceleration = -1, float deltaTime = -1)
@@ -61,5 +69,16 @@ public class RB_AiMovement : MonoBehaviour
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+    }
+
+    private void UpdateAnimator()
+    {
+        if(_enemyAnimator != null)
+        {
+            _enemyAnimator.SetFloat("Horizontal", _rb.velocity.normalized.x);
+            _enemyAnimator.SetFloat("Vertical", _rb.velocity.normalized.z);
+            _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
+        }
+        
     }
 }

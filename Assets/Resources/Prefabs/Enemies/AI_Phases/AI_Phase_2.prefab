@@ -408,7 +408,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9114800491695808032
 RectTransform:
   m_ObjectHideFlags: 0
@@ -613,25 +613,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 401fb56c24b43d04ca5c0340cc9d2658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AiType: 0
   MovementSpeed: 4
   RotationSpeed: 4
   MovementSpeedAttack: 8
   AttackRange: 2
   AttackSpeed: 2
+  AttackDamage: 2
   SplineContainer: {fileID: 0}
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
   HasAnInterval: 0
   StartWaitingWaypointInterval: 0
-  InFov: 0
+  InRange: 0
   FovRange: 10
-  FovAngle: 75
-  CanvasUi: {fileID: 0}
-  ImageSpotBar: {fileID: 0}
-  DurationAlphaCanvas: 0.5
-  DurationToLoadSpotBar: 1
-  DurationToUnloadSpotBar: 0.5
-  _prefabUxDetectedReadyMark: {fileID: 0}
+  WaitBeforeAttack: 1
   AiMovement: {fileID: 0}
   HasAlreadySeen: 0
 --- !u!114 &5049743095030184060

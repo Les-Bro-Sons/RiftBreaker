@@ -36,6 +36,7 @@ public class RB_AICombat_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Header("FOV Parameters")]
     public bool InRange = false;
     [Range(1f, 50f)] public float FovRange = 10f;
+    public float WaitBeforeAttack = 1f;
 
 /*    [Header("UI")]
     public CanvasGroup CanvasUi;

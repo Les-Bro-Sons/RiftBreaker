@@ -181,7 +181,7 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         //Starting dash
         _firstDashPosition = _transform.position;
-        _dashDirection = _transform.forward;
+        _dashDirection = new Vector3(RB_InputManager.Instance.MoveValue.x, 0, RB_InputManager.Instance.MoveValue.y);
         _lastUsedDashTime = Time.time;
         _isDashing = true;
         //Starting dash animation

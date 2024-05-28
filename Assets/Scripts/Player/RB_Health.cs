@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,6 +27,7 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] private GameObject _particleHeal;
     [SerializeField] Animator _animPlayer;
     [SerializeField] Animator _animUX;
+    [SerializeField] Animator _animUIPlayer;
 
     //Components
     Rigidbody _rb;
@@ -52,6 +54,9 @@ public class RB_Health : MonoBehaviour {
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
         _animPlayer.SetTrigger("isDamage");
         _animUX.SetTrigger("isDamage");
+        _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().text = (-amount).ToString();
+        _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().color = new Color(255,0,0);
+        _animUIPlayer.SetTrigger("isDamage");
     }
 
     public void TakeKnockback(Vector3 direction, float knockbackForce)

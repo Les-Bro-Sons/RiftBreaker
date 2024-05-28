@@ -7,13 +7,14 @@ public class RB_TestDamage : MonoBehaviour
 
     [SerializeField] bool damage;
     [SerializeField] RB_Health health;
+    [SerializeField] int damageamount;
 
     // Update is called once per frame
     void Update()
     {
         if (damage)
         {
-            health.TakeDamage(1);
+            health.TakeDamage(damageamount);
             damage = false;
         }
     }

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.UI;
 
-public class RB_AIInf_GoToTarget : RB_BTNode
+/*public class RB_AIInf_GoToTarget : RB_BTNode
 {
     private RB_AIInf_BTTree _btParent;
 
@@ -56,4 +56,4 @@ public class RB_AIInf_GoToTarget : RB_BTNode
             return _state;
         }
     }
-}
+}*/

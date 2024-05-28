@@ -1,13 +1,11 @@
 using BehaviorTree;
 using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Splines;
 
 public class RB_AI_Task_DefaultPatrol : RB_BTNode
 {
-    private RB_AIInf_BTTree _btParent;
+    private RB_AI_BTTree _btParent;
 
     //private Transform[] _waypoints;
     private int _currentWaypointIndex = 0;
@@ -27,8 +25,9 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
 
     private List<Vector3> _splinePointsPos = new();
 
-    public RB_AI_Task_DefaultPatrol(RB_AIInf_BTTree BtParent)
+    public RB_AI_Task_DefaultPatrol(RB_AI_BTTree BtParent)
     {
+        Debug.Log("PATROL");
         _btParent = BtParent;
 
         _transform = _btParent.transform;

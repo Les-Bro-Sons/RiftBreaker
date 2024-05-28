@@ -2,7 +2,7 @@ using BehaviorTree;
 using System.Collections;
 using UnityEngine;
 
-public class RB_AIInf_Attack : RB_BTNode
+/*public class RB_AIInf_Attack : RB_BTNode
 {
     private RB_AIInf_BTTree _btParent;
     private Transform _transform;
@@ -55,7 +55,8 @@ public class RB_AIInf_Attack : RB_BTNode
                     {
                         _attackCoroutine = _btParent.StartCoroutine(AttackCoroutine(target));
                     }
-    */
+                    */
+/*
                 }
             }
         }
@@ -125,4 +126,4 @@ public class RB_AIInf_Attack : RB_BTNode
             _hasAlreadyInit = false;
         }
     }
-}
+}*/

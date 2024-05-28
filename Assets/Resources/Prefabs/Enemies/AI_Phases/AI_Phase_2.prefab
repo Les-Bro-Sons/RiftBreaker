@@ -403,12 +403,12 @@ GameObject:
   - component: {fileID: 2629091478838784588}
   - component: {fileID: 630856352108775824}
   m_Layer: 0
-  m_Name: Canvas - UI
+  m_Name: Canvas - Spot UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9114800491695808032
 RectTransform:
   m_ObjectHideFlags: 0
@@ -620,6 +620,7 @@ MonoBehaviour:
   AttackRange: 2
   AttackSpeed: 2
   AttackDamage: 2
+  WaitBeforeAttack: 1
   SplineContainer: {fileID: 0}
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
@@ -627,9 +628,17 @@ MonoBehaviour:
   StartWaitingWaypointInterval: 0
   InRange: 0
   FovRange: 10
-  WaitBeforeAttack: 1
+  FovAngle: 75
+  CanvasUi: {fileID: 630856352108775824}
+  ImageSpotBar: {fileID: 3423591583767908502}
+  DurationAlphaCanvas: 0.5
+  DurationToLoadSpotBar: 1
+  DurationToUnloadSpotBar: 0.5
+  _prefabUxDetectedReadyMark: {fileID: 2153901776240351120, guid: 507c0141ec0e1ec45bc19ba2bf7d24d0,
+    type: 3}
   AiMovement: {fileID: 0}
   HasAlreadySeen: 0
+  IsAttacking: 0
 --- !u!114 &5049743095030184060
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,14 +1,14 @@
 using BehaviorTree;
 using UnityEngine;
 
-public class RB_AICombat_GoToTarget : RB_BTNode
+public class RB_AI_GoToTarget : RB_BTNode
 {
-    private RB_AICombat_BTTree _btParent;
+    private RB_AI_BTTree _btParent;
 
     private Transform _transform;
     //private Animator _animator;
 
-    public RB_AICombat_GoToTarget(RB_AICombat_BTTree BtParent)
+    public RB_AI_GoToTarget(RB_AI_BTTree BtParent)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
@@ -17,6 +17,8 @@ public class RB_AICombat_GoToTarget : RB_BTNode
 
     public override BTNodeState Evaluate()
     {
+        if (_btParent.IsAttacking) return _state = BTNodeState.SUCCESS;
+
         Transform target = (Transform)GetData("target");
 
         if (target == null)
@@ -38,8 +40,8 @@ public class RB_AICombat_GoToTarget : RB_BTNode
         {
             direction.Normalize();
             //_transform.position += direction * _btParent.MovementSpeedAttack * Time.deltaTime; // Déplacement de l'agent vers la cible
-            //_transform.LookAt(target);
             _btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
+            //_transform.LookAt(target);
             _state = BTNodeState.RUNNING;
         }
 

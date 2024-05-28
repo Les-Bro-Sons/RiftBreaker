@@ -5,7 +5,7 @@ using UnityEngine.Splines;
 
 public class RB_AICombat_Task_DefaultPatrol : RB_BTNode
 {
-    private RB_AICombat_BTTree _btParent;
+    private RB_AI_BTTree _btParent;
 
     //private Transform[] _waypoints;
     private int _currentWaypointIndex = 0;
@@ -25,7 +25,7 @@ public class RB_AICombat_Task_DefaultPatrol : RB_BTNode
 
     private List<Vector3> _splinePointsPos = new();
 
-    public RB_AICombat_Task_DefaultPatrol(RB_AICombat_BTTree BtParent)
+    public RB_AICombat_Task_DefaultPatrol(RB_AI_BTTree BtParent)
     {
         _btParent = BtParent;
 

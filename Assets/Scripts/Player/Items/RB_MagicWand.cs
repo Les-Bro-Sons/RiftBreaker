@@ -9,4 +9,9 @@ public class RB_MagicWand : RB_Items
         _playerAnimator.SetFloat("WeaponID", 1);
         _colliderAnimator.SetFloat("WeaponID", 1);
     }
+
+    public override void ChargedAttack()
+    {
+        base.ChargedAttack();
+    }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RB_AiMovement : MonoBehaviour
 {
+    [HideInInspector] public Vector3 WalkDirection;
 
     [Header("IA movement properties")]
     [HideInInspector] public Vector3 LastDirection;
@@ -12,6 +13,9 @@ public class RB_AiMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
+
+    [Header("Animation")]
+    [SerializeField] private Animator _enemyAnimator;
 
     private void Awake()
     {
@@ -28,12 +32,18 @@ public class RB_AiMovement : MonoBehaviour
         FrictionForce();
     }
 
+    private void Update()
+    {
+        UpdateAnimator();
+    }
+
     public void MoveIntoDirection(Vector3 direction, float speed = -1, float acceleration = -1, float deltaTime = -1)
     {
         if (direction == Vector3.zero) return;
         if (speed == -1) speed = _movementMaxSpeed;
         if (acceleration == -1) acceleration = _movementAcceleration;
         direction = direction.normalized;
+        WalkDirection = direction.normalized;
 
         if (deltaTime == -1)
         {
@@ -61,5 +71,17 @@ public class RB_AiMovement : MonoBehaviour
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+    }
+
+    private void UpdateAnimator()
+    {
+        //Updating the enemy animator
+        if(_enemyAnimator != null)
+        {
+            _enemyAnimator.SetFloat("Horizontal", WalkDirection.x);
+            _enemyAnimator.SetFloat("Vertical", WalkDirection.z);
+            _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
+        }
+        
     }
 }

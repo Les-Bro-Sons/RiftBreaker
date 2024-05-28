@@ -16,8 +16,7 @@ public class RB_SpriteBillBoard : MonoBehaviour
 
     private void Start()
     {
-        //Getting default rotation
-        _defaultRotation = _transform.rotation;
+        _defaultRotation = Quaternion.LookRotation(Vector3.forward);
     }
 
     private void LookAtCamera()

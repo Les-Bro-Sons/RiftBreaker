@@ -142,6 +142,12 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ChargedAttack()
     {
+        if(_playerAnimator.GetFloat("WeaponID") <= .1f && _playerAnimator.GetFloat("WeaponID") >= 0f)
+        {
+            //Reset directions
+            RB_PlayerMovement.Instance.ResetDirection();
+        }
+
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;

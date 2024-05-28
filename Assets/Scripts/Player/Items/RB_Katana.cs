@@ -10,8 +10,6 @@ public class RB_Katana : RB_Items
 
     public override void ChargedAttack()
     {
-        //Reset directions
-        RB_PlayerMovement.Instance.ResetDirection();
         base.ChargedAttack();
     }
 }

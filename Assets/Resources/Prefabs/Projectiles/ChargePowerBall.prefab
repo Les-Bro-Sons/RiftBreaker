@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 4518073358368696130}
   - component: {fileID: 6595077383267285407}
   - component: {fileID: 3608295380498534000}
+  - component: {fileID: -2698247391230198945}
   m_Layer: 0
   m_Name: ChargePowerBall
   m_TagString: Untagged
@@ -253,14 +254,23 @@ MonoBehaviour:
   _launchForce: {x: 0, y: 0, z: 0}
   _totalLifeTime: 2
   Team: 1
-  _followParticles: {fileID: 0}
-  _destroyParticles: {fileID: 0}
+  _destroyOnWall: 0
+  _wallDetectionLength: 1
+  _followParticles: {fileID: 2451604520403008917, guid: a32b8235e98f64d4087e5fa9d84c1489,
+    type: 3}
+  _destroyParticles: {fileID: 2451604520403008917, guid: ade4b292e4342e841a74c79067e1e6fa,
+    type: 3}
+  _continuousForceScreenshake: 0
+  _continuousDelayScreenshake: 0
   _damage: 20
+  _knocbackExplosionForce: 0
   _knockback: {x: 0, y: 0, z: 5}
   _isDealingDamageMultipleTime: 0
   _isDealingKnockbackMultipleTime: 0
   _canDamageAlly: 0
   _canKnockbackAlly: 0
+  _damageOnExplosion: 1
+  _explosionRadius: 1
 --- !u!54 &3608295380498534000
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -288,3 +298,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
+--- !u!114 &-2698247391230198945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4305256619858800791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb5b1e692bde7f4aaff6e7404b85673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventOnObjectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEnemyExit:
+    m_PersistentCalls:
+      m_Calls: []

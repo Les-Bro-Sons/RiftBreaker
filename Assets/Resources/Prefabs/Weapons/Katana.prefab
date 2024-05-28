@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5118908842477022123}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6793543130408524868}
   - component: {fileID: 3150792290815004498}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Katana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4941359248235997316}
   - component: {fileID: 2431901478797040913}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: weaponCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6348181909369658313}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8241562237352362998}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,14 +222,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2325006786299238088}
-  - component: {fileID: 3040380860854101033}
+  - component: {fileID: 8542635498254281744}
   m_Layer: 0
   m_Name: weaponSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2325006786299238088
 Transform:
   m_ObjectHideFlags: 0
@@ -245,7 +245,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6348181909369658313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3040380860854101033
+--- !u!212 &8542635498254281744
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

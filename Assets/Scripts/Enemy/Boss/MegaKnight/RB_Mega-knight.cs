@@ -6,12 +6,6 @@ public class RB_Mega_knight : RB_Boss
 {
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
-    [Header("Projectiles")]
-    public GameObject Spikes;
-    private Vector2 _rangeOfAttack = new Vector2(200, 50);
-    public int RowsOfSpikes = 5;
-    public int ColumnsOfSpikes = 5;
-
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
     [SerializeField] private float _slashKnockback = 15;
@@ -21,6 +15,7 @@ public class RB_Mega_knight : RB_Boss
     private float _slashDelayTimer = 0;
 
     [Header("Spikes (attack2)")]
+    public GameObject Spikes;
     [SerializeField] private float _spikesLength = 5;
     [SerializeField] private float _spikesSpaces = 0.75f;
     [SerializeField] private float _spikeDamage = 10;
@@ -229,10 +224,10 @@ public class RB_Mega_knight : RB_Boss
         }
         */
         float currentLength = 0;
-        Vector3 placingPos = transform.position + (transform.forward * _spikesSpaces);
-        placingPos.y = Spikes.transform.position.y;
         Vector3 placingdir = (_currentTarget.position - transform.position);
         placingdir = new Vector3(placingdir.x, 0, placingdir.z).normalized;
+        Vector3 placingPos = transform.position + (placingdir * _spikesSpaces);
+        placingPos.y = Spikes.transform.position.y;
         while (currentLength < _spikesLength)
         {
             placingPos.y = Spikes.transform.position.y;

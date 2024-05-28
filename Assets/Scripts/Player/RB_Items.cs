@@ -91,9 +91,9 @@ public class RB_Items : MonoBehaviour
 
     public virtual void Attack()
     {
-        //Cooldown for attack
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
+        //Cooldown for attack
         _lastUsedAttackTime = Time.time;
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");

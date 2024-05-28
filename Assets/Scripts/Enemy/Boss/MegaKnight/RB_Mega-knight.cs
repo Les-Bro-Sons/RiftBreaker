@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +35,14 @@ public class RB_Mega_knight : RB_Boss
     private Vector3 _jumpStartPos;
     private Vector3 _jumpEndPos;
 
+    //Animation
+    [SerializeField] RB_EnemyAnimation _enemyAnimation;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -48,7 +55,6 @@ public class RB_Mega_knight : RB_Boss
         _currentCooldownAttack1 -= Time.deltaTime;
         _currentCooldownAttack2 -= Time.deltaTime; 
         _currentCooldownAttack3 -= Time.deltaTime;
-        //_mouvement.MoveIntoDirection(PlayerPosition.position);
     }
 
     private void FixedUpdate()
@@ -77,6 +83,7 @@ public class RB_Mega_knight : RB_Boss
                 CurrentState = BOSSSTATES.Idle; //wait in idle
                 break;
             case BOSSSTATES.Attack3:
+                JumpAttack();
                 break;
         }
     }
@@ -138,11 +145,15 @@ public class RB_Mega_knight : RB_Boss
 
     public void Slash() //ATTACK 1
     {
+        //Animations
+        _enemyAnimation.TriggerBasicAttack();
+
         List<RB_Health> alreadyDamaged = new();
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f), transform.rotation))
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
             {
+                
                 if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
 
                 alreadyDamaged.Add(enemyHealth);
@@ -169,11 +180,13 @@ public class RB_Mega_knight : RB_Boss
         _jumpStartPos = transform.position;
         _jumpEndPos = _currentTarget.position;
         BossRB.velocity = Vector3.zero;
-        JumpAttack();
     }
 
     public void JumpAttack() //ATTACK 3
     {
+        //Animations
+        _enemyAnimation.TriggerThirdAttack();
+
         //jump calculation
         _currentJumpDuration += Time.fixedDeltaTime;
         float percentComplete = _currentJumpDuration / _jumpDuration;
@@ -223,6 +236,10 @@ public class RB_Mega_knight : RB_Boss
             }
         }
         */
+
+        //Animations
+        _enemyAnimation.TriggerSecondAttack();
+
         float currentLength = 0;
         Vector3 placingdir = (_currentTarget.position - transform.position);
         placingdir = new Vector3(placingdir.x, 0, placingdir.z).normalized;

@@ -49,11 +49,15 @@ public class RB_Projectile : MonoBehaviour
     private Rigidbody _rb;
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
+    [SerializeField] private Animator _projectileAnimator;
 
     //Movements
     private float _traveledDistance;
     private Vector3 _firstPos;
     private float _creationTime;
+
+    //Spawn prefab
+    public float SpawnDistanceFromPlayer;
 
 
     private void Awake()
@@ -112,7 +116,7 @@ public class RB_Projectile : MonoBehaviour
     {
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
         {
-            if (TryGetComponent<RB_Health>(out RB_Health enemyHealth))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
             {
                 enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
                 enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
@@ -208,6 +212,17 @@ public class RB_Projectile : MonoBehaviour
             }
 
             _currentContinousDelayScreenshake += Time.deltaTime;
+        }
+
+        UpdateAnim();
+    }
+
+    private void UpdateAnim()
+    {
+        if(_projectileAnimator != null)
+        {
+            _projectileAnimator.SetFloat("Horizontal", _transform.TransformDirection(Vector3.forward).x);
+            _projectileAnimator.SetFloat("Vertical", _transform.TransformDirection(Vector3.forward).z);
         }
     }
 }

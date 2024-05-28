@@ -175,7 +175,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool IsDoingAnyAttack()
     {
         //If the player is attacking in any way possible (normal attack, charging attack, charged attack or special attack)
-        return IsChargingAttack  || IsChargedAttacking || IsSpecialAttacking || IsAttacking;
+        return IsChargedAttacking || IsSpecialAttacking || IsAttacking;
     }
 
     public bool IsDoingAnyNotNormalAttack()

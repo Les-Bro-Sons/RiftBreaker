@@ -64,7 +64,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator = _playerAction.PlayerAnimator;
         _colliderAnimator = _playerAction.ColliderAnimator;
         _collisionDetection = _playerAction.CollisionDetection;
-        //_collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
+        move_collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
     }

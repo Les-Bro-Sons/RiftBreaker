@@ -6,13 +6,13 @@ public class RB_MenuButton : MonoBehaviour , IPointerEnterHandler, IPointerExitH
     bool _isHoovered;
     float _originalXPos;
 
-    [SerializeField] Transform _textTrasform;
+    [SerializeField] RectTransform _textTrasform;
 
     [SerializeField] float _offsetHover;
     [SerializeField] float _offsetSpeed;
 
     private void Awake() {
-        _originalXPos = _textTrasform.position.x;
+        _originalXPos = _textTrasform.localPosition.x;
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -24,16 +24,19 @@ public class RB_MenuButton : MonoBehaviour , IPointerEnterHandler, IPointerExitH
     }
 
     private void Update() {
-        if(_isHoovered) {
-            float xPos = _textTrasform.position.x;
+        if (!RB_MenuManager.Instance.IsOptionOpen){
+            if (_isHoovered) {
+            float xPos = _textTrasform.localPosition.x;
             xPos = Mathf.Lerp(xPos, _originalXPos - _offsetHover, _offsetSpeed * Time.deltaTime);
-            _textTrasform.position = new Vector3(xPos, _textTrasform.position.y, _textTrasform.position.z);
+            _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
+            }
+            else {
+                float xPos = _textTrasform.localPosition.x;
+                xPos = Mathf.Lerp(xPos, _originalXPos, _offsetSpeed * Time.deltaTime);
+                _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
+            }
         }
-        else {
-            float xPos = _textTrasform.position.x;
-            xPos = Mathf.Lerp(xPos, _originalXPos, _offsetSpeed * Time.deltaTime);
-            _textTrasform.position = new Vector3(xPos, _textTrasform.position.y, _textTrasform.position.z);
-        }
+
     }
 
 }

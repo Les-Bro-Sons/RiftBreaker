@@ -17,7 +17,7 @@ public class RB_PlayerAnim : MonoBehaviour
 
     private void UpdateAnimation()
     {
-        //Passing speed and rot to animator
+        //Passing speed and rot to Animator
         _playerAnimator.SetFloat("Speed", _playerMovement.GetVelocity().magnitude);
         _playerAnimator.SetFloat("yRot", _transform.rotation.eulerAngles.y);
     }

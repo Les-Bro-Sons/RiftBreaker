@@ -27,7 +27,7 @@ public class RB_Camera : MonoBehaviour
 
     private void Start()
     {
-        _virtualCam.Follow = RB_PlayerController.Instance.transform;
+        //_virtualCam.Follow = RB_PlayerController.Instance.transform;
     }
 
     private void Update() 

@@ -33,6 +33,8 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector2 MoveValue;
 
+    public bool IsMouse = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -59,6 +61,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        IsMouse = (context.action.activeControl.device.name == "Mouse");
         if (context.started)
             EventAttackStarted?.Invoke();
         else if (context.canceled)

@@ -77,7 +77,6 @@ public class RB_Mega_knight : RB_Boss
                 CurrentState = BOSSSTATES.Idle; //wait in idle
                 break;
             case BOSSSTATES.Attack3:
-                JumpAttack();
                 break;
         }
     }
@@ -170,6 +169,7 @@ public class RB_Mega_knight : RB_Boss
         _jumpStartPos = transform.position;
         _jumpEndPos = _currentTarget.position;
         BossRB.velocity = Vector3.zero;
+        JumpAttack();
     }
 
     public void JumpAttack() //ATTACK 3

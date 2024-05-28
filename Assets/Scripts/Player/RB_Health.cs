@@ -24,6 +24,8 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] private GameObject _particleDamage;
     [SerializeField] private GameObject _particleDeath;
     [SerializeField] private GameObject _particleHeal;
+    [SerializeField] Animator _animPlayer;
+    [SerializeField] Animator _animUX;
 
     //Components
     Rigidbody _rb;
@@ -48,6 +50,8 @@ public class RB_Health : MonoBehaviour {
         }
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
+        _animPlayer.SetTrigger("isDamage");
+        _animUX.SetTrigger("isDamage");
     }
 
     public void TakeKnockback(Vector3 direction, float knockbackForce)

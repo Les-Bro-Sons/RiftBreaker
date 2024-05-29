@@ -17,12 +17,11 @@ public class RB_EnemyAnimation : MonoBehaviour
         _rb = GetComponentInParent<Rigidbody>();
         _transform = _rb.transform;
     }
-
     private void UpdateAnim()
     {
         _enemyAnimator.SetFloat("Horizontal", _transform.forward.normalized.x);
         _enemyAnimator.SetFloat("Vertical", _transform.forward.normalized.z);
-        _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
+        _enemyAnimator.SetFloat("Speed", _currentVelocity.magnitude);
     }
 
     public void SpawnPrefab(string prefabToSpawn)

@@ -131,6 +131,11 @@ public class RB_PlayerAction : MonoBehaviour
                 _playerController.ChoseItem(_itemId);
                 _itemId++;
                 _itemId = (_itemId >= 2) ? 2 : _itemId;
+
+                if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
+                {
+                    RB_LevelManager.Instance.SwitchPhase();
+                }
             }
         }
         if (!IsItemNearby)

@@ -53,10 +53,12 @@ public class RB_Health : MonoBehaviour {
         }
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
+        //triggering the animation
         _animPlayer.SetTrigger("isDamage");
         _animUX.SetTrigger("isDamage");
+        //Change the text of the UI Text with the amount of damage
         _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().text = (-amount).ToString();
-        _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().color = new Color(255,0,0);
+        //Trigger the last animation
         _animUIPlayer.SetTrigger("isDamage");
     }
 

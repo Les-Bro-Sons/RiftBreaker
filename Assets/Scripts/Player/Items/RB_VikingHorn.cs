@@ -17,6 +17,9 @@ public class RB_VikingHorn : RB_Items
     //Components
     private Rigidbody _rb;
 
+    //Particles
+    [SerializeField] private string _landingOnDirt;
+
 
 
     public override void Bind()
@@ -46,6 +49,7 @@ public class RB_VikingHorn : RB_Items
     {
         //Constantly updating animation
         _playerAnimator.SetFloat("Combo", CurrentAttackCombo);
+        _colliderAnimator.SetFloat("Combo", CurrentAttackCombo);
     }
 
     private void ComboTimer()
@@ -81,6 +85,12 @@ public class RB_VikingHorn : RB_Items
             _rb.MovePosition(position);
             if (_heightIndex > 1)
             {
+                GameObject newObject = Instantiate(Resources.Load("Prefabs/Particles/" + _landingOnDirt), _transform.position, _transform.rotation) as GameObject;
+                if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+                {
+                    newObject.transform.position += _transform.forward * projectile.SpawnDistanceFromPlayer;
+                    projectile.Team = TEAMS.Player;
+                }
                 //If the jump is finished, stop the jump
                 _heightIndex = 0;
                 _shouldJump = false;

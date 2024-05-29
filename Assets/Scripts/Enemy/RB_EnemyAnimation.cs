@@ -21,7 +21,7 @@ public class RB_EnemyAnimation : MonoBehaviour
     {
         _enemyAnimator.SetFloat("Horizontal", _transform.forward.normalized.x);
         _enemyAnimator.SetFloat("Vertical", _transform.forward.normalized.z);
-        _enemyAnimator.SetFloat("Speed", _currentVelocity.magnitude);
+        _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
     }
 
     public void SpawnPrefab(string prefabToSpawn)

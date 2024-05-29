@@ -403,12 +403,12 @@ GameObject:
   - component: {fileID: 2629091478838784588}
   - component: {fileID: 630856352108775824}
   m_Layer: 0
-  m_Name: Canvas - UI
+  m_Name: Canvas - Spot UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9114800491695808032
 RectTransform:
   m_ObjectHideFlags: 0
@@ -447,7 +447,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -500,7 +500,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5294633908493450411}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -546,11 +546,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8330248978177540950}
   - component: {fileID: 3479361445346534170}
+  - component: {fileID: 4038741704068842438}
   - component: {fileID: 425471524185727200}
-  - component: {fileID: 5049743095030184060}
   - component: {fileID: 5025532415131859972}
+  - component: {fileID: 5049743095030184060}
+  - component: {fileID: 5806088935590054422}
   m_Layer: 0
-  m_Name: AI_Phase_2
+  m_Name: AI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -600,7 +602,25 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!114 &4038741704068842438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6368448233150745149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a503888d5e399c4c81f815164ab9311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventDead:
+    m_PersistentCalls:
+      m_Calls: []
+  _isAttachedToAPhase: 0
+  _spawnInPhase: 1
+  SpriteRenderer: {fileID: 8818120888488790519}
 --- !u!114 &425471524185727200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,11 +635,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AiType: 0
   MovementSpeed: 4
-  RotationSpeed: 4
-  MovementSpeedAttack: 8
+  MovementSpeedAggro: 8
   AttackRange: 2
-  AttackSpeed: 2
-  AttackDamage: 2
+  AttackSpeed: 0.3
+  AttackDamage: 10
+  WaitBeforeAttack: 1
   SplineContainer: {fileID: 0}
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
@@ -627,25 +647,25 @@ MonoBehaviour:
   StartWaitingWaypointInterval: 0
   InRange: 0
   FovRange: 10
-  WaitBeforeAttack: 1
-  AiMovement: {fileID: 0}
+  FovAngle: 180
   HasAlreadySeen: 0
---- !u!114 &5049743095030184060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6368448233150745149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df13b3e2f13008489581e799e347d69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LastDirection: {x: 0, y: 0, z: 0}
-  _movementAcceleration: 200
-  _movementMaxSpeed: 12
-  _movementFrictionForce: 100
+  IsAttacking: 0
+  LastTargetPos: {x: 0, y: 0, z: 0}
+  CanvasUi: {fileID: 630856352108775824}
+  ImageSpotBar: {fileID: 3423591583767908502}
+  DurationAlphaCanvas: 0.5
+  DurationToLoadSpotBar: 1.5
+  DurationToUnloadSpotBar: 1
+  _prefabUxDetectedReadyMark: {fileID: 2153901776240351120, guid: 507c0141ec0e1ec45bc19ba2bf7d24d0,
+    type: 3}
+  AiMovement: {fileID: 0}
+  AiHealth: {fileID: 0}
+  AiRigidbody: {fileID: 0}
+  SlashRange: 3
+  SlashDamage: 10
+  SlashKnockback: 10
+  SlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
+    type: 3}
 --- !u!114 &5025532415131859972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,9 +693,45 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0
-  _particleDamage: {fileID: 0}
+  _particleDamage: {fileID: 827747827748336171, guid: 6f1309b1a7e1f9b4e97af0d4ed517342,
+    type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+--- !u!114 &5049743095030184060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6368448233150745149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df13b3e2f13008489581e799e347d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkDirection: {x: 0, y: 0, z: 0}
+  LastDirection: {x: 0, y: 0, z: 0}
+  _movementAcceleration: 200
+  _movementMaxSpeed: 12
+  _movementFrictionForce: 100
+  _enemyAnimator: {fileID: 0}
+--- !u!114 &5806088935590054422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6368448233150745149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956c35150b281de40be91d869fc9ac99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entityType: 0
+  _spriteRenderer: {fileID: 8818120888488790519}
+  _animator: {fileID: 6890039085366698046}
+  _health: {fileID: 5025532415131859972}
+  _enemy: {fileID: 4038741704068842438}
 --- !u!1 &6707635782235582040
 GameObject:
   m_ObjectHideFlags: 0

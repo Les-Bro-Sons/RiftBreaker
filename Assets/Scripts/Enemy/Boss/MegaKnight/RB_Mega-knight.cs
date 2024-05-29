@@ -68,7 +68,7 @@ public class RB_Mega_knight : RB_Boss
                 }
                 break;
             case BOSSSTATES.Moving:
-                _movement.MoveIntoDirection(_currentTarget.position - transform.position); //move to the target
+                _movement.MoveToPosition(_currentTarget.position); //move to the target
                 SwitchBossState();
                 break;
             case BOSSSTATES.Attack1:

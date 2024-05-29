@@ -13,6 +13,10 @@ namespace BehaviorTree
 
             foreach (RB_BTNode BTNode in _children)
             {
+                if (anyChildIsRunning)
+                {
+                    break;
+                }
                 switch (BTNode.Evaluate())
                 {
                     case BTNodeState.FAILURE:

@@ -1,7 +1,7 @@
 using BehaviorTree;
 using UnityEngine;
 
-public class RB_AI_PlayerInFov : RB_BTNode
+/*public class RB_AIInf_PlayerInFov : RB_BTNode
 {
     private RB_AIInf_BTTree _btParent;
 
@@ -23,7 +23,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private bool _isLoadingSpotBar = false;
     private bool _isUnloadingSpotBar = false;
     
-    public RB_AI_PlayerInFov(RB_AIInf_BTTree BtParent)
+    public RB_AIInf_PlayerInFov(RB_AIInf_BTTree BtParent)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
@@ -32,47 +32,55 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     public override BTNodeState Evaluate()
     {
-        object t = GetData("target");
-        if (t == null)
+        if (_btParent.IsAttacking)
         {
-            //Debug.Log("Recherche de la cible...");
-            Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
-            if (colliders.Length > 0)
-            {
-                //Debug.Log("Cible trouvée, assignation en cours...");
-                Parent.Parent.SetData("target", colliders[0].transform);
-                t = colliders[0].transform;
-            }
-            //else
-            //    Debug.Log("Aucune cible trouvée dans la portée.");
-        }
-
-        Transform target = (Transform)t;
-
-        if (target == null)
-        {
-            //Debug.Log("target est toujours null après la recherche.");
-            _state = BTNodeState.FAILURE;
-            return _state;
-        }
-        //else
-        //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
-
-        if (SeesPlayer(target))
-        {
-            // _animator.SetBool("Attacking", true);
-            // _animator.SetBool("Walking", false);
-
-            _btParent.ImageSpotBar.fillAmount = 0.0f;
-            _btParent.CanvasUi.alpha = 0.0f;
-
             _state = BTNodeState.SUCCESS;
             return _state;
         }
+        else
+        {
+            object t = GetData("target");
+            if (t == null)
+            {
+                //Debug.Log("Recherche de la cible...");
+                Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
+                if (colliders.Length > 0)
+                {
+                    //Debug.Log("Cible trouvée, assignation en cours...");
+                    Parent.Parent.SetData("target", colliders[0].transform);
+                    t = colliders[0].transform;
+                }
+                //else
+                //    Debug.Log("Aucune cible trouvée dans la portée.");
+            }
+
+            Transform target = (Transform)t;
+
+            if (target == null)
+            {
+                //Debug.Log("target est toujours null après la recherche.");
+                _state = BTNodeState.FAILURE;
+                return _state;
+            }
+            //else
+            //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
+
+            if (SeesPlayer(target))
+            {
+                // _animator.SetBool("Attacking", true);
+                // _animator.SetBool("Walking", false);
+
+                _btParent.ImageSpotBar.fillAmount = 0.0f;
+                _btParent.CanvasUi.alpha = 0.0f;
+
+                _state = BTNodeState.SUCCESS;
+                return _state;
+            }
         
-        _hasFocusedUx = false;
-        _state = BTNodeState.FAILURE;
-        return _state;
+            _hasFocusedUx = false;
+            _state = BTNodeState.FAILURE;
+            return _state;
+        }
     }
 
     bool SeesPlayer(Transform target)
@@ -213,4 +221,4 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
         _currentValueFillSpotBar = _btParent.ImageSpotBar.fillAmount;
     }
-}
+}*/

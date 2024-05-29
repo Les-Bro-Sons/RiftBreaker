@@ -43,12 +43,12 @@ public class RB_Items : MonoBehaviour
     protected Animator _colliderAnimator;
     private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
-    private Transform _transform;
+    protected Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _transform = transform;
         
@@ -91,6 +91,7 @@ public class RB_Items : MonoBehaviour
 
     public virtual void Attack()
     {
+
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
@@ -117,7 +118,6 @@ public class RB_Items : MonoBehaviour
             {
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
                 _enemyHealth.TakeDamage(_currentDamage);
-                print(detectedObject.name + "took damage");
 
                 /////UX/////
                 if (_impulseSource)

@@ -77,10 +77,10 @@ public class RB_PlayerAction : MonoBehaviour
         }
     }
 
-    public void Rebind()
+    public void SetItem(int id)
     {
         //When the item is gathered, get it
-        _item = GetComponentInChildren<RB_Items>();
+        _item = Items[id];
     }
 
     public void StartDash()
@@ -94,7 +94,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (_item != null && CanAttack() && _item.CanAttack())
+        if (_item != null && CanAttack() && _item.CanAttack() && _item.CurrentAttackCombo < 4)
         {
             //Attack
             IsAttacking = true;
@@ -110,11 +110,9 @@ public class RB_PlayerAction : MonoBehaviour
         IsItemNearby = false;
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _interactRange))
         {
-            print("trying to gather item");
             if(RB_Tools.TryGetComponentInParent<RB_Items>(collider.gameObject, out RB_Items itemGathered))
             {
                 //For each object around the player, verify if it's an item
-                print("item gathered");
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
                 EventItemGathered?.Invoke();
@@ -162,7 +160,6 @@ public class RB_PlayerAction : MonoBehaviour
         if (_item != null && CanAttack())
         {
             //Start charging attack
-            print("IsChargedAttacking : " + IsChargedAttacking + ", Starting charge attack");
             IsChargingAttack = true;
             _isChargingAnimation = false;
             _chargeAttackPressTime = 0;

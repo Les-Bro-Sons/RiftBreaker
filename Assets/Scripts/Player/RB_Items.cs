@@ -79,6 +79,12 @@ public class RB_Items : MonoBehaviour
         _objectToRemove.SetActive(false);
     }
 
+    public virtual void Drop()
+    {
+        _objectToRemove.SetActive(true);
+        _transform.parent = null;
+    }
+
     public virtual void ResetAttack()
     {
         //Turning off all attack animations

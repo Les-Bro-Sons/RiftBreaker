@@ -119,9 +119,18 @@ public class RB_PlayerAction : MonoBehaviour
                 itemGathered.Bind();
                 IsItemNearby = true;
                 //Add the item gathered to the items
-                Items.Add(itemGathered);
+                if (Items.Count >= 3)
+                {
+                    _item.Drop();
+                    Items[_itemId] = itemGathered;
+                }
+                else
+                {
+                    Items.Add(itemGathered);
+                }
                 _playerController.ChoseItem(_itemId);
                 _itemId++;
+                _itemId = (_itemId >= 2) ? 2 : _itemId;
             }
         }
         if (!IsItemNearby)

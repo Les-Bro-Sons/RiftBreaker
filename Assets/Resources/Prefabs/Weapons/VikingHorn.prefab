@@ -160,6 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 851840921330242087}
   - component: {fileID: 7135831210641033284}
+  - component: {fileID: 6555051240348793900}
   m_Layer: 0
   m_Name: weaponSprite
   m_TagString: Untagged
@@ -176,7 +177,7 @@ Transform:
   m_GameObject: {fileID: 8458586976768100553}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: -3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -234,6 +235,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6555051240348793900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8458586976768100553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8782994434126254191
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,7 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 0
+  ChargeTime: 1
   _chargeZoom: 0.85
   _attackCooldown: 0
   _attackDamage: 0
@@ -330,5 +343,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _jumpDistance: 0
-  _jumpHeight: 0
+  _jumpDistance: 2
+  _jumpHeight: 5
+  _comboDelay: 2

@@ -6,13 +6,24 @@ public class RB_AI_GoToTarget : RB_BTNode
     private RB_AI_BTTree _btParent;
 
     private Transform _transform;
-    //private Animator _animator;
+
+    private float _range;
+    private float _speed;
 
     public RB_AI_GoToTarget(RB_AI_BTTree BtParent)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
-        // _animator = transform.GetComponent<Animator>();
+        _range = _btParent.AttackRange;
+        _speed = _btParent.MovementSpeedAggro;
+    }
+
+    public RB_AI_GoToTarget(RB_AI_BTTree BtParent, float speed, float range)
+    {
+        _btParent = BtParent;
+        _transform = _btParent.transform;
+        _range = range;
+        _speed = speed;
     }
 
     public override BTNodeState Evaluate()
@@ -32,7 +43,7 @@ public class RB_AI_GoToTarget : RB_BTNode
 
         //Debug.Log($"distance : {distance}");
 
-        if (distance <= _btParent.AttackRange) // Vérifie si l'agent est suffisamment proche de la cible
+        if (distance <= _range) // Vérifie si l'agent est suffisamment proche de la cible
         {
             _state = BTNodeState.SUCCESS;
         }
@@ -42,7 +53,7 @@ public class RB_AI_GoToTarget : RB_BTNode
             //_transform.position += direction * _btParent.MovementSpeedAttack * Time.deltaTime; // Déplacement de l'agent vers la cible
 
             //_btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
-            _btParent.AiMovement.MoveToPosition(target.position, _btParent.MovementSpeedAttack);
+            _btParent.AiMovement.MoveToPosition(target.position, _speed);
 
             //_transform.LookAt(target);
             _state = BTNodeState.RUNNING;

@@ -11,22 +11,19 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     private List<PHASES> _combatPhases = new();
 
     public Dictionary<string, bool> BoolDictionnary = new Dictionary<string, bool>();
+    private List<RB_Health> _characterCollisions = new();
 
     [Header("Main Parameters")]
     public ENEMYCLASS AiType = ENEMYCLASS.Light;
     public float MovementSpeed = 4f;
-    public float RotationSpeed = 4f;
-    public float MovementSpeedAttack = 8f;
+    public float MovementSpeedAggro = 8f;
     [Range (1f, 10f)] public float AttackRange = 2f;
     public float AttackSpeed = 2f;
-    public float AttackDamage = 2f;
-    public float WaitBeforeAttack = 0.5f;
 
     [Header("Spline Parameters")]
     public SplineContainer SplineContainer;
     public float WaitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
     public int PatrolSplineIndex = 0;
-
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
 
@@ -49,11 +46,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Header("Components")]
     [HideInInspector] public RB_AiMovement AiMovement;
     [HideInInspector] public RB_Health AiHealth;
+    [HideInInspector] public Rigidbody AiRigidbody;
 
     [Header("Faible")]
     [SerializeField] public float SlashRange;
     [SerializeField] public float SlashDamage;
     [SerializeField] public float SlashKnockback;
+    [SerializeField] public float SlashDelay;
     [SerializeField] public GameObject SlashParticles;
 
 
@@ -67,6 +66,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         if (AiMovement == null)
             AiMovement.AddComponent<RB_AiMovement>();
         AiHealth = GetComponent<RB_Health>();
+        AiRigidbody = GetComponent<Rigidbody>();
     }
 
     /*public void UxFocus()
@@ -94,7 +94,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
-                    new RB_BTSelector(new List<RB_BTNode> // selector ai lost sight of target
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AICheck_EnemyTouchDetection(this, true),
+                    }),
+
+                    new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target
                     {
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
@@ -116,8 +121,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_AICheck_Bool(this, "HasAlreadySeen"),
                         new RB_AI_PlayerInFov(this),
-                        new RB_AI_GoToTarget(this),
-                        new RB_AI_Attack(this),
+                        new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
+                        new RB_AI_Attack(this, -1),
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
@@ -139,9 +144,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Faible
                     {
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Light),
-                        new RB_AI_PlayerInFov(this),
-                        new RB_AI_GoToTarget(this),
-                        new RB_AI_Attack(this),
+                        new RB_AI_PlayerInRoom(this),
+                        new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
+                        new RB_AI_Attack(this, 0), //slash
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Moyen
@@ -153,6 +158,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Heavy),
                     }),
+
+                    new RB_AI_Task_DefaultPatrol(this),  // task default
                 }),
             }),
         });;
@@ -164,5 +171,26 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         if (prefab)
             Instantiate(prefab, position, rotation);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (RB_Tools.TryGetComponentInParent<RB_Health>(collision.gameObject, out RB_Health health))
+        {
+            _characterCollisions.Add(health);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (RB_Tools.TryGetComponentInParent<RB_Health>(collision.gameObject, out RB_Health health) && _characterCollisions.Contains(health))
+        {
+            _characterCollisions.Remove(health);
+        }
+    }
+
+    public List<RB_Health> GetCollisions()
+    {
+        return _characterCollisions;
     }
 }

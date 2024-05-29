@@ -10,6 +10,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     private List<PHASES> _infiltrationPhases = new();
     private List<PHASES> _combatPhases = new();
 
+    public Dictionary<string, bool> BoolDictionnary = new Dictionary<string, bool>();
+
     [Header("Main Parameters")]
     public ENEMYCLASS AiType = ENEMYCLASS.Light;
     public float MovementSpeed = 4f;
@@ -28,13 +30,15 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
 
-    [Header("FOV Parameters")]
+    [Header("Spot Parameters")]
     public bool InRange = false;
     [Range(1f, 50f)] public float FovRange = 10f;
     public float FovAngle = 75f;
+    [HideInInspector] public bool HasAlreadySeen = false;
+    [HideInInspector] public bool IsAttacking = false;
+    [HideInInspector] public Vector3 LastTargetPos;
 
-
-    [Header("UI")]
+    [Header("Spot UI")]
     public CanvasGroup CanvasUi;
     public Image ImageSpotBar;
     public float DurationAlphaCanvas = 0.5f;
@@ -45,10 +49,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Header("Components")]
     [HideInInspector] public RB_AiMovement AiMovement;
     [HideInInspector] public RB_Health AiHealth;
-
-
-    [HideInInspector] public bool HasAlreadySeen = false;
-    [HideInInspector] public bool IsAttacking = false;
 
     [Header("Faible")]
     [SerializeField] public float SlashRange;
@@ -94,11 +94,35 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
-                    new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
+                    new RB_BTSelector(new List<RB_BTNode> // selector ai lost sight of target
                     {
+                        new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
+                        {
+                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AI_PlayerInFov(this),
+                            new RB_AI_SetBool(this, "GoToLastTargetPos", false)
+                        }),
+
+                        new RB_BTSequence(new List<RB_BTNode> // sequence go to last target pos
+                        {
+                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AI_GoToLastTargetPos(this, 2, AiMovement.MovementMaxSpeed / 2f, AiMovement.MovementAcceleration / 2f),
+                            new RB_AICheck_WaitForSeconds(this, 2, "GoToLastTargetPos", false) // ADD RANDOM PATROL (Feature)
+                        }),
+                        
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> // Sequence spotted
+                    {
+                        new RB_AICheck_Bool(this, "HasAlreadySeen"),
                         new RB_AI_PlayerInFov(this),
                         new RB_AI_GoToTarget(this),
                         new RB_AI_Attack(this),
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
+                    {
+                        new RB_AI_PlayerInFov(this),
                     }),
 
                     new RB_AI_Task_DefaultPatrol(this),  // task default
@@ -131,7 +155,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
                 }),
             }),
-        });
+        });;
 
         return root;
     }

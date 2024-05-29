@@ -62,11 +62,12 @@ public class RB_AI_Attack : RB_BTNode
                     switch (_btParent.AiType)
                     {
                         case ENEMYCLASS.Light:
-                            if (distance <= _btParent.AttackRange || true) // Vérifie si l'agent est suffisamment proche de la cible
+                            Slash();
+                            /*if (distance <= _btParent.AttackRange || true) // Vérifie si l'agent est suffisamment proche de la cible
                             {
                                 RB_Tools.TryGetComponentInParent<RB_Health>(target.gameObject, out RB_Health _targetHealth); // A REMPLACER QUAND IL Y AURA UNE ANIMATION
                                 _targetHealth.TakeDamage(_btParent.AttackDamage);
-                            }
+                            }*/
                             break;
 
                         case ENEMYCLASS.Medium:

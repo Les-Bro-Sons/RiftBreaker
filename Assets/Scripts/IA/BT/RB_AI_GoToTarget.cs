@@ -40,7 +40,10 @@ public class RB_AI_GoToTarget : RB_BTNode
         {
             direction.Normalize();
             //_transform.position += direction * _btParent.MovementSpeedAttack * Time.deltaTime; // Déplacement de l'agent vers la cible
-            _btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
+
+            //_btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
+            _btParent.AiMovement.MoveToPosition(target.position, _btParent.MovementSpeedAttack);
+
             //_transform.LookAt(target);
             _state = BTNodeState.RUNNING;
         }

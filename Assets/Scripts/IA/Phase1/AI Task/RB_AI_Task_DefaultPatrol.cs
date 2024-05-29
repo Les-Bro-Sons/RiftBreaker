@@ -27,7 +27,6 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
 
     public RB_AI_Task_DefaultPatrol(RB_AI_BTTree BtParent)
     {
-        Debug.Log("PATROL");
         _btParent = BtParent;
 
         _transform = _btParent.transform;
@@ -126,7 +125,7 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
             }
             else
             {
-                _btParent.AiMovement.MoveIntoDirection(targetPosition - _transform.position, _btParent.MovementSpeed);
+                _btParent.AiMovement.MoveToPosition(targetPosition, _btParent.MovementSpeed);
                 //_transform.position = Vector3.MoveTowards(_transform.position, targetPosition, _btParent.MovementSpeed * Time.deltaTime);
                 //_transform.LookAt(targetPosition);
             }

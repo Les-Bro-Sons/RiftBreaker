@@ -125,7 +125,7 @@ public class RB_AICombat_Task_DefaultPatrol : RB_BTNode
             }
             else
             {
-                _btParent.AiMovement.MoveIntoDirection(targetPosition - _transform.position, _btParent.MovementSpeed);
+                _btParent.AiMovement.MoveToPosition(targetPosition, _btParent.MovementSpeed);
                 //_transform.position = Vector3.MoveTowards(_transform.position, targetPosition, _btParent.MovementSpeed * Time.deltaTime);
                 //_transform.LookAt(targetPosition);
             }

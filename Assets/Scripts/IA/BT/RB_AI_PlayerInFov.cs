@@ -1,4 +1,5 @@
 using BehaviorTree;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class RB_AI_PlayerInFov : RB_BTNode
@@ -38,7 +39,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             case PHASES.Infiltration:
                 if (_btParent.IsAttacking) return _state = BTNodeState.SUCCESS;
-
                 _state = InfiltrationCheck();
                 break;
             case PHASES.Boss:
@@ -66,7 +66,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     Parent.Parent.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;
 
-                    _btParent.HasAlreadySeen = true;
+                    _btParent.BoolDictionnary["HasAlreadySeen"] = true;
                 }
             }
             else
@@ -110,7 +110,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 if (colliders.Length > 0)
                 {
                     //Debug.Log("Cible trouvée, assignation en cours...");
-                    Parent.Parent.SetData("target", colliders[0].transform);
+                    _btParent.Root.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;
                 }
                 //else
@@ -127,26 +127,60 @@ public class RB_AI_PlayerInFov : RB_BTNode
             }
             //else
             //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
-            if (SeesPlayer(target))
-            {
-                // _animator.SetBool("Attacking", true);
-                // _animator.SetBool("Walking", false);
+            
 
-                _btParent.ImageSpotBar.fillAmount = 0.0f;
-                _btParent.CanvasUi.alpha = 0.0f;
-                _state = BTNodeState.SUCCESS;
-                return _state;
-            }
-            else if (_btParent.ImageSpotBar.fillAmount > 0)
+            if (_btParent.BoolDictionnary.ContainsKey("HasAlreadySeen") && _btParent.BoolDictionnary["HasAlreadySeen"])
             {
-                _state = BTNodeState.RUNNING;
-                return _state;
+                if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange)
+                {
+                    UnloadSpotBar();
+                    _btParent.LastTargetPos = target.position;
+                    if (_btParent.ImageSpotBar.fillAmount <= 0)
+                    {
+                        _btParent.BoolDictionnary["GoToLastTargetPos"] = true;
+                        UnloadCanvas();
+                        _btParent.BoolDictionnary["HasAlreadySeen"] = false;
+                        _state = BTNodeState.FAILURE;
+                    }
+                    else
+                    {
+                        LoadCanvas();
+                        _state = BTNodeState.RUNNING;
+                    }
+                }
+                else
+                {
+                    UnloadCanvas();
+                    return _state = BTNodeState.SUCCESS;
+                }
             }
+            else
+            {
+                if (SeesPlayer(target))
+                {
+                    // _animator.SetBool("Attacking", true);
+                    // _animator.SetBool("Walking", false);
 
-            _hasFocusedUx = false;
-            _state = BTNodeState.FAILURE;
-            return _state;
+                    //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
+                    //_btParent.CanvasUi.alpha = 0.0f;
+                    _btParent.BoolDictionnary["HasAlreadySeen"] = true;
+                    _state = BTNodeState.SUCCESS;
+                    return _state;
+                }
+                else if (_btParent.ImageSpotBar.fillAmount > 0)
+                {
+                    _btParent.transform.forward = (target.transform.position - _btParent.transform.position).normalized;
+                    _state = BTNodeState.RUNNING;
+                    return _state;
+                }
+            }
+            
         }
+            
+
+        _hasFocusedUx = false;
+        _state = BTNodeState.FAILURE;
+        return _state;
     }
 
     bool SeesPlayer(Transform target)
@@ -158,34 +192,26 @@ public class RB_AI_PlayerInFov : RB_BTNode
             RaycastHit hit;
 
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, _layerMaskPlayer))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange) && hit.transform == target.parent) //_layerMaskPlayer
             {
-                if (hit.transform == target.parent)
+                // Dessine un rayon vert si le joueur est détecté.
+                Debug.DrawLine(_transform.position, hit.point, Color.green);
+
+                if (!_hasACorrectView)
                 {
-                    // Dessine un rayon vert si le joueur est détecté.
-                    Debug.DrawLine(_transform.position, hit.point, Color.green);
+                    LoadCanvas();
 
-                    if (!_hasACorrectView)
-                    {
-                        LoadCanvas();
-
-                        if (_currentValueAlphaCanvas >= 1)
-                            LoadSpotBar();
-                    }
-                    else
-                    {
-                        if (!_hasFocusedUx)
-                        {
-                            _btParent.UxFocus();
-                            _hasFocusedUx = true;
-                        }
-                        return true;
-                    }
+                    if (_currentValueAlphaCanvas >= 1)
+                        LoadSpotBar();
                 }
                 else
                 {
-                    // Dessine un rayon jaune si un autre objet est touché.
-                    Debug.DrawLine(_transform.position, hit.point, Color.yellow);
+                    if (!_hasFocusedUx)
+                    {
+                        _btParent.UxFocus();
+                        _hasFocusedUx = true;
+                    }
+                    return true;
                 }
             }
             else

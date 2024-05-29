@@ -128,6 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3952820253371109215}
   - component: {fileID: 6898039039432727865}
+  - component: {fileID: 8820580482774689819}
   m_Layer: 0
   m_Name: weaponSprite
   m_TagString: Untagged
@@ -202,6 +203,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8820580482774689819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7051855330456273059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7495783596179589365
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,6 +278,7 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 303392580688658768}
   HudSprite: {fileID: 0}
+  FollowMouseOnChargeAttack: 1
 --- !u!1 &8067806801707449436
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,18 +38,27 @@ public class RB_PlayerAnim : MonoBehaviour
         }
         else
         {
-            if (RB_InputManager.Instance.IsMouse)
+            if (!_playerAction.CurrentItem.FollowMouseOnChargeAttack && _playerAction.IsChargedAttacking) // If the player has to not follow the mouse while charge attacking
             {
-                //If player is attacking get the position of the mouse and shoot it towards it
-                if (!_directionGot && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-                {
-                    directionToAttack = new Vector3((hit.point - _playerTransform.position).x, 0, (hit.point - _playerTransform.position).z);
-                    _directionGot = true;
-                }
-                _playerTransform.forward = directionToAttack;
-                _playerAnimator.SetFloat("Horizontal", directionToAttack.x);
-                _playerAnimator.SetFloat("Vertical", directionToAttack.z);
+                _playerTransform.forward = Vector3.back;
             }
+            else
+            {
+                if (RB_InputManager.Instance.IsMouse)
+                {
+                    //If player is attacking get the position of the mouse and attack towards it
+                    if (!_directionGot && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                    {
+                        directionToAttack = new Vector3((hit.point - _playerTransform.position).x, 0, (hit.point - _playerTransform.position).z);
+                        _directionGot = true;
+                    }
+                    _playerTransform.forward = directionToAttack;
+                    _playerAnimator.SetFloat("Horizontal", directionToAttack.x);
+                    _playerAnimator.SetFloat("Vertical", directionToAttack.z);
+                }
+            }
+            
+            
         }
         //Constantly set the speed of the player to the player animator
         _playerAnimator.SetFloat("Speed", _playerMovement.GetVelocity().magnitude);

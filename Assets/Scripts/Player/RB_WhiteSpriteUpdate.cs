@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class RB_WhiteSpriteUpdate : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer PlayerSpriteRenderer;
+    SpriteRenderer ParentSpriteRenderer;
     SpriteRenderer SelfSpriteRenderer;
 
     private void Start()
     {
+        SpriteRenderer[] sprites;
+        sprites = GetComponentsInParent<SpriteRenderer>();
+        ParentSpriteRenderer = sprites[1];
         SelfSpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SelfSpriteRenderer.sprite = PlayerSpriteRenderer.sprite;
+        SelfSpriteRenderer.sprite = ParentSpriteRenderer.sprite;
     }
 }

@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class RB_PlayerAnim : MonoBehaviour
@@ -8,6 +8,14 @@ public class RB_PlayerAnim : MonoBehaviour
     [SerializeField] RB_PlayerMovement _playerMovement;
     private Transform _playerTransform;
     private RB_PlayerAction _playerAction;
+
+    //conditions
+    private bool _directionGot = false;
+    private bool _prefabSpawned = false;
+
+    //Attack
+    Vector3 directionToAttack = new();
+
 
     private void Awake()
     {
@@ -21,12 +29,27 @@ public class RB_PlayerAnim : MonoBehaviour
 
     private void UpdateAnimation()
     {
-
         if (!_playerAction.IsDoingAnyAttack())
         {
             //Constantly update the direction of the player to the animators if he's not attacking
-            _playerAnimator.SetFloat("Horizontal", _playerMovement.GetDirectionToMove().x);
-            _playerAnimator.SetFloat("Vertical", _playerMovement.GetDirectionToMove().z);
+            _playerAnimator.SetFloat("Horizontal", _playerTransform.forward.x);
+            _playerAnimator.SetFloat("Vertical", _playerTransform.forward.z);
+            _directionGot = false;
+        }
+        else
+        {
+            if (RB_InputManager.Instance.IsMouse)
+            {
+                //If player is attacking get the position of the mouse and shoot it towards it
+                if (!_directionGot && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                {
+                    directionToAttack = new Vector3((hit.point - _playerTransform.position).x, 0, (hit.point - _playerTransform.position).z);
+                    _directionGot = true;
+                }
+                _playerTransform.forward = directionToAttack;
+                _playerAnimator.SetFloat("Horizontal", directionToAttack.x);
+                _playerAnimator.SetFloat("Vertical", directionToAttack.z);
+            }
         }
         //Constantly set the speed of the player to the player animator
         _playerAnimator.SetFloat("Speed", _playerMovement.GetVelocity().magnitude);
@@ -41,12 +64,25 @@ public class RB_PlayerAnim : MonoBehaviour
 
     public void SpawnPrefab(string prefabToSpawn)
     {
-        //Spawn the prefab by his name
-        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _playerTransform.position + new Vector3(0, -.5f, 0), _playerTransform.rotation) as GameObject;
-        if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+        if (!_prefabSpawned)
         {
-            projectile.Team = TEAMS.Player;
+            //Spawn the prefab by his name
+            _prefabSpawned = true;
+            GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + prefabToSpawn), _playerTransform.position, _playerTransform.rotation) as GameObject;
+            if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+            {
+                newObject.transform.position += _playerTransform.forward * projectile.SpawnDistanceFromPlayer;
+                projectile.Team = TEAMS.Player;
+            }
+            StartCoroutine(ResetSpawnPrefab());
         }
+    }
+
+    IEnumerator ResetSpawnPrefab()
+    {
+        //To prevent from spawning two projectile at once
+        yield return new WaitForSeconds(.1f);
+        _prefabSpawned = false;
     }
 
     private void Update()

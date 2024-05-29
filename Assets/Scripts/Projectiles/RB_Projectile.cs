@@ -18,6 +18,8 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
     [SerializeField] public TEAMS Team;
+    [SerializeField] private bool _destroyOnWall;
+    [SerializeField] private float _wallDetectionLength = 1;
 
     [Header("Particles")]
     [SerializeField] private GameObject _followParticles;
@@ -36,17 +38,26 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;
     [SerializeField] private bool _canKnockbackAlly = false;
-    private List<GameObject> _alreadyDamaged = new(); 
+    [SerializeField] private bool _isDestroyingOnDamage = false;
+    private List<GameObject> _alreadyDamaged = new();
+
+    [Header("Explosion")]
+    [SerializeField] private bool _damageOnExplosion = false;
+    [SerializeField] private float _explosionRadius = 1;
 
     //Components
     private Rigidbody _rb;
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
+    [SerializeField] private Animator _projectileAnimator;
 
     //Movements
     private float _traveledDistance;
     private Vector3 _firstPos;
     private float _creationTime;
+
+    //Spawn prefab
+    public float SpawnDistanceFromPlayer;
 
 
     private void Awake()
@@ -67,6 +78,12 @@ public class RB_Projectile : MonoBehaviour
 
     private void EnemyEntered(GameObject enemy)
     {
+        if (_damageOnExplosion)
+        {
+            Explode();
+            return;
+        }
+
         bool isAlreadyDamaged = true;
         if (!_alreadyDamaged.Contains(enemy))
         {
@@ -86,6 +103,29 @@ public class RB_Projectile : MonoBehaviour
         {
             enemyHealth.TakeDamage(_damage);
         }
+
+        if (_isDestroyingOnDamage)
+        {
+            if (_destroyParticles)
+                Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+            Destroy(gameObject);
+        }
+    }
+
+    private void Explode()
+    {
+        foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+            {
+                enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
+                enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
+                enemyHealth.TakeDamage(_damage);
+            }
+        }
+        if (_destroyParticles)
+            Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+        Destroy(gameObject);
     }
 
     private void Start()
@@ -106,6 +146,20 @@ public class RB_Projectile : MonoBehaviour
     {
         //Move the projectile
         MoveLinear();
+        if (_destroyOnWall && Physics.Raycast(_transform.position, _rb.velocity.normalized, _wallDetectionLength, 1 << 3))
+        {
+            if (_damageOnExplosion)
+            {
+                Explode();
+            }
+            else
+            {
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+                Destroy(gameObject);
+            }
+            
+        }
     }
 
     private void MoveLinear()
@@ -158,6 +212,17 @@ public class RB_Projectile : MonoBehaviour
             }
 
             _currentContinousDelayScreenshake += Time.deltaTime;
+        }
+
+        UpdateAnim();
+    }
+
+    private void UpdateAnim()
+    {
+        if(_projectileAnimator != null)
+        {
+            _projectileAnimator.SetFloat("Horizontal", _transform.TransformDirection(Vector3.forward).x);
+            _projectileAnimator.SetFloat("Vertical", _transform.TransformDirection(Vector3.forward).z);
         }
     }
 }

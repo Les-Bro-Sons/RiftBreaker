@@ -1,15 +1,12 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using System.Collections;
-using Cinemachine.PostFX;
 
 public class RB_UXRewindManager : MonoBehaviour
 {
     public static RB_UXRewindManager Instance;
 
     [SerializeField] private Volume _rewindVolume;
-
     [SerializeField] private float _durationToSwitch = 1f;
 
     private void Awake()

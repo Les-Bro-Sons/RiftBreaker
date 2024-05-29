@@ -14,7 +14,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _movementAcceleration;
     [SerializeField] private float _movementMaxSpeed;
     [SerializeField] private float _movementFrictionForce;
-    [SerializeField] private Vector3 _directionToMove;
+    public Vector3 DirectionToMove;
     public Direction ActualDirection;
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
@@ -77,22 +77,22 @@ public class RB_PlayerMovement : MonoBehaviour
         _isMoving = false;
     }
 
-    private void GetDirection(Vector3 direction)
+    public void GetDirection(Vector3 direction)
     {
-        _directionToMove = new Vector3(direction.x, 0, direction.y);
+        DirectionToMove = new Vector3(direction.x, 0, direction.y);
         if (!_playerAction.IsAttacking)
         {
             //setting the right direction in the state
-            if (Mathf.Abs(_directionToMove.x) > Mathf.Abs(_directionToMove.y))
+            if (Mathf.Abs(DirectionToMove.x) > Mathf.Abs(DirectionToMove.y))
             {
-                if (_directionToMove.x > 0)
+                if (DirectionToMove.x > 0)
                     ActualDirection = Direction.Right;
                 else
                     ActualDirection = Direction.Left;
             }
             else
             {
-                if (_directionToMove.z > 0)
+                if (DirectionToMove.z > 0)
                     ActualDirection = Direction.Back;
                 else
                     ActualDirection = Direction.Face;
@@ -105,21 +105,20 @@ public class RB_PlayerMovement : MonoBehaviour
         if (!_playerAction.IsDoingAnyAttack())
         {
             //Setting the direction to the player
-            _transform.forward = _directionToMove;
+            _rb.MoveRotation(Quaternion.LookRotation(DirectionToMove));
         }
-        
     }
 
     public Vector3 GetDirectionToMove()
     {
-        return _directionToMove;
+        return DirectionToMove;
     }
 
     public void ResetDirection()
     {
         ActualDirection = Direction.Face;
-        _transform.forward = Vector3.back;
-        _directionToMove = Vector3.back;
+        _rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
+        DirectionToMove = Vector3.back;
     }
 
     private void ClampingSpeed()
@@ -142,14 +141,14 @@ public class RB_PlayerMovement : MonoBehaviour
         if(_currentVelocity.magnitude < _movementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(_directionToMove * _movementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
+            _rb.AddForce(DirectionToMove * _movementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
         }
     }
 
     public bool CanMove()
     {
         //if is moving, not dashing and not attacking
-        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack();
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack() || (_playerAction.IsSpecialAttacking && _playerAction.CurrentItem.CanMoveDuringSpecialAttack);
     }
 
     private void SetSpeed()
@@ -256,6 +255,7 @@ public class RB_PlayerMovement : MonoBehaviour
             //Call the movement function
             Move();
         }
+        
 
         //Call the dash function
         Dash();

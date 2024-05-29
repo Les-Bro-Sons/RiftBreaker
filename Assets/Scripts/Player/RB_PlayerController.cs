@@ -55,7 +55,6 @@ public class RB_PlayerController : MonoBehaviour
     public void OnChargeAttackStart()
     {
         //Start charging attack
-        //print("attacking");
         _playerAction.StartChargeAttack();
     }
 
@@ -66,6 +65,7 @@ public class RB_PlayerController : MonoBehaviour
         {
             _playerAction.SetCurrentWeapon(_playerAction.Items[id].name);
             _playerAction.Items[id].Bind();
+            _playerAction.SetItem(id);
         }
         
     }
@@ -82,7 +82,6 @@ public class RB_PlayerController : MonoBehaviour
         _item = GetComponentInChildren<RB_Items>();
         //Set the attack event to the charge attack
         RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
-        _playerAction.Rebind();
     }
 
     public void OnChargeAttackStop()

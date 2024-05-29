@@ -77,10 +77,10 @@ public class RB_PlayerAction : MonoBehaviour
         }
     }
 
-    public void Rebind()
+    public void SetItem(int id)
     {
         //When the item is gathered, get it
-        _item = GetComponentInChildren<RB_Items>();
+        _item = Items[id];
     }
 
     public void StartDash()
@@ -94,7 +94,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (_item != null && CanAttack() && _item.CanAttack())
+        if (_item != null && CanAttack() && _item.CanAttack() && _item.CurrentAttackCombo < 4)
         {
             //Attack
             IsAttacking = true;
@@ -110,20 +110,32 @@ public class RB_PlayerAction : MonoBehaviour
         IsItemNearby = false;
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _interactRange))
         {
-            print("trying to gather item");
             if(RB_Tools.TryGetComponentInParent<RB_Items>(collider.gameObject, out RB_Items itemGathered))
             {
                 //For each object around the player, verify if it's an item
-                print("item gathered");
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
                 EventItemGathered?.Invoke();
                 itemGathered.Bind();
                 IsItemNearby = true;
                 //Add the item gathered to the items
-                Items.Add(itemGathered);
+                if (Items.Count >= 3)
+                {
+                    _item.Drop();
+                    Items[_itemId] = itemGathered;
+                }
+                else
+                {
+                    Items.Add(itemGathered);
+                }
                 _playerController.ChoseItem(_itemId);
                 _itemId++;
+                _itemId = (_itemId >= 2) ? 2 : _itemId;
+
+                if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
+                {
+                    RB_LevelManager.Instance.SwitchPhase();
+                }
             }
         }
         if (!IsItemNearby)
@@ -138,8 +150,8 @@ public class RB_PlayerAction : MonoBehaviour
         if(_item != null)
         {
             //Charge attack
-            _item.ChargedAttack();
             IsChargedAttacking = true;
+            _item.ChargedAttack();
             EventChargedAttack?.Invoke();
         }
         
@@ -162,7 +174,6 @@ public class RB_PlayerAction : MonoBehaviour
         if (_item != null && CanAttack())
         {
             //Start charging attack
-            print("IsChargedAttacking : " + IsChargedAttacking + ", Starting charge attack");
             IsChargingAttack = true;
             _isChargingAnimation = false;
             _chargeAttackPressTime = 0;
@@ -175,7 +186,7 @@ public class RB_PlayerAction : MonoBehaviour
     public bool IsDoingAnyAttack()
     {
         //If the player is attacking in any way possible (normal attack, charging attack, charged attack or special attack)
-        return IsChargingAttack  || IsChargedAttacking || IsSpecialAttacking || IsAttacking;
+        return IsChargedAttacking || IsSpecialAttacking || IsAttacking;
     }
 
     public bool IsDoingAnyNotNormalAttack()

@@ -310,6 +310,8 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 6577973786371852535}
   HudSprite: {fileID: 0}
+  FollowMouseOnChargeAttack: 1
+  CanMoveDuringSpecialAttack: 1
   _jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -347,3 +349,4 @@ MonoBehaviour:
   _jumpHeight: 5
   _comboDelay: 2
   _landingOnDirt: LandingDirt
+  _specialAttackParticle: 

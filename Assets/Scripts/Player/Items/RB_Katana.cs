@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 public class RB_Katana : RB_Items
 {
     public override void Bind()
@@ -8,8 +11,16 @@ public class RB_Katana : RB_Items
         _colliderAnimator.SetFloat("WeaponID", 0);
     }
 
+    public IEnumerator WaitForEndOfFrameToChargeAttack()
+    {
+        yield return new WaitForEndOfFrame();
+        base.ChargedAttack();
+    }
+
     public override void ChargedAttack()
     {
-        base.ChargedAttack();
+        //Reset directions
+        RB_PlayerMovement.Instance.ResetDirection();
+        StartCoroutine(WaitForEndOfFrameToChargeAttack());
     }
 }

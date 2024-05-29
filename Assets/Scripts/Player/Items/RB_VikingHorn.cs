@@ -19,6 +19,8 @@ public class RB_VikingHorn : RB_Items
 
     //Particles
     [SerializeField] private string _landingOnDirt;
+    [SerializeField] private string _specialAttackParticle;
+    private string _currentParticle;
 
 
 
@@ -40,9 +42,15 @@ public class RB_VikingHorn : RB_Items
         CurrentAttackCombo += 1;
         if(CurrentAttackCombo == 4)
         {
-            StartJumpAttack();
+            StartJumpAttack(_landingOnDirt);
         }
         
+    }
+
+    public override void SpecialAttack()
+    {
+        base.SpecialAttack();
+        StartJumpAttack(_specialAttackParticle);
     }
 
     private void UpdateAnim()
@@ -61,10 +69,11 @@ public class RB_VikingHorn : RB_Items
         }
     }
 
-    public void StartJumpAttack()
+    public void StartJumpAttack(string particle)
     {
         if (!_isJumping)
         {
+            _currentParticle = particle;
             //Start the jump attack
             _shouldJump = true;
         }
@@ -85,7 +94,7 @@ public class RB_VikingHorn : RB_Items
             _rb.MovePosition(position);
             if (_heightIndex > 1)
             {
-                GameObject newObject = Instantiate(Resources.Load("Prefabs/Particles/" + _landingOnDirt), _transform.position, _transform.rotation) as GameObject;
+                GameObject newObject = Instantiate(Resources.Load("Prefabs/Particles/" + _currentParticle), _transform.position, _transform.rotation) as GameObject;
                 if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
                 {
                     newObject.transform.position += _transform.forward * projectile.SpawnDistanceFromPlayer;
@@ -98,7 +107,6 @@ public class RB_VikingHorn : RB_Items
                 CurrentAttackCombo = 0;
             }
         }
-        
     }
 
     private void FixedUpdate()

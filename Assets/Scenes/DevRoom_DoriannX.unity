@@ -536,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentPhase: 0
+  LastPhase: 0
   CurrentScene: 0
   EventPlayerLost:
     m_PersistentCalls:
@@ -1231,11 +1232,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mega_Knight
       objectReference: {fileID: 0}
-    - target: {fileID: 3453180199176938183, guid: f4f863f9616382e4a88bcc93eec0164a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7043983935662915794, guid: f4f863f9616382e4a88bcc93eec0164a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1659,11 +1655,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4432048569124779529, guid: 781f55821f82ba241a0c10ee54bc76da,
-        type: 3}
-      propertyPath: _landingOnDirt
-      value: LandingDirt
-      objectReference: {fileID: 0}
     - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -150,8 +150,8 @@ public class RB_PlayerAction : MonoBehaviour
         if(_item != null)
         {
             //Charge attack
-            _item.ChargedAttack();
             IsChargedAttacking = true;
+            _item.ChargedAttack();
             EventChargedAttack?.Invoke();
         }
         

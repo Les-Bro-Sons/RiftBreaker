@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class RB_PlayerMovement : MonoBehaviour
 {
@@ -117,7 +116,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public void ResetDirection()
     {
         ActualDirection = Direction.Face;
-        _transform.forward = Vector3.back;
+        _rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
         DirectionToMove = Vector3.back;
     }
 
@@ -148,7 +147,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanMove()
     {
         //if is moving, not dashing and not attacking
-        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack();
+        return _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack() || (_playerAction.IsSpecialAttacking && _playerAction.CurrentItem.CanMoveDuringSpecialAttack);
     }
 
     private void SetSpeed()

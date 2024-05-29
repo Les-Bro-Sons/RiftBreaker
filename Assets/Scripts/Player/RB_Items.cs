@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class RB_Items : MonoBehaviour
 {
@@ -48,6 +47,10 @@ public class RB_Items : MonoBehaviour
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
+
+    //bool
+    public bool FollowMouseOnChargeAttack;
+    public bool CanMoveDuringSpecialAttack;
 
     protected virtual void Awake()
     {
@@ -152,12 +155,6 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ChargedAttack()
     {
-        if(_playerAnimator.GetFloat("WeaponID") <= .1f && _playerAnimator.GetFloat("WeaponID") >= 0f)
-        {
-            //Reset directions
-            RB_PlayerMovement.Instance.ResetDirection();
-        }
-
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RB_AiMovement : MonoBehaviour
 {
@@ -6,8 +7,8 @@ public class RB_AiMovement : MonoBehaviour
 
     [Header("IA movement properties")]
     [HideInInspector] public Vector3 LastDirection;
-    [SerializeField] private float _movementAcceleration;
-    [SerializeField] private float _movementMaxSpeed;
+    [SerializeField] private float _movementAcceleration; public float MovementAcceleration { get { return _movementAcceleration; } }
+    [SerializeField] private float _movementMaxSpeed; public float MovementMaxSpeed { get { return _movementMaxSpeed; } }
     [SerializeField] private float _movementFrictionForce;
 
     [Header("Components")]
@@ -17,10 +18,13 @@ public class RB_AiMovement : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _enemyAnimator;
 
+    private NavMeshPath _navPath;
+
     private void Awake()
     {
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
+        _navPath = new NavMeshPath();
     }
 
     private void FixedUpdate()
@@ -37,7 +41,7 @@ public class RB_AiMovement : MonoBehaviour
         UpdateAnimator();
     }
 
-    public void MoveIntoDirection(Vector3 direction, float speed = -1, float acceleration = -1, float deltaTime = -1)
+    public void MoveIntoDirection(Vector3 direction, float speed = -1, float acceleration = -1, float deltaTime = -1) // deprecated
     {
         if (direction == Vector3.zero) return;
         if (speed == -1) speed = _movementMaxSpeed;
@@ -57,6 +61,28 @@ public class RB_AiMovement : MonoBehaviour
         }
         _transform.forward = direction;
         LastDirection = direction;
+    }
+
+    public void MoveToPosition(Vector3 targetPos, float speed = -1, float acceleration = -1, float deltaTime = -1)
+    {
+        if (speed == -1) speed = _movementMaxSpeed;
+        if (acceleration == -1) acceleration = _movementAcceleration;
+        if (deltaTime == -1) deltaTime = Time.deltaTime;
+
+        if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, _navPath))
+        {
+            if (_navPath.corners.Length <= 1) return; //1 because navpath sucks
+            
+            Vector3 nextPos = _navPath.corners[1];
+            nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change
+            Vector3 direction = (nextPos - _transform.position).normalized;
+            WalkDirection = direction;
+
+            _rb.AddForce(direction * speed * deltaTime * acceleration); //move
+
+            _transform.forward = direction;
+            LastDirection = direction;
+        }
     }
 
     private void FrictionForce()

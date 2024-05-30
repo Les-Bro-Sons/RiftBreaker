@@ -19,6 +19,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private RB_Health _health;
     [SerializeField] private RB_Enemy _enemy;
+    private RB_AI_BTTree _btTree;
 
     private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
 
@@ -31,6 +32,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _health = GetComponent<RB_Health>();
         if (!_enemy)
             _enemy = GetComponent<RB_Enemy>();
+        _btTree = GetComponent<RB_AI_BTTree>();
     }
 
     private void Start()
@@ -134,6 +136,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = true;
         if (_animator)
             _animator.enabled = false;
+        if (_btTree)
+            _btTree.enabled = false;
     }
 
     private void StopRewinding()
@@ -146,6 +150,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
         if (_animator)
             _animator.enabled = true;
+        if (_btTree)
+            _btTree.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
     }
 

@@ -1,22 +1,35 @@
 using BehaviorTree;
 using UnityEngine;
 
-public class RB_AICombat_GoToTarget : RB_BTNode
+public class RB_AI_GoToTarget : RB_BTNode
 {
-    private RB_AICombat_BTTree _btParent;
+    private RB_AI_BTTree _btParent;
 
     private Transform _transform;
-    //private Animator _animator;
 
-    public RB_AICombat_GoToTarget(RB_AICombat_BTTree BtParent)
+    private float _range;
+    private float _speed;
+
+    public RB_AI_GoToTarget(RB_AI_BTTree BtParent)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
-        // _animator = transform.GetComponent<Animator>();
+        _range = _btParent.AttackRange;
+        _speed = _btParent.MovementSpeedAggro;
+    }
+
+    public RB_AI_GoToTarget(RB_AI_BTTree BtParent, float speed, float range)
+    {
+        _btParent = BtParent;
+        _transform = _btParent.transform;
+        _range = range;
+        _speed = speed;
     }
 
     public override BTNodeState Evaluate()
     {
+        if (_btParent.IsAttacking) return _state = BTNodeState.SUCCESS;
+
         Transform target = (Transform)GetData("target");
 
         if (target == null)
@@ -30,7 +43,7 @@ public class RB_AICombat_GoToTarget : RB_BTNode
 
         //Debug.Log($"distance : {distance}");
 
-        if (distance <= _btParent.AttackRange) // Vérifie si l'agent est suffisamment proche de la cible
+        if (distance <= _range) // Vérifie si l'agent est suffisamment proche de la cible
         {
             _state = BTNodeState.SUCCESS;
         }
@@ -38,8 +51,11 @@ public class RB_AICombat_GoToTarget : RB_BTNode
         {
             direction.Normalize();
             //_transform.position += direction * _btParent.MovementSpeedAttack * Time.deltaTime; // Déplacement de l'agent vers la cible
+
+            //_btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
+            _btParent.AiMovement.MoveToPosition(target.position, _speed);
+
             //_transform.LookAt(target);
-            _btParent.AiMovement.MoveIntoDirection(direction, _btParent.MovementSpeedAttack);
             _state = BTNodeState.RUNNING;
         }
 

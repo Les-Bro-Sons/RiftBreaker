@@ -51,7 +51,7 @@ public class RB_VisualSettings : MonoBehaviour {
     }
 
     public void SetResolution(int  resolutionID) {
-        _currentResolutionID= resolutionID;
+        _currentResolutionID = resolutionID;
     }
 
     public void ApplyResolution() {

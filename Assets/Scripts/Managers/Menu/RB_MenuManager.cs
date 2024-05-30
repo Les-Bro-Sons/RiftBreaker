@@ -1,10 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RB_MenuManager : MonoBehaviour {
 
     public static RB_MenuManager Instance;
 
     public Animator Animator;
+
+    enum MENUSTATE { 
+        Audio, Video, Control
+    }
+
+    MENUSTATE _menuState;
 
     public bool IsOptionOpen;
     private void Start() {
@@ -18,6 +25,7 @@ public class RB_MenuManager : MonoBehaviour {
     public void Options() {
         Animator.SetBool("IsOptionOpen", true);
         IsOptionOpen = true;
+        _menuState = MENUSTATE.Audio;
     }
 
     public void CloseOption() { 
@@ -25,35 +33,47 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void OptionAudio() {
-        Animator.SetTrigger("Audio");
+        if(_menuState != MENUSTATE.Audio) { 
+            Animator.SetTrigger("Audio");
+            _menuState = MENUSTATE.Audio;
+        }
     }
     public void OptionVideo() {
-        Animator.SetTrigger("Video");
+        if (_menuState != MENUSTATE.Video) { 
+            Animator.SetTrigger("Video");
+            _menuState= MENUSTATE.Video;
+        }
+
     }
     public void OptionControl() {
-        Animator.SetTrigger("Control");
+        if (_menuState != MENUSTATE.Control) { 
+            Animator.SetTrigger("Control");
+            _menuState = MENUSTATE.Control;
+        }
     }
 
     public void Credits() { 
     
     }
 
-    public void Quit() { 
-    
+    public void Quit() {
+        Animator.SetBool("IsQuitOpen", true);
     }
-
     public void ConfirmQuit() { 
         Application.Quit();
     }
-
-    public void CancelQuit() { 
-        
+    public void CancelQuit() {
+        Animator.SetBool("IsQuitOpen", false);
     }
-
     public void BackMainMenu() {
         Animator.SetBool("IsOptionOpen", false);
     }
 
+    public void SelectButton(GameObject gameObject) {
+        if(gameObject.TryGetComponent(out Button button)) { 
+            button.Select();
+        }
 
+    }
 
 }

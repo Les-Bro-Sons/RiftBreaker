@@ -1,42 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class RB_MenuButton : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler{
+public class RB_MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,ISelectHandler, IDeselectHandler{
 
-    bool _isHoovered;
-    float _originalXPos;
+    [SerializeField] Sprite _default;
+    [SerializeField] Sprite _hoovered;
 
-    [SerializeField] RectTransform _textTrasform;
+    Image _renderer;
 
-    [SerializeField] float _offsetHover;
-    [SerializeField] float _offsetSpeed;
-
-    private void Awake() {
-        _originalXPos = _textTrasform.localPosition.x;
+    private void Awake(){
+        _renderer = GetComponent<Image>();
+        _renderer.sprite = _default;
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        _isHoovered = true;
+        _renderer.sprite = _hoovered;
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        _isHoovered = false;
+        _renderer.sprite = _default;
     }
 
-    private void Update() {
-        if (!RB_MenuManager.Instance.IsOptionOpen){
-            if (_isHoovered) {
-            float xPos = _textTrasform.localPosition.x;
-            xPos = Mathf.Lerp(xPos, _originalXPos - _offsetHover, _offsetSpeed * Time.deltaTime);
-            _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
-            }
-            else {
-                float xPos = _textTrasform.localPosition.x;
-                xPos = Mathf.Lerp(xPos, _originalXPos, _offsetSpeed * Time.deltaTime);
-                _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
-            }
-        }
-
+    public void OnSelect(BaseEventData eventData){
+        _renderer.sprite = _hoovered;
     }
 
+    public void OnDeselect(BaseEventData eventData){
+        _renderer.sprite = _default;
+    }
 }

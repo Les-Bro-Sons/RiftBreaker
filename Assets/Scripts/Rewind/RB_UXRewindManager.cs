@@ -11,12 +11,20 @@ public class RB_UXRewindManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
     }
     public void StartRewindTransition()
     {
         StopAllCoroutines();
         StartCoroutine(FadeInRewindEffect(_durationToSwitch * 0.5f));
+        RB_UxHourglass.Instance.StartUseHourglassUx();
     }
 
     public void StopRewindTransition()

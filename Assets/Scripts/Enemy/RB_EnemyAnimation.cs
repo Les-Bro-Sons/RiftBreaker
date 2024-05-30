@@ -7,6 +7,7 @@ public class RB_EnemyAnimation : MonoBehaviour
     Animator _enemyAnimator;
     Rigidbody _rb;
     Transform _transform;
+    
 
     //Prefab spawner
     private bool _prefabSpawned = false;

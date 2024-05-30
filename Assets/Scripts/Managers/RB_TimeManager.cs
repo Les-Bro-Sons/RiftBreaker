@@ -10,12 +10,14 @@ public class RB_TimeManager : MonoBehaviour
     public UnityEvent EventStopRewinding;
 
     [SerializeField] private float _recordDelay = 0.1f;
+    public float DurationRewind = 5f;
+    private float _startedRewind = 0f;
     private float _timeWaited = 9999f; // used for delay, it's set at 9999 so it record the first frame
 
     private float _currentTime = 0; public float CurrentTime { get { return _currentTime; } }
 
     private bool _isRecording = true;
-    private bool _isRewinding = false;
+    public bool IsRewinding = false;
 
     private void Awake()
     {
@@ -39,7 +41,7 @@ public class RB_TimeManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isRecording && !_isRewinding) // doesn't record if rewinding
+        if (_isRecording && !IsRewinding) // doesn't record if rewinding
         {
             _currentTime += Time.fixedDeltaTime;
             _timeWaited += Time.fixedDeltaTime;
@@ -49,10 +51,30 @@ public class RB_TimeManager : MonoBehaviour
                 RecordFrame();
             }
         }
-        else if (_isRewinding)
+        else if (IsRewinding)
         {
+            if (GetRewindLastingTime() >= DurationRewind) 
+            {
+                StopRewinding();
+                return;
+            }
             Rewind();
         }
+    }
+
+    public float GetRewindLastingTime()
+    {
+        return Mathf.Abs(_startedRewind - Time.time);
+    }
+
+    public float GetRewindRemainingTime()
+    {
+        return DurationRewind - Mathf.Abs(_startedRewind - Time.time);
+    }
+
+    public float GetRewindRemainingTimeInSecond()
+    {
+        return (DurationRewind - Mathf.Abs(_startedRewind - Time.time)) ;
     }
 
     private void RecordFrame()
@@ -72,8 +94,9 @@ public class RB_TimeManager : MonoBehaviour
 
     private void StartRewinding()
     {
+        _startedRewind = Time.time;
         EventRecordFrame?.Invoke(); // used for interpolation
-        _isRewinding = true;
+        IsRewinding = true;
         UxStartRewind();
         EventStartRewinding?.Invoke();
     }
@@ -81,7 +104,7 @@ public class RB_TimeManager : MonoBehaviour
     private void StopRewinding()
     {
         EventStopRewinding?.Invoke();
-        _isRewinding = false;
+        IsRewinding = false;
         UxStopRewind();
         EventRecordFrame?.Invoke(); // used for interpolation
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,9 +6,10 @@ public class RB_TimeManager : MonoBehaviour
 {
     public static RB_TimeManager Instance;
 
-    public UnityEvent EventRecordFrame;
-    public UnityEvent EventStartRewinding;
-    public UnityEvent EventStopRewinding;
+    [HideInInspector] public UnityEvent EventRecordFrame;
+    [HideInInspector] public UnityEvent EventStartRewinding;
+    [HideInInspector] public UnityEvent EventStopRewinding;
+
 
     [SerializeField] private float _recordDelay = 0.1f;
     public float DurationRewind = 5f;
@@ -18,6 +20,10 @@ public class RB_TimeManager : MonoBehaviour
 
     private bool _isRecording = true;
     public bool IsRewinding = false;
+
+    [Header("Hourglass")]
+    public int NumberOfRewind = 3;
+    public List<GameObject> HourglassList = new();
 
     private void Awake()
     {
@@ -37,6 +43,8 @@ public class RB_TimeManager : MonoBehaviour
         RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewinding); // TO TEST
 
         StartRecording();
+
+        RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
     }
 
     private void FixedUpdate()
@@ -94,19 +102,31 @@ public class RB_TimeManager : MonoBehaviour
 
     private void StartRewinding()
     {
-        _startedRewind = Time.time;
-        EventRecordFrame?.Invoke(); // used for interpolation
-        IsRewinding = true;
-        UxStartRewind();
-        EventStartRewinding?.Invoke();
+
+        if (NumberOfRewind > 0)
+        { 
+            _startedRewind = Time.time;
+            EventRecordFrame?.Invoke(); // used for interpolation
+            IsRewinding = true;
+            UxStartRewind();
+            EventStartRewinding?.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("Aucun sablier dans la liste !");
+        }
     }
 
     private void StopRewinding()
     {
-        EventStopRewinding?.Invoke();
-        IsRewinding = false;
-        UxStopRewind();
-        EventRecordFrame?.Invoke(); // used for interpolation
+        if (IsRewinding)
+        {
+            EventStopRewinding?.Invoke();
+            IsRewinding = false;
+            UxStopRewind();
+            NumberOfRewind -= 1;
+            EventRecordFrame?.Invoke(); // used for interpolation
+        }
     }
 
     private void Rewind()
@@ -117,6 +137,7 @@ public class RB_TimeManager : MonoBehaviour
     private void UxStartRewind()
     {
         RB_UXRewindManager.Instance.StartRewindTransition();
+
     }
 
     private void UxStopRewind()

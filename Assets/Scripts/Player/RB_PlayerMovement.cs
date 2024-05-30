@@ -1,3 +1,4 @@
+using MANAGERS;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -42,6 +43,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private Rigidbody _rb;
     private Transform _transform;
     private RB_PlayerAction _playerAction;
+    private RB_AudioManager _audioManager;
 
     //Debug components
     [Header("Debug Components")]
@@ -59,6 +61,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _transform = transform;
         _playerAction = GetComponent<RB_PlayerAction>();
         ResetDirection();
+        _audioManager = RB_AudioManager.Instance;
     }
     private void Start()
     {
@@ -186,6 +189,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
+        _audioManager.PlaySFX("SheathingSound",new Vector3(1,1,1));
     }
 
     

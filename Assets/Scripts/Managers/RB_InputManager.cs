@@ -115,4 +115,15 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventItem3Canceled?.Invoke();
     }
+
+    public Vector3 GetMouseDirection(Vector3 initialPos)
+    {
+        Vector3 direction = new();
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        {
+            direction = new Vector3((hit.point - initialPos).x, 0, (hit.point - initialPos).z);
+        }
+
+        return direction;
+    }
 }

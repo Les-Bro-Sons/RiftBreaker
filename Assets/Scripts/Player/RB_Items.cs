@@ -48,6 +48,9 @@ public class RB_Items : MonoBehaviour
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
 
+    //Player
+    protected Transform _playerTransform;
+
     //bool
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
@@ -64,6 +67,7 @@ public class RB_Items : MonoBehaviour
 
     protected virtual void Start()
     {
+        _playerTransform = RB_PlayerAction.Instance.transform;
         _playerAction = RB_PlayerAction.Instance;
         _playerAnimator = _playerAction.PlayerAnimator;
         _colliderAnimator = _playerAction.ColliderAnimator;
@@ -102,7 +106,6 @@ public class RB_Items : MonoBehaviour
 
     public virtual void Attack()
     {
-
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
@@ -126,7 +129,7 @@ public class RB_Items : MonoBehaviour
         foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
         {
             //If on the detected object, there's life script, it deals damage
-            if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && !alreadyDamaged.Contains(_enemyHealth))
+            if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && _enemyHealth.Team != TEAMS.Player && !alreadyDamaged.Contains(_enemyHealth))
             {
                 alreadyDamaged.Add(_enemyHealth);
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);

@@ -202,7 +202,7 @@ public class RB_AI_Attack : RB_BTNode
         projectile.Speed = speed;
         projectile.TotalDistance = distance;
     }
-
+    
     public void Slash() //ATTACK 0 LIGHT
     {
         List<RB_Health> alreadyDamaged = new();

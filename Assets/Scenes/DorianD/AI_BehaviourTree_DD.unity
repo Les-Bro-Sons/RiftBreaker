@@ -374,6 +374,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5090107859350373542, guid: 2312d13daccd96d4b8c05df2086bd53c,
+        type: 3}
+      propertyPath: SplineContainer
+      value: 
+      objectReference: {fileID: 1297859647}
     - target: {fileID: 7118112953485518528, guid: 2312d13daccd96d4b8c05df2086bd53c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1238,20 +1243,35 @@ PrefabInstance:
       propertyPath: m_CameraDistance
       value: 30
       objectReference: {fileID: 0}
-    - target: {fileID: 4643655773795105233, guid: 627c2010fbfafc2499538cbe386f86b8,
+    - target: {fileID: 1337210788444913679, guid: 627c2010fbfafc2499538cbe386f86b8,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1337210788444913679, guid: 627c2010fbfafc2499538cbe386f86b8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1337210788444913679, guid: 627c2010fbfafc2499538cbe386f86b8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643655773795105233, guid: 627c2010fbfafc2499538cbe386f86b8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4643655773795105233, guid: 627c2010fbfafc2499538cbe386f86b8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.82
+      value: 19.283627
       objectReference: {fileID: 0}
     - target: {fileID: 4643655773795105233, guid: 627c2010fbfafc2499538cbe386f86b8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.09
+      value: -23.981335
       objectReference: {fileID: 0}
     - target: {fileID: 4643655773795105233, guid: 627c2010fbfafc2499538cbe386f86b8,
         type: 3}
@@ -1288,6 +1308,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5253749452669877751, guid: 627c2010fbfafc2499538cbe386f86b8,
+        type: 3}
+      propertyPath: m_Follow
+      value: 
+      objectReference: {fileID: 1962423506}
     - target: {fileID: 5253749452669877751, guid: 627c2010fbfafc2499538cbe386f86b8,
         type: 3}
       propertyPath: m_Lens.OrthographicSize
@@ -1670,6 +1695,12 @@ MonoBehaviour:
   _particleDamage: {fileID: 0}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+--- !u!4 &1962423506 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
+    type: 3}
+  m_PrefabInstance: {fileID: 1929447044}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2023610485
 PrefabInstance:
   m_ObjectHideFlags: 0

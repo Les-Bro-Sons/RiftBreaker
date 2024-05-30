@@ -144,22 +144,55 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Faible
                     {
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Light),
-                        new RB_AI_PlayerInRoom(this),
-                        new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
-                        new RB_AI_Attack(this, 0), //slash
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //spot sequence
+                            {
+                                new RB_AI_PlayerInRoom(this),
+                                new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
+                                new RB_AI_Attack(this, 0), //slash
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_Task_DefaultPatrol(this),
+                            }),
+                        }),
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Moyen
                     {
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Medium),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //spot sequence
+                            {
+                                new RB_AI_PlayerInRoom(this),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_Task_DefaultPatrol(this),
+                            }),
+                        }),
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Fort
                     {
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Heavy),
-                    }),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //spot sequence
+                            {
+                                new RB_AI_PlayerInRoom(this),
+                            }),
 
-                    new RB_AI_Task_DefaultPatrol(this),  // task default
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_Task_DefaultPatrol(this),
+                            }),
+                        }),
+                    }),
                 }),
             }),
         });;

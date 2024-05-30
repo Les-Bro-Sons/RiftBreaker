@@ -30,6 +30,7 @@ public class RB_PlayerAction : MonoBehaviour
     [SerializeField] private GameObject _chargedAttackReadyMark;
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
+    private RB_TimeBodyRecorder _timeRecorder;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -66,6 +67,7 @@ public class RB_PlayerAction : MonoBehaviour
         _transform = transform;
         _item = GetComponentInChildren<RB_Items>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
+        _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
 
     public void SetCurrentWeapon(string currentWeapon)
@@ -131,6 +133,11 @@ public class RB_PlayerAction : MonoBehaviour
                 _playerController.ChoseItem(_itemId);
                 _itemId++;
                 _itemId = (_itemId >= 2) ? 2 : _itemId;
+
+                EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
+                timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
+                timeEvent.ItemTook = itemGathered;
+                _timeRecorder.RecordTimeEvent(timeEvent);
 
                 if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
                 {

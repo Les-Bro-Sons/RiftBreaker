@@ -33,6 +33,8 @@ public struct PointInTime
     public Dictionary<string, bool> BoolDictionnary;
     /////////////
 
+    public List<EventInTime> TimeEvents;
+
     public PointInTime InterpolateValues(PointInTime nextP, float currentTime)
     {
         PointInTime interpolatedP = this;
@@ -58,11 +60,11 @@ public struct EventInTime
 
     public float Time;
 
-    public Vector3 Position;
-    public Quaternion Rotation;
+    //TookWeapon
+    public RB_Items ItemTook;
 }
 
 public enum TYPETIMEEVENT
 {
-    DestroyedPrefab,
+    TookWeapon,
 }

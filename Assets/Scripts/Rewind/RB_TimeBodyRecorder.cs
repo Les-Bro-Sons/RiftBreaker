@@ -25,6 +25,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private RB_LevelManager _levelManager;
 
+    private List<EventInTime> _timeEventForNextPoint = new(); //events to save in the next point in time
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -53,6 +55,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
+    public void RecordTimeEvent(EventInTime timeEvent)
+    {
+        _timeEventForNextPoint.Add(timeEvent);
+    }
+
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
         PointInTime newPoint = new PointInTime();
@@ -72,8 +79,10 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         {
             newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
         }
+        newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
         _pointsInTime.Add(newPoint);
+        _timeEventForNextPoint.Clear();
     }
 
     private void Rewind()
@@ -132,14 +141,23 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 {
                     _enemy.UnTombstone();
                 }
-                _health.Dead = currentP.Dead;
             }
+            _health.Dead = currentP.Dead;
         }
         if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) 
             _levelManager.SwitchPhase(currentP.Phase);
         if (_btTree)
         {
             _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        foreach (EventInTime timeEvent in currentP.TimeEvents)
+        {
+            switch(timeEvent.TypeEvent)
+            {
+                case TYPETIMEEVENT.TookWeapon:
+                    timeEvent.ItemTook.Drop();
+                    break;
+            }
         }
     }
 

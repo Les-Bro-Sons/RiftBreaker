@@ -92,6 +92,7 @@ public class RB_Items : MonoBehaviour
     {
         _objectToRemove.SetActive(true);
         _transform.parent = null;
+        print("caca");
     }
 
     public virtual void ResetAttack()

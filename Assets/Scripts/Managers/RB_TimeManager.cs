@@ -73,6 +73,10 @@ public class RB_TimeManager : MonoBehaviour
                 return;
             }
             Rewind();
+            if (_fullRewind)
+            {
+                Time.timeScale += Time.fixedDeltaTime / 10f;
+            }
         }
     }
 
@@ -128,6 +132,7 @@ public class RB_TimeManager : MonoBehaviour
     {
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
+            Time.timeScale = 1;
             EventStopRewinding?.Invoke();
             IsRewinding = false;
             UxStopRewind();

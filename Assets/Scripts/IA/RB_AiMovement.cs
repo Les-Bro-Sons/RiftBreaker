@@ -79,8 +79,9 @@ public class RB_AiMovement : MonoBehaviour
             WalkDirection = direction;
 
             _rb.AddForce(direction * speed * deltaTime * acceleration); //move
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
 
-            _transform.forward = direction;
+            //_transform.forward = direction;
             LastDirection = direction;
         }
     }

@@ -10,14 +10,6 @@ public class RB_AI_GoToTarget : RB_BTNode
     private float _range;
     private float _speed;
 
-    public RB_AI_GoToTarget(RB_AI_BTTree BtParent)
-    {
-        _btParent = BtParent;
-        _transform = _btParent.transform;
-        _range = _btParent.AttackRange;
-        _speed = _btParent.MovementSpeedAggro;
-    }
-
     public RB_AI_GoToTarget(RB_AI_BTTree BtParent, float speed, float range)
     {
         _btParent = BtParent;

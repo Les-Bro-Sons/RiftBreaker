@@ -59,7 +59,7 @@ public class RB_AI_Attack : RB_BTNode
                             }
                             break;
                         default:
-
+                            StopAttacking();
                             break;
                     }
                     break;
@@ -73,6 +73,16 @@ public class RB_AI_Attack : RB_BTNode
                                 StopAttacking();
                             }
                             break;
+                        case 0: //bow attack
+                            if (WaitBeforeAttackCounter(_btParent.BowDelay))
+                            {
+                                LaunchArrow(_btParent.ArrowPrefab, _btParent.BowDamage, _btParent.BowKnockback, _btParent.ArrowSpeed, _btParent.ArrowDistance);
+                                StopAttacking();
+                            }
+                            break;
+                        default:
+                            StopAttacking();
+                            break;
                     }
                     break;
                 case ENEMYCLASS.Heavy:
@@ -84,6 +94,9 @@ public class RB_AI_Attack : RB_BTNode
                                 Slash();
                                 StopAttacking();
                             }
+                            break;
+                        default:
+                            StopAttacking();
                             break;
                     }
                     break;
@@ -108,10 +121,20 @@ public class RB_AI_Attack : RB_BTNode
         _btParent.IsAttacking = false;
     }
 
-    public void Slash() //ATTACK 1
+    public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM
+    {
+        RB_Projectile projectile = _btParent.SpawnPrefab(arrowPrefab, _transform.position + _transform.forward, _transform.rotation).GetComponent<RB_Projectile>();
+        projectile.Team = _btParent.AiHealth.Team;
+        projectile.Damage = damage;
+        projectile.KnocbackExplosionForce = knockback;
+        projectile.Speed = speed;
+        projectile.TotalDistance = distance;
+    }
+
+    public void Slash() //ATTACK 0 LIGHT
     {
         List<RB_Health> alreadyDamaged = new();
-        foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * _btParent.SlashRange / 2), Vector3.one * (_btParent.SlashRange / 2f), _transform.rotation))
+        foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * _btParent.SlashCollisionSize / 2), Vector3.one * (_btParent.SlashCollisionSize / 2f), _transform.rotation))
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
             {
@@ -122,11 +145,6 @@ public class RB_AI_Attack : RB_BTNode
                 enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.SlashKnockback);
             }
         }
-        _btParent.SpawnPrefab(_btParent.SlashParticles, _transform.position + (_transform.forward * _btParent.SlashRange / 2), _transform.rotation);
-    }
-
-    public void FinishedAttack()
-    {
-
+        _btParent.SpawnPrefab(_btParent.SlashParticles, _transform.position + (_transform.forward * _btParent.SlashCollisionSize / 2), _transform.rotation);
     }
 }

@@ -12,8 +12,8 @@ public class RB_Projectile : MonoBehaviour
 
     //Properties
     [Header("Properties")]
-    [SerializeField] private float _speed;
-    [SerializeField] private float _totalDistance;
+    [SerializeField] private float _speed; public float Speed { get { return _speed; } set { _speed = value; } }
+    [SerializeField] private float _totalDistance; public float TotalDistance { get { return _totalDistance; } set { _totalDistance = value; } }
     [SerializeField] private ProjectileType _projectileType;
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
@@ -31,8 +31,8 @@ public class RB_Projectile : MonoBehaviour
     private float _currentContinousDelayScreenshake = 9999; // set at 9999 so it impulse at the start
 
     [Header("Damage")]
-    [SerializeField] private float _damage = 10;
-    [SerializeField] private float _knocbackExplosionForce = 0;
+    [SerializeField] private float _damage = 10; public float Damage { get { return _damage; } set { _damage = value; } }
+    [SerializeField] private float _knocbackExplosionForce = 0; public float KnocbackExplosionForce { get {  return _knocbackExplosionForce; } set { _knocbackExplosionForce = value; } }
     [SerializeField] private Vector3 _knockback = Vector3.zero;
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
@@ -102,13 +102,12 @@ public class RB_Projectile : MonoBehaviour
         if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
             enemyHealth.TakeDamage(_damage);
-        }
-
-        if (_isDestroyingOnDamage)
-        {
-            if (_destroyParticles)
-                Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-            Destroy(gameObject);
+            if (_isDestroyingOnDamage)
+            {
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+                Destroy(gameObject);
+            }
         }
     }
 

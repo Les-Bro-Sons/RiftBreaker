@@ -1,5 +1,7 @@
 using BehaviorTree;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class RB_AI_Attack : RB_BTNode
@@ -13,6 +15,8 @@ public class RB_AI_Attack : RB_BTNode
     private float _waitBeforeAttackCounter = 0f;
 
     private int _attackIndex = 0;
+
+    private bool _alreadyAttacked = false;
 
     //private Animator _animator;
 
@@ -95,6 +99,18 @@ public class RB_AI_Attack : RB_BTNode
                                 StopAttacking();
                             }
                             break;
+                        case 0:
+                            if (WaitBeforeAttackCounter(_btParent.HeavyBowDelay, true, true))
+                            {
+                                _btParent.StartCoroutine(HeavyBowShoot());
+                            }
+                            break;
+                        case 1:
+                            if (WaitBeforeAttackCounter((_btParent.MaxHeavySlashCombo != 0)? _btParent.HeavySlashFirstDelay : _btParent.HeavySlashComboDelay, true, false))
+                            {
+                                HeavySlash();
+                            }
+                            break;
                         default:
                             StopAttacking();
                             break;
@@ -107,11 +123,66 @@ public class RB_AI_Attack : RB_BTNode
         return _state;
     }
 
-    private bool WaitBeforeAttackCounter(float wait)
+    private void HeavySlash()
+    {
+        _btParent.CurrentHeavySlashCombo += 1;
+
+        List<RB_Health> alreadyDamaged = new();
+        foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * _btParent.HeavySlashCollisionSize / 2), Vector3.one * (_btParent.HeavySlashCollisionSize / 2f), _transform.rotation))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+            {
+                if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                alreadyDamaged.Add(enemyHealth);
+                enemyHealth.TakeDamage(_btParent.HeavySlashDamage);
+                enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.HeavySlashKnockback);
+            }
+        }
+        _btParent.SpawnPrefab(_btParent.HeavySlashParticles, _transform.position + (_transform.forward * _btParent.HeavySlashCollisionSize / 2), _transform.rotation);
+
+        if (_btParent.CurrentHeavySlashCombo >= _btParent.MaxHeavySlashCombo)
+        {
+            _btParent.BoolDictionnary["HeavyAttackSlash"] = false;
+            _btParent.CurrentHeavySlashCombo = 0;
+        }
+
+        StopAttacking();
+    }
+
+    private IEnumerator HeavyBowShoot() //ATTACK 0 HEAVY
+    {
+        for (int i = 0; i < _btParent.HeavyBowProjectileNumber; i++)
+        {
+            yield return new WaitForSeconds(_btParent.HeavyBowDelayBetweenProjectile);
+            RB_Projectile projectile = _btParent.SpawnPrefab(_btParent.HeavyArrowPrefab, _transform.position, _transform.rotation).GetComponent<RB_Projectile>();
+            projectile.Team = _btParent.AiHealth.Team;
+            projectile.Damage = _btParent.HeavyBowDamage;
+            projectile.KnocbackExplosionForce = _btParent.HeavyBowKnockback;
+            projectile.TotalDistance = _btParent.HeavyArrowDistance;
+            projectile.Speed = _btParent.HeavyArrowSpeed;
+        }
+        _btParent.BoolDictionnary["HeavyAttackSlash"] = true;
+        StopAttacking();
+    }
+
+    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = true, bool rotateWhenAttacking = false)
     {
         _waitBeforeAttackCounter += Time.deltaTime;
-        _btParent.transform.forward = (_target.transform.position - _btParent.transform.position).normalized;
-        return (_waitBeforeAttackCounter > wait);
+        
+        if (_waitBeforeAttackCounter > wait && !_alreadyAttacked)
+        {
+            _alreadyAttacked = true;
+            return true;
+        }
+        else
+        {
+            if (rotateTowardTarget && (!_alreadyAttacked || rotateWhenAttacking))
+            {
+                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
+            }
+            return false;
+        }
     }
 
     private void StopAttacking()
@@ -119,6 +190,7 @@ public class RB_AI_Attack : RB_BTNode
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;
         _btParent.IsAttacking = false;
+        _alreadyAttacked = false;
     }
 
     public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM

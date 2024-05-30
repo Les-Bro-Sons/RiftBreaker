@@ -17,6 +17,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public ENEMYCLASS AiType = ENEMYCLASS.Light;
     public float MovementSpeed = 4f;
     public float MovementSpeedAggro = 8f;
+    public float MovementSpeedFlee = 6f;
     public float AttackSpeed = 2f;
 
     [Header("Spline Parameters")]
@@ -52,7 +53,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float SlashDamage;
     [SerializeField] public float SlashKnockback;
     [SerializeField] public float SlashDelay;
-    [SerializeField] public float SlashCollisionSize;
+    [SerializeField] public float SlashCollisionSize = 3;
     [SerializeField] public GameObject SlashParticles;
 
     [Header("Moyen")]
@@ -65,10 +66,25 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float ArrowDistance;
 
     [Header("Fort")]
+    [SerializeField] public GameObject HeavyArrowPrefab;
     [SerializeField] public float HeavyBowRange;
     [SerializeField] public float HeavyBowDamage;
     [SerializeField] public float HeavyBowKnockback;
     [SerializeField] public float HeavyBowDelay;
+    [SerializeField] public float HeavyBowProjectileNumber = 3;
+    [SerializeField] public float HeavyBowDelayBetweenProjectile = 0.2f;
+    [SerializeField] public float HeavyArrowSpeed;
+    [SerializeField] public float HeavyArrowDistance;
+
+    [SerializeField] public float HeavySlashRange;
+    [SerializeField] public float HeavySlashDamage;
+    [SerializeField] public float HeavySlashKnockback;
+    [SerializeField] public float HeavySlashFirstDelay;
+    [SerializeField] public float HeavySlashComboDelay;
+    [SerializeField] public float HeavySlashCollisionSize = 3;
+    public int CurrentHeavySlashCombo = 0;
+    [SerializeField] public int MaxHeavySlashCombo = 5;
+    [SerializeField] public GameObject HeavySlashParticles;
 
 
     private void Awake()
@@ -186,13 +202,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_PlayerInRoom(this),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
-                                    new RB_BTSequence(new List<RB_BTNode>
+                                    new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
                                         new RB_AICheck_IsTargetClose(this, 5),
-                                        new RB_AI_FleeFromTarget(this, 5, MovementSpeedAggro),
+                                        new RB_AI_FleeFromTarget(this, 5, MovementSpeedFlee),
                                     }),
 
-                                    new RB_BTSequence(new List<RB_BTNode>
+                                    new RB_BTSequence(new List<RB_BTNode> //bow sequence
                                     {
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, BowRange),
                                         new RB_AI_Attack(this, 0), //bow
@@ -216,6 +232,23 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
                                 new RB_AI_PlayerInRoom(this),
+                                new RB_BTSelector(new List<RB_BTNode>
+                                {
+                                    new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence
+                                    {
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), // to switch attacks
+                                        new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavyBowRange),
+                                        new RB_AI_FleeFromTarget(this, HeavyBowRange/1.5f, MovementSpeedFlee),
+                                        new RB_AI_Attack(this, 0),
+                                    }),
+                                    
+                                    new RB_BTSequence(new List<RB_BTNode> //heavy slash sequence
+                                    {
+                                        new RB_AICheck_Bool(this, "HeavyAttackSlash"), // to switch attacks
+                                        new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavySlashRange),
+                                        new RB_AI_Attack(this, 1),
+                                    }),
+                                }),
                             }),
 
                             new RB_BTSequence(new List<RB_BTNode>

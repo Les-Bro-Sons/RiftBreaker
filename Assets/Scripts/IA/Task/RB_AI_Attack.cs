@@ -99,13 +99,13 @@ public class RB_AI_Attack : RB_BTNode
                                 StopAttacking();
                             }
                             break;
-                        case 0:
-                            if (WaitBeforeAttackCounter(_btParent.HeavyBowDelay, true, true))
+                        case 0: //Heavy bow attack (3 projectiles)
+                            if (WaitBeforeAttackCounter(_btParent.HeavyBowDelay, true, true)) 
                             {
                                 _btParent.StartCoroutine(HeavyBowShoot());
                             }
                             break;
-                        case 1:
+                        case 1: //heavy slash attack
                             if (WaitBeforeAttackCounter((_btParent.MaxHeavySlashCombo != 0)? _btParent.HeavySlashFirstDelay : _btParent.HeavySlashComboDelay, true, false))
                             {
                                 HeavySlash();
@@ -123,7 +123,7 @@ public class RB_AI_Attack : RB_BTNode
         return _state;
     }
 
-    private void HeavySlash()
+    private void HeavySlash() //ATTACK 1 HEAVY
     {
         _btParent.CurrentHeavySlashCombo += 1;
 
@@ -141,7 +141,7 @@ public class RB_AI_Attack : RB_BTNode
         }
         _btParent.SpawnPrefab(_btParent.HeavySlashParticles, _transform.position + (_transform.forward * _btParent.HeavySlashCollisionSize / 2), _transform.rotation);
 
-        if (_btParent.CurrentHeavySlashCombo >= _btParent.MaxHeavySlashCombo)
+        if (_btParent.CurrentHeavySlashCombo >= _btParent.MaxHeavySlashCombo) //check if combo is fully complete
         {
             _btParent.BoolDictionnary["HeavyAttackSlash"] = false;
             _btParent.CurrentHeavySlashCombo = 0;
@@ -166,7 +166,7 @@ public class RB_AI_Attack : RB_BTNode
         StopAttacking();
     }
 
-    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = true, bool rotateWhenAttacking = false)
+    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = true, bool rotateWhenAttacking = false) //used for the waitbeforeattack
     {
         _waitBeforeAttackCounter += Time.deltaTime;
         
@@ -185,7 +185,7 @@ public class RB_AI_Attack : RB_BTNode
         }
     }
 
-    private void StopAttacking()
+    private void StopAttacking() //reset variables
     {
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;

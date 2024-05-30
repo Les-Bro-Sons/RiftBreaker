@@ -1,10 +1,7 @@
-using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 public class RB_LevelManager : MonoBehaviour
 {
@@ -31,6 +28,11 @@ public class RB_LevelManager : MonoBehaviour
             DestroyImmediate(gameObject);
             return;
         }
+    }
+
+    private void Start()
+    {
+        RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
     }
 
     public void SwitchPhase()
@@ -79,11 +81,26 @@ public class RB_LevelManager : MonoBehaviour
 
     public void PlayerLost() 
     {
+        StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
     }
+
+    public IEnumerator PlayerLostUX()
+    {
+        RB_Camera.Instance.Zoom(0.5f, 1);
+        yield return new WaitForSeconds(3);
+        RB_Camera.Instance.Zoom(1f, 0.3f);
+        FullLevelRewind();
+        yield return null;
+    } 
 
     public void PlayerWon()
     {
         EventPlayerWon?.Invoke();
+    }
+
+    public void FullLevelRewind()
+    {
+        RB_TimeManager.Instance.StartRewinding(true, true);
     }
 }

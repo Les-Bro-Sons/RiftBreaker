@@ -32,7 +32,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Range(1f, 50f)] public float FovRange = 10f;
     public float FovAngle = 75f;
     [HideInInspector] public bool HasAlreadySeen = false;
-    [HideInInspector] public bool IsAttacking = false;
     [HideInInspector] public Vector3 LastTargetPos;
 
     [Header("Spot UI")]
@@ -294,4 +293,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         return _characterCollisions;
     }
+
+    public bool GetBool(string name)
+    {
+        return (BoolDictionnary.ContainsKey(name) && BoolDictionnary[name]);
+    } 
 }

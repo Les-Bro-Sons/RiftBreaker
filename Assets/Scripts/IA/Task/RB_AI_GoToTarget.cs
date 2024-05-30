@@ -20,7 +20,7 @@ public class RB_AI_GoToTarget : RB_BTNode
 
     public override BTNodeState Evaluate()
     {
-        if (_btParent.IsAttacking) return _state = BTNodeState.SUCCESS;
+        if (_btParent.GetBool("IsAttacking")) return _state = BTNodeState.SUCCESS;
 
         Transform target = (Transform)GetData("target");
 

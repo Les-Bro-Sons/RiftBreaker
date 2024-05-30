@@ -38,7 +38,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
         switch (RB_LevelManager.Instance.CurrentPhase)
         {
             case PHASES.Infiltration:
-                if (_btParent.IsAttacking) return _state = BTNodeState.SUCCESS;
+                if (_btParent.GetBool("IsAttacking")) return _state = BTNodeState.SUCCESS;
+                Debug.Log("infiltrationCheck");
                 _state = InfiltrationCheck();
                 break;
             case PHASES.Boss:
@@ -95,7 +96,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     //////INFILTRATION//////
     public BTNodeState InfiltrationCheck()
     {
-        if (_btParent.IsAttacking)
+        if (_btParent.GetBool("IsAttacking"))
         {
             _state = BTNodeState.SUCCESS;
             return _state;

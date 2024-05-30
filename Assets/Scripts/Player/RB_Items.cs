@@ -102,7 +102,6 @@ public class RB_Items : MonoBehaviour
 
     public virtual void Attack()
     {
-
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack

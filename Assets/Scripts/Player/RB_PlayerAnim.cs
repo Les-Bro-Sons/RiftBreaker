@@ -47,9 +47,9 @@ public class RB_PlayerAnim : MonoBehaviour
                 if (RB_InputManager.Instance.IsMouse)
                 {
                     //If player is attacking get the position of the mouse and attack towards it
-                    if (!_directionGot && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                    if (!_directionGot)
                     {
-                        directionToAttack = new Vector3((hit.point - _playerTransform.position).x, 0, (hit.point - _playerTransform.position).z);
+                        directionToAttack = RB_InputManager.Instance.GetMouseDirection(_playerTransform.position);
                         _directionGot = true;
                     }
                     _playerTransform.forward = directionToAttack;

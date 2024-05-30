@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RB_EnemyAnimation : MonoBehaviour
@@ -7,6 +8,9 @@ public class RB_EnemyAnimation : MonoBehaviour
     Rigidbody _rb;
     Transform _transform;
     
+
+    //Prefab spawner
+    private bool _prefabSpawned = false;
 
     private void Awake()
     {
@@ -19,6 +23,29 @@ public class RB_EnemyAnimation : MonoBehaviour
         _enemyAnimator.SetFloat("Horizontal", _transform.forward.normalized.x);
         _enemyAnimator.SetFloat("Vertical", _transform.forward.normalized.z);
         _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
+    }
+
+    public void SpawnPrefab(string prefabToSpawn)
+    {
+        if (!_prefabSpawned)
+        {
+            //Spawn the prefab by his name
+            _prefabSpawned = true;
+            GameObject newObject = Instantiate(Resources.Load("Prefabs/" + prefabToSpawn), _transform.position, _transform.rotation) as GameObject;
+            if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+            {
+                newObject.transform.position += _transform.forward * projectile.SpawnDistanceFromPlayer;
+                projectile.Team = TEAMS.Player;
+            }
+            StartCoroutine(ResetSpawnPrefab());
+        }
+    }
+
+    IEnumerator ResetSpawnPrefab()
+    {
+        //To prevent from spawning two projectile at once
+        yield return new WaitForSeconds(.1f);
+        _prefabSpawned = false;
     }
 
     private void Update()

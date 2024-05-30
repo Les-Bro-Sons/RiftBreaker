@@ -17,7 +17,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public ENEMYCLASS AiType = ENEMYCLASS.Light;
     public float MovementSpeed = 4f;
     public float MovementSpeedAggro = 8f;
-    [Range (1f, 10f)] public float AttackRange = 2f;
     public float AttackSpeed = 2f;
 
     [Header("Spline Parameters")]
@@ -48,12 +47,28 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public RB_Health AiHealth;
     [HideInInspector] public Rigidbody AiRigidbody;
 
-    [Header("Faible")]
+    [Header("Faible / Infiltration")]
     [SerializeField] public float SlashRange;
     [SerializeField] public float SlashDamage;
     [SerializeField] public float SlashKnockback;
     [SerializeField] public float SlashDelay;
+    [SerializeField] public float SlashCollisionSize;
     [SerializeField] public GameObject SlashParticles;
+
+    [Header("Moyen")]
+    [SerializeField] public GameObject ArrowPrefab;
+    [SerializeField] public float BowRange;
+    [SerializeField] public float BowDamage;
+    [SerializeField] public float BowKnockback;
+    [SerializeField] public float BowDelay;
+    [SerializeField] public float ArrowSpeed;
+    [SerializeField] public float ArrowDistance;
+
+    [Header("Fort")]
+    [SerializeField] public float HeavyBowRange;
+    [SerializeField] public float HeavyBowDamage;
+    [SerializeField] public float HeavyBowKnockback;
+    [SerializeField] public float HeavyBowDelay;
 
 
     private void Awake()
@@ -97,6 +112,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_EnemyTouchDetection(this, true),
+                        new RB_AI_DoFailure(),
                     }),
 
                     new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target
@@ -121,7 +137,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_AICheck_Bool(this, "HasAlreadySeen"),
                         new RB_AI_PlayerInFov(this),
-                        new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
+                        new RB_AI_GoToTarget(this, MovementSpeedAggro, SlashRange),
                         new RB_AI_Attack(this, -1),
                     }),
 
@@ -149,7 +165,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
                                 new RB_AI_PlayerInRoom(this),
-                                new RB_AI_GoToTarget(this, MovementSpeedAggro, AttackRange),
+                                new RB_AI_GoToTarget(this, MovementSpeedAggro, SlashRange),
                                 new RB_AI_Attack(this, 0), //slash
                             }),
 
@@ -168,6 +184,21 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
                                 new RB_AI_PlayerInRoom(this),
+                                new RB_BTSelector(new List<RB_BTNode>
+                                {
+                                    new RB_BTSequence(new List<RB_BTNode>
+                                    {
+                                        new RB_AICheck_IsTargetClose(this, 5),
+                                        new RB_AI_FleeFromTarget(this, 5, MovementSpeedAggro),
+                                    }),
+
+                                    new RB_BTSequence(new List<RB_BTNode>
+                                    {
+                                        new RB_AI_GoToTarget(this, MovementSpeedAggro, BowRange),
+                                        new RB_AI_Attack(this, 0), //bow
+                                    }),
+                                }),
+                                
                             }),
 
                             new RB_BTSequence(new List<RB_BTNode>
@@ -200,10 +231,14 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         return root;
     }
 
-    public void SpawnPrefab(GameObject prefab, Vector3 position, Quaternion rotation)
+    public GameObject SpawnPrefab(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         if (prefab)
-            Instantiate(prefab, position, rotation);
+            return Instantiate(prefab, position, rotation);
+        else
+        {
+            return null;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

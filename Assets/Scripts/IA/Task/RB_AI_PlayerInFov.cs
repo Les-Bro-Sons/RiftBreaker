@@ -61,7 +61,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             if (t == null)
             {
                 Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
-                if (colliders.Length > 0)
+                if (colliders.Length > 0) //A MODIFIER
                 {
                     Parent.Parent.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;

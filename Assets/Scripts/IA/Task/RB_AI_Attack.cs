@@ -16,14 +16,11 @@ public class RB_AI_Attack : RB_BTNode
 
     private int _attackIndex = 0;
 
-    //private Animator _animator;
-
     public RB_AI_Attack(RB_AI_BTTree BtParent, int attackIndex)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
         _attackIndex = attackIndex;
-        // _animator = transform.GetComponent<Animator>();
     }
 
     public override BTNodeState Evaluate()

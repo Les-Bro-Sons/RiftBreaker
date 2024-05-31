@@ -46,6 +46,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public RB_AiMovement AiMovement;
     [HideInInspector] public RB_Health AiHealth;
     [HideInInspector] public Rigidbody AiRigidbody;
+    public Animator AiAnimator;
 
     [Header("Faible / Infiltration")]
     [SerializeField] public float SlashRange;

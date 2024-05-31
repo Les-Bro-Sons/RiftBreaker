@@ -189,7 +189,6 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
-        _audioManager.PlaySFX("SheathingSound",new Vector3(1,1,1));
     }
 
     

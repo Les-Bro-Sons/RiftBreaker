@@ -69,9 +69,9 @@ public class RB_VolumeManager : MonoBehaviour{
     }
 
     private void Update() {
-        _generalVolume.text = ((int) (_generalSlider.value*100)).ToString() + " %";
-        _musicVolume.text = ((int) (_musicSlider.value*100)).ToString() + " %";
-        _SFXVolume.text = ((int) (_SFXSlider.value*100)).ToString() + " %";
+        _generalVolume.text = (Mathf.RoundToInt(_generalSlider.value*100)).ToString() + " %";
+        _musicVolume.text = (Mathf.RoundToInt (_musicSlider.value*100)).ToString() + " %";
+        _SFXVolume.text = (Mathf.RoundToInt(_SFXSlider.value*100)).ToString() + " %";
         
     }
 

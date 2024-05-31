@@ -46,14 +46,14 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                Slash();
+                                Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
                             break;
                         case 0: //slash attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                Slash();
+                                Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 StopAttacking();
                             }
                             break;
@@ -68,7 +68,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                Slash();
+                                Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
                             break;
@@ -90,7 +90,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                Slash();
+                                Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
                             break;
@@ -116,6 +116,23 @@ public class RB_AI_Attack : RB_BTNode
 
         _state = BTNodeState.RUNNING;
         return _state;
+    }
+
+    public void Slash(float damage, float range, float knockback, float collSize, GameObject particle) //ATTACK 0 LIGHT
+    {
+        List<RB_Health> alreadyDamaged = new();
+        foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * collSize / 2), Vector3.one * (collSize / 2f), _transform.rotation))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+            {
+                if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                alreadyDamaged.Add(enemyHealth);
+                enemyHealth.TakeDamage(damage);
+                enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, knockback);
+            }
+        }
+        _btParent.SpawnPrefab(particle, _transform.position + (_transform.forward * collSize / 2), _transform.rotation);
     }
 
     private void HeavySlash() //ATTACK 1 HEAVY
@@ -161,7 +178,7 @@ public class RB_AI_Attack : RB_BTNode
         StopAttacking();
     }
 
-    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = true, bool rotateWhenAttacking = false) //used for the waitbeforeattack
+    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack
     {
         _waitBeforeAttackCounter += Time.deltaTime;
         
@@ -196,22 +213,5 @@ public class RB_AI_Attack : RB_BTNode
         projectile.KnocbackExplosionForce = knockback;
         projectile.Speed = speed;
         projectile.TotalDistance = distance;
-    }
-    
-    public void Slash() //ATTACK 0 LIGHT
-    {
-        List<RB_Health> alreadyDamaged = new();
-        foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * _btParent.SlashCollisionSize / 2), Vector3.one * (_btParent.SlashCollisionSize / 2f), _transform.rotation))
-        {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
-            {
-                if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
-
-                alreadyDamaged.Add(enemyHealth);
-                enemyHealth.TakeDamage(_btParent.SlashDamage);
-                enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.SlashKnockback);
-            }
-        }
-        _btParent.SpawnPrefab(_btParent.SlashParticles, _transform.position + (_transform.forward * _btParent.SlashCollisionSize / 2), _transform.rotation);
     }
 }

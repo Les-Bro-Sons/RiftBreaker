@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +15,8 @@ public class RB_AiMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
+    private NavMeshAgent _agent;
+    private NavMeshObstacle _obstacle;
 
     [Header("Animation")]
     [SerializeField] private Animator _enemyAnimator;
@@ -25,6 +28,8 @@ public class RB_AiMovement : MonoBehaviour
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _navPath = new NavMeshPath();
+        _agent = GetComponent<NavMeshAgent>();
+        _obstacle = GetComponent<NavMeshObstacle>();
     }
 
     private void FixedUpdate()
@@ -72,6 +77,7 @@ public class RB_AiMovement : MonoBehaviour
         if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, _navPath))
         {
             if (_navPath.corners.Length <= 1) return; //1 because navpath sucks
+            
             
             Vector3 nextPos = _navPath.corners[1];
             nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change

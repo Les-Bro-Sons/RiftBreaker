@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class RB_Items : MonoBehaviour
@@ -92,6 +93,12 @@ public class RB_Items : MonoBehaviour
     {
         _objectToRemove.SetActive(true);
         _transform.parent = null;
+        _playerAction.Items.Remove(this);
+        if(_playerAction.Item == this)
+        {
+            _playerAction.Item = null;
+            _playerAction.SetCurrentWeapon("");
+        }
     }
 
     public virtual void ResetAttack()

@@ -16,9 +16,6 @@ public class RB_ChessQueen : RB_Items
     //Special attack
     private bool _shouldBoost = false;
 
-    //Player
-    private Transform _playerTransform;
-
     protected override void Start()
     {
         base.Start();

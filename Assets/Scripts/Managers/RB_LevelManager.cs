@@ -53,6 +53,8 @@ public class RB_LevelManager : MonoBehaviour
                 break;
         }
 
+
+
         SpawnEnemiesInPhase(CurrentPhase);
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
     }
@@ -60,6 +62,9 @@ public class RB_LevelManager : MonoBehaviour
     public void SwitchPhase(PHASES phaseToSwitch)
     {
         LastPhase = CurrentPhase;
+
+        RB_HUDManager.Instance.PlayAnimation($"SkillsPhase{phaseToSwitch}");
+
         CurrentPhase = phaseToSwitch;
         SpawnEnemiesInPhase(CurrentPhase);
 

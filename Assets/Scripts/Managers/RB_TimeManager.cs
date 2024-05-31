@@ -67,7 +67,7 @@ public class RB_TimeManager : MonoBehaviour
                 StopRewinding();
                 return;
             }
-            else if (_currentTime - Time.fixedDeltaTime <= 0)
+            else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
             {
                 StopRewinding(true);
                 return;

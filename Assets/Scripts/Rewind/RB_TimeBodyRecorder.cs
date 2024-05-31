@@ -186,9 +186,9 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = false;
             _rb.velocity = _savedVelocity;
         }
-        if (_animator)
+        if (_health && !_health.Dead && _animator)
             _animator.enabled = true;
-        if (_btTree)
+        if (_health && !_health.Dead && _btTree)
             _btTree.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
     }

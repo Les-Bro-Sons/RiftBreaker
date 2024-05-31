@@ -75,8 +75,8 @@ public class RB_Enemy : MonoBehaviour
     {
         if (_isTombstoned)
         {
-            if (_btTree) _btTree.enabled = true;
-            if (AiAnimator) AiAnimator.enabled = true;
+            if (_btTree && !RB_TimeManager.Instance.IsRewinding) _btTree.enabled = true;
+            if (AiAnimator && !RB_TimeManager.Instance.IsRewinding) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;
         }

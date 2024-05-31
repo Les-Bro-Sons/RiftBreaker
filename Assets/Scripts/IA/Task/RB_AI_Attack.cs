@@ -33,10 +33,16 @@ public class RB_AI_Attack : RB_BTNode
             return _state;
         }
 
+        if (!_btParent.GetBool("IsWaitingForAttack"))
+        {
+            _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
+        }
+
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _btParent.AttackSpeed)
         {
             _btParent.BoolDictionnary["IsAttacking"] = true;
+            
 
             switch (_btParent.AiType)
             {
@@ -44,7 +50,7 @@ public class RB_AI_Attack : RB_BTNode
                     switch (_attackIndex)
                     {
                         case -1: //infiltration attack
-                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
@@ -66,7 +72,7 @@ public class RB_AI_Attack : RB_BTNode
                     switch (_attackIndex)
                     {
                         case -1: //infiltration attack
-                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
@@ -88,7 +94,7 @@ public class RB_AI_Attack : RB_BTNode
                     switch (_attackIndex)
                     {
                         case -1: //infiltration attack
-                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
@@ -116,6 +122,27 @@ public class RB_AI_Attack : RB_BTNode
 
         _state = BTNodeState.RUNNING;
         return _state;
+    }
+
+    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack
+    {
+        _waitBeforeAttackCounter += Time.deltaTime;
+
+        if (_waitBeforeAttackCounter > wait && !_btParent.GetBool("AlreadyAttacked"))
+        {
+            _btParent.BoolDictionnary["AlreadyAttacked"] = true;
+
+            return true;
+        }
+        else
+        {
+            _btParent.BoolDictionnary["IsWaitingForAttack"] = true;
+            if (rotateTowardTarget && (!_btParent.GetBool("AlreadyAttacked") || rotateWhenAttacking))
+            {
+                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
+            }
+            return false;
+        }
     }
 
     public void Slash(float damage, float range, float knockback, float collSize, GameObject particle) //ATTACK 0 LIGHT
@@ -178,31 +205,13 @@ public class RB_AI_Attack : RB_BTNode
         StopAttacking();
     }
 
-    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack
-    {
-        _waitBeforeAttackCounter += Time.deltaTime;
-        
-        if (_waitBeforeAttackCounter > wait && !_btParent.GetBool("AlreadyAttacked"))
-        {
-            _btParent.BoolDictionnary["AlreadyAttacked"] = true;
-            return true;
-        }
-        else
-        {
-            if (rotateTowardTarget && (!_btParent.GetBool("AlreadyAttacked") || rotateWhenAttacking))
-            {
-                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
-            }
-            return false;
-        }
-    }
-
     private void StopAttacking() //reset variables
     {
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;
         _btParent.BoolDictionnary["IsAttacking"] = false;
         _btParent.BoolDictionnary["AlreadyAttacked"] = false;
+        _btParent.BoolDictionnary["IsWaitingForAttack"] = false;
     }
 
     public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM

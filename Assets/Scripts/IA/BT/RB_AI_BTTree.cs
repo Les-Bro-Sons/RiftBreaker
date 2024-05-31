@@ -2,6 +2,7 @@ using BehaviorTree;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Splines;
 using UnityEngine.UI;
 
@@ -47,8 +48,17 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public RB_Health AiHealth;
     [HideInInspector] public Rigidbody AiRigidbody;
     public Animator AiAnimator;
+    [HideInInspector] public NavMeshAgent AiNavMeshAgent;
 
-    [Header("Faible / Infiltration")]
+    [Header("Infiltration")]
+    [SerializeField] public float InfSlashRange;
+    [SerializeField] public float InfSlashDamage;
+    [SerializeField] public float InfSlashKnockback;
+    [SerializeField] public float InfSlashDelay;
+    [SerializeField] public float InfSlashCollisionSize = 3;
+    [SerializeField] public GameObject InfSlashParticles;
+
+    [Header("Faible")]
     [SerializeField] public float SlashRange;
     [SerializeField] public float SlashDamage;
     [SerializeField] public float SlashKnockback;
@@ -154,7 +164,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_AICheck_Bool(this, "HasAlreadySeen"),
                         new RB_AI_PlayerInFov(this),
-                        new RB_AI_GoToTarget(this, MovementSpeedAggro, SlashRange),
+                        new RB_AI_GoToTarget(this, MovementSpeedAggro, InfSlashRange),
                         new RB_AI_Attack(this, -1),
                     }),
 

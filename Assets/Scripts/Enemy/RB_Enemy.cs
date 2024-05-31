@@ -8,6 +8,7 @@ public class RB_Enemy : MonoBehaviour
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
     [SerializeField] private PHASES _spawnInPhase = PHASES.Infiltration;
     public SpriteRenderer SpriteRenderer; //PLACEHOLDER
+    public Animator AiAnimator;
 
     private Rigidbody _rb;
     private RB_AI_BTTree _btTree;
@@ -62,6 +63,7 @@ public class RB_Enemy : MonoBehaviour
         if (!_isTombstoned)
         {
             if (_btTree) _btTree.enabled = false;
+            if (AiAnimator) AiAnimator.enabled = false;
             _isTombstoned = true;
             SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
             _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
@@ -74,6 +76,7 @@ public class RB_Enemy : MonoBehaviour
         if (_isTombstoned)
         {
             if (_btTree) _btTree.enabled = true;
+            if (AiAnimator) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;
         }

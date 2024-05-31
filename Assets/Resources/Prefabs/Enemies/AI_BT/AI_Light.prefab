@@ -845,6 +845,7 @@ MonoBehaviour:
   _isAttachedToAPhase: 0
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 662286531341207993}
+  AiAnimator: {fileID: 4265850386259287309}
 --- !u!114 &5090107859350373542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,7 +876,7 @@ MonoBehaviour:
   CanvasUi: {fileID: 6583748221772371284}
   ImageSpotBar: {fileID: 4646331559764148717}
   DurationAlphaCanvas: 0.15
-  DurationToLoadSpotBar: 1.5
+  DurationToLoadSpotBar: 0.5
   DurationToUnloadSpotBar: 1
   _prefabUxDetectedReadyMark: {fileID: 2153901776240351120, guid: 507c0141ec0e1ec45bc19ba2bf7d24d0,
     type: 3}
@@ -883,6 +884,14 @@ MonoBehaviour:
   AiHealth: {fileID: 0}
   AiRigidbody: {fileID: 0}
   AiAnimator: {fileID: 0}
+  AiNavMeshAgent: {fileID: 0}
+  InfSlashRange: 2
+  InfSlashDamage: 300
+  InfSlashKnockback: 10
+  InfSlashDelay: 0
+  InfSlashCollisionSize: 3
+  InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
+    type: 3}
   SlashRange: 2
   SlashDamage: 10
   SlashKnockback: 10

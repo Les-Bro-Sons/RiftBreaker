@@ -130,7 +130,13 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {
-            _health.Hp = currentP.Health;
+
+            //_health.Hp = currentP.Health;
+            if (_health.Hp > currentP.Health)
+                _health.TakeDamage(Mathf.Abs(_health.Hp - currentP.Health), true);
+            else if (_health.Hp < currentP.Health)
+                _health.Heal(Mathf.Abs(_health.Hp - currentP.Health), true);
+
             if (_health.Dead != currentP.Dead && _enemy)
             {
                 if (currentP.Dead) //die

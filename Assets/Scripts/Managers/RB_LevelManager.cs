@@ -18,6 +18,7 @@ public class RB_LevelManager : MonoBehaviour
 
     [Header("HUD SKILLS")]
     [SerializeField] private string _phaseInfiltration = $"SkillsPhase{PHASES.Infiltration}";
+    [SerializeField] private string _phaseInfiltrationWithoutWnim = $"SkillsPhase{PHASES.Infiltration}WithoutAnim";
     [SerializeField] private string _phaseCombat = $"SkillsPhase{PHASES.Combat}";
 
 
@@ -37,7 +38,7 @@ public class RB_LevelManager : MonoBehaviour
     private void Start()
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
-        RB_HUDManager.Instance.PlayAnimation(_phaseInfiltration);
+        RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
     }
 
     public void SwitchPhase()

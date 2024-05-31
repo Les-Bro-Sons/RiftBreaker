@@ -119,7 +119,7 @@ public class RB_TimeManager : MonoBehaviour
             EventRecordFrame?.Invoke(); // used for interpolation
             IsRewinding = true;
             _fullRewind = fullRewind;
-            UxStartRewind();
+            UxStartRewind(fullRewind);
             EventStartRewinding?.Invoke();
         }
         else
@@ -136,7 +136,15 @@ public class RB_TimeManager : MonoBehaviour
             EventStopRewinding?.Invoke();
             IsRewinding = false;
             UxStopRewind();
-            NumberOfRewind -= 1;
+            if (!stopFullRewind)
+            {
+                NumberOfRewind -= 1;
+            }
+            else
+            {
+                NumberOfRewind = 3;
+                RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
+            }
             EventRecordFrame?.Invoke(); // used for interpolation
         }
     }
@@ -146,9 +154,9 @@ public class RB_TimeManager : MonoBehaviour
         _currentTime -= Time.fixedDeltaTime;
     }
 
-    private void UxStartRewind()
+    private void UxStartRewind(bool fullRewind = false)
     {
-        RB_UXRewindManager.Instance.StartRewindTransition();
+        RB_UXRewindManager.Instance.StartRewindTransition(fullRewind);
 
     }
 

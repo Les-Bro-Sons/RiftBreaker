@@ -20,11 +20,18 @@ public class RB_UXRewindManager : MonoBehaviour
             DestroyImmediate(gameObject);
         }
     }
-    public void StartRewindTransition()
+    public void StartRewindTransition(bool fullRewind = false)
     {
         StopAllCoroutines();
         StartCoroutine(FadeInRewindEffect(_durationToSwitch * 0.5f));
-        RB_UxHourglass.Instance.StartUseHourglassUx();
+        if (!fullRewind)
+        {
+            RB_UxHourglass.Instance.StartUseHourglassUx();
+        }
+        else
+        {
+
+        }
     }
 
     public void StopRewindTransition()

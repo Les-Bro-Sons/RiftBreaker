@@ -20,6 +20,7 @@ public class RB_TimeManager : MonoBehaviour
 
     private bool _isRecording = true;
     public bool IsRewinding = false;
+    private bool _fullRewind = false;
 
     [Header("Hourglass")]
     public int NumberOfRewind = 3;
@@ -39,8 +40,8 @@ public class RB_TimeManager : MonoBehaviour
 
     private void Start()
     {
-        RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewinding); // TO TEST
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewinding); // TO TEST
+        RB_InputManager.Instance.EventRewindStarted.AddListener(delegate { StartRewinding(false); }); // TO TEST
+        RB_InputManager.Instance.EventRewindCanceled.AddListener(delegate { StopRewinding(false); }); // TO TEST
 
         StartRecording();
 
@@ -61,12 +62,21 @@ public class RB_TimeManager : MonoBehaviour
         }
         else if (IsRewinding)
         {
-            if (GetRewindLastingTime() >= DurationRewind) 
+            if (GetRewindLastingTime() >= DurationRewind && !_fullRewind) 
             {
                 StopRewinding();
                 return;
             }
+            else if (_currentTime - Time.fixedDeltaTime <= 0)
+            {
+                StopRewinding(true);
+                return;
+            }
             Rewind();
+            if (_fullRewind)
+            {
+                Time.timeScale += Time.fixedDeltaTime / 10f;
+            }
         }
     }
 
@@ -100,14 +110,15 @@ public class RB_TimeManager : MonoBehaviour
         _isRecording = false;
     }
 
-    private void StartRewinding()
+    public void StartRewinding(bool skipChecks = false, bool fullRewind = false)
     {
 
-        if (NumberOfRewind > 0)
+        if (NumberOfRewind > 0 || skipChecks)
         { 
             _startedRewind = Time.time;
             EventRecordFrame?.Invoke(); // used for interpolation
             IsRewinding = true;
+            _fullRewind = fullRewind;
             UxStartRewind();
             EventStartRewinding?.Invoke();
         }
@@ -117,10 +128,11 @@ public class RB_TimeManager : MonoBehaviour
         }
     }
 
-    private void StopRewinding()
+    public void StopRewinding(bool stopFullRewind = false)
     {
-        if (IsRewinding)
+        if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
+            Time.timeScale = 1;
             EventStopRewinding?.Invoke();
             IsRewinding = false;
             UxStopRewind();

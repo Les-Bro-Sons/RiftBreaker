@@ -16,8 +16,6 @@ public class RB_AI_Attack : RB_BTNode
 
     private int _attackIndex = 0;
 
-    private bool _alreadyAttacked = false;
-
     //private Animator _animator;
 
     public RB_AI_Attack(RB_AI_BTTree BtParent, int attackIndex)
@@ -41,7 +39,7 @@ public class RB_AI_Attack : RB_BTNode
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _btParent.AttackSpeed)
         {
-            _btParent.IsAttacking = true;
+            _btParent.BoolDictionnary["IsAttacking"] = true;
 
             switch (_btParent.AiType)
             {
@@ -170,14 +168,14 @@ public class RB_AI_Attack : RB_BTNode
     {
         _waitBeforeAttackCounter += Time.deltaTime;
         
-        if (_waitBeforeAttackCounter > wait && !_alreadyAttacked)
+        if (_waitBeforeAttackCounter > wait && !_btParent.GetBool("AlreadyAttacked"))
         {
-            _alreadyAttacked = true;
+            _btParent.BoolDictionnary["AlreadyAttacked"] = true;
             return true;
         }
         else
         {
-            if (rotateTowardTarget && (!_alreadyAttacked || rotateWhenAttacking))
+            if (rotateTowardTarget && (!_btParent.GetBool("AlreadyAttacked") || rotateWhenAttacking))
             {
                 _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
             }
@@ -189,8 +187,8 @@ public class RB_AI_Attack : RB_BTNode
     {
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;
-        _btParent.IsAttacking = false;
-        _alreadyAttacked = false;
+        _btParent.BoolDictionnary["IsAttacking"] = false;
+        _btParent.BoolDictionnary["AlreadyAttacked"] = false;
     }
 
     public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM

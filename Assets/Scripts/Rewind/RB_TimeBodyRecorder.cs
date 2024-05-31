@@ -1,6 +1,6 @@
 using Cinemachine.Utility;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_TimeBodyRecorder : MonoBehaviour
@@ -23,6 +23,10 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
 
+    private RB_LevelManager _levelManager;
+
+    private List<EventInTime> _timeEventForNextPoint = new(); //events to save in the next point in time
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -32,6 +36,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _health = GetComponent<RB_Health>();
         if (!_enemy)
             _enemy = GetComponent<RB_Enemy>();
+        _levelManager = GetComponent<RB_LevelManager>();
         _btTree = GetComponent<RB_AI_BTTree>();
     }
 
@@ -50,6 +55,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
+    public void RecordTimeEvent(EventInTime timeEvent)
+    {
+        _timeEventForNextPoint.Add(timeEvent);
+    }
+
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
         PointInTime newPoint = new PointInTime();
@@ -64,8 +74,15 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             newPoint.Dead = _health.Dead;
         }
         if (_rb) newPoint.Velocity = _rb.velocity;
+        if (_levelManager) newPoint.Phase = _levelManager.CurrentPhase;
+        if (_btTree)
+        {
+            newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
         _pointsInTime.Add(newPoint);
+        _timeEventForNextPoint.Clear();
     }
 
     private void Rewind()
@@ -124,7 +141,22 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 {
                     _enemy.UnTombstone();
                 }
-                _health.Dead = currentP.Dead;
+            }
+            _health.Dead = currentP.Dead;
+        }
+        if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) 
+            _levelManager.SwitchPhase(currentP.Phase);
+        if (_btTree)
+        {
+            _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        foreach (EventInTime timeEvent in currentP.TimeEvents)
+        {
+            switch(timeEvent.TypeEvent)
+            {
+                case TYPETIMEEVENT.TookWeapon:
+                    timeEvent.ItemTook.Drop();
+                    break;
             }
         }
     }

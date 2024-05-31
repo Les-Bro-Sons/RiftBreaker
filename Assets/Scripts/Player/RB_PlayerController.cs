@@ -8,6 +8,7 @@ public class RB_PlayerController : MonoBehaviour
     RB_PlayerMovement _playerMovement;
     RB_PlayerAction _playerAction;
     RB_Items _item;
+    RB_Health _health;
 
     //States
     [HideInInspector] public PLAYERSTATES CurrentState;
@@ -22,6 +23,7 @@ public class RB_PlayerController : MonoBehaviour
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerAction = GetComponent<RB_PlayerAction>();
         _item = GetComponentInChildren<RB_Items>();
+        _health = GetComponent<RB_Health>();
     }
 
     private void Start()
@@ -52,6 +54,15 @@ public class RB_PlayerController : MonoBehaviour
         _playerAction.EventItemGathered.AddListener(BindToAttack);
     }
 
+    [SerializeField] SpriteRenderer _spriteR; //PLACEHOLDER
+    private void LateUpdate()
+    {
+        if (_health.Dead)
+        {
+            _spriteR.sprite = Resources.Load<Sprite>("Sprites/dead_joueur"); //PLACEHOLDER, REPLACE IN ANIMATION
+        }
+    }
+
     public void OnChargeAttackStart()
     {
         //Start charging attack
@@ -73,7 +84,8 @@ public class RB_PlayerController : MonoBehaviour
     public void Interact()
     {
         //Interact with the object nearby
-        _playerAction.Interact();
+        if (!_health.Dead)
+            _playerAction.Interact();
     }
 
     public void BindToAttack()
@@ -86,32 +98,39 @@ public class RB_PlayerController : MonoBehaviour
 
     public void OnChargeAttackStop()
     {
-        //If charge attack completed start charged attack otherwise start normal attack
-        _playerAction.StopChargeAttack();
+        if (!_health.Dead)
+        {
+            //If charge attack completed start charged attack otherwise start normal attack
+            _playerAction.StopChargeAttack();
+        }
     }
 
     public void OnStartDash()
     {
         //Start dash
-        _playerAction.StartDash();
+        if (!_health.Dead)
+            _playerAction.StartDash();
     }
 
     public void OnMoveStart()
     {
         //Start movement
-        _playerMovement.StartMove();
+        if (!_health.Dead)
+            _playerMovement.StartMove();
     }
 
     public void OnMoveStop()
     {
         //Stop movement
-        _playerMovement.StopMove();
+        if (!_health.Dead)
+            _playerMovement.StopMove();
     }
 
     public void OnSpecialAttack()
     {
         //Start special attack
-        _playerAction.SpecialAttack();
+        if (!_health.Dead)
+            _playerAction.SpecialAttack();
     }
 
     public void OnStartRewind()

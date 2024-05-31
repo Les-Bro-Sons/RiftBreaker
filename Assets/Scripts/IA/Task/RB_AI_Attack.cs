@@ -46,6 +46,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
+                                _btParent.AiAnimator.SetTrigger("Attack");
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
@@ -53,6 +54,7 @@ public class RB_AI_Attack : RB_BTNode
                         case 0: //slash attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
+                                _btParent.AiAnimator.SetTrigger("Attack");
                                 Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 StopAttacking();
                             }

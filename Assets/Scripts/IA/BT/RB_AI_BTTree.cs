@@ -21,7 +21,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float AttackSpeed = 2f;
 
     [Header("Spline Parameters")]
-    public SplineContainer SplineContainer;
+    [HideInInspector] public SplineContainer SplineContainer;
     public float WaitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
     public int PatrolSplineIndex = 0;
     public bool HasAnInterval = false;
@@ -117,6 +117,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         _infiltrationPhases.Add(PHASES.Infiltration);
         _combatPhases.Add(PHASES.Combat);
         _combatPhases.Add(PHASES.Boss);
+        this.SplineContainer = RB_SplineManager.Splines;
 
         RB_BTNode root = new RB_BTSelector(new List<RB_BTNode>
         {

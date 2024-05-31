@@ -44,3 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed80171e47ae914fbcd1efb134a2b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentPhase: 0
+  LastPhase: 0
+  CurrentScene: 0
+  EventPlayerLost:
+    m_PersistentCalls:
+      m_Calls: []
+  EventPlayerWon:
+    m_PersistentCalls:
+      m_Calls: []
+  _phaseInfiltration: SkillsPhaseInfiltration
+  _phaseCombat: SkillsPhaseCombat

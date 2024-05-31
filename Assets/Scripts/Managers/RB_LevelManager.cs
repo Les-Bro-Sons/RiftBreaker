@@ -16,6 +16,10 @@ public class RB_LevelManager : MonoBehaviour
 
     public Dictionary<PHASES, List<GameObject>> _savedEnemiesInPhase = new();
 
+    [Header("HUD SKILLS")]
+    [SerializeField] private string _phaseInfiltration = $"SkillsPhase{PHASES.Infiltration}";
+    [SerializeField] private string _phaseCombat = $"SkillsPhase{PHASES.Combat}";
+
 
     private void Awake()
     {
@@ -33,6 +37,7 @@ public class RB_LevelManager : MonoBehaviour
     private void Start()
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
+        RB_HUDManager.Instance.PlayAnimation(_phaseInfiltration);
     }
 
     public void SwitchPhase()
@@ -42,6 +47,7 @@ public class RB_LevelManager : MonoBehaviour
         switch(CurrentPhase)
         {
             case PHASES.Infiltration:
+                RB_HUDManager.Instance.PlayAnimation(_phaseCombat);
                 CurrentPhase = PHASES.Combat;
                 break;
         }

@@ -745,6 +745,10 @@ MonoBehaviour:
   _prefabHourglass: {fileID: 1164252878731851849, guid: 1997dc19f032b4147be2567898cdac39,
     type: 3}
   _hourglassHolster: {fileID: 2129547509338405607}
+  _rotationDuration: 1
+  _alphaDuration: 1
+  _targetUsedRotation: 180
+  _targetNotUsedRotation: 0
 --- !u!1 &2464911195594787585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1573,7 +1577,7 @@ GameObject:
   - component: {fileID: 8583629249294197873}
   - component: {fileID: 1352458506507538279}
   m_Layer: 5
-  m_Name: HUD Canvas
+  m_Name: HUD Manager - Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1679,7 +1683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a003d1bbb4878246aea0f37d72cf4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentHUD: 0
+  AnimatorHud: {fileID: 0}
 --- !u!95 &1352458506507538279
 Animator:
   serializedVersion: 5

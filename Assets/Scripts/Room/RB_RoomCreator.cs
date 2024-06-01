@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RB_DetectionZone : MonoBehaviour
+public class RB_RoomCreator : MonoBehaviour
 {
     // Properties section
     [Header("Properties")]

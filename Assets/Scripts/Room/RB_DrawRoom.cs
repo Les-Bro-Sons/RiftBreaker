@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(RB_DetectionZone))]
+[CustomEditor(typeof(RB_RoomCreator))]
 public class RB_DrawRoom : Editor
 {
     //Properties
@@ -13,7 +13,7 @@ public class RB_DrawRoom : Editor
     {
         DrawDefaultInspector();
 
-        RB_DetectionZone detectionZone = (RB_DetectionZone)target;
+        RB_RoomCreator detectionZone = (RB_RoomCreator)target;
 
 
         EditorGUILayout.LabelField("");
@@ -42,7 +42,7 @@ public class RB_DrawRoom : Editor
         }
     }
 
-    private void SetPoint(RB_DetectionZone detectionZone)
+    private void SetPoint(RB_RoomCreator detectionZone)
     {
         //Get the position of the mouse on the object with the selected layer
         Vector3 mousePosition = Event.current.mousePosition;
@@ -61,7 +61,7 @@ public class RB_DrawRoom : Editor
 
     void OnSceneGUI()
     {
-        RB_DetectionZone detectionZone = (RB_DetectionZone)target;
+        RB_RoomCreator detectionZone = (RB_RoomCreator)target;
         detectionZone.PointsInterval = Mathf.Clamp(detectionZone.PointsInterval, 1, int.MaxValue);
 
         Event e = Event.current;

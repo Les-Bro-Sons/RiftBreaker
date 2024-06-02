@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(ScrollRect))]
-public class RB_MenuAutomaticDropDown : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
+public class RB_MenuAutomaticScrollRect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
     public float ScrollSpeed = 10f;
     bool _isHoovered = false;
 

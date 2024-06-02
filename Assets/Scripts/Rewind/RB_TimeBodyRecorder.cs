@@ -176,6 +176,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _animator.enabled = false;
         if (_btTree)
             _btTree.enabled = false;
+        if (_enemy)
+            _enemy.enabled = false;
     }
 
     private void StopRewinding()
@@ -190,6 +192,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _animator.enabled = true;
         if (_health && !_health.Dead && _btTree)
             _btTree.enabled = true;
+        if (_enemy)
+            _enemy.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
     }
 

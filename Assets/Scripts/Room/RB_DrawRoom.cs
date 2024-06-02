@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,49 +14,61 @@ public class RB_DrawRoom : Editor
     {
         DrawDefaultInspector();
 
-        RB_RoomCreator detectionZone = (RB_RoomCreator)target;
+        RB_RoomCreator roomCreator = (RB_RoomCreator)target;
 
 
         EditorGUILayout.LabelField("");
         //Create buttons for the collider creations
         if (GUILayout.Button("AddCollider"))
         {
-            detectionZone.UpdateCollider();
-            detectionZone.ColliderPoints.Clear();
+            roomCreator.UpdateCollider();
+            roomCreator.ColliderPoints.Clear();
         }
 
         if (GUILayout.Button("Remove Points"))
         {
-            detectionZone.ColliderPoints.Clear();
+            roomCreator.ColliderPoints.Clear();
         }
 
         if (GUILayout.Button("Clear Mesh"))
         {
-            detectionZone.ClearMesh();
-            detectionZone.UpdateCollider();
-            detectionZone.ClearMesh();
+            roomCreator.ClearMesh();
+            roomCreator.UpdateCollider();
+            roomCreator.ClearMesh();
         }
 
         if (GUILayout.Button("Create Rooms"))
         {
-            detectionZone.CreateRoom();
+            roomCreator.CreateRoom();
         }
+    }
+    public Vector3? GetMousePos(RB_RoomCreator detectionZone)
+    {
+        // Get the position of the mouse on the object with the selected layer
+        Vector3 mousePosition = Event.current.mousePosition;
+        Vector3? raycastMousePos = null;
+        Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
+
+        // Sort hits by distance
+        Array.Sort(hits, (h1, h2) => h1.distance.CompareTo(h2.distance));
+
+        foreach (var hit in hits)
+        {
+            if (detectionZone.objectToDrawOn == hit.collider.gameObject)
+            {
+                raycastMousePos = hit.point;
+                break;
+            }
+        }
+        return raycastMousePos;
     }
 
     private void SetPoint(RB_RoomCreator detectionZone)
     {
-        //Get the position of the mouse on the object with the selected layer
-        Vector3 mousePosition = Event.current.mousePosition;
-        Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
-
-        foreach (var hit in hits)
+        if (GetMousePos(detectionZone) != null)
         {
-            if (detectionZone.DrawColliderLayer == (detectionZone.DrawColliderLayer | (1 << hit.collider.gameObject.layer)))
-            {
-                detectionZone.ColliderPoints.Add(hit.point);
-                break;
-            }
+            detectionZone.ColliderPoints.Add(GetMousePos(detectionZone).Value);
         }
     }
 
@@ -72,20 +85,18 @@ public class RB_DrawRoom : Editor
         if (e.type == EventType.MouseDown && e.button == 0)
         {
             _isDrawing = true;
-            Vector3 mousePosition = Event.current.mousePosition;
-            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
             bool foundPoint = false;
-            for(int i = 0; i < hits.Length; i++)
+            if (GetMousePos(detectionZone) != null)
             {
+                Vector3 mousePosition = GetMousePos(detectionZone).Value;
                 //If there's any point nearby the mouse click, remove it
-                if (detectionZone.DrawColliderLayer == (detectionZone.DrawColliderLayer | (1 << hits[i].collider.gameObject.layer)) && (GetClosestPointWithinDistance(detectionZone.ColliderPoints, hits[i].point, 1) != null))
+                if ((GetClosestPointWithinDistance(detectionZone.ColliderPoints, mousePosition, 1) != null))
                 {
-                    detectionZone.ColliderPoints.Remove(GetClosestPointWithinDistance(detectionZone.ColliderPoints, hits[i].point, 1).Value);
+                    detectionZone.ColliderPoints.Remove(GetClosestPointWithinDistance(detectionZone.ColliderPoints, mousePosition, 1).Value);
                     foundPoint = true;
-                    break;
                 }
             }
+
             //Otherwise place a new one
             if(!foundPoint)
             {

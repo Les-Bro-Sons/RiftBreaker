@@ -116,13 +116,14 @@ public class RB_InputManager : MonoBehaviour
             EventItem3Canceled?.Invoke();
     }
 
-    public Vector3 GetMouseDirection(Vector3 initialPos)
+    public Vector3 GetMouseDirection()
     {
         Vector3 direction = new();
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-        {
-            direction = new Vector3((hit.point - initialPos).x, 0, (hit.point - initialPos).z);
-        }
+        Vector3 screenMousePos = Input.mousePosition;
+        screenMousePos.z = Camera.main.nearClipPlane;
+        Vector3 adjustedWorldMousePos = Camera.main.ScreenToWorldPoint(screenMousePos) - Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, screenMousePos.z));
+        print(adjustedWorldMousePos);
+        direction = new Vector3((adjustedWorldMousePos - Vector3.zero).x, 0, (adjustedWorldMousePos - Vector3.zero).z);
 
         return direction;
     }

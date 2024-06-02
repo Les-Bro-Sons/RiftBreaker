@@ -16,8 +16,10 @@ public class RB_EntityDetector : MonoBehaviour
         {
             if (entityHealth.Team == TEAMS.Ai)//If it the entity is an ai then add it to the enemy list
                 _room.AddDetectedEnemy(entityHealth.gameObject);
-            else if (entityHealth.Team == TEAMS.Player)//Otherwise if it's a player check the IsPlayerInRoom bool
+            else if (entityHealth.Team == TEAMS.Player && entityHealth.TryGetComponent<RB_PlayerMovement>(out RB_PlayerMovement playerMovement) && RB_RoomManager.Instance.GetPlayerCurrentRoom() == null)//Otherwise if it's a player check the IsPlayerInRoom bool
                 _room.IsPlayerInRoom = true;
+            else if(entityHealth.Team == TEAMS.Player)
+                _room.AddDectedAlly(entityHealth.gameObject);
         }
         
     }
@@ -31,5 +33,6 @@ public class RB_EntityDetector : MonoBehaviour
             return;
         }
         _room.RemoveDetectedEnemy(other.gameObject);
+        _room.RemoveDectedAlly(other.gameObject);
     }
 }

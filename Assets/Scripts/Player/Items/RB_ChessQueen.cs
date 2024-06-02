@@ -33,7 +33,7 @@ public class RB_ChessQueen : RB_Items
     public override void Attack()
     {
         base.Attack();
-        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection(_playerTransform.position);
+        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection();
         _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
         GameObject spawnedChessPawn = Instantiate(_pawnPrefab, _spawnPos, Quaternion.identity);
         if (_shouldBoost)
@@ -46,7 +46,7 @@ public class RB_ChessQueen : RB_Items
     public override void ChargedAttack()
     {
         base.ChargedAttack();
-        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection(_playerTransform.position);
+        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection();
         _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
         GameObject spawnedChessPawn = Instantiate(_towerPrefab, _spawnPos, Quaternion.identity);
         if (_shouldBoost)

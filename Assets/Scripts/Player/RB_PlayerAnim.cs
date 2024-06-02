@@ -49,7 +49,7 @@ public class RB_PlayerAnim : MonoBehaviour
                     //If player is attacking get the position of the mouse and attack towards it
                     if (!_directionGot)
                     {
-                        directionToAttack = RB_InputManager.Instance.GetMouseDirection(_playerTransform.position);
+                        directionToAttack = RB_InputManager.Instance.GetMouseDirection();
                         _directionGot = true;
                     }
                     _playerTransform.forward = directionToAttack;

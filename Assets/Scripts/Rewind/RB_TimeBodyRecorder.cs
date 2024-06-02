@@ -1,29 +1,49 @@
+using Cinemachine.Utility;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_TimeBodyRecorder : MonoBehaviour
 {
+    
     new Transform transform; // to reduce performance cost of calling transform
     private Rigidbody _rb;
-    private List<RB_PointInTime> _pointsInTime = new();
+    private List<PointInTime> _pointsInTime = new();
 
     private bool _isRewinding = false;
 
     [SerializeField] private ENTITYTYPES _entityType = ENTITYTYPES.Ai;
     private RB_UXRewindManager _uxRewind;
 
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private RB_Health _health;
+    [SerializeField] private RB_Enemy _enemy;
+    private RB_AI_BTTree _btTree;
+
+    private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
+
+    private RB_LevelManager _levelManager;
+
+    private List<EventInTime> _timeEventForNextPoint = new(); //events to save in the next point in time
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         transform = GetComponent<Transform>(); // to reduce performance cost of calling transform
         _uxRewind = FindObjectOfType<RB_UXRewindManager>();
+        if (!_health)
+            _health = GetComponent<RB_Health>();
+        if (!_enemy)
+            _enemy = GetComponent<RB_Enemy>();
+        _levelManager = GetComponent<RB_LevelManager>();
+        _btTree = GetComponent<RB_AI_BTTree>();
     }
 
     private void Start()
     {
-        RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewinding); // TO TEST
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewinding); // TO TEST
+        RB_TimeManager.Instance.EventStartRewinding.AddListener(StartRewinding);
+        RB_TimeManager.Instance.EventStopRewinding.AddListener(StopRewinding);
         RB_TimeManager.Instance.EventRecordFrame.AddListener(delegate { RecordTimeFrame(RB_TimeManager.Instance.CurrentTime); });
     }
 
@@ -35,19 +55,127 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
+    public void RecordTimeEvent(EventInTime timeEvent)
+    {
+        _timeEventForNextPoint.Add(timeEvent);
+    }
+
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
-        _pointsInTime.Add(new RB_PointInTime(time, transform.position, transform.rotation));
+        PointInTime newPoint = new PointInTime();
+        newPoint.Time = time;
+        newPoint.Position = transform.position;
+        newPoint.Rotation = transform.rotation;
+        if (_spriteRenderer)
+            newPoint.Sprite = _spriteRenderer.sprite;
+        if (_health)
+        {
+            newPoint.Health = _health.Hp;
+            newPoint.Dead = _health.Dead;
+        }
+        if (_rb) newPoint.Velocity = _rb.velocity;
+        if (_levelManager) newPoint.Phase = _levelManager.CurrentPhase;
+        if (_btTree)
+        {
+            newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        newPoint.TimeEvents = _timeEventForNextPoint.ToList();
+
+        _pointsInTime.Add(newPoint);
+        _timeEventForNextPoint.Clear();
+    }
+
+    private void Rewind()
+    {
+        if (_pointsInTime.Count <= 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        float currentTime = RB_TimeManager.Instance.CurrentTime;
+
+        //PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
+
+        RemoveLastPointIfFuture(currentTime);
+
+        PointInTime currentP;
+        PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
+        if (_pointsInTime.Count > 1) 
+        {
+            ///////INTERPOLATION////////
+            PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
+            currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime);
+            ///////////////////////////
+        }
+        else
+        {
+            currentP = closestPointInTime;
+        }
+
+        if (!currentP.Position.IsNaN())
+        {
+            if (_rb)
+            {
+                _rb.MovePosition(currentP.Position) ;
+                _rb.rotation = currentP.Rotation;
+                _savedVelocity = currentP.Velocity;
+            }
+            else
+            {
+                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation);
+            }
+        }
+        
+        if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
+        if (_health)
+        {
+
+            //_health.Hp = currentP.Health;
+            if (_health.Hp > currentP.Health)
+                _health.TakeDamage(Mathf.Abs(_health.Hp - currentP.Health), true);
+            else if (_health.Hp < currentP.Health)
+                _health.Heal(Mathf.Abs(_health.Hp - currentP.Health), true);
+
+            if (_health.Dead != currentP.Dead && _enemy)
+            {
+                if (currentP.Dead) //die
+                {
+                    _enemy.Tombstone();
+                }
+                else //revive
+                {
+                    _enemy.UnTombstone();
+                }
+            }
+            _health.Dead = currentP.Dead;
+        }
+        if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) 
+            _levelManager.SwitchPhase(currentP.Phase);
+        if (_btTree)
+        {
+            _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        foreach (EventInTime timeEvent in currentP.TimeEvents)
+        {
+            switch(timeEvent.TypeEvent)
+            {
+                case TYPETIMEEVENT.TookWeapon:
+                    timeEvent.ItemTook.Drop();
+                    break;
+            }
+        }
     }
 
     private void StartRewinding()
     {
         _isRewinding = true;
         if (_rb)
-        {
             _rb.isKinematic = true;
-        }
-        UxStartRewind();
+        if (_animator)
+            _animator.enabled = false;
+        if (_btTree)
+            _btTree.enabled = false;
     }
 
     private void StopRewinding()
@@ -56,32 +184,23 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_rb)
         {
             _rb.isKinematic = false;
+            _rb.velocity = _savedVelocity;
         }
+        if (_health && !_health.Dead && _animator)
+            _animator.enabled = true;
+        if (_health && !_health.Dead && _btTree)
+            _btTree.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
-
-        UxStopRewind();
     }
 
-    private void Rewind()
-    {
-        if (_pointsInTime.Count == 0)
-            return;
-
-        float currentTime = RB_TimeManager.Instance.CurrentTime;
-
-        RB_PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
-        transform.position = closestPointInTime.Position;
-        transform.rotation = closestPointInTime.Rotation;    
-    }
-
-    private RB_PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore
+    private PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore
     {
         if (_pointsInTime.Count == 1)
             return _pointsInTime[0];
 
         float timeDifference = 0;
-        RB_PointInTime lastPoint = _pointsInTime[_pointsInTime.Count - 1];
-        RB_PointInTime beforeLastPoint = _pointsInTime[_pointsInTime.Count - 2];
+        PointInTime lastPoint = _pointsInTime[_pointsInTime.Count - 1];
+        PointInTime beforeLastPoint = _pointsInTime[_pointsInTime.Count - 2];
 
         timeDifference = Mathf.Abs(currentTime - lastPoint.Time); // time difference between last point and now
 
@@ -100,7 +219,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void RemoveFuturePointsInTime(float currentTime)
     {
-        foreach (RB_PointInTime point in _pointsInTime)
+        foreach (PointInTime point in _pointsInTime)
         {
             if (point.Time > currentTime)
             {
@@ -111,15 +230,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
-    private void UxStartRewind()
+    private void RemoveLastPointIfFuture(float currentTime)
     {
-        if (_entityType == ENTITYTYPES.Player)
-            _uxRewind?.StartRewindTransition();
-    }
-
-    private void UxStopRewind()
-    {
-        if (_entityType == ENTITYTYPES.Player)
-        _uxRewind?.StopRewindTransition();
+        if (_pointsInTime[_pointsInTime.Count - 2].Time > currentTime) //if the last point is completely in the future, it deletes it
+        {
+            _pointsInTime.RemoveAt(_pointsInTime.Count - 1);
+        }
     }
 }

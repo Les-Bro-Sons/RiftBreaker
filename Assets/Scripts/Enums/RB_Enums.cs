@@ -60,6 +60,20 @@ public enum ENTITYTYPES
     Player,
 }
 
+public enum TEAMS
+{
+    Ai,
+    Player,
+    Neutral,
+}
+
+public enum ENEMYCLASS
+{
+    Light,
+    Medium,
+    Heavy
+}
+
 // ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES

@@ -1,19 +1,27 @@
 using UnityEngine;
 
-public class RB_HUDManager : MonoBehaviour  {
+public class RB_HUDManager : MonoBehaviour  
+{
+    public static RB_HUDManager Instance;
 
-    [SerializeField] HUDTYPE _currentHUD;
+    private Animator _animatorHud;
 
-    private void RefreshHud(){
-
-    }
-    void Start()
+    private void Awake()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+
+        _animatorHud = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update() {
-        RefreshHud();
+    public void PlayAnimation(string animationName)
+    {
+        _animatorHud.Play(animationName);
     }
 }

@@ -36,10 +36,14 @@ public class RB_HUDRecastTime : MonoBehaviour {
                 RB_PlayerMovement.Instance.EventDash.AddListener(delegate { RecastTimerStart(RB_PlayerMovement.Instance.DashCooldown); });
                 break;
             case RECASTTYPE.AttackBase:
+                RB_PlayerAction.Instance.EventBasicAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.AttackCooldown); });
                 break;
             case RECASTTYPE.AttackCharged:
+                RB_PlayerAction.Instance.EventStartChargingAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.ChargeTime - RB_PlayerAction.Instance.StartChargingDelay); });
+                RB_PlayerAction.Instance.EventStopChargingAttack.AddListener(RecastTimerEnd);
                 break;
             case RECASTTYPE.AttackSpecial:
+                _multiplierFactor = 1f / 100f;
                 break;
         }
 
@@ -51,18 +55,56 @@ public class RB_HUDRecastTime : MonoBehaviour {
         _remainTime = timer;
         _timerText.text = _remainTime.ToString();
         _isTimerStarted = true;
-        _fillImage.fillAmount = _remainTime * _multiplierFactor;
+        switch (Type)
+        {
+            default:
+                _fillImage.fillAmount = _remainTime * _multiplierFactor;
+                break;
+            case RECASTTYPE.AttackCharged:
+                _fillImage.fillAmount = 1;
+                break;
+        }
+        
     }
 
     void Update() { 
+        switch (Type)
+        {
+            case RECASTTYPE.AttackSpecial:
+                float charge = RB_PlayerAction.Instance.SpecialAttackCharge;
+                if (charge < 100)
+                {
+                    //_displayCast.color = Color.gray;
+                    _timerText.text = charge.ToString("0");
+                    _fillImage.fillAmount = Mathf.Abs((charge * _multiplierFactor) - 1);
+                }
+                else
+                {
+                    //_displayCast.color = Color.white;
+                    _timerText.text = "";
+                    _fillImage.fillAmount = 0;
+                }
+
+                break;
+        }
+
         if (!_isTimerStarted) { return; }
 
         //Défilement du Recast Time
         if(_remainTime > 0f) {
-            _displayCast.color = Color.gray;
+            //_displayCast.color = Color.gray;
             _remainTime -= Time.deltaTime;
             _timerText.text = _remainTime.ToString("0.0");
-            _fillImage.fillAmount = _remainTime * _multiplierFactor;
+            switch (Type)
+            {
+                case RECASTTYPE.AttackCharged:
+                    _fillImage.fillAmount = 1 - (_remainTime * _multiplierFactor);
+                    break;
+                default:
+                    _fillImage.fillAmount = _remainTime * _multiplierFactor;
+                    break;
+            }
+            
         }
         else { 
             RecastTimerEnd();
@@ -72,8 +114,10 @@ public class RB_HUDRecastTime : MonoBehaviour {
     //Fonction qui se fait appeler quand la compétence à totalement rechargé. 
     void RecastTimerEnd() {
         _timerText.text = "";
+        _remainTime = 0;
+        _fillImage.fillAmount = 0;
         EventTimerEnd?.Invoke();
-        _displayCast.color = Color.white;
+        //_displayCast.color = Color.white;
     }
 
 }

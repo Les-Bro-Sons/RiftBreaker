@@ -18,7 +18,7 @@ public class RB_AI_PlayerInRoom : RB_BTNode
     {
         _state = BTNodeState.FAILURE;
 
-        if (RB_RoomManager.Instance.GetPlayerCurrentRoom() == RB_RoomManager.Instance.GetPlayerCurrentRoom())
+        if (RB_RoomManager.Instance.GetPlayerCurrentRoom() == RB_RoomManager.Instance.GetEntityRoom(_btParent.AiHealth.Team, _btParent.gameObject))
         {
             Collider[] colliders = Physics.OverlapSphere(_transform.position, 1000, 1 << 7); //PLACHOLDER
             if (colliders.Length > 0)

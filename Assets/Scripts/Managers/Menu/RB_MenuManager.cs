@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RB_MenuManager : MonoBehaviour {
@@ -20,6 +21,7 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void Play() {
+        RB_SceneTransitionManager.Instance.NewScene((int)(SceneManager.GetActiveScene().buildIndex + 1));
     }
 
     public void Options() {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if (UNITY_EDITOR)
 [CustomEditor(typeof(RB_RoomCreator))]
 public class RB_DrawRoom : Editor
 {
@@ -152,3 +153,4 @@ public class RB_DrawRoom : Editor
         return closestPoint;
     }
 }
+#endif

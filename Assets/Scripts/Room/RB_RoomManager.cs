@@ -24,14 +24,12 @@ public class RB_RoomManager:MonoBehaviour
     private List<RB_Room> _rooms = new();
 
     //Components
-    private Transform _transform;
     public static RB_RoomManager Instance;
 
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
-        _transform = transform;
     }
 
     private void Start()
@@ -41,7 +39,19 @@ public class RB_RoomManager:MonoBehaviour
 
     private void InitializeRooms()
     {
-        foreach (Transform roomTransform in _transform)
+        _rooms.Clear();
+        foreach (Transform roomTransform in transform)
+        {
+            if (roomTransform.TryGetComponent<RB_Room>(out RB_Room room))
+            {
+                _rooms.Add(room);
+            }
+        }
+    }
+
+    private void UpdateRooms()
+    {
+        foreach (Transform roomTransform in transform)
         {
             if (roomTransform.TryGetComponent<RB_Room>(out RB_Room room))
             {
@@ -53,6 +63,39 @@ public class RB_RoomManager:MonoBehaviour
     public List<GameObject> GetDetectedEnemies(int roomIndex)
     {
         return _rooms[roomIndex].DetectedEnemies;
+    }
+
+    public List<GameObject> GetDetectedAllies(int roomIndex)
+    {
+        return _rooms[roomIndex].DetectedAllies;
+    }
+
+    public int? GetEntityRoom(TEAMS team, GameObject entity)
+    {
+        int? roomIndex = null;
+        for(int i = 0; i < _rooms.Count; i++)
+        {
+            if (team == TEAMS.Ai)
+            {
+
+                if (GetDetectedEnemies(i).Contains(entity))
+                {
+                    roomIndex = i;
+                    break;
+                }
+            }
+            else
+            {
+                if (GetDetectedAllies(i).Contains(entity))
+                {
+                    roomIndex = i;
+                    break;
+                }
+            }
+        }
+        
+
+        return roomIndex;
     }
 
     public int? GetPlayerCurrentRoom()
@@ -82,10 +125,23 @@ public class RB_RoomManager:MonoBehaviour
 
     public void ClearRooms()
     {
-        foreach (Transform room in transform)
+        UpdateRooms();
+        int maxIter = _rooms.Count + 100;
+        while (_rooms.Count > 0)
         {
-            DestroyImmediate(room.gameObject);
+            foreach (Transform room in transform)
+            {
+                if (room.gameObject.TryGetComponent<RB_Room>(out RB_Room roomScript) && _rooms.Contains(roomScript))
+                {
+                    DestroyImmediate(roomScript.gameObject);
+                    _rooms.Remove(roomScript);
+                }
+            }
+            UpdateRooms();
+            maxIter --;
+            if(maxIter <= 0)
+                break;
         }
-        _rooms.Clear();
+        
     }
 }

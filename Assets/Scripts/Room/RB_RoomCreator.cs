@@ -11,7 +11,7 @@ public class RB_RoomCreator : MonoBehaviour
     public bool ShouldDrawCollider; // Flag to determine if the collider should be drawn
     public bool ShouldDrawRenderer; // Flag to determine if the renderer should be drawn
     public float ColliderHeight; // Height of the collider
-    public LayerMask DrawColliderLayer; // Layer mask for drawing the collider
+    public GameObject objectToDrawOn; // Object to draw on
     public Material ColliderMaterial; // Material for the collider's visual representation
     [HideInInspector] public bool ShowList; // Hidden property to control showing the list in the inspector
 
@@ -43,13 +43,18 @@ public class RB_RoomCreator : MonoBehaviour
 
     public void CreateRoom()
     {
+        int maxIteration = transform.childCount + 100;
         while (transform.childCount != 0)
         {
             foreach (Transform room in transform)
             {
                 room.parent = _roomManager.transform;
             }
+            maxIteration--;
+            if(maxIteration <= 0)
+                break;
         }
+        _meshObjects.Clear();
     }
 
     // Creates mesh colliders based on the given points and normal
@@ -184,11 +189,19 @@ public class RB_RoomCreator : MonoBehaviour
     }
 
     // Calculates the normal vector of the plane defined by the first three points
-    Vector3 CalculateNormal(List<Vector3> points)
+    public static Vector3 CalculateNormal(List<Vector3> points)
     {
         Vector3 v1 = points[1] - points[0];
         Vector3 v2 = points[2] - points[0];
-        return Vector3.Cross(v1, v2).normalized;
+        Vector3 normal = Vector3.Cross(v1, v2).normalized;
+
+        // Ensure the normal is oriented towards Vector3.up
+        if (Vector3.Dot(normal, Vector3.up) > 0)
+        {
+            normal = -normal;
+        }
+
+        return normal;
     }
 
     // Clears the mesh objects and children from the transform

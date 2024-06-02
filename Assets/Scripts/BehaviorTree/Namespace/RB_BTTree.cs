@@ -6,12 +6,12 @@ namespace BehaviorTree
     {
         private RB_BTNode _root = null; public RB_BTNode Root { get { return _root; } }
 
-        protected void Start()
+        protected virtual void Start()
         {
             _root = SetupTree();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (_root != null)
                 _root.Evaluate();

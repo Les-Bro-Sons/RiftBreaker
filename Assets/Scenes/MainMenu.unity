@@ -5929,6 +5929,7 @@ GameObject:
   - component: {fileID: 514033358}
   - component: {fileID: 514033357}
   - component: {fileID: 514033356}
+  - component: {fileID: 514033359}
   m_Layer: 5
   m_Name: Scrollbar Vertical
   m_TagString: Untagged
@@ -6043,6 +6044,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 514033354}
   m_CullTransparentMesh: 1
+--- !u!114 &514033359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514033354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f4d53e433e6824ea076271f3a4af01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextSelectable: {fileID: 1796291111}
+  _isSelected: 0
 --- !u!1 &521104014
 GameObject:
   m_ObjectHideFlags: 0
@@ -19461,6 +19476,7 @@ GameObject:
   - component: {fileID: 1584192594}
   - component: {fileID: 1584192593}
   - component: {fileID: 1584192592}
+  - component: {fileID: 1584192595}
   m_Layer: 5
   m_Name: Scrollbar
   m_TagString: Untagged
@@ -19575,6 +19591,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584192590}
   m_CullTransparentMesh: 1
+--- !u!114 &1584192595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584192590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f4d53e433e6824ea076271f3a4af01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextSelectable: {fileID: 1918293690}
+  _isSelected: 0
 --- !u!1 &1595107987
 GameObject:
   m_ObjectHideFlags: 0
@@ -20330,6 +20360,7 @@ GameObject:
   - component: {fileID: 1634594530}
   - component: {fileID: 1634594529}
   - component: {fileID: 1634594528}
+  - component: {fileID: 1634594531}
   m_Layer: 5
   m_Name: Scrollbar
   m_TagString: Untagged
@@ -20444,6 +20475,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634594526}
   m_CullTransparentMesh: 1
+--- !u!114 &1634594531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634594526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f4d53e433e6824ea076271f3a4af01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextSelectable: {fileID: 1918293690}
+  _isSelected: 0
 --- !u!1 &1640701476
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,8 @@ public class RB_Projectile : MonoBehaviour
 
     //Properties
     [Header("Properties")]
-    [SerializeField] private float _speed;
-    [SerializeField] private float _totalDistance;
+    [SerializeField] private float _speed; public float Speed { get { return _speed; } set { _speed = value; } }
+    [SerializeField] private float _totalDistance; public float TotalDistance { get { return _totalDistance; } set { _totalDistance = value; } }
     [SerializeField] private ProjectileType _projectileType;
     [SerializeField] private Vector3 _launchForce;
     [SerializeField] private float _totalLifeTime;
@@ -31,8 +31,8 @@ public class RB_Projectile : MonoBehaviour
     private float _currentContinousDelayScreenshake = 9999; // set at 9999 so it impulse at the start
 
     [Header("Damage")]
-    [SerializeField] private float _damage = 10;
-    [SerializeField] private float _knocbackExplosionForce = 0;
+    [SerializeField] private float _damage = 10; public float Damage { get { return _damage; } set { _damage = value; } }
+    [SerializeField] private float _knocbackExplosionForce = 0; public float KnocbackExplosionForce { get {  return _knocbackExplosionForce; } set { _knocbackExplosionForce = value; } }
     [SerializeField] private Vector3 _knockback = Vector3.zero;
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
@@ -49,11 +49,15 @@ public class RB_Projectile : MonoBehaviour
     private Rigidbody _rb;
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
+    [SerializeField] private Animator _projectileAnimator;
 
     //Movements
     private float _traveledDistance;
     private Vector3 _firstPos;
     private float _creationTime;
+
+    //Spawn prefab
+    public float SpawnDistanceFromPlayer;
 
 
     private void Awake()
@@ -98,13 +102,12 @@ public class RB_Projectile : MonoBehaviour
         if ((_isDealingDamageMultipleTime || !isAlreadyDamaged) && (_canDamageAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
             enemyHealth.TakeDamage(_damage);
-        }
-
-        if (_isDestroyingOnDamage)
-        {
-            if (_destroyParticles)
-                Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-            Destroy(gameObject);
+            if (_isDestroyingOnDamage)
+            {
+                if (_destroyParticles)
+                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -112,7 +115,7 @@ public class RB_Projectile : MonoBehaviour
     {
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
         {
-            if (TryGetComponent<RB_Health>(out RB_Health enemyHealth))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
             {
                 enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
                 enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
@@ -208,6 +211,17 @@ public class RB_Projectile : MonoBehaviour
             }
 
             _currentContinousDelayScreenshake += Time.deltaTime;
+        }
+
+        UpdateAnim();
+    }
+
+    private void UpdateAnim()
+    {
+        if(_projectileAnimator != null)
+        {
+            _projectileAnimator.SetFloat("Horizontal", _transform.TransformDirection(Vector3.forward).x);
+            _projectileAnimator.SetFloat("Vertical", _transform.TransformDirection(Vector3.forward).z);
         }
     }
 }

@@ -33,6 +33,8 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector2 MoveValue;
 
+    public bool IsMouse = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -59,6 +61,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        IsMouse = (context.action.activeControl.device.name == "Mouse");
         if (context.started)
             EventAttackStarted?.Invoke();
         else if (context.canceled)
@@ -111,5 +114,17 @@ public class RB_InputManager : MonoBehaviour
             EventItem3Started?.Invoke();
         else if (context.canceled)
             EventItem3Canceled?.Invoke();
+    }
+
+    public Vector3 GetMouseDirection()
+    {
+        Vector3 direction = new();
+        Vector3 screenMousePos = Input.mousePosition;
+        screenMousePos.z = Camera.main.nearClipPlane;
+        Vector3 adjustedWorldMousePos = Camera.main.ScreenToWorldPoint(screenMousePos) - Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, screenMousePos.z));
+        print(adjustedWorldMousePos);
+        direction = new Vector3((adjustedWorldMousePos - Vector3.zero).x, 0, (adjustedWorldMousePos - Vector3.zero).z);
+
+        return direction;
     }
 }

@@ -1,29 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RB_HUDManager : MonoBehaviour  {
+public class RB_HUDManager : MonoBehaviour  
+{
+    public static RB_HUDManager Instance;
 
-    [SerializeField] HUDTYPE _currentHUD;
-
-    private Canvas _canvas;
-
-    private void RefreshHud(){
-
-    }
+    private Animator _animatorHud;
 
     private void Awake()
     {
-        _canvas = GetComponent<Canvas>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+
+        _animatorHud = GetComponent<Animator>();
     }
 
-    void Start()
+    public void PlayAnimation(string animationName)
     {
-        _canvas.worldCamera = Camera.main;
-    }
-
-    // Update is called once per frame
-    void Update() {
-        RefreshHud();
+        _animatorHud.Play(animationName);
     }
 }

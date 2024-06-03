@@ -1,6 +1,6 @@
 using Cinemachine.Utility;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_TimeBodyRecorder : MonoBehaviour
@@ -19,8 +19,13 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private RB_Health _health;
     [SerializeField] private RB_Enemy _enemy;
+    private RB_AI_BTTree _btTree;
 
     private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
+
+    private RB_LevelManager _levelManager;
+
+    private List<EventInTime> _timeEventForNextPoint = new(); //events to save in the next point in time
 
     private void Awake()
     {
@@ -31,6 +36,8 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _health = GetComponent<RB_Health>();
         if (!_enemy)
             _enemy = GetComponent<RB_Enemy>();
+        _levelManager = GetComponent<RB_LevelManager>();
+        _btTree = GetComponent<RB_AI_BTTree>();
     }
 
     private void Start()
@@ -48,6 +55,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
+    public void RecordTimeEvent(EventInTime timeEvent)
+    {
+        _timeEventForNextPoint.Add(timeEvent);
+    }
+
     private void RecordTimeFrame(float time) // record a new frame with position and rotation of the gameObject at a specific time
     {
         PointInTime newPoint = new PointInTime();
@@ -62,8 +74,15 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             newPoint.Dead = _health.Dead;
         }
         if (_rb) newPoint.Velocity = _rb.velocity;
+        if (_levelManager) newPoint.Phase = _levelManager.CurrentPhase;
+        if (_btTree)
+        {
+            newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
         _pointsInTime.Add(newPoint);
+        _timeEventForNextPoint.Clear();
     }
 
     private void Rewind()
@@ -111,7 +130,13 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {
-            _health.Hp = currentP.Health;
+
+            //_health.Hp = currentP.Health;
+            if (_health.Hp > currentP.Health)
+                _health.TakeDamage(Mathf.Abs(_health.Hp - currentP.Health), true);
+            else if (_health.Hp < currentP.Health)
+                _health.Heal(Mathf.Abs(_health.Hp - currentP.Health), true);
+
             if (_health.Dead != currentP.Dead && _enemy)
             {
                 if (currentP.Dead) //die
@@ -122,7 +147,22 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 {
                     _enemy.UnTombstone();
                 }
-                _health.Dead = currentP.Dead;
+            }
+            _health.Dead = currentP.Dead;
+        }
+        if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) 
+            _levelManager.SwitchPhase(currentP.Phase);
+        if (_btTree)
+        {
+            _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        foreach (EventInTime timeEvent in currentP.TimeEvents)
+        {
+            switch(timeEvent.TypeEvent)
+            {
+                case TYPETIMEEVENT.TookWeapon:
+                    timeEvent.ItemTook.Drop();
+                    break;
             }
         }
     }
@@ -134,6 +174,10 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = true;
         if (_animator)
             _animator.enabled = false;
+        if (_btTree)
+            _btTree.enabled = false;
+        if (_enemy)
+            _enemy.enabled = false;
     }
 
     private void StopRewinding()
@@ -144,8 +188,12 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _rb.isKinematic = false;
             _rb.velocity = _savedVelocity;
         }
-        if (_animator)
+        if (_health && !_health.Dead && _animator)
             _animator.enabled = true;
+        if (_health && !_health.Dead && _btTree)
+            _btTree.enabled = true;
+        if (_enemy)
+            _enemy.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
     }
 

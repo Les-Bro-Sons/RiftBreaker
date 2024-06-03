@@ -1,8 +1,7 @@
 using AYellowpaper.SerializedCollections;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 //using Cinemachine;
 
 public class RB_SceneTransitionManager : MonoBehaviour
@@ -36,7 +35,7 @@ public class RB_SceneTransitionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(transform.root.gameObject);
         }
         else
             DestroyImmediate(gameObject);
@@ -46,8 +45,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
     {
         TransitionCanvas.worldCamera = Camera.main;
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
-
-        NewTransition(FadeType.ToString());
     }
 
     /*
@@ -72,8 +69,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     }
 
-
-
     public void NewTransition(string nameTransition)
     {
         TransitionCanvas.worldCamera = Camera.main;
@@ -84,9 +79,10 @@ public class RB_SceneTransitionManager : MonoBehaviour
     public void NewScene(string nameScene)
     {
         SceneManager.LoadScene(nameScene);
-/*        if (SceneManager.GetSceneByName(nameScene).buildIndex < 4 || SceneManager.GetSceneByName("EndMenu").buildIndex >= 18)
-            RZ_GameManager.Instance.hud.SetActive(false);
-        else
-            RZ_GameManager.Instance.hud.SetActive(true);*/
+    }
+
+    public void NewScene(int idScene)
+    {
+        SceneManager.LoadScene(idScene);
     }
 }

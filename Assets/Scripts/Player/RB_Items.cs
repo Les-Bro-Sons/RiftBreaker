@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class RB_Items : MonoBehaviour
 {
     //Attack
-    private float _lastUsedAttackTime;
+    protected float _lastUsedAttackTime;
     private float _currentDamage;
     private float _currentKnockbackForce;
     protected float _currentHitScreenshakeForce;
@@ -121,7 +121,7 @@ public class RB_Items : MonoBehaviour
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        _lastUsedAttackTime = Time.time;
+        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
@@ -134,8 +134,7 @@ public class RB_Items : MonoBehaviour
         //Degats
         //KBs
 
-        //end of attack
-        StartCoroutine(OnEndOfAttack());
+        
     }
 
     public virtual void DealDamage()
@@ -157,7 +156,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitToResetAttacks()
+    protected IEnumerator WaitToResetAttacks()
     {
         //Wait for the end of the frame 
         yield return new WaitForEndOfFrame();
@@ -192,6 +191,9 @@ public class RB_Items : MonoBehaviour
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
+
+        //end of attack
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void SpecialAttack()
@@ -218,6 +220,8 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         RB_Camera.Instance.Zoom(_chargeZoom);
+
+        
     }
 
     public virtual void StopChargingAttack()

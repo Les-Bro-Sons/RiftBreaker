@@ -51,6 +51,9 @@ public class RB_PlayerController : MonoBehaviour
         RB_InputManager.Instance.EventItem2Started.AddListener(delegate { ChoseItem(1); });
         RB_InputManager.Instance.EventItem3Started.AddListener(delegate { ChoseItem(2); });
 
+        RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
+        RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
+
         _playerAction.EventItemGathered.AddListener(BindToAttack);
     }
 
@@ -136,10 +139,14 @@ public class RB_PlayerController : MonoBehaviour
     public void OnStartRewind()
     {
         //start rewind in playeraction
+        if (!_health.Dead)
+            RB_TimeManager.Instance.StartRewinding(false, false);
     }
 
     public void OnStopRewind()
     {
         //stop rewind in playeraction
+        if (!_health.Dead)
+            RB_TimeManager.Instance.StopRewinding(false);
     }
 }

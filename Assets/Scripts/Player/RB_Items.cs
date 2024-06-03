@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public class RB_Items : MonoBehaviour
     //bool
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
+
+    //Events
+    public UnityEvent EventOnEndOfAttack;
 
     protected virtual void Awake()
     {
@@ -129,6 +133,9 @@ public class RB_Items : MonoBehaviour
         _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
+
+        //end of attack
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void DealDamage()
@@ -162,6 +169,12 @@ public class RB_Items : MonoBehaviour
     {
         //Cooldown dash
         return Time.time > (_lastUsedAttackTime + _attackCooldown);
+    }
+
+    public virtual IEnumerator OnEndOfAttack()
+    {
+        yield return new WaitForSeconds(_playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        EventOnEndOfAttack?.Invoke();
     }
 
     public virtual void ChargedAttack()

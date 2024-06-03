@@ -31,16 +31,17 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Header("Spot Parameters")]
     public bool InRange = false;
     [Range(1f, 50f)] public float FovRange = 10f;
+    [Range(1f, 50f)] public float SpottedFovRange = 10f;
     public float FovAngle = 75f;
-    [HideInInspector] public bool HasAlreadySeen = false;
+    public float DurationToLoadSpotBar = 0.5f;
+    public float DurationToUnloadSpotBar = 1f;
     [HideInInspector] public Vector3 LastTargetPos;
 
     [Header("Spot UI")]
     public CanvasGroup CanvasUi;
     public Image ImageSpotBar;
     public float DurationAlphaCanvas = 0.5f;
-    public float DurationToLoadSpotBar = 1f;
-    public float DurationToUnloadSpotBar = 0.5f;
+    [HideInInspector] public float LastSpotValue = 0;
     [SerializeField] private GameObject _prefabUxDetectedReadyMark;
 
     [Header("Components")]
@@ -56,6 +57,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSlashKnockback;
     [SerializeField] public float InfSlashDelay;
     [SerializeField] public float InfSlashCollisionSize = 3;
+    [SerializeField] public float InfSpottedMoveSpeed = 11;
     [SerializeField] public GameObject InfSlashParticles;
 
     [Header("Faible")]
@@ -110,11 +112,41 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         AiRigidbody = GetComponent<Rigidbody>();
     }
 
-    /*public void UxFocus()
+    protected override void Update()
     {
-        GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
-        spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-    }*/
+        base.Update();
+        SpotCanvasAlpha();
+    }
+
+    private void SpotCanvasAlpha() //handle the alpha of the spot canvas when needed
+    {
+        float SpotValue = ImageSpotBar.fillAmount;
+        if (LastSpotValue != SpotValue && SpotValue > 0 && SpotValue < 1)
+        {
+            if (CanvasUi.alpha < 1)
+            {
+                ShowSpotCanvas();
+            }
+        }
+        else
+        {
+            if (CanvasUi.alpha > 0)
+            {
+                HideSpotCanvas();
+            }
+        }
+        LastSpotValue = SpotValue;
+    }
+
+    private void ShowSpotCanvas()
+    {
+        CanvasUi.alpha = Mathf.Clamp(CanvasUi.alpha + Time.deltaTime / DurationAlphaCanvas, 0, 1);
+    }
+
+    private void HideSpotCanvas()
+    {
+        CanvasUi.alpha = Mathf.Clamp(CanvasUi.alpha - Time.deltaTime / DurationAlphaCanvas, 0, 1);
+    }
 
     public void UxFocus()
     {
@@ -147,7 +179,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
                             new RB_AICheck_Bool(this, "GoToLastTargetPos"),
-                            new RB_AI_PlayerInFov(this),
+                            new RB_AI_PlayerInFov(this, FovRange),
                             new RB_AI_SetBool(this, "GoToLastTargetPos", false)
                         }),
 
@@ -162,15 +194,15 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence spotted
                     {
-                        new RB_AICheck_Bool(this, "HasAlreadySeen"),
-                        new RB_AI_PlayerInFov(this),
-                        new RB_AI_GoToTarget(this, MovementSpeedAggro, InfSlashRange),
+                        new RB_AICheck_Bool(this, "IsTargetSpotted"),
+                        new RB_AI_PlayerInFov(this, SpottedFovRange),
+                        new RB_AI_GoToTarget(this, InfSpottedMoveSpeed, InfSlashRange),
                         new RB_AI_Attack(this, -1),
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
-                        new RB_AI_PlayerInFov(this),
+                        new RB_AI_PlayerInFov(this, FovRange),
                     }),
 
                     new RB_AI_Task_DefaultPatrol(this),  // task default
@@ -210,7 +242,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         {
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
-                                new RB_AI_PlayerInRoom(this),
+                                new RB_AICheck_Bool(this, "PlayerSpottedInCombat"),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
@@ -226,6 +258,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                     }),
                                 }),
                                 
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_PlayerInRoom(this),
+                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", true),
                             }),
 
                             new RB_BTSequence(new List<RB_BTNode>

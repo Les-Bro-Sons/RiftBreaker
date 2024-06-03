@@ -51,7 +51,6 @@ public class RB_HUDRecastTime : MonoBehaviour {
 
     //Initilisation du system de Recast Time
     public void RecastTimerStart(float timer) {
-        Debug.Log(timer);
         _multiplierFactor = 1f/timer;
         _remainTime = timer;
         _timerText.text = _remainTime.ToString();

@@ -84,9 +84,10 @@ public class RB_SceneTransitionManager : MonoBehaviour
     public void NewScene(string nameScene)
     {
         SceneManager.LoadScene(nameScene);
-/*        if (SceneManager.GetSceneByName(nameScene).buildIndex < 4 || SceneManager.GetSceneByName("EndMenu").buildIndex >= 18)
-            RZ_GameManager.Instance.hud.SetActive(false);
-        else
-            RZ_GameManager.Instance.hud.SetActive(true);*/
+    }
+
+    public void NewScene(int idScene)
+    {
+        SceneManager.LoadScene(idScene);
     }
 }

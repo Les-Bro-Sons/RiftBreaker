@@ -13,19 +13,13 @@ public class RB_AI_PlayerInFov : RB_BTNode
     [Header("Header")]
     //private CanvasGroup _canvasUi;
     //private Image _imageSpotBar;
-    private float _currentValueFillSpotBar = 0.0f;
-    private float _currentValueAlphaCanvas = 0.0f;
 
-    private bool _isLoadingCanvas = false;
-    private bool _isUnloadingCanvas = false;
-
-    private bool _hasACorrectView = false;
     private bool _hasFocusedUx = false;
 
     private bool _isLoadingSpotBar = false;
     private bool _isUnloadingSpotBar = false;
 
-    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent)
+    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range)
     {
         _btParent = BtParent;
         _transform = _btParent.transform;
@@ -55,7 +49,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     ////COMBAT////
     private BTNodeState CombatCheck()
     {
-        if (!_btParent.HasAlreadySeen)
+        if (!_btParent.GetBool("IsTargetSpotted"))
         {
             object t = GetData("target");
             if (t == null)
@@ -63,15 +57,15 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
                 if (colliders.Length > 0) //A MODIFIER
                 {
-                    Parent.Parent.SetData("target", colliders[0].transform);
+                    _btParent.Root.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;
 
-                    _btParent.BoolDictionnary["HasAlreadySeen"] = true;
+                    _btParent.BoolDictionnary["IsTargetSpotted"] = true;
                 }
             }
             else
             {
-                _btParent.HasAlreadySeen = false;
+                _btParent.BoolDictionnary["IsTargetSpotted"] = false;
             }
 
             Transform target = (Transform)t;
@@ -83,7 +77,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             }
         }
 
-        if (_btParent.HasAlreadySeen)
+        if (_btParent.GetBool("IsTargetSpotted"))
             _state = BTNodeState.SUCCESS;
         else
             _state = BTNodeState.FAILURE;
@@ -127,9 +121,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
             }
             //else
             //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
-            
 
-            if (_btParent.BoolDictionnary.ContainsKey("HasAlreadySeen") && _btParent.BoolDictionnary["HasAlreadySeen"])
+            if (_btParent.GetBool("IsTargetSpotted"))
             {
                 if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange)
                 {
@@ -138,19 +131,19 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     if (_btParent.ImageSpotBar.fillAmount <= 0)
                     {
                         _btParent.BoolDictionnary["GoToLastTargetPos"] = true;
-                        UnloadCanvas();
-                        _btParent.BoolDictionnary["HasAlreadySeen"] = false;
+                        //UnloadCanvas();
+                        _btParent.BoolDictionnary["IsTargetSpotted"] = false;
                         _state = BTNodeState.FAILURE;
                     }
                     else
                     {
-                        LoadCanvas();
+                        //LoadCanvas();
                         _state = BTNodeState.RUNNING;
                     }
                 }
                 else
                 {
-                    UnloadCanvas();
+                    //UnloadCanvas();
                     return _state = BTNodeState.SUCCESS;
                 }
             }
@@ -163,21 +156,43 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                     //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
                     //_btParent.CanvasUi.alpha = 0.0f;
-                    _btParent.BoolDictionnary["HasAlreadySeen"] = true;
-                    _state = BTNodeState.SUCCESS;
-                    return _state;
+                    if (!_btParent.GetBool("HasACorrectView"))
+                    {
+                        LoadSpotBar();
+                    }
+
+                    if (_btParent.ImageSpotBar.fillAmount >= 1)
+                    {
+                        _btParent.BoolDictionnary["IsTargetSpotted"] = true;
+                        if (!_hasFocusedUx)
+                        {
+                            _btParent.UxFocus();
+                            _hasFocusedUx = true;
+                        }
+                        _state = BTNodeState.SUCCESS;
+                        return _state;
+                    }
+                    else
+                    {
+                        _btParent.transform.forward = (target.transform.position - _btParent.transform.position).normalized;
+                        _state = BTNodeState.RUNNING;
+                        return _state;
+                    }
+                    
                 }
-                else if (_btParent.ImageSpotBar.fillAmount > 0)
+                else
+                {
+                    UnloadSpotBar();
+                }
+                /*else if (_btParent.ImageSpotBar.fillAmount > 0)
                 {
                     _btParent.transform.forward = (target.transform.position - _btParent.transform.position).normalized;
                     _state = BTNodeState.RUNNING;
                     return _state;
-                }
+                }*/
             }
             
         }
-            
-
         _hasFocusedUx = false;
         _state = BTNodeState.FAILURE;
         return _state;
@@ -192,17 +207,29 @@ public class RB_AI_PlayerInFov : RB_BTNode
             RaycastHit hit;
 
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange) && hit.transform == target.parent) //_layerMaskPlayer
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange))
             {
+                RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);
+                if (hitHealth && hitHealth.Team != _btParent.AiHealth.Team)
+                {
+                    _btParent.Root.SetData("target", hitHealth.transform);
+                }
+                else
+                {
+                    return false;
+                }
+
+                return true;
+
                 // Dessine un rayon vert si le joueur est détecté.
                 Debug.DrawLine(_transform.position, hit.point, Color.green);
 
-                if (!_hasACorrectView)
-                {
-                    LoadCanvas();
+                Debug.Log("In View");
 
-                    if (_currentValueAlphaCanvas >= 1)
-                        LoadSpotBar();
+                if (!_btParent.GetBool("HasACorrectView"))
+                {
+                    Debug.Log("loading");
+                    LoadSpotBar();
                 }
                 else
                 {
@@ -214,61 +241,9 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     return true;
                 }
             }
-            else
-            {
-                UnloadSpotBar();
-
-                if (_currentValueFillSpotBar <= 0)
-                    UnloadCanvas();
-            }
-        }
-        else
-        {
-            UnloadSpotBar();
-
-            if (_currentValueFillSpotBar <= 0)
-                UnloadCanvas();
         }
 
         return false;
-    }
-
-    private void LoadCanvas()
-    {
-        if (!_isLoadingCanvas)
-        {
-            _isLoadingCanvas = true;
-            _isUnloadingCanvas = false;
-        }
-
-        _btParent.CanvasUi.alpha += Time.deltaTime / _btParent.DurationAlphaCanvas;
-
-        if (_btParent.CanvasUi.alpha >= 1.0f)
-        {
-            _btParent.CanvasUi.alpha = 1.0f;
-            _isLoadingCanvas = false;
-        }
-
-        _currentValueAlphaCanvas = _btParent.CanvasUi.alpha;
-    }
-
-    private void UnloadCanvas()
-    {
-        if (!_isUnloadingCanvas)
-        {
-            _isLoadingCanvas = false;
-            _isUnloadingCanvas = true;
-        }
-
-        _btParent.CanvasUi.alpha -= Time.deltaTime / _btParent.DurationAlphaCanvas;
-
-        if (_btParent.CanvasUi.alpha <= 0.0f)
-        {
-            _btParent.CanvasUi.alpha = 0.0f;
-            _isUnloadingCanvas = false;
-        }
-
-        _currentValueAlphaCanvas = _btParent.CanvasUi.alpha;
     }
 
     private void LoadSpotBar()
@@ -287,10 +262,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             _btParent.ImageSpotBar.fillAmount = 1.0f;
             _isLoadingSpotBar = false;
-            _hasACorrectView = true;
+            _btParent.BoolDictionnary["HasACorrectView"] = true;
         }
-
-        _currentValueFillSpotBar = _btParent.ImageSpotBar.fillAmount;
     }
 
     private void UnloadSpotBar()
@@ -308,10 +281,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             _btParent.ImageSpotBar.fillAmount = 0.0f;
             _isUnloadingSpotBar = false;
-            _hasACorrectView = false;
+            _btParent.BoolDictionnary["HasACorrectView"] = false;
         }
-
-        _currentValueFillSpotBar = _btParent.ImageSpotBar.fillAmount;
     }
 
 }

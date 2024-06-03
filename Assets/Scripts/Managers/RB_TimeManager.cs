@@ -40,9 +40,6 @@ public class RB_TimeManager : MonoBehaviour
 
     private void Start()
     {
-        RB_InputManager.Instance.EventRewindStarted.AddListener(delegate { StartRewinding(false); }); // TO TEST
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(delegate { StopRewinding(false); }); // TO TEST
-
         StartRecording();
 
         RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
@@ -112,6 +109,7 @@ public class RB_TimeManager : MonoBehaviour
 
     public void StartRewinding(bool skipChecks = false, bool fullRewind = false)
     {
+        if (IsRewinding) return;
 
         if (NumberOfRewind > 0 || skipChecks)
         { 
@@ -130,6 +128,8 @@ public class RB_TimeManager : MonoBehaviour
 
     public void StopRewinding(bool stopFullRewind = false)
     {
+        if (!IsRewinding) return;
+
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
             Time.timeScale = 1;

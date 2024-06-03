@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if (UNITY_EDITOR)
 [CustomEditor(typeof(RB_RoomManager))]
 public class RB_CustomEditorRoomManager : Editor
 {
@@ -17,6 +18,7 @@ public class RB_CustomEditorRoomManager : Editor
         }
     }
 }
+#endif
 
 public class RB_RoomManager:MonoBehaviour
 {

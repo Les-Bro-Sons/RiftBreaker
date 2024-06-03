@@ -46,10 +46,10 @@ Shader "Custom/GroundTiling"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                o.worldNormal = mul((float3x3)unity_ObjectToWorld, v.normal);
+                o.worldNormal = normalize(mul((float3x3)unity_ObjectToWorld, v.normal));
 
-                // Utiliser les coordonnées de position pour générer une valeur aléatoire par face
-                o.randValue = frac(sin(dot(o.worldPos.xy + o.worldPos.z, float2(12.9898, 78.233))) * 43758.5453);
+                // Générer une valeur aléatoire basée sur la position du monde
+                o.randValue = frac(sin(dot(floor(o.worldPos.xy / _Scale), float2(12.9898, 78.233))) * 43758.5453);
 
                 return o;
             }
@@ -57,7 +57,7 @@ Shader "Custom/GroundTiling"
             fixed4 SampleTriplanarTexture(float3 worldPos, float3 worldNormal, sampler2D tex)
             {
                 float3 blend = abs(worldNormal);
-                blend = normalize(max(blend, 0.00001)); //to avoid division by zero
+                blend = normalize(max(blend, 0.00001)); // Eviter la division par zéro
                 blend /= (blend.x + blend.y + blend.z);
 
                 fixed4 xTex = tex2D(tex, worldPos.yz * _Scale);
@@ -69,12 +69,12 @@ Shader "Custom/GroundTiling"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float3 worldPos = i.worldPos * _Scale;
+                float3 worldPos = i.worldPos;
                 float3 worldNormal = normalize(i.worldNormal);
 
+                // Sélectionner aléatoirement une texture
                 float n = i.randValue * 4.0;
-
-                fixed4 tex = fixed4(0, 0, 0, 1);
+                fixed4 tex;
 
                 if (n < 1.0)
                     tex = SampleTriplanarTexture(worldPos, worldNormal, _Texture1);

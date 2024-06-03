@@ -10,35 +10,41 @@ public class RB_Room : MonoBehaviour
 
     //In room
     [Header("In Room")]
-    public List<GameObject> DetectedEnemies = new();
+    public List<RB_Health> DetectedEnemies = new();
     public List<GameObject> DetectedAllies = new();
-    public List<GameObject> Doors = new();
+    public List<RB_Door> Doors = new();
     public bool IsPlayerInRoom;
 
     private void Update()
     {
-        if(IsClosedRoom && IsPlayerInRoom && !isRoomClosed)
+        if(RB_LevelManager.Instance.CurrentPhase == PHASES.Combat && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
         {
-            
-
-        }
-    }
-
-    public void CreateDoors()
-    {
-        isRoomClosed = true;
-        foreach(GameObject door in Doors)
+            CloseRoom();
+        }else if (isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
         {
-            
+            OpenRoom();
         }
     }
 
     public void CloseRoom()
     {
-
+        isRoomClosed = true;
+        foreach (RB_Door door in Doors)
+        {
+            door.Close();
+        }
     }
 
-    public void AddDetectedEnemy(GameObject detectedEnemy)
+    public void OpenRoom()
+    {
+        isRoomClosed = false;
+        foreach (RB_Door door in Doors)
+        {
+            door.Open();
+        }
+    }
+
+    public void AddDetectedEnemy(RB_Health detectedEnemy)
     {
         if (!DetectedEnemies.Contains(detectedEnemy))
         {
@@ -46,7 +52,7 @@ public class RB_Room : MonoBehaviour
         }
     }
 
-    public void RemoveDetectedEnemy(GameObject lostEnemy)
+    public void RemoveDetectedEnemy(RB_Health lostEnemy)
     {
         if (DetectedEnemies.Contains(lostEnemy))
         {
@@ -68,5 +74,19 @@ public class RB_Room : MonoBehaviour
         {
             DetectedAllies.Remove(lostAlly);
         }
+    }
+
+    public bool IsAllEnemyDied()
+    {
+        int enemyDead = 0;
+        foreach(RB_Health enemyHealth in DetectedEnemies)
+        {
+            if (enemyHealth.Dead)
+            {
+                enemyDead++;
+            }
+        }
+
+        return enemyDead == DetectedEnemies.Count;
     }
 }

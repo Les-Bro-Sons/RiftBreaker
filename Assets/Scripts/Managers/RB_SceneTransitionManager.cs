@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -60,6 +61,16 @@ public class RB_SceneTransitionManager : MonoBehaviour
             _fadeCoroutine = StartCoroutine(Fade(nameScene, duration));
         }
     */
+
+    public void SwitchSceneTransition()
+    {
+        StartCoroutine(SwitchSceneTransitionCoroutine());
+    }
+
+    private IEnumerator SwitchSceneTransitionCoroutine()
+    {
+        yield return null;
+    }
 
     public void SetImageAlpha(Image image, float alpha)
     {

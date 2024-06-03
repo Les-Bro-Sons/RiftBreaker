@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Used in animation event
 public class RB_ButtonSelectioner : MonoBehaviour {
 
     [SerializeField] List<Button> _mainButtons = new List<Button>();

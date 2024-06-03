@@ -77,5 +77,4 @@ public class RB_MenuManager : MonoBehaviour {
         }
 
     }
-
 }

@@ -1,8 +1,7 @@
 using AYellowpaper.SerializedCollections;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 //using Cinemachine;
 
 public class RB_SceneTransitionManager : MonoBehaviour
@@ -36,7 +35,7 @@ public class RB_SceneTransitionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(transform.root.gameObject);
         }
         else
             DestroyImmediate(gameObject);
@@ -46,8 +45,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
     {
         TransitionCanvas.worldCamera = Camera.main;
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
-
-        NewTransition(FadeType.ToString());
     }
 
     /*
@@ -71,8 +68,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
             image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
         }
     }
-
-
 
     public void NewTransition(string nameTransition)
     {

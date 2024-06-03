@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RB_MenuExitScrollBar : MonoBehaviour, IPointerExitHandler, ISelectHandler, IPointerDownHandler{
+public class RB_MenuExitScrollBar : MonoBehaviour, IPointerDownHandler, IPointerUpHandler{
     [SerializeField] Selectable _nextSelectable;
     [SerializeField] bool _isSelected;
 
@@ -12,15 +12,11 @@ public class RB_MenuExitScrollBar : MonoBehaviour, IPointerExitHandler, ISelectH
     Scrollbar _scrollbar;
 
 
-    private void Start()
-    {
+    private void Start() {
         _scrollbar = GetComponent<Scrollbar>();
     }
-    /*    public void OnPointerEnter(PointerEventData eventData){
 
-        }*/
-
-    public void OnPointerExit(PointerEventData eventData){
+    public void OnPointerUp(PointerEventData eventData){
         if (_isSelected) {
             _scrollbar.interactable = false;
             _scrollbar.interactable = true;
@@ -29,14 +25,7 @@ public class RB_MenuExitScrollBar : MonoBehaviour, IPointerExitHandler, ISelectH
         }
     }
 
-    public void OnSelect(BaseEventData eventData){
-        Debug.Log("AAAA");
-        _isSelected = true;
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("AAAA");
+    public void OnPointerDown(PointerEventData eventData) {
         _isSelected = true;
     }
 }

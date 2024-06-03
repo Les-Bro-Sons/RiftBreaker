@@ -147,7 +147,7 @@ public class RB_PlayerController : MonoBehaviour
     public void OnStopRewind()
     {
         //stop rewind in playeraction
-        if (CanDoInput(false))
+        if (CanDoInput(true))
             RB_TimeManager.Instance.StopRewinding(false);
     }
 

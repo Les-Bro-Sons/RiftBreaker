@@ -68,9 +68,9 @@ GameObject:
   - component: {fileID: 4403257837153332557}
   - component: {fileID: 263053956299020696}
   - component: {fileID: 7939403144304551523}
-  - component: {fileID: -5315812548548587530}
+  - component: {fileID: -7003628297246129058}
   m_Layer: 0
-  m_Name: Sylvashot
+  m_Name: RobertLenecClones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3453180199176938183}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 956c35150b281de40be91d869fc9ac99, type: 3}
   m_Name: 
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3453180199176938183}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3df13b3e2f13008489581e799e347d69, type: 3}
   m_Name: 
@@ -186,7 +186,7 @@ MonoBehaviour:
   _movementMaxSpeed: 5
   _movementFrictionForce: 75
   _enemyAnimator: {fileID: 7214748225881584283}
---- !u!114 &-5315812548548587530
+--- !u!114 &-7003628297246129058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3453180199176938183}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501494f742c15d341a2c7851acdb5152, type: 3}
+  m_Script: {fileID: 11500000, guid: 289ff7de277334f4aa15c78e2c58e43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EventDead:
@@ -204,23 +204,10 @@ MonoBehaviour:
   _isAttachedToAPhase: 1
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 0}
-  AttackRange: 1
-  AttackSpeed: 2
-  DistanceFromPlayer: 0
-  DetectionRadius: 100
-  CooldownAttack1: 0
-  CooldownAttack2: 0
-  CooldownAttack3: 0
-  CooldownBetweenAttacks: 0
-  WaitInIdle: 1
-  BossRB: {fileID: 7950358798519079587}
-  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
-    type: 3}
-  PlayerLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  Health: {fileID: 0}
-  CurrentState: 0
+  RedBall: {fileID: 2082089089255593965, guid: 1766625714284a848a4b56cb9ea16f4c, type: 3}
+  _lifetime: 2
+  _redBallOffset: 2
+  _shootCooldown: 1
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

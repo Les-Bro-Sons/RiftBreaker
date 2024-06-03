@@ -77,6 +77,8 @@ public class RB_Mega_knight : RB_Boss
                 CurrentState = BOSSSTATES.Idle; //wait in idle
                 break;
             case BOSSSTATES.Attack3:
+                _currentWaitInIdle = WaitInIdle;
+                CurrentState = BOSSSTATES.Idle;
                 break;
         }
     }

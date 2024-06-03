@@ -84,6 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3252659066798579505}
+  - component: {fileID: 4324569416656677796}
   m_Layer: 5
   m_Name: Infiltration
   m_TagString: Untagged
@@ -112,6 +113,18 @@ RectTransform:
   m_AnchoredPosition: {x: 30, y: 30}
   m_SizeDelta: {x: 430, y: 190}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &4324569416656677796
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576337132769359974}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1178956392610598757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,11 +1608,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3252659066798579505}
   - {fileID: 4992034310130583284}
   - {fileID: 1027325089488218430}
   - {fileID: 5961547948710642017}
   - {fileID: 3941932059779524829}
-  - {fileID: 3252659066798579505}
   - {fileID: 8906945105117312175}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

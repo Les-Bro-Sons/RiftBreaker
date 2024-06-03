@@ -1,5 +1,25 @@
+using UnityEditor;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(RB_Health))]
+public class RB_HealthCustomEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        RB_Health health = (RB_Health)target;
+
+        if (GUILayout.Button("Die"))
+        {
+            health.EventDeath.Invoke();
+        }
+    }
+}
+#endif
 
 
 public class RB_Health : MonoBehaviour {

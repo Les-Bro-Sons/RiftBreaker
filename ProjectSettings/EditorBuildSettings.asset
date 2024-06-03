@@ -6,6 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7d959a073f7c2cb469ac3385230da4f3
+  - enabled: 1
+    path: Assets/Scenes/LEVELS/Niveau1-MVP.unity
+    guid: 7c1266f081608e949a8f27d34a912095
+  - enabled: 1
+    path: Assets/Scenes/LEVELS/Boss/MegaKnightScene.unity
+    guid: 5c4071097a40a8949988ad92fcbf0665
+  - enabled: 1
+    path: Assets/Scenes/Gabriel/WinRoom.unity
+    guid: 5b0f789a26e1b4b4f92106f3e5711f90
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: c8fbb1725779b974ea338f5376adb1ba,
+      type: 2}

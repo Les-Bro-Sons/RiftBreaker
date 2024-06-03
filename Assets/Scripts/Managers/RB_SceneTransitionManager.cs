@@ -47,7 +47,7 @@ public class RB_SceneTransitionManager : MonoBehaviour
         TransitionCanvas.worldCamera = Camera.main;
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
 
-        NewTransition(FadeType.ToString());
+        //NewTransition(FadeType.ToString());
     }
 
     /*
@@ -88,6 +88,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
 
     public void NewScene(int idScene)
     {
-        SceneManager.LoadScene(idScene);
+        //SceneManager.LoadScene(idScene);
     }
 }

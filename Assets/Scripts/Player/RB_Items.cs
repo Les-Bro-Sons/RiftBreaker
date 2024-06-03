@@ -1,8 +1,8 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
@@ -56,6 +56,9 @@ public class RB_Items : MonoBehaviour
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
 
+    //Events
+    public UnityEvent EventOnEndOfAttack;
+
     protected virtual void Awake()
     {
         _transform = transform;
@@ -94,11 +97,13 @@ public class RB_Items : MonoBehaviour
         _objectToRemove.SetActive(true);
         _transform.parent = null;
         _playerAction.Items.Remove(this);
-        if(_playerAction.Item == this)
+        if (_playerAction.Item == this)
         {
+            _playerAction.ItemId--;
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
+        
     }
 
     public virtual void ResetAttack()
@@ -128,6 +133,9 @@ public class RB_Items : MonoBehaviour
         _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
+
+        //end of attack
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void DealDamage()
@@ -161,6 +169,12 @@ public class RB_Items : MonoBehaviour
     {
         //Cooldown dash
         return Time.time > (_lastUsedAttackTime + _attackCooldown);
+    }
+
+    public virtual IEnumerator OnEndOfAttack()
+    {
+        yield return new WaitForSeconds(_playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        EventOnEndOfAttack?.Invoke();
     }
 
     public virtual void ChargedAttack()

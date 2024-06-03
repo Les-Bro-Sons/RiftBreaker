@@ -67,6 +67,13 @@ public enum TEAMS
     Neutral,
 }
 
+public enum ENEMYCLASS
+{
+    Light,
+    Medium,
+    Heavy
+}
+
 // ~~~~~~~~~~ STATES ~~~~~~~~~~
 
 public enum PLAYERSTATES
@@ -85,3 +92,4 @@ public enum SETTINGSTATES
     Graphics,
     Controls
 }
+

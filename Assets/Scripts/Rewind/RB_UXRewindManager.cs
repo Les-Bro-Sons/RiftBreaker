@@ -1,25 +1,37 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using System.Collections;
-using Cinemachine.PostFX;
 
 public class RB_UXRewindManager : MonoBehaviour
 {
     public static RB_UXRewindManager Instance;
 
     [SerializeField] private Volume _rewindVolume;
-
     [SerializeField] private float _durationToSwitch = 1f;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
     }
-    public void StartRewindTransition()
+    public void StartRewindTransition(bool fullRewind = false)
     {
         StopAllCoroutines();
         StartCoroutine(FadeInRewindEffect(_durationToSwitch * 0.5f));
+        if (!fullRewind)
+        {
+            RB_UxHourglass.Instance.StartUseHourglassUx();
+        }
+        else
+        {
+
+        }
     }
 
     public void StopRewindTransition()

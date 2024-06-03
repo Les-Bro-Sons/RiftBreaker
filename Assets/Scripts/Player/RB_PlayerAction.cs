@@ -50,7 +50,7 @@ public class RB_PlayerAction : MonoBehaviour
     //item
     public List<RB_Items> Items = new();
     public bool IsItemNearby;
-    private int _itemId = 0;
+    public int ItemId = 0;
     public RB_Items Item; public RB_Items CurrentItem { get { return Item; } }
 
     //Debug
@@ -130,9 +130,10 @@ public class RB_PlayerAction : MonoBehaviour
                 {
                     Items.Add(itemGathered);
                 }
-                _playerController.ChoseItem(_itemId);
-                _itemId++;
-                _itemId = (_itemId >= 2) ? 2 : _itemId;
+                print(ItemId);
+                _playerController.ChoseItem(ItemId);
+                ItemId++;
+                ItemId = (ItemId >= 2) ? 2 : ItemId;
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

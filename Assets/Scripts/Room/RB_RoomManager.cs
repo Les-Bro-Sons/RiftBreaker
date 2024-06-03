@@ -27,6 +27,7 @@ public class RB_RoomManager:MonoBehaviour
 
     //Components
     public static RB_RoomManager Instance;
+    public GameObject DoorPrefab;
 
     private void Awake()
     {

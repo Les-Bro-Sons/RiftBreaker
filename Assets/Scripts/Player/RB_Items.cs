@@ -1,13 +1,13 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
     //Attack
-    private float _lastUsedAttackTime;
+    protected float _lastUsedAttackTime;
     private float _currentDamage;
     private float _currentKnockbackForce;
     protected float _currentHitScreenshakeForce;
@@ -56,6 +56,9 @@ public class RB_Items : MonoBehaviour
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
 
+    //Events
+    public UnityEvent EventOnEndOfAttack;
+
     protected virtual void Awake()
     {
         _transform = transform;
@@ -94,11 +97,13 @@ public class RB_Items : MonoBehaviour
         _objectToRemove.SetActive(true);
         _transform.parent = null;
         _playerAction.Items.Remove(this);
-        if(_playerAction.Item == this)
+        if (_playerAction.Item == this)
         {
+            _playerAction.ItemId--;
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
+        
     }
 
     public virtual void ResetAttack()
@@ -116,7 +121,7 @@ public class RB_Items : MonoBehaviour
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        _lastUsedAttackTime = Time.time;
+        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
@@ -128,6 +133,8 @@ public class RB_Items : MonoBehaviour
         _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
+
+        
     }
 
     public virtual void DealDamage()
@@ -149,7 +156,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitToResetAttacks()
+    protected IEnumerator WaitToResetAttacks()
     {
         //Wait for the end of the frame 
         yield return new WaitForEndOfFrame();
@@ -161,6 +168,12 @@ public class RB_Items : MonoBehaviour
     {
         //Cooldown dash
         return Time.time > (_lastUsedAttackTime + _attackCooldown);
+    }
+
+    public virtual IEnumerator OnEndOfAttack()
+    {
+        yield return new WaitForSeconds(_playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        EventOnEndOfAttack?.Invoke();
     }
 
     public virtual void ChargedAttack()
@@ -178,6 +191,9 @@ public class RB_Items : MonoBehaviour
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
+
+        //end of attack
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void SpecialAttack()
@@ -204,6 +220,8 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         RB_Camera.Instance.Zoom(_chargeZoom);
+
+        
     }
 
     public virtual void StopChargingAttack()

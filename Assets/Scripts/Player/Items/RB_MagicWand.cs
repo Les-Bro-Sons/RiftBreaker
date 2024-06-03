@@ -1,7 +1,14 @@
+using MANAGERS;
 using UnityEngine;
 
 public class RB_MagicWand : RB_Items
 {
+    public override void Attack() {
+        base.Attack();
+        RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position);
+
+    }
+
     public override void Bind()
     {
         base.Bind();

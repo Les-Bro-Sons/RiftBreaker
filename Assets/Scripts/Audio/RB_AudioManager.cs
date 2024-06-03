@@ -102,6 +102,10 @@ namespace MANAGERS
 			
 		}
 
+		public void StopSFX() {
+			_sfxSource.Stop();
+		}
+
 		public void PlayJingle(string nameClip)
 		{
 			StartCoroutine(PlayJingleCoroutine(nameClip));

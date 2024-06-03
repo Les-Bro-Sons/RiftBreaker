@@ -1,8 +1,14 @@
 using System.Collections;
+using MANAGERS;
 using UnityEngine;
 
 public class RB_Katana : RB_Items
 {
+    public override void Attack() {
+        base.Attack();
+        RB_AudioManager.Instance.PlaySFX("LittleSwoosh", RB_PlayerController.Instance.transform.position);
+    }
+    
     public override void Bind()
     {
         base.Bind();

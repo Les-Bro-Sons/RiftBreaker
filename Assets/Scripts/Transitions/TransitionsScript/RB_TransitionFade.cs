@@ -20,7 +20,7 @@ public class RB_TransitionFade : RB_Transition
 
     void Start()
     {
-        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(RB_SceneTransitionManager.Instance.PlayButton, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
     public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)

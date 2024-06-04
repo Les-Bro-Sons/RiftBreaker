@@ -13,7 +13,7 @@ public class RB_Items : MonoBehaviour
     protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
-    [SerializeField] private float SpecialAttackChargeTime;
+    [SerializeField] private float _specialAttackChargeTime;
 
     [SerializeField] private float _chargeZoom = 0.85f;
 

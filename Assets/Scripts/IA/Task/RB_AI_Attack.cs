@@ -58,7 +58,7 @@ public class RB_AI_Attack : RB_BTNode
                                 _btParent.AiAnimator.SetTrigger("Attack");
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 if(!_playSoundDamaged)
-                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f);
+                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f, .5f);
                                 StopAttacking();
                             }
                             break;
@@ -68,7 +68,7 @@ public class RB_AI_Attack : RB_BTNode
                                 _btParent.AiAnimator.SetTrigger("Attack");
                                 Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 if(!_playSoundDamaged)
-                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.1f);
+                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.1f, .5f);
                                 StopAttacking();
                             }
                             break;
@@ -85,14 +85,14 @@ public class RB_AI_Attack : RB_BTNode
                             {
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 if(!_playSoundDamaged)
-                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f);
+                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f, .5f);
                                 StopAttacking();
                             }
                             break;
                         case 0: //bow attack
                             if (WaitBeforeAttackCounter(_btParent.BowDelay))
                             {
-                                RB_AudioManager.Instance.PlaySFX("bowArrow", RB_PlayerController.Instance.transform.position, 0f);
+                                RB_AudioManager.Instance.PlaySFX("bowArrow", RB_PlayerController.Instance.transform.position, 0f, .5f);
                                 LaunchArrow(_btParent.ArrowPrefab, _btParent.BowDamage, _btParent.BowKnockback, _btParent.ArrowSpeed, _btParent.ArrowDistance);
                                 StopAttacking();
                             }
@@ -110,7 +110,7 @@ public class RB_AI_Attack : RB_BTNode
                             {
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 if(!_playSoundDamaged)
-                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f);
+                                    RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f, .5f);
                                 StopAttacking();
                             }
                             break;
@@ -123,7 +123,7 @@ public class RB_AI_Attack : RB_BTNode
                         case 1: //heavy slash attack
                             if (WaitBeforeAttackCounter((_btParent.MaxHeavySlashCombo != 0)? _btParent.HeavySlashFirstDelay : _btParent.HeavySlashComboDelay, true, false))
                             {
-                                RB_AudioManager.Instance.PlaySFX("BigSwooosh", RB_PlayerController.Instance.transform.position, 0f);
+                                RB_AudioManager.Instance.PlaySFX("BigSwooosh", RB_PlayerController.Instance.transform.position, 0f, .5f);
                                 HeavySlash();
                             }
                             break;
@@ -171,7 +171,7 @@ public class RB_AI_Attack : RB_BTNode
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                 if (_playSoundDamaged)
                 {
-                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f);
+                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f, .5f);
                     _playSoundDamaged = false;
                 }
                 alreadyDamaged.Add(enemyHealth);
@@ -196,7 +196,7 @@ public class RB_AI_Attack : RB_BTNode
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                 if (_playSoundDamaged)
                 {
-                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f);
+                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f, .5f);
                     _playSoundDamaged = false;
                 }
                 alreadyDamaged.Add(enemyHealth);
@@ -225,7 +225,7 @@ public class RB_AI_Attack : RB_BTNode
             projectile.KnocbackExplosionForce = _btParent.HeavyBowKnockback;
             projectile.TotalDistance = _btParent.HeavyArrowDistance;
             projectile.Speed = _btParent.HeavyArrowSpeed;
-            RB_AudioManager.Instance.PlaySFX("bowArrow", RB_PlayerController.Instance.transform.position, 0f);
+            RB_AudioManager.Instance.PlaySFX("bowArrow", RB_PlayerController.Instance.transform.position, 0f, .5f);
         }
         _btParent.BoolDictionnary["HeavyAttackSlash"] = true;
         StopAttacking();

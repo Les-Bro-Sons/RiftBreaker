@@ -1,5 +1,6 @@
 using MANAGERS;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class RB_VikingHorn : RB_Items
 {
@@ -40,13 +41,13 @@ public class RB_VikingHorn : RB_Items
         switch (CurrentAttackCombo)
         {
             case 0: 
-                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0);
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0, 1);
                 break;
             case 1: 
-                RB_AudioManager.Instance.PlaySFX("BigSwoosh2", RB_PlayerController.Instance.transform.position, 0);
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh2", RB_PlayerController.Instance.transform.position, 0, 1);
                 break;
             case 2: 
-                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0);
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0, 1);
                 break;
         }
         
@@ -59,6 +60,16 @@ public class RB_VikingHorn : RB_Items
             StartJumpAttack(_landingOnDirt);
         }
         
+    }
+
+    public override void StartChargingAttack() {
+        base.StartChargingAttack();
+        RB_AudioManager.Instance.PlaySFX("growl", RB_PlayerController.Instance.transform.position, 0.15f, .5f);
+    }
+
+    public override void ChargedAttack() {
+        base.ChargedAttack();
+        RB_AudioManager.Instance.PlaySFX("huh1", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void SpecialAttack()
@@ -119,7 +130,7 @@ public class RB_VikingHorn : RB_Items
                 _shouldJump = false;
                 _isJumping = false;
                 CurrentAttackCombo = 0;
-                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0);
+                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0, .5f);
             }
         }
     }

@@ -6,7 +6,7 @@ public class RB_Katana : RB_Items
 {
     public override void Attack() {
         base.Attack();
-        RB_AudioManager.Instance.PlaySFX("LittleSwoosh", RB_PlayerController.Instance.transform.position,0);
+        RB_AudioManager.Instance.PlaySFX("LittleSwoosh", RB_PlayerController.Instance.transform.position,0, 1);
     }
     
     public override void Bind()
@@ -28,6 +28,11 @@ public class RB_Katana : RB_Items
         //Reset directions
         RB_PlayerMovement.Instance.ResetDirection();
         StartCoroutine(WaitForEndOfFrameToChargeAttack());
-        RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position,0);
+        RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position,0, 1);
+    }
+
+    public override void SpecialAttack() {
+        base.SpecialAttack();
+        RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position,0, 1);
     }
 }

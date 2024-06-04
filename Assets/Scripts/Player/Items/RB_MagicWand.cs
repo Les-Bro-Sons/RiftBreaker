@@ -5,7 +5,7 @@ public class RB_MagicWand : RB_Items
 {
     public override void Attack() {
         base.Attack();
-        RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position);
+        RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position,0);
 
     }
 

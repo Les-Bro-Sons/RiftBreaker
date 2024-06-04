@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 
 public class RB_VikingHorn : RB_Items
@@ -36,6 +37,19 @@ public class RB_VikingHorn : RB_Items
     public override void Attack()
     {
         base.Attack();
+        switch (CurrentAttackCombo)
+        {
+            case 0: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0);
+                break;
+            case 1: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh2", RB_PlayerController.Instance.transform.position, 0);
+                break;
+            case 2: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0);
+                break;
+        }
+        
         //Start the timer
         _attackUseTime = Time.time;
         //Increase the combo
@@ -105,6 +119,7 @@ public class RB_VikingHorn : RB_Items
                 _shouldJump = false;
                 _isJumping = false;
                 CurrentAttackCombo = 0;
+                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0);
             }
         }
     }

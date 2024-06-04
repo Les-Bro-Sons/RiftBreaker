@@ -117,7 +117,7 @@ public class RB_Items : MonoBehaviour
     }
 
     public virtual void Attack()
-    {
+    { 
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
@@ -135,7 +135,6 @@ public class RB_Items : MonoBehaviour
         //KBs
 
         //end of attack
-        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void DealDamage()
@@ -192,6 +191,8 @@ public class RB_Items : MonoBehaviour
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
+        
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void SpecialAttack()

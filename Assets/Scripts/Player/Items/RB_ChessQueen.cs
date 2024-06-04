@@ -42,7 +42,7 @@ public class RB_ChessQueen : RB_Items
             //spawnedChessPawn.Boost();
         }
         SpawnedChessPawns.Add(spawnedChessPawn);
-        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position);
+        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position,0);
 
     }
 

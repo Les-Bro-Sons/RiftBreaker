@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 
 public class RB_Scythe : RB_Items
@@ -12,7 +13,10 @@ public class RB_Scythe : RB_Items
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
 
-
+    public override void Attack() {
+        base.Attack();
+        RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0);
+    }
 
     public override void Bind()
     {

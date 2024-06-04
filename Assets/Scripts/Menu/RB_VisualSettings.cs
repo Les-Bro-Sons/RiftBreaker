@@ -16,22 +16,22 @@ public class RB_VisualSettings : MonoBehaviour {
     int _currentDisplayID;
 
     void Start() {
-        //obtiens tout les résolution disponible sur l'écran
+        // Get all available screen resolutions
         _allResolutions = Screen.resolutions;
 
         _resolutionDropdown.ClearOptions();
-        
-        //obtiens le taux de rafraichissment actuel de l'écran
+
+        // Get the current screen refresh rate
         _currentRefreshRate = Screen.currentResolution.refreshRateRatio;
 
-        //Filtre les résolutions disponible pour garder le même taux de refraichissment
-        for(int u = 0; u < _allResolutions.Length; u++) {
+        // Filter available resolutions to match the current refresh rate
+        for (int u = 0; u < _allResolutions.Length; u++) {
             if (_allResolutions[u].refreshRateRatio.value == _currentRefreshRate.value) {
                 _filteredResolutions.Add(_allResolutions[u]);
             }
         }
 
-        //Création du drop-down avec les résolution filtrée
+        // Create the dropdown list with filtered resolutions
         List<string> dropdownOptions = new List<string>();
         for( int u = 0; u < _filteredResolutions.Count; ++u) { 
             string resolutionOption = _filteredResolutions[u].width + " x " + _filteredResolutions[u].height;
@@ -50,10 +50,12 @@ public class RB_VisualSettings : MonoBehaviour {
         ApplyDisplayMode();
     }
 
+
     public void SetResolution(int  resolutionID) {
         _currentResolutionID = resolutionID;
     }
 
+    // Apply the current resolution settings
     public void ApplyResolution() {
         Resolution resolution = _filteredResolutions[_currentResolutionID];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode, _currentRefreshRate);
@@ -61,6 +63,7 @@ public class RB_VisualSettings : MonoBehaviour {
         PlayerPrefs.Save();
     }
 
+    // Initialize the resolution settings
     public void StartResolution() {
         if (!PlayerPrefs.HasKey("ResolutionID")){
             _currentResolutionID = _oldResolutionID;
@@ -70,11 +73,13 @@ public class RB_VisualSettings : MonoBehaviour {
         }
         _resolutionDropdown.value = _currentResolutionID;
     }
+    
 
     public void SetDisplayMode(int displayID) {
         _currentDisplayID = displayID;
     }
 
+    // Apply the current display mode settings
     public void ApplyDisplayMode() {
         switch (_currentDisplayID) {
             case 0:
@@ -94,7 +99,7 @@ public class RB_VisualSettings : MonoBehaviour {
         PlayerPrefs.Save();
     }
 
-
+    // Initialize the display mode settings
     public void StartDisplayMode(){
         if (!PlayerPrefs.HasKey("DisplayID")){
             _currentDisplayID = 0;
@@ -105,6 +110,7 @@ public class RB_VisualSettings : MonoBehaviour {
         _displayDropdown.value = _currentDisplayID;
     }
 
+    // Set display mode and resolution mode to default
     public void Default() {
         _currentDisplayID = 0;
         _displayDropdown.value = _currentDisplayID;

@@ -97,7 +97,7 @@ public class RB_Items : MonoBehaviour
         //Recharge over time the special attack
         if(_playerAction.SpecialAttackCharge <= 100)
         {
-            _playerAction.SpecialAttackCharge += (Time.deltaTime / SpecialAttackChargeTime) * 100;
+            _playerAction.SpecialAttackCharge += (Time.deltaTime / _specialAttackChargeTime) * 100;
         }
     }
 

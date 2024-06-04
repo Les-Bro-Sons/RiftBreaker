@@ -1,7 +1,27 @@
 using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
+using UnityEditor;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(RB_Health))]
+public class RB_HealthCustomEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        RB_Health health = (RB_Health)target;
+
+        if (GUILayout.Button("Die"))
+        {
+            health.EventDeath.Invoke();
+        }
+    }
+}
+#endif
 
 
 public class RB_Health : MonoBehaviour {
@@ -12,7 +32,7 @@ public class RB_Health : MonoBehaviour {
 
     public bool Dead = false;
 
-    //Nom de l'entitÈ qui possËde le script
+    //Nom de l'entit√© qui poss√®de le script
     string _name; public string Name { get { return _name; } }
     
     [HideInInspector] public UnityEvent EventDeath;
@@ -39,15 +59,15 @@ public class RB_Health : MonoBehaviour {
         _rb = GetComponent<Rigidbody>();
     }
 
-    //Fonction de prise de dÈg‚ts
-    public void TakeDamage(float amount) {
+    //Fonction de prise de d√©g√¢ts
+    public void TakeDamage(float amount, bool ignoreParticle = false) {
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
         if (_hp <= 0 && !Dead)
         {
             Dead = true;
-            if (_particleDeath)
+            if (_particleDeath && !ignoreParticle)
                 Instantiate(_particleDeath, transform.position, Quaternion.identity);
             EventDeath.Invoke();
         }
@@ -69,11 +89,12 @@ public class RB_Health : MonoBehaviour {
     }
 
     //Fonction de soin
-    public void Heal(float amount) {
+    public void Heal(float amount, bool ignoreParticle = false) {
         _hp = Mathf.Clamp(_hp + amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventHeal.Invoke();
-        Instantiate(_particleHeal, transform.position, Quaternion.identity);
+        if (_particleHeal && !ignoreParticle)
+            Instantiate(_particleHeal, transform.position, Quaternion.identity);
     }
 
     //Fonction de soin Maximum

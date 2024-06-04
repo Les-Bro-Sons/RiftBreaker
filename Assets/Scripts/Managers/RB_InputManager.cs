@@ -115,4 +115,16 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventItem3Canceled?.Invoke();
     }
+
+    public Vector3 GetMouseDirection()
+    {
+        Vector3 direction = new();
+        Vector3 screenMousePos = Input.mousePosition;
+        screenMousePos.z = Camera.main.nearClipPlane;
+        Vector3 adjustedWorldMousePos = Camera.main.ScreenToWorldPoint(screenMousePos) - Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, screenMousePos.z));
+        print(adjustedWorldMousePos);
+        direction = new Vector3((adjustedWorldMousePos - Vector3.zero).x, 0, (adjustedWorldMousePos - Vector3.zero).z);
+
+        return direction;
+    }
 }

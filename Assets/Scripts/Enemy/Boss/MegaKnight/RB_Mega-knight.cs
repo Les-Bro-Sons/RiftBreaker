@@ -68,7 +68,7 @@ public class RB_Mega_knight : RB_Boss
                 }
                 break;
             case BOSSSTATES.Moving:
-                _movement.MoveIntoDirection(_currentTarget.position - transform.position); //move to the target
+                _movement.MoveToPosition(_currentTarget.position); //move to the target
                 SwitchBossState();
                 break;
             case BOSSSTATES.Attack1:
@@ -176,6 +176,10 @@ public class RB_Mega_knight : RB_Boss
 
     private void StartJumpAttack() //START ATTACK 3
     {
+        //Animations
+        _enemyAnimation.TriggerThirdAttack();
+        print("start jump attack");
+
         _currentJumpDuration = 0;
         _jumpStartPos = transform.position;
         _jumpEndPos = _currentTarget.position;
@@ -184,9 +188,6 @@ public class RB_Mega_knight : RB_Boss
 
     public void JumpAttack() //ATTACK 3
     {
-        //Animations
-        _enemyAnimation.TriggerThirdAttack();
-
         //jump calculation
         _currentJumpDuration += Time.fixedDeltaTime;
         float percentComplete = _currentJumpDuration / _jumpDuration;

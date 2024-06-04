@@ -1,12 +1,13 @@
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
     //Attack
-    private float _lastUsedAttackTime;
+    protected float _lastUsedAttackTime;
     private float _currentDamage;
     private float _currentKnockbackForce;
     protected float _currentHitScreenshakeForce;
@@ -43,12 +44,22 @@ public class RB_Items : MonoBehaviour
     protected Animator _colliderAnimator;
     private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
-    private Transform _transform;
+    protected Transform _transform;
     RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
 
-    private void Awake()
+    //Player
+    protected Transform _playerTransform;
+
+    //bool
+    public bool FollowMouseOnChargeAttack;
+    public bool CanMoveDuringSpecialAttack;
+
+    //Events
+    public UnityEvent EventOnEndOfAttack;
+
+    protected virtual void Awake()
     {
         _transform = transform;
         
@@ -60,23 +71,39 @@ public class RB_Items : MonoBehaviour
 
     protected virtual void Start()
     {
+        _playerTransform = RB_PlayerAction.Instance.transform;
         _playerAction = RB_PlayerAction.Instance;
         _playerAnimator = _playerAction.PlayerAnimator;
         _colliderAnimator = _playerAction.ColliderAnimator;
         _collisionDetection = _playerAction.CollisionDetection;
-        _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
     }
 
     public virtual void Bind()
     {
+        _collisionDetection.EventOnEnemyEntered.RemoveAllListeners();
+        _collisionDetection.EventOnEnemyEntered.AddListener(DealDamage);
         //Reset the current transform
         _transform = transform;
         //When the item is gathered get the playerAction
         _playerAction = GetComponentInParent<RB_PlayerAction>();
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
+    }
+
+    public virtual void Drop()
+    {
+        _objectToRemove.SetActive(true);
+        _transform.parent = null;
+        _playerAction.Items.Remove(this);
+        if (_playerAction.Item == this)
+        {
+            _playerAction.ItemId--;
+            _playerAction.Item = null;
+            _playerAction.SetCurrentWeapon("");
+        }
+        
     }
 
     public virtual void ResetAttack()
@@ -91,10 +118,10 @@ public class RB_Items : MonoBehaviour
 
     public virtual void Attack()
     {
-        //Cooldown for attack
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
-        _lastUsedAttackTime = Time.time;
+        //Cooldown for attack
+        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
@@ -106,18 +133,21 @@ public class RB_Items : MonoBehaviour
         _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
+
+        
     }
 
     public virtual void DealDamage()
     {
+        List<RB_Health> alreadyDamaged = new();
         foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
         {
             //If on the detected object, there's life script, it deals damage
-            if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth))
+            if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && _enemyHealth.Team != TEAMS.Player && !alreadyDamaged.Contains(_enemyHealth))
             {
+                alreadyDamaged.Add(_enemyHealth);
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
                 _enemyHealth.TakeDamage(_currentDamage);
-                print(detectedObject.name + "took damage");
 
                 /////UX/////
                 if (_impulseSource)
@@ -126,7 +156,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitToResetAttacks()
+    protected IEnumerator WaitToResetAttacks()
     {
         //Wait for the end of the frame 
         yield return new WaitForEndOfFrame();
@@ -140,14 +170,14 @@ public class RB_Items : MonoBehaviour
         return Time.time > (_lastUsedAttackTime + _attackCooldown);
     }
 
+    public virtual IEnumerator OnEndOfAttack()
+    {
+        yield return new WaitForSeconds(_playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        EventOnEndOfAttack?.Invoke();
+    }
+
     public virtual void ChargedAttack()
     {
-        if(_playerAnimator.GetFloat("WeaponID") <= .1f && _playerAnimator.GetFloat("WeaponID") >= 0f)
-        {
-            //Reset directions
-            RB_PlayerMovement.Instance.ResetDirection();
-        }
-
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;
@@ -161,6 +191,9 @@ public class RB_Items : MonoBehaviour
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
+
+        //end of attack
+        StartCoroutine(OnEndOfAttack());
     }
 
     public virtual void SpecialAttack()
@@ -187,6 +220,8 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         RB_Camera.Instance.Zoom(_chargeZoom);
+
+        
     }
 
     public virtual void StopChargingAttack()

@@ -1,26 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RB_AiMovement : MonoBehaviour
 {
     [HideInInspector] public Vector3 WalkDirection;
 
-    [Header("IA movement properties")]
+    [SerializeField] private float _pushForce = 3f;
+
+    [Header("IA movement properties (default, useless if set in a bt Tree)")]
     [HideInInspector] public Vector3 LastDirection;
-    [SerializeField] private float _movementAcceleration;
-    [SerializeField] private float _movementMaxSpeed;
+    [SerializeField] private float _movementAcceleration; public float MovementAcceleration { get { return _movementAcceleration; } }
+    [SerializeField] private float _movementMaxSpeed; public float MovementMaxSpeed { get { return _movementMaxSpeed; } }
     [SerializeField] private float _movementFrictionForce;
 
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
+    private NavMeshAgent _agent;
+    private NavMeshObstacle _obstacle;
+    private RB_Health _health;
 
     [Header("Animation")]
     [SerializeField] private Animator _enemyAnimator;
+
+    private NavMeshPath _navPath;
+
+    private List<Rigidbody> _overlapBodies = new();
 
     private void Awake()
     {
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
+        _navPath = new NavMeshPath();
+        _agent = GetComponent<NavMeshAgent>();
+        _obstacle = GetComponent<NavMeshObstacle>();
+        _health = GetComponent<RB_Health>();
     }
 
     private void FixedUpdate()
@@ -30,6 +46,9 @@ public class RB_AiMovement : MonoBehaviour
 
         //Adding friction force
         FrictionForce();
+
+        //add force to overlaping bodies
+        PushOverlapingBodies();
     }
 
     private void Update()
@@ -37,26 +56,46 @@ public class RB_AiMovement : MonoBehaviour
         UpdateAnimator();
     }
 
-    public void MoveIntoDirection(Vector3 direction, float speed = -1, float acceleration = -1, float deltaTime = -1)
+    public void MoveIntoDirection(Vector3 direction, float? speed = null, float? acceleration = null, float? deltaTime = null) // deprecated
     {
         if (direction == Vector3.zero) return;
-        if (speed == -1) speed = _movementMaxSpeed;
-        if (acceleration == -1) acceleration = _movementAcceleration;
+        if (speed == null) speed = _movementMaxSpeed;
+        if (acceleration == null) acceleration = _movementAcceleration;
+        if (deltaTime == null) deltaTime = Time.deltaTime;
         direction = direction.normalized;
         WalkDirection = direction.normalized;
-
-        if (deltaTime == -1)
-        {
-            deltaTime = Time.deltaTime;
-        }
 
         if (_rb.velocity.magnitude < _movementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(direction * speed * deltaTime * acceleration);
+            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value);
         }
         _transform.forward = direction;
         LastDirection = direction;
+    }
+
+    public void MoveToPosition(Vector3 targetPos, float? speed = null, float? acceleration = null, float? deltaTime = null)
+    {
+        if (speed == null) speed = _movementMaxSpeed;
+        if (acceleration == null) acceleration = _movementAcceleration;
+        if (deltaTime == null) deltaTime = Time.deltaTime;
+
+        if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, _navPath))
+        {
+            if (_navPath.corners.Length <= 1) return; //1 because navpath sucks
+            
+            
+            Vector3 nextPos = _navPath.corners[1];
+            nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change
+            Vector3 direction = (nextPos - _transform.position).normalized;
+            WalkDirection = direction;
+
+            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value); //move
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
+
+            //_transform.forward = direction;
+            LastDirection = direction;
+        }
     }
 
     private void FrictionForce()
@@ -83,5 +122,32 @@ public class RB_AiMovement : MonoBehaviour
             _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
         }
         
+    }
+
+    private void PushOverlapingBodies()
+    {
+        foreach (Rigidbody body in _overlapBodies)
+        {
+            body.AddForce((body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health collHealth) && collHealth.Team == _health.Team)
+        {
+            if (collHealth.TryGetComponent<Rigidbody>(out Rigidbody collRB))
+            {
+                _overlapBodies.Add(collRB);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody collRB) && _overlapBodies.Contains(collRB))
+        {
+            _overlapBodies.Remove(collRB);
+        }
     }
 }

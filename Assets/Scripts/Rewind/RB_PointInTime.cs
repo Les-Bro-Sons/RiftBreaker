@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -22,7 +23,18 @@ public struct PointInTime
     public float Health;
     public bool Dead;
     /////////////
-    ///
+
+    //RB_LEVELMANAGER//
+    public PHASES Phase;
+    ///////////////////
+
+
+    //RB_AI_BTTree//
+    public Dictionary<string, bool> BoolDictionnary;
+    /////////////
+
+    public List<EventInTime> TimeEvents;
+
     public PointInTime InterpolateValues(PointInTime nextP, float currentTime)
     {
         PointInTime interpolatedP = this;
@@ -48,11 +60,11 @@ public struct EventInTime
 
     public float Time;
 
-    public Vector3 Position;
-    public Quaternion Rotation;
+    //TookWeapon
+    public RB_Items ItemTook;
 }
 
 public enum TYPETIMEEVENT
 {
-    DestroyedPrefab,
+    TookWeapon,
 }

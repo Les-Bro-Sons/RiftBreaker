@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -8,7 +9,8 @@ namespace MANAGERS
 	public class RB_AudioManager : MonoBehaviour
 	{
 		public static RB_AudioManager Instance;
-
+		public GameObject _prefabAudioSource;
+		
 		[Header("Audio")]
 		[SerializeField] private string _nameMusicGame = "SheathingSound";
 
@@ -56,7 +58,7 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			PlayMusic(_nameMusicGame);
+			PlayMusic("son_angaros");
 		}
 
 		public void PlayMusic(string nameClip)
@@ -65,10 +67,10 @@ namespace MANAGERS
 			{
 				_musicSource.Stop();
 			}
-			AudioClip musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
-			if (musicClip != null)
+			AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
+			if (_musicClip != null)
 			{
-				_musicSource.clip = musicClip;
+				_musicSource.clip = _musicClip;
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 
@@ -81,9 +83,23 @@ namespace MANAGERS
 		}
 
 
-		public void PlaySFX(string nameClip)
+		public void PlaySFX(string nameClip,Vector3 desiredPosition)
 		{
-			_sfxSource.PlayOneShot(Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}"));
+			GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
+			_sfxSource = _audioSource.GetComponent<AudioSource>();
+			
+			AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+			if (_sfxClip != null)
+			{
+				_sfxSource.clip = _sfxClip;
+				_sfxSource.Play();
+				Destroy(_audioSource,_sfxClip.length);
+			}
+			else
+			{
+				Debug.LogWarning("SFX clip not found: " + nameClip);
+			}
+			
 		}
 
 		public void PlayJingle(string nameClip)

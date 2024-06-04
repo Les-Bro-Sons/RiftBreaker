@@ -95,6 +95,8 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 8480078606098514397}
   HudSprite: {fileID: 0}
+  FollowMouseOnChargeAttack: 0
+  CanMoveDuringSpecialAttack: 0
 --- !u!1 &5193897555094522839
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,6 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2325006786299238088}
   - component: {fileID: 8542635498254281744}
+  - component: {fileID: 8108051534453624737}
   m_Layer: 0
   m_Name: weaponSprite
   m_TagString: Untagged
@@ -297,3 +300,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8108051534453624737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8549684315420695012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

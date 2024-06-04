@@ -1,8 +1,8 @@
 using AYellowpaper.SerializedCollections;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 //using Cinemachine;
 
 public class RB_SceneTransitionManager : MonoBehaviour
@@ -36,7 +36,7 @@ public class RB_SceneTransitionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(transform.root.gameObject);
         }
         else
             DestroyImmediate(gameObject);
@@ -46,8 +46,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
     {
         TransitionCanvas.worldCamera = Camera.main;
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
-
-        NewTransition(FadeType.ToString());
     }
 
     /*
@@ -64,6 +62,16 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     */
 
+    public void SwitchSceneTransition()
+    {
+        StartCoroutine(SwitchSceneTransitionCoroutine());
+    }
+
+    private IEnumerator SwitchSceneTransitionCoroutine()
+    {
+        yield return null;
+    }
+
     public void SetImageAlpha(Image image, float alpha)
     {
         if (image != null)
@@ -71,8 +79,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
             image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
         }
     }
-
-
 
     public void NewTransition(string nameTransition)
     {
@@ -84,9 +90,10 @@ public class RB_SceneTransitionManager : MonoBehaviour
     public void NewScene(string nameScene)
     {
         SceneManager.LoadScene(nameScene);
-/*        if (SceneManager.GetSceneByName(nameScene).buildIndex < 4 || SceneManager.GetSceneByName("EndMenu").buildIndex >= 18)
-            RZ_GameManager.Instance.hud.SetActive(false);
-        else
-            RZ_GameManager.Instance.hud.SetActive(true);*/
+    }
+
+    public void NewScene(int idScene)
+    {
+        //SceneManager.LoadScene(idScene);
     }
 }

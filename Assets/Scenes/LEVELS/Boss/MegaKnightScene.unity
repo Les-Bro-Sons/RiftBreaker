@@ -7095,6 +7095,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
+    - target: {fileID: 445337707927815580, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _hpText
+      value: 
+      objectReference: {fileID: 1868365610}
+    - target: {fileID: 445337707927815580, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _rb_Health
+      value: 
+      objectReference: {fileID: 1243839999}
     - target: {fileID: 972639614009032283, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -11346,6 +11356,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1860969075}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1868365610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8926928723139340854, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1219606048}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1888072950
 PrefabInstance:
   m_ObjectHideFlags: 0

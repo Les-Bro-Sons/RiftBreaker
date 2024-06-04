@@ -68,7 +68,7 @@ public class RB_RoomManager:MonoBehaviour
         return _rooms[roomIndex].DetectedEnemies;
     }
 
-    public List<GameObject> GetDetectedAllies(int roomIndex)
+    public List<RB_Health> GetDetectedAllies(int roomIndex)
     {
         return _rooms[roomIndex].DetectedAllies;
     }
@@ -88,7 +88,7 @@ public class RB_RoomManager:MonoBehaviour
             }
             else
             {
-                if (GetDetectedAllies(i).Contains(entity))
+                if (GetDetectedAllies(i).Contains(entity.GetComponent<RB_Health>()))
                 {
                     roomIndex = i;
                     break;

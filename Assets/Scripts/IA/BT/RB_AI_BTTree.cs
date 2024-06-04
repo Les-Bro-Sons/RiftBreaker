@@ -306,6 +306,32 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             }),
                         }),
                     }),
+
+                    new RB_BTSequence(new List<RB_BTNode> //sequence Pawn
+                    {
+                        new RB_AICheck_Class(AiType, ENEMYCLASS.Pawn),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //Spot sequence
+                            {
+
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //No enemy spotted
+                            {
+                                //follow player
+                            }),
+                        }),
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> //sequence Tower
+                    {
+                        new RB_AICheck_Class(AiType, ENEMYCLASS.Tower),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+
+                        }),
+                    }),
                 }),
             }),
         });;

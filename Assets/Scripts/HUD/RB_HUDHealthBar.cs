@@ -112,6 +112,6 @@ public class RB_HUDHealthBar : MonoBehaviour {
         percentComplete = percentComplete * percentComplete;
 
         _displayedHealth = Mathf.Lerp(_displayedHealth, _rb_Health.Hp, percentComplete);
-        _healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} ♥";
+        //_healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} ♥";
     }
 }

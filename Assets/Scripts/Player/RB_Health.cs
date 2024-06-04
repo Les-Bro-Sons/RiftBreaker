@@ -74,12 +74,21 @@ public class RB_Health : MonoBehaviour {
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
         //triggering the animation
-        _animPlayer.SetTrigger("isDamage");
-        _animUX.SetTrigger("isDamage");
-        //Change the text of the UI Text with the amount of damage
-        _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().text = (-amount).ToString();
-        //Trigger the last animation
-        _animUIPlayer.SetTrigger("isDamage");
+        if (_animPlayer) _animPlayer.SetTrigger("isDamage");
+        else Debug.LogWarning("No _animPlayer in RB_Health");
+
+        if (_animUX) _animUX.SetTrigger("isDamage");
+        else Debug.LogWarning("No _animUX in RB_Health");
+
+        if (_animUIPlayer)
+        {
+            //Change the text of the UI Text with the amount of damage
+            _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().text = (-amount).ToString();
+            //Trigger the last animation
+            _animUIPlayer.SetTrigger("isDamage");
+        }
+        else Debug.LogWarning("No _animUIPlayer in RB_Health");
+        
     }
 
     public void TakeKnockback(Vector3 direction, float knockbackForce)

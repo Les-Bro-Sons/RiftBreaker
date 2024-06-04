@@ -71,7 +71,16 @@ public enum ENEMYCLASS
 {
     Light,
     Medium,
-    Heavy
+    Heavy,
+    Pawn,
+    Tower,
+}
+
+public enum TARGETMODE
+{
+    Closest,
+    Furthest,
+    Random
 }
 
 // ~~~~~~~~~~ STATES ~~~~~~~~~~

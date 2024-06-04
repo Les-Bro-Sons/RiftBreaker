@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8908260332136096927}
@@ -148,11 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 401fb56c24b43d04ca5c0340cc9d2658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AiType: 0
+  AiType: 3
   MovementSpeed: 4
   MovementSpeedAggro: 8
   MovementSpeedFlee: 6
-  AttackSpeed: 2
+  AttackSpeed: 0.2
   SplineContainer: {fileID: 0}
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
@@ -183,12 +183,13 @@ MonoBehaviour:
   InfSlashCollisionSize: 3
   InfSpottedMoveSpeed: 11
   InfSlashParticles: {fileID: 0}
-  SlashRange: 0
-  SlashDamage: 0
-  SlashKnockback: 0
-  SlashDelay: 0
+  SlashRange: 2
+  SlashDamage: 10
+  SlashKnockback: 10
+  SlashDelay: 0.5
   SlashCollisionSize: 3
-  SlashParticles: {fileID: 0}
+  SlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
+    type: 3}
   ArrowPrefab: {fileID: 0}
   BowRange: 0
   BowDamage: 0
@@ -227,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 0
-  _hpMax: 100
+  _hpMax: 10
   Armor: 0
   Team: 1
   Dead: 0
@@ -244,6 +245,9 @@ MonoBehaviour:
   _particleDamage: {fileID: 0}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &4257602956119110178
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,6 +43,7 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
+    public UnityEvent EventOnChargeSpecialAttackGathered;
 
     //Interacts
     [SerializeField] private float _interactRange;

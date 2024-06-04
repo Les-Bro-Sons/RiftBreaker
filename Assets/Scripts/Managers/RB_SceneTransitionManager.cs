@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -61,6 +62,16 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     */
 
+    public void SwitchSceneTransition()
+    {
+        StartCoroutine(SwitchSceneTransitionCoroutine());
+    }
+
+    private IEnumerator SwitchSceneTransitionCoroutine()
+    {
+        yield return null;
+    }
+
     public void SetImageAlpha(Image image, float alpha)
     {
         if (image != null)
@@ -83,6 +94,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
 
     public void NewScene(int idScene)
     {
-        SceneManager.LoadScene(idScene);
+        //SceneManager.LoadScene(idScene);
     }
 }

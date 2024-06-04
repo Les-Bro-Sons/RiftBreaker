@@ -27,6 +27,7 @@ public class RB_RoomManager:MonoBehaviour
 
     //Components
     public static RB_RoomManager Instance;
+    public GameObject DoorPrefab;
 
     private void Awake()
     {
@@ -62,7 +63,7 @@ public class RB_RoomManager:MonoBehaviour
         }
     }
 
-    public List<GameObject> GetDetectedEnemies(int roomIndex)
+    public List<RB_Health> GetDetectedEnemies(int roomIndex)
     {
         return _rooms[roomIndex].DetectedEnemies;
     }
@@ -79,8 +80,7 @@ public class RB_RoomManager:MonoBehaviour
         {
             if (team == TEAMS.Ai)
             {
-
-                if (GetDetectedEnemies(i).Contains(entity))
+                if (GetDetectedEnemies(i).Contains(entity.GetComponent<RB_Health>()))
                 {
                     roomIndex = i;
                     break;

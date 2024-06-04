@@ -28,7 +28,7 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Start()
     {
-        if(_item != null)
+        if (_item != null)
         {
             RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
             RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
@@ -39,7 +39,7 @@ public class RB_PlayerController : MonoBehaviour
             RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
             RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
         }
-        
+
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
@@ -69,25 +69,26 @@ public class RB_PlayerController : MonoBehaviour
     public void OnChargeAttackStart()
     {
         //Start charging attack
-        _playerAction.StartChargeAttack();
+        if (CanDoInput())
+            _playerAction.StartChargeAttack();
     }
 
     public void ChoseItem(int id)
     {
         //Chose the item wanted
-        if(_playerAction.Items.Count-1 >= id)
+        if (_playerAction.Items.Count - 1 >= id && CanDoInput())
         {
             _playerAction.SetCurrentWeapon(_playerAction.Items[id].name);
             _playerAction.Items[id].Bind();
             _playerAction.SetItem(id);
         }
-        
+
     }
 
     public void Interact()
     {
         //Interact with the object nearby
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.Interact();
     }
 
@@ -101,7 +102,7 @@ public class RB_PlayerController : MonoBehaviour
 
     public void OnChargeAttackStop()
     {
-        if (!_health.Dead)
+        if (CanDoInput())
         {
             //If charge attack completed start charged attack otherwise start normal attack
             _playerAction.StopChargeAttack();
@@ -111,42 +112,50 @@ public class RB_PlayerController : MonoBehaviour
     public void OnStartDash()
     {
         //Start dash
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.StartDash();
     }
 
     public void OnMoveStart()
     {
         //Start movement
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerMovement.StartMove();
     }
 
     public void OnMoveStop()
     {
         //Stop movement
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerMovement.StopMove();
     }
 
     public void OnSpecialAttack()
     {
         //Start special attack
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.SpecialAttack();
     }
 
     public void OnStartRewind()
     {
         //start rewind in playeraction
-        if (!_health.Dead)
+        if (CanDoInput())
             RB_TimeManager.Instance.StartRewinding(false, false);
     }
 
     public void OnStopRewind()
     {
         //stop rewind in playeraction
-        if (!_health.Dead)
+        if (CanDoInput(true))
             RB_TimeManager.Instance.StopRewinding(false);
+    }
+
+    private bool CanDoInput(bool ignoreRewind = false)
+    {
+        if (!ignoreRewind)
+            return (!_health.Dead && !RB_TimeManager.Instance.IsRewinding);
+        else
+            return (!_health.Dead);
     }
 }

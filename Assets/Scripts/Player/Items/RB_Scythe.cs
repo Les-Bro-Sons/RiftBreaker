@@ -65,10 +65,4 @@ public class RB_Scythe : RB_Items
     {
         ChargeZone();
     }
-
-    public override void SpecialAttack()
-    {
-        base.SpecialAttack();
-
-    }
 }

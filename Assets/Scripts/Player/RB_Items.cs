@@ -46,7 +46,7 @@ public class RB_Items : MonoBehaviour
     private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
     protected Transform _transform;
-    RB_PlayerAction _playerAction;
+    protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
 

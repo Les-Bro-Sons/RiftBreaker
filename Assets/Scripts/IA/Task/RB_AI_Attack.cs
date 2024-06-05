@@ -123,7 +123,6 @@ public class RB_AI_Attack : RB_BTNode
                     switch (_attackIndex)
                     {
                         case 0:
-                            Debug.Log("la guerre des étoiles");
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
                                 if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);

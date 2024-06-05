@@ -22,7 +22,6 @@ public class RB_Enemy : MonoBehaviour
     protected RB_AiMovement _movement;
 
     public float ChargeSpecialAttackAmount;
-
     protected virtual void Awake()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(Death);
@@ -31,6 +30,7 @@ public class RB_Enemy : MonoBehaviour
         _originalExcludeLayer = _rb.excludeLayers;
         _movement = GetComponent<RB_AiMovement>();
         _btTree = GetComponent<RB_AI_BTTree>();
+        SetLayerToTeam();
     }
 
     protected virtual void Start()
@@ -42,6 +42,29 @@ public class RB_Enemy : MonoBehaviour
         }
         Spawned();
     }
+
+    private void SetLayerToTeam()
+    {
+        int layer;
+        TEAMS team = GetComponent<RB_Health>().Team;
+        if (team == TEAMS.Ai)
+            layer = LayerMask.NameToLayer("Enemy");
+        else
+            layer = LayerMask.NameToLayer("Ally");
+
+        gameObject.layer = layer;
+        SetLayerToAllChildren(layer, transform);
+    }
+
+    private void SetLayerToAllChildren(int layer, Transform obj)
+    {
+        foreach(Transform child in obj)
+        {
+            child.gameObject.layer = layer;
+            SetLayerToAllChildren(layer, child);
+        }
+    }  
+
 
     public virtual void Spawned() //when the enemy is spawned
     {

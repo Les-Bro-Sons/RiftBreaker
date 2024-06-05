@@ -120,7 +120,6 @@ public class RB_PlayerAction : MonoBehaviour
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
-                EventItemGathered?.Invoke();
                 itemGathered.Bind();
                 IsItemNearby = true;
                 //Add the item gathered to the items
@@ -134,7 +133,8 @@ public class RB_PlayerAction : MonoBehaviour
                     Items.Add(itemGathered);
                 }
                 _playerController.ChoseItem(Items.Count-1);
-                    
+                EventItemGathered?.Invoke();
+
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

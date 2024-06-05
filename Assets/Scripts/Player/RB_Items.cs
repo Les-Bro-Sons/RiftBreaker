@@ -49,6 +49,7 @@ public class RB_Items : MonoBehaviour
     protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
+    public Sprite CurrentSprite;
 
     //Player
     protected Transform _playerTransform;
@@ -79,6 +80,8 @@ public class RB_Items : MonoBehaviour
         _collisionDetection = _playerAction.CollisionDetection;
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
+        //Get the sprite of the item
+        CurrentSprite = GetComponentInChildren<SpriteRenderer>().sprite;
     }
 
     private void Update()
@@ -109,8 +112,10 @@ public class RB_Items : MonoBehaviour
         _transform = transform;
         //When the item is gathered get the playerAction
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
+        
     }
 
     public virtual void Drop()

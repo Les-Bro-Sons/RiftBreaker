@@ -545,6 +545,28 @@ MonoBehaviour:
   Doors:
   - {fileID: 1174568152}
   IsPlayerInRoom: 0
+--- !u!1 &72450446 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166457479968353290, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6803120366867803271}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &72450449
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72450446}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.1
 --- !u!1001 &73042646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15453,15 +15475,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 533140736824242365, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 63018d04de389e942bd6d5e7c77331ad, type: 2}
     - target: {fileID: 1794891112774613695, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
       propertyPath: m_LocalScale.x
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2906002548817221432, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2906002548817221432, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2906002548817221432, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 4186512075783864997, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
@@ -15516,7 +15548,17 @@ PrefabInstance:
     - target: {fileID: 5657500622291302193, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
       propertyPath: m_Size.x
-      value: 8
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657500622291302193, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657500622291302193, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7890855732655748875, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
@@ -15536,7 +15578,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4166457479968353290, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 72450449}
   m_SourcePrefab: {fileID: 100100000, guid: 1c9e9cc168055a64bbdfaee37e99e77a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

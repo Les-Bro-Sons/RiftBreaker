@@ -84,6 +84,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
 
     public void NewScene(int idScene)
     {
-/*        SceneManager.LoadScene(idScene);*/
+        SceneManager.LoadScene(idScene);
     }
 }

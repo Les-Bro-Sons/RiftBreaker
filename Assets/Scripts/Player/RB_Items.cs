@@ -13,6 +13,7 @@ public class RB_Items : MonoBehaviour
     protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
+    [SerializeField] private float _specialAttackChargeTime;
 
     [SerializeField] private float _chargeZoom = 0.85f;
 
@@ -45,7 +46,7 @@ public class RB_Items : MonoBehaviour
     private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
     protected Transform _transform;
-    RB_PlayerAction _playerAction;
+    protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
 
@@ -78,6 +79,26 @@ public class RB_Items : MonoBehaviour
         _collisionDetection = _playerAction.CollisionDetection;
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
+    }
+
+    private void Update()
+    {
+        RechargeSpecialAttack();
+    }
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        _playerAction.SpecialAttackCharge += amountToAdd;
+    }
+
+    public virtual void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if(_playerAction.SpecialAttackCharge <= 100)
+        {
+            _playerAction.SpecialAttackCharge += (Time.deltaTime / _specialAttackChargeTime) * 100;
+        }
     }
 
     public virtual void Bind()

@@ -26,6 +26,9 @@ public class RB_LevelManager : MonoBehaviour
 
 
 
+    public GameObject ChargeSpecialAttackParticlePrefab;
+
+
     private void Awake()
     {
         if (Instance == null)

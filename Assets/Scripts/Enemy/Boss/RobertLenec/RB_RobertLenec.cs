@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class RB_RobertLenec : RB_Boss
 {
+    public static RB_RobertLenec Instance;
+
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     [Header("Movement")]
@@ -45,6 +47,19 @@ public class RB_RobertLenec : RB_Boss
     private List<GameObject> clones = new List<GameObject>();
     private Vector3 _lastPosition;
     protected float _currentCooldownBeforeReactivate;
+
+    protected override void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+        base.Awake();
+    }
 
     protected override void Start()
     {

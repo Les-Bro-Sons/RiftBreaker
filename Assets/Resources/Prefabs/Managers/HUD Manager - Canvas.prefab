@@ -107,11 +107,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1027325089488218430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -0.0005385455, y: -10}
   m_SizeDelta: {x: 870.001, y: 15.001}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2676816233855528953
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -257,11 +257,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1027325089488218430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -0.0005385455, y: -10}
   m_SizeDelta: {x: 870.001, y: 15.001}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8364171707302488673
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -332,11 +332,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1027325089488218430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -0.0005385455, y: -10}
   m_SizeDelta: {x: 870.001, y: 15.001}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4283872599389782733
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -384,6 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3252659066798579505}
+  - component: {fileID: 9017875141943782277}
   m_Layer: 5
   m_Name: Infiltration
   m_TagString: Untagged
@@ -412,6 +413,18 @@ RectTransform:
   m_AnchoredPosition: {x: 21, y: 36}
   m_SizeDelta: {x: 430, y: 190}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &9017875141943782277
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576337132769359974}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &625672918427086494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1983,6 +1996,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a003d1bbb4878246aea0f37d72cf4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BossHealthBar: {fileID: 1029535267045642270}
+  PlayerHealthBar: {fileID: 1352758396821749588}
 --- !u!95 &1352458506507538279
 Animator:
   serializedVersion: 5
@@ -2457,7 +2472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 0
   _hpText: {fileID: 4133105706951511155}
-  _rb_Health: {fileID: 0}
+  Rb_health: {fileID: 0}
   _bossName: {fileID: 0}
   _chipSpeed: 5
   _frontHealthBar: {fileID: 6833915712529896534}
@@ -3453,7 +3468,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 35}
+  m_AnchoredPosition: {x: 0, y: 42}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1742176188358587917
@@ -3484,7 +3499,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NAME
+  m_text: Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -3494,8 +3509,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4286513239
+  m_fontColor: {r: 0.34117648, g: 0, b: 0.49803925, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3704,7 +3719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1027325089488218430
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3743,7 +3758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 1
   _hpText: {fileID: 0}
-  _rb_Health: {fileID: 0}
+  Rb_health: {fileID: 0}
   _bossName: {fileID: 8324163904302383028}
   _chipSpeed: 2
   _frontHealthBar: {fileID: 3971192513082826471}

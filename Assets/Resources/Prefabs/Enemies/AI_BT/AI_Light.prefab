@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 6554147553573485156}
   - component: {fileID: 3823845038770663302}
   - component: {fileID: 8258866895159472360}
+  - component: {fileID: 7110264631178411431}
   m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
@@ -504,9 +505,21 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7110264631178411431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805048988133975934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69eb593d09610af4ebfc41e1b3290e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4990249021314812702
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +883,7 @@ MonoBehaviour:
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 662286531341207993}
   AiAnimator: {fileID: 4265850386259287309}
+  ChargeSpecialAttackAmount: 0
 --- !u!114 &5090107859350373542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,6 +995,9 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &2892481053865208935
 MonoBehaviour:
   m_ObjectHideFlags: 0

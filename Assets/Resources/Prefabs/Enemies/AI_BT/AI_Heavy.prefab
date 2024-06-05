@@ -363,6 +363,7 @@ MonoBehaviour:
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 8145346850076723994}
   AiAnimator: {fileID: 0}
+  ChargeSpecialAttackAmount: 0
 --- !u!114 &8504773875681969578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,14 +388,15 @@ MonoBehaviour:
   StartWaitingWaypointInterval: 0
   InRange: 0
   FovRange: 10
+  SpottedFovRange: 10
   FovAngle: 180
-  HasAlreadySeen: 0
+  DurationToLoadSpotBar: 0.5
+  DurationToUnloadSpotBar: 1
   LastTargetPos: {x: 0, y: 0, z: 0}
   CanvasUi: {fileID: 3091315868309787768}
   ImageSpotBar: {fileID: 7765848753964575599}
   DurationAlphaCanvas: 0.15
-  DurationToLoadSpotBar: 0.5
-  DurationToUnloadSpotBar: 1
+  LastSpotValue: 0
   _prefabUxDetectedReadyMark: {fileID: 2153901776240351120, guid: 507c0141ec0e1ec45bc19ba2bf7d24d0,
     type: 3}
   AiMovement: {fileID: 0}
@@ -407,6 +409,7 @@ MonoBehaviour:
   InfSlashKnockback: 10
   InfSlashDelay: 0.1
   InfSlashCollisionSize: 3
+  InfSpottedMoveSpeed: 11
   InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
   SlashRange: 2
@@ -475,6 +478,9 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &3512577705081871335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,6 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkDirection: {x: 0, y: 0, z: 0}
+  _pushForce: 3
   LastDirection: {x: 0, y: 0, z: 0}
   _movementAcceleration: 200
   _movementMaxSpeed: 12
@@ -948,6 +955,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6683713562970319506}
   - component: {fileID: 1245781233140379116}
+  - component: {fileID: 2572277811788719139}
+  - component: {fileID: 4605232276434189893}
   m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
@@ -993,3 +1002,38 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &2572277811788719139
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8117630062430630872}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4605232276434189893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8117630062430630872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69eb593d09610af4ebfc41e1b3290e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -249,6 +249,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
                                         new RB_AICheck_IsTargetClose(this, 5),
                                         new RB_AI_FleeFromTarget(this, 5, MovementSpeedFlee),
                                     }),
@@ -285,11 +286,18 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
+                                    new RB_BTSequence(new List<RB_BTNode> //flee sequence
+                                    {
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), //when bow attack
+                                        new RB_AICheck_IsTargetClose(this, HeavyBowRange/1.5f),
+                                        new RB_AI_FleeFromTarget(this, HeavyBowRange/1.5f, MovementSpeedFlee),
+                                    }),
+
                                     new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence
                                     {
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavyBowRange),
-                                        new RB_AI_FleeFromTarget(this, HeavyBowRange/1.5f, MovementSpeedFlee),
                                         new RB_AI_Attack(this, 0),
                                     }),
                                     

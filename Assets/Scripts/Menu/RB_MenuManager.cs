@@ -21,7 +21,6 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void Play() {
-        Debug.Log(1212);
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 

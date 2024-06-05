@@ -1996,6 +1996,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a003d1bbb4878246aea0f37d72cf4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BossHealthBar: {fileID: 1029535267045642270}
+  PlayerHealthBar: {fileID: 1352758396821749588}
 --- !u!95 &1352458506507538279
 Animator:
   serializedVersion: 5
@@ -2470,7 +2472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 0
   _hpText: {fileID: 4133105706951511155}
-  _rb_Health: {fileID: 0}
+  Rb_health: {fileID: 0}
   _bossName: {fileID: 0}
   _chipSpeed: 5
   _frontHealthBar: {fileID: 6833915712529896534}
@@ -3756,7 +3758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 1
   _hpText: {fileID: 0}
-  _rb_Health: {fileID: 0}
+  Rb_health: {fileID: 0}
   _bossName: {fileID: 8324163904302383028}
   _chipSpeed: 2
   _frontHealthBar: {fileID: 3971192513082826471}

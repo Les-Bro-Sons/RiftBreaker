@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RB_Mega_knight : RB_Boss
 {
+    public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     [Header("Slash (attack1)")]
@@ -38,8 +39,13 @@ public class RB_Mega_knight : RB_Boss
     //Animation
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
-    protected override void Awake()
-    {
+    protected override void Awake(){
+        if (Instance == null) {
+            Instance = this;
+        }
+        else { 
+            DestroyImmediate(gameObject);
+        }
         base.Awake();
     }
 

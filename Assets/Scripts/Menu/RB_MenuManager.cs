@@ -21,7 +21,7 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void Play() {
-        RB_SceneTransitionManager.Instance.NewScene((int)(SceneManager.GetActiveScene().buildIndex + 1));
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
     public void Options() {

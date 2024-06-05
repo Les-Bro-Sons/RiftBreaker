@@ -46,7 +46,22 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
-        RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
+        if(CurrentPhase == PHASES.Boss)
+        {
+            switch (CurrentScene)
+            {
+                case SCENENAMES.Boss1:
+                    RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Mega_knight.Instance.GetComponent<RB_Health>();
+                    break;
+                case SCENENAMES.Boss2:
+                    RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
+                    break;
+                case SCENENAMES.Boss3:
+                    /*RB_HUDManager.Instance.BossHealthBar.Rb_health = */
+                    break;
+            }
+            RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
+        }
     }
 
     public void SwitchPhase()
@@ -60,18 +75,7 @@ public class RB_LevelManager : MonoBehaviour
                 CurrentPhase = PHASES.Combat;
                 break;
             case PHASES.Boss:
-                switch (CurrentScene){
-                    case SCENENAMES.Boss1 :
-                        RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Mega_knight.Instance.GetComponent<RB_Health>();
-                        break;
-                    case SCENENAMES.Boss2 :
-                        RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
-                        break;
-                    case SCENENAMES.Boss3 :
-                        /*RB_HUDManager.Instance.BossHealthBar.Rb_health = */
-                        break;
-                }
-                RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
+
 
                 break;
         }

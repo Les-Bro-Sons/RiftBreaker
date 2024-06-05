@@ -17,7 +17,7 @@ public class RB_Room : MonoBehaviour
 
     private void Update()
     {
-        if(RB_LevelManager.Instance.CurrentPhase == PHASES.Combat && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
+        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
         {
             CloseRoom();
         }else if (isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))

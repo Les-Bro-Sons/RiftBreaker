@@ -52,6 +52,7 @@ public class RB_PlayerAction : MonoBehaviour
     public List<RB_Items> Items = new();
     public bool IsItemNearby;
     public int ItemId = 0;
+    public bool FirstItemGathered = false;
     public RB_Items Item; public RB_Items CurrentItem { get { return Item; } }
 
     //Debug
@@ -84,6 +85,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //When the item is gathered, get it
         Item = Items[id];
+        ItemId = id;
     }
 
     public void StartDash()
@@ -131,10 +133,8 @@ public class RB_PlayerAction : MonoBehaviour
                 {
                     Items.Add(itemGathered);
                 }
-                print(ItemId);
-                _playerController.ChoseItem(ItemId);
-                ItemId++;
-                ItemId = (ItemId >= 2) ? 2 : ItemId;
+                _playerController.ChoseItem(Items.Count-1);
+                    
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

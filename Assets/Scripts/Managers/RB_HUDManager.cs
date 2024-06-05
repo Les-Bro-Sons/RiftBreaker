@@ -6,6 +6,8 @@ public class RB_HUDManager : MonoBehaviour
 
     private Animator _animatorHud;
 
+    public RB_HUDHealthBar BossHealthBar;
+
     private void Awake()
     {
         if (Instance == null)

@@ -10,7 +10,7 @@ public class RB_TransitionRift : RB_Transition
     void Start()
     {
         _material.SetFloat("_MaskAmount", -0.1f);
-        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(RB_SceneTransitionManager.Instance.PlayButton, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
     public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)

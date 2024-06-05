@@ -21955,7 +21955,7 @@ GameObject:
   - component: {fileID: 1775722174}
   - component: {fileID: 1775722175}
   m_Layer: 5
-  m_Name: Menus
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22060,7 +22060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe7bc41899daab428acfc11934e7f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
+  Animator: {fileID: 1775722175}
   IsOptionOpen: 0
 --- !u!95 &1775722175
 Animator:
@@ -22072,7 +22072,7 @@ Animator:
   m_GameObject: {fileID: 1775722169}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fae322b6ffcdc9341a7ac6d4de3ba947, type: 2}
+  m_Controller: {fileID: 9100000, guid: e89cad46bdcefb44eb5d6b9bf5bc7767, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

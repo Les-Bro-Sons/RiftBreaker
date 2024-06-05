@@ -52,7 +52,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
-                                _btParent.AiAnimator.SetTrigger("Attack");
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
@@ -60,7 +60,7 @@ public class RB_AI_Attack : RB_BTNode
                         case 0: //slash attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                _btParent.AiAnimator.SetTrigger("Attack");
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 StopAttacking();
                             }
@@ -116,6 +116,33 @@ public class RB_AI_Attack : RB_BTNode
                             break;
                         default:
                             StopAttacking();
+                            break;
+                    }
+                    break;
+                case ENEMYCLASS.Pawn:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            Debug.Log("la guerre des étoiles");
+                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
+                                Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
+                                StopAttacking();
+                            }
+                            break;
+                    }
+                    break;
+                case ENEMYCLASS.Tower:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
+                                Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
+                                StopAttacking();
+                            }
                             break;
                     }
                     break;

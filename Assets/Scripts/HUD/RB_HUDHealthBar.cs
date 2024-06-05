@@ -12,9 +12,8 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
     [SerializeField] private MODE _mode = MODE.Other;
 
-    [SerializeField] Slider _hpBar;
     [SerializeField] TextMeshProUGUI _hpText;
-    [SerializeField] RB_Health _rb_Health;
+    [SerializeField]  RB_Health _rb_Health;
 
     [SerializeField] TextMeshProUGUI _bossName;
 
@@ -43,13 +42,6 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
         UxStart();
     }
-
-    //Mise à jour de la barre de vie
-    /*  
-    void RefreshHealth(){
-        _hpBar.value = _rb_Health.Hp / _rb_Health.HpMax;
-        _hpText.text = _rb_Health.Hp.ToString() + " / " + _rb_Health.HpMax.ToString() + " ♥";
-    }*/
 
     private void Update()
     {
@@ -120,6 +112,6 @@ public class RB_HUDHealthBar : MonoBehaviour {
         percentComplete = percentComplete * percentComplete;
 
         _displayedHealth = Mathf.Lerp(_displayedHealth, _rb_Health.Hp, percentComplete);
-        _healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} ♥";
+        //_healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} ♥";
     }
 }

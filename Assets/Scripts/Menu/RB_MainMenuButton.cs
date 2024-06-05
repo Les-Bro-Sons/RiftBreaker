@@ -41,6 +41,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     private void Update() {
         if (!RB_MenuManager.Instance.IsOptionOpen){
+            //move the text when selected or hoovered
             if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
                 float xPos = _textTrasform.localPosition.x;
                 xPos = Mathf.Lerp(xPos, _originalXPos - _offsetHover, _offsetSpeed * Time.deltaTime);

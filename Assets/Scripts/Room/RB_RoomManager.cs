@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -65,11 +66,20 @@ public class RB_RoomManager:MonoBehaviour
 
     public List<RB_Health> GetDetectedEnemies(int roomIndex)
     {
+
+        foreach (RB_Health enemy in _rooms[roomIndex].DetectedEnemies.ToList()) 
+        {
+            if (enemy == null) _rooms[roomIndex].DetectedEnemies.Remove(enemy);
+        }
         return _rooms[roomIndex].DetectedEnemies;
     }
 
-    public List<GameObject> GetDetectedAllies(int roomIndex)
+    public List<RB_Health> GetDetectedAllies(int roomIndex)
     {
+        foreach (RB_Health enemy in _rooms[roomIndex].DetectedAllies.ToList())
+        {
+            if (enemy == null) _rooms[roomIndex].DetectedAllies.Remove(enemy);
+        }
         return _rooms[roomIndex].DetectedAllies;
     }
 
@@ -88,7 +98,7 @@ public class RB_RoomManager:MonoBehaviour
             }
             else
             {
-                if (GetDetectedAllies(i).Contains(entity))
+                if (GetDetectedAllies(i).Contains(entity.GetComponent<RB_Health>()))
                 {
                     roomIndex = i;
                     break;

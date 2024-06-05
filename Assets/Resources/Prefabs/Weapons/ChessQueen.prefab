@@ -151,6 +151,9 @@ MonoBehaviour:
   HudSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
   _pawnPrefab: {fileID: 3802911559949533877, guid: 2ff2e45e915a8c445805ebad3cd3c5c2,
     type: 3}
   _towerPrefab: {fileID: 4019689486546910041, guid: 2fc813b3e0297cf41ae7d7f0d250a838,
@@ -250,7 +253,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8210913413640510869}

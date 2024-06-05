@@ -22,6 +22,9 @@ public class RB_LevelManager : MonoBehaviour
     [SerializeField] private string _phaseCombat = $"SkillsPhase{PHASES.Combat}";
 
 
+    public GameObject ChargeSpecialAttackParticlePrefab;
+
+
     private void Awake()
     {
         if (Instance == null)

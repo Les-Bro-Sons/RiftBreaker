@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_MusicBox : RB_Items
@@ -12,6 +13,9 @@ public class RB_MusicBox : RB_Items
     //Properties
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
+
+    //Music Notes
+    public List<Sprite> NoteSprites = new();
 
 
     protected override void Start()
@@ -31,9 +35,11 @@ public class RB_MusicBox : RB_Items
     {
         if(_charging)
         {
-            StartCoroutine(WaitToResetAttacks());
-            StartCoroutine(WaitToResetAttacks());
             _charging = false;
+            _playerAnimator.SetBool("ChargingAttack", false);
+            _playerAction.StopAttack();
+            _playerAction.StopChargedAttack();
+            _playerAction.StopSpecialAttack();
             return;
         }
         base.Attack();

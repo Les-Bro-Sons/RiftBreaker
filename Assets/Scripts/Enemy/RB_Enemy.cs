@@ -21,6 +21,8 @@ public class RB_Enemy : MonoBehaviour
 
     protected RB_AiMovement _movement;
 
+    public float ChargeSpecialAttackAmount;
+
     protected virtual void Awake()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(Death);
@@ -68,6 +70,9 @@ public class RB_Enemy : MonoBehaviour
             SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
             _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
             _rb.velocity = Vector3.zero;
+            //Create charge special attack particles
+            GameObject instantiatedChargeSpecialAttackParticleSystem = Instantiate(RB_LevelManager.Instance.ChargeSpecialAttackParticlePrefab, transform);
+            instantiatedChargeSpecialAttackParticleSystem.transform.position = transform.position;
         }
     }
 

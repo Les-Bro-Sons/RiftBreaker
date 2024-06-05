@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _specialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 0
@@ -287,6 +288,15 @@ MonoBehaviour:
     type: 3}
   _zoneGrowthSpeed: 5
   _maxZoneSize: 5
+  NoteSprites:
+  - {fileID: 21300000, guid: 524f3370ab6e1e5409d1e10cd3c6bb38, type: 3}
+  - {fileID: 21300000, guid: 4332913de8ac78a40a18b33c33c599aa, type: 3}
+  - {fileID: 21300000, guid: fe3a404178e54d84fa7ab6c51040d028, type: 3}
+  - {fileID: 21300000, guid: c8a1b4de992075245a33bcb03c436bf7, type: 3}
+  - {fileID: 21300000, guid: 6ecd5473e3194e44bb25b81483f2a432, type: 3}
+  - {fileID: 21300000, guid: 70b1c158299dba94c96f295d1b7cd822, type: 3}
+  - {fileID: 21300000, guid: f0ce89f9c515e1741bf24c6b5a2aff56, type: 3}
+  - {fileID: 21300000, guid: 089e27426bee91841b77d52d4aa56f67, type: 3}
 --- !u!1 &8067806801707449436
 GameObject:
   m_ObjectHideFlags: 0

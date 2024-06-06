@@ -31,11 +31,12 @@ public class RB_Scythe : RB_Items
     
     public override void StartChargingAttack()
     {
-        _stopSound = true;
         base.StartChargingAttack();
+        _stopSound = true;
         if(_instantiatedZone == null)
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
+            LoopSound();
             StartChargeZone();
         }
     }
@@ -71,7 +72,7 @@ public class RB_Scythe : RB_Items
 
     private void StopSound() {
         _stopSound = false;
-        //RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFX();
     }
 
     private void Update()
@@ -79,20 +80,25 @@ public class RB_Scythe : RB_Items
         ChargeZone();
         if (_stopSound)
         {
-            LootSound();
+            LoopSound();
         }
-        else
-        {
-            RB_AudioManager.Instance.SfxSource.Stop();
-        }
+        // else
+        // {
+        //     RB_AudioManager.Instance.SfxSource.Stop();
+        // }
     }
 
-    private void LootSound() {
+    private void LoopSound() {
         _timer -= Time.deltaTime;
         if (_timer<=0)
         {
             RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, 0, 0.5f);
             _timer = RB_AudioManager.Instance.SfxSource.clip.length;
         }
+    }
+
+    public override void SpecialAttack() {
+        base.SpecialAttack();
+        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 0.5f);
     }
 }

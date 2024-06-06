@@ -83,6 +83,7 @@ public class RB_AI_Attack : RB_BTNode
                         case 0: //bow attack
                             if (WaitBeforeAttackCounter(_btParent.BowDelay))
                             {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 LaunchArrow(_btParent.ArrowPrefab, _btParent.BowDamage, _btParent.BowKnockback, _btParent.ArrowSpeed, _btParent.ArrowDistance);
                                 StopAttacking();
                             }
@@ -98,6 +99,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 StopAttacking();
                             }
@@ -105,12 +107,14 @@ public class RB_AI_Attack : RB_BTNode
                         case 0: //Heavy bow attack (3 projectiles)
                             if (WaitBeforeAttackCounter(_btParent.HeavyBowDelay, true, true)) 
                             {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("DistanceAttack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 _btParent.StartCoroutine(HeavyBowShoot());
                             }
                             break;
                         case 1: //heavy slash attack
                             if (WaitBeforeAttackCounter((_btParent.MaxHeavySlashCombo != 0)? _btParent.HeavySlashFirstDelay : _btParent.HeavySlashComboDelay, true, false))
                             {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 HeavySlash();
                             }
                             break;

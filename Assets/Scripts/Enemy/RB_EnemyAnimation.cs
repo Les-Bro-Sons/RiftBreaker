@@ -15,9 +15,14 @@ public class RB_EnemyAnimation : MonoBehaviour
     private void Awake()
     {
         _enemyAnimator = GetComponent<Animator>();
-        _rb = GetComponentInParent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        _rb = GetComponentInParent<RB_AI_BTTree>().AiRigidbody;
         _transform = _rb.transform;
     }
+
     private void UpdateAnim()
     {
         _enemyAnimator.SetFloat("Horizontal", _transform.forward.normalized.x);

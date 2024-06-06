@@ -107,4 +107,9 @@ public class RB_MusicBox : RB_Items
     {
         RB_AudioManager.Instance.StopSFX();
     }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("sheating_music_box", RB_PlayerController.Instance.transform.position, 0,.5f);
+    }
 }

@@ -87,6 +87,7 @@ public class RB_PlayerAction : MonoBehaviour
         //When the item is gathered, get it
         Item = Items[id];
         ItemId = id;
+        Item.ChooseSfx();
     }
 
     public void StartDash()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -118,6 +119,7 @@ public class RB_TimeManager : MonoBehaviour
             IsRewinding = true;
             _fullRewind = fullRewind;
             UxStartRewind(fullRewind);
+            RB_AudioManager.Instance.MusicSource.pitch = -1;
             EventStartRewinding?.Invoke();
         }
         else
@@ -145,6 +147,7 @@ public class RB_TimeManager : MonoBehaviour
                 NumberOfRewind = 3;
                 RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
             }
+            // RB_AudioManager.Instance.MusicSource.pitch = 1;
             EventRecordFrame?.Invoke(); // used for interpolation
         }
     }

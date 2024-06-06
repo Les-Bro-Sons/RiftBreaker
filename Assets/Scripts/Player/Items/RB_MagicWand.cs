@@ -36,4 +36,9 @@ public class RB_MagicWand : RB_Items
         base.SpecialAttack();
         RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position, .1f, 1);
     }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("Sheating_magic_wand", RB_PlayerController.Instance.transform.position, 0,.5f);
+    }
 }

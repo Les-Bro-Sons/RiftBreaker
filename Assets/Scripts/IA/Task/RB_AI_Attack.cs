@@ -166,6 +166,8 @@ public class RB_AI_Attack : RB_BTNode
                 enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, _transform.position), _btParent.ExplosionKnockback);
             }
         }
+        if (_btParent.ExplosionParticles)
+            _btParent.SpawnPrefab(_btParent.ExplosionParticles, _transform.position, Quaternion.identity);
         _btParent.AiHealth.TakeDamage(9999);
     }
 

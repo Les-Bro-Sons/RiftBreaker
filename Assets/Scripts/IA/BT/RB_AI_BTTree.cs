@@ -117,6 +117,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
             AiMovement.AddComponent<RB_AiMovement>();
         AiHealth = GetComponent<RB_Health>();
         AiRigidbody = GetComponent<Rigidbody>();
+        AiAnimator = GetComponentInChildren<Animator>();
     }
 
     protected override void Update()
@@ -165,6 +166,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     protected override RB_BTNode SetupTree()
     {
+        AiAnimator.SetFloat("EnemyID", (int)AiType);
+
+        
         _infiltrationPhases.Add(PHASES.Infiltration);
         _combatPhases.Add(PHASES.Combat);
         _combatPhases.Add(PHASES.Boss);

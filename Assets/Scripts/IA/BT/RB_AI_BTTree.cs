@@ -102,6 +102,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float ExplosionDamage = 30;
     [SerializeField] public float ExplosionKnockback = 15;
     [SerializeField] public float ExplosionRadius = 3;
+    [SerializeField] public float ExplosionDelay = 1;
     [SerializeField] public float ExplosionStartRange = 1;
     [SerializeField] public GameObject ExplosionParticles;
 

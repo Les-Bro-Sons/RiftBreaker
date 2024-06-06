@@ -1,5 +1,6 @@
 using BehaviorTree;
 using System.Collections.Generic;
+using MANAGERS;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -392,5 +393,10 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public bool GetBool(string name)
     {
         return (BoolDictionnary.ContainsKey(name) && BoolDictionnary[name]);
-    } 
+    }
+
+    public void AlertSound() 
+    {
+        RB_AudioManager.Instance.PlaySFX("hey", transform.position, 0,1);
+    }
 }

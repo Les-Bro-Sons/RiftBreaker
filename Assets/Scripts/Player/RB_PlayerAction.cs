@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using MANAGERS;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -134,6 +135,8 @@ public class RB_PlayerAction : MonoBehaviour
                 }
                 _playerController.ChoseItem(Items.Count-1);
                 EventItemGathered?.Invoke();
+                
+                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
 
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding

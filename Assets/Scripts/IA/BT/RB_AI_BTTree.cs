@@ -98,6 +98,11 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public int MaxHeavySlashCombo = 5;
     [SerializeField] public GameObject HeavySlashParticles;
 
+    [Header("Tower")]
+    [SerializeField] public float ExplosionDamage = 30;
+    [SerializeField] public float ExplosionKnockback = 15;
+    [SerializeField] public float ExplosionRadius = 3;
+    [SerializeField] public GameObject ExplosionParticles;
 
     private void Awake()
     {
@@ -340,7 +345,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             {
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
                                 new RB_AI_GoToTarget(this, MovementSpeedAggro, SlashRange),
-                                new RB_AI_Attack(this, 0), //slash
+                                new RB_AI_Attack(this, 0), //explode
                             }),
                         }),
                     }),

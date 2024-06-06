@@ -139,7 +139,7 @@ public class RB_AI_Attack : RB_BTNode
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
                                 if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
-                                Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
+                                KamikazeExplosion();
                                 StopAttacking();
                             }
                             break;
@@ -150,6 +150,23 @@ public class RB_AI_Attack : RB_BTNode
 
         _state = BTNodeState.RUNNING;
         return _state;
+    }
+
+    private void KamikazeExplosion()
+    {
+        List<RB_Health> alreadyDamaged = new();
+        foreach (Collider enemy in Physics.OverlapSphere(_transform.position, _btParent.ExplosionRadius))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+            {
+                if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                alreadyDamaged.Add(enemyHealth);
+                enemyHealth.TakeDamage(_btParent.ExplosionDamage);
+                enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, _transform.position), _btParent.ExplosionKnockback);
+            }
+        }
+        _btParent.AiHealth.TakeDamage(9999);
     }
 
     private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack

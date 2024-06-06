@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 
 public class RB_ChessQueen : RB_Items
@@ -41,6 +42,8 @@ public class RB_ChessQueen : RB_Items
             //spawnedChessPawn.Boost();
         }
         SpawnedChessPawns.Add(spawnedChessPawn);
+        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position,0, 1);
+
     }
 
     public override void ChargedAttack()

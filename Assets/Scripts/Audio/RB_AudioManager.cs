@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 namespace MANAGERS
 {
@@ -58,7 +59,7 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			PlayMusic("son_angaros");
+			// PlayMusic("son_angaros");
 		}
 
 		public void PlayMusic(string nameClip)
@@ -83,12 +84,12 @@ namespace MANAGERS
 		}
 
 
-		public void PlaySFX(string nameClip,Vector3 desiredPosition)
-		{
+		public void PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation, float volume) {
 			GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
 			_sfxSource = _audioSource.GetComponent<AudioSource>();
-			
 			AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+			_sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			_sfxSource.volume = volume;
 			if (_sfxClip != null)
 			{
 				_sfxSource.clip = _sfxClip;
@@ -99,7 +100,11 @@ namespace MANAGERS
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
 			}
-			
+		}
+
+		public void StopSFX() 
+		{
+			_sfxSource.Stop();
 		}
 
 		public void PlayJingle(string nameClip)

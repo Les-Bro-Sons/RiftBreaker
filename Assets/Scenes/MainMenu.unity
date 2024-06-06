@@ -4561,6 +4561,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
         type: 3}
+      propertyPath: m_InputType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
+        type: 3}
       propertyPath: m_RebindText
       value: 
       objectReference: {fileID: 0}
@@ -7651,7 +7656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS/Up
+  m_text: LS Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -9032,6 +9037,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BindingId
       value: b1dddabb-172a-4a62-9cd1-98d9a3064567
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
+        type: 3}
+      propertyPath: m_InputType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
         type: 3}
@@ -19250,6 +19260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentButton: 0
+  CurrentButton2: 0
   ButtonHooveredCount: 0
 --- !u!114 &1367825640 stripped
 MonoBehaviour:
@@ -29640,6 +29651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BindingId
       value: 51fd1a5e-d1fe-4fc1-a0f9-a36ee8246df4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
+        type: 3}
+      propertyPath: m_InputType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6680292650503350826, guid: f25dcd618d3acd64795bf8bb32edb6c9,
         type: 3}

@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,8 +22,9 @@ public class RB_MusicBox : RB_Items
     protected override void Start()
     {
         base.Start();
-
+        EventOnEndOfAttack.AddListener(EndOfAttack);
     }
+   
     public override void Bind()
     {
         base.Bind();
@@ -43,6 +45,7 @@ public class RB_MusicBox : RB_Items
             return;
         }
         base.Attack();
+        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
     }
 
     public override void ChargedAttack()
@@ -50,6 +53,7 @@ public class RB_MusicBox : RB_Items
         base.ChargedAttack();
 
         _charging = false;
+        RB_AudioManager.Instance.PlaySFX("musicbox_Loop", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void StartChargingAttack()
@@ -60,7 +64,9 @@ public class RB_MusicBox : RB_Items
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
+            RB_AudioManager.Instance.PlaySFX("musicBoxManivelle", RB_PlayerController.Instance.transform.position, .15f, .05f);
         }
+        
 
     }
 
@@ -97,5 +103,8 @@ public class RB_MusicBox : RB_Items
         ChargeZone();
     }
 
-
+    private void EndOfAttack() 
+    {
+        RB_AudioManager.Instance.StopSFX();
+    }
 }

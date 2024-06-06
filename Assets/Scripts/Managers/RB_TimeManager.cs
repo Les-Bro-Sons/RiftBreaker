@@ -72,7 +72,7 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                Time.timeScale += Time.fixedDeltaTime / 10f;
+                Time.timeScale += Time.fixedDeltaTime / 2.5f;
             }
         }
     }

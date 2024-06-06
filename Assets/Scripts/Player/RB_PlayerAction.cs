@@ -43,6 +43,7 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
+    public UnityEvent EventOnChargeSpecialAttackGathered;
 
     //Interacts
     [SerializeField] private float _interactRange;
@@ -51,6 +52,7 @@ public class RB_PlayerAction : MonoBehaviour
     public List<RB_Items> Items = new();
     public bool IsItemNearby;
     public int ItemId = 0;
+    public bool FirstItemGathered = false;
     public RB_Items Item; public RB_Items CurrentItem { get { return Item; } }
 
     //Debug
@@ -83,6 +85,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //When the item is gathered, get it
         Item = Items[id];
+        ItemId = id;
     }
 
     public void StartDash()
@@ -117,7 +120,6 @@ public class RB_PlayerAction : MonoBehaviour
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
-                EventItemGathered?.Invoke();
                 itemGathered.Bind();
                 IsItemNearby = true;
                 //Add the item gathered to the items
@@ -130,10 +132,9 @@ public class RB_PlayerAction : MonoBehaviour
                 {
                     Items.Add(itemGathered);
                 }
-                print(ItemId);
-                _playerController.ChoseItem(ItemId);
-                ItemId++;
-                ItemId = (ItemId >= 2) ? 2 : ItemId;
+                _playerController.ChoseItem(Items.Count-1);
+                EventItemGathered?.Invoke();
+
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

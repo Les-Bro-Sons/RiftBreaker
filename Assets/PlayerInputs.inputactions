@@ -335,7 +335,7 @@
                 {
                     "name": "",
                     "id": "b1dddabb-172a-4a62-9cd1-98d9a3064567",
-                    "path": "<Gamepad>/dpad/down",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -474,6 +474,15 @@
                     "name": "CancelSelection",
                     "type": "Button",
                     "id": "691c5dc0-683a-4a47-9f7e-4ce559d33dad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "0c525b8b-0e2e-4613-ac61-30242d7e5e76",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1171,6 +1180,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "CancelSelection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "500a6bf4-8777-42d5-94e6-f6ec85bc2588",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e27d94dd-fbe4-4a77-a9ec-64cc3750acee",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

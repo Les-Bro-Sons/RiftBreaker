@@ -55,7 +55,7 @@ public class RB_AI_Attack : RB_BTNode
                         case -1: //infiltration attack
                             if (WaitBeforeAttackCounter(_btParent.InfSlashDelay))
                             {
-                                _btParent.AiAnimator.SetTrigger("Attack");
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 Slash(_btParent.InfSlashDamage, _btParent.InfSlashRange, _btParent.InfSlashKnockback, _btParent.InfSlashCollisionSize, _btParent.InfSlashParticles);
                                 if(!_playSoundDamaged)
                                     RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.5f, .5f);
@@ -65,7 +65,7 @@ public class RB_AI_Attack : RB_BTNode
                         case 0: //slash attack
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
-                                _btParent.AiAnimator.SetTrigger("Attack");
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
                                 Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 if(!_playSoundDamaged)
                                     RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0.1f, .5f);
@@ -132,11 +132,56 @@ public class RB_AI_Attack : RB_BTNode
                             break;
                     }
                     break;
+                case ENEMYCLASS.Pawn:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
+                                Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
+                                StopAttacking();
+                            }
+                            break;
+                    }
+                    break;
+                case ENEMYCLASS.Tower:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            if (WaitBeforeAttackCounter(_btParent.SlashDelay))
+                            {
+                                if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
+                                KamikazeExplosion();
+                                StopAttacking();
+                            }
+                            break;
+                    }
+                    break;
             }
         }
 
         _state = BTNodeState.RUNNING;
         return _state;
+    }
+
+    private void KamikazeExplosion()
+    {
+        List<RB_Health> alreadyDamaged = new();
+        foreach (Collider enemy in Physics.OverlapSphere(_transform.position, _btParent.ExplosionRadius))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+            {
+                if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                alreadyDamaged.Add(enemyHealth);
+                enemyHealth.TakeDamage(_btParent.ExplosionDamage);
+                enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, _transform.position), _btParent.ExplosionKnockback);
+            }
+        }
+        if (_btParent.ExplosionParticles)
+            _btParent.SpawnPrefab(_btParent.ExplosionParticles, _transform.position, Quaternion.identity);
+        _btParent.AiHealth.TakeDamage(9999);
     }
 
     private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack

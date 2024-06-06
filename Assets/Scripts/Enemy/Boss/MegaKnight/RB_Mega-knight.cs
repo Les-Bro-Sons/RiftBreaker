@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RB_Mega_knight : RB_Boss
 {
+    public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     [Header("Slash (attack1)")]
@@ -39,8 +40,13 @@ public class RB_Mega_knight : RB_Boss
     //Animation
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
-    protected override void Awake()
-    {
+    protected override void Awake(){
+        if (Instance == null) {
+            Instance = this;
+        }
+        else { 
+            DestroyImmediate(gameObject);
+        }
         base.Awake();
     }
 
@@ -60,6 +66,10 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
+        int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -127,15 +137,7 @@ public class RB_Mega_knight : RB_Boss
             }
         }
         
-
-        //if (MovementSpeed >= 0.1f) //SWITCH TO MOVING
-        //{
         return CurrentState = BOSSSTATES.Moving;
-        //}
-        //SWITCH TO IDLE
-
-        _currentWaitInIdle = WaitInIdle;
-        return BOSSSTATES.Idle;
     }
 
     private bool WaitForSlash() //TIMER ATTACK 1
@@ -159,7 +161,7 @@ public class RB_Mega_knight : RB_Boss
 
                 alreadyDamaged.Add(enemyHealth);
                 enemyHealth.TakeDamage(_slashDamage);
-                enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position ,_slashKnockback);
+                enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, transform.position) ,_slashKnockback);
             }
         }
         if (_slashParticles)
@@ -179,7 +181,6 @@ public class RB_Mega_knight : RB_Boss
     {
         //Animations
         _enemyAnimation.TriggerThirdAttack();
-        print("start jump attack");
 
         _currentJumpDuration = 0;
         _jumpStartPos = transform.position;
@@ -206,7 +207,7 @@ public class RB_Mega_knight : RB_Boss
                     if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                     alreadyDamaged.Add(enemyHealth);
                     enemyHealth.TakeDamage(_landingDamage);
-                    enemyHealth.TakeKnockback((collider.transform.position - transform.position).normalized, _landingKnockback);
+                    enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(collider.transform.position, transform.position), _landingKnockback);
                 }
             }
 
@@ -266,7 +267,7 @@ public class RB_Mega_knight : RB_Boss
 
         _alreadySpikeDamaged.Add(enemyHealth);
         enemyHealth.TakeDamage(_spikeDamage);
-        enemyHealth.TakeKnockback((enemyHealth.transform.position - transform.position).normalized, _spikeKnockback);
+        enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, transform.position), _spikeKnockback);
     }
     
 

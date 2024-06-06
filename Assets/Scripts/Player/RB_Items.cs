@@ -7,12 +7,13 @@ using UnityEngine.Events;
 public class RB_Items : MonoBehaviour
 {
     //Attack
-    private float _lastUsedAttackTime;
+    protected float _lastUsedAttackTime;
     private float _currentDamage;
     private float _currentKnockbackForce;
     protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
+    [SerializeField] private float _specialAttackChargeTime;
 
     [SerializeField] private float _chargeZoom = 0.85f;
 
@@ -45,9 +46,10 @@ public class RB_Items : MonoBehaviour
     private RB_CollisionDetection _collisionDetection;
     [SerializeField] private GameObject _objectToRemove;
     protected Transform _transform;
-    RB_PlayerAction _playerAction;
+    protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
+    public Sprite CurrentSprite;
 
     //Player
     protected Transform _playerTransform;
@@ -78,6 +80,28 @@ public class RB_Items : MonoBehaviour
         _collisionDetection = _playerAction.CollisionDetection;
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
+        //Get the sprite of the item
+        CurrentSprite = GetComponentInChildren<SpriteRenderer>().sprite;
+    }
+
+    private void Update()
+    {
+        RechargeSpecialAttack();
+    }
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        _playerAction.SpecialAttackCharge += amountToAdd;
+    }
+
+    public virtual void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if(_playerAction.SpecialAttackCharge <= 100)
+        {
+            _playerAction.SpecialAttackCharge += (Time.deltaTime / _specialAttackChargeTime) * 100;
+        }
     }
 
     public virtual void Bind()
@@ -88,8 +112,10 @@ public class RB_Items : MonoBehaviour
         _transform = transform;
         //When the item is gathered get the playerAction
         _playerAction = GetComponentInParent<RB_PlayerAction>();
+
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
+        
     }
 
     public virtual void Drop()
@@ -121,7 +147,7 @@ public class RB_Items : MonoBehaviour
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        _lastUsedAttackTime = Time.time;
+        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
@@ -134,7 +160,6 @@ public class RB_Items : MonoBehaviour
         //Degats
         //KBs
 
-        //end of attack
     }
 
     public virtual void DealDamage()
@@ -156,7 +181,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitToResetAttacks()
+    protected IEnumerator WaitToResetAttacks()
     {
         //Wait for the end of the frame 
         yield return new WaitForEndOfFrame();
@@ -191,7 +216,6 @@ public class RB_Items : MonoBehaviour
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
-        
         StartCoroutine(OnEndOfAttack());
     }
 
@@ -219,6 +243,8 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         RB_Camera.Instance.Zoom(_chargeZoom);
+
+        
     }
 
     public virtual void StopChargingAttack()

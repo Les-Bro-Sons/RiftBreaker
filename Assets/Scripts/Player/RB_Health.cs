@@ -1,3 +1,5 @@
+using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEngine;
@@ -30,7 +32,7 @@ public class RB_Health : MonoBehaviour {
 
     public bool Dead = false;
 
-    //Nom de l'entitÈ qui possËde le script
+    //Nom de l'entit√© qui poss√®de le script
     string _name; public string Name { get { return _name; } }
     
     [HideInInspector] public UnityEvent EventDeath;
@@ -44,6 +46,9 @@ public class RB_Health : MonoBehaviour {
     [SerializeField] private GameObject _particleDamage;
     [SerializeField] private GameObject _particleDeath;
     [SerializeField] private GameObject _particleHeal;
+    [SerializeField] Animator _animPlayer;
+    [SerializeField] Animator _animUX;
+    [SerializeField] Animator _animUIPlayer;
 
     //Components
     Rigidbody _rb;
@@ -54,7 +59,7 @@ public class RB_Health : MonoBehaviour {
         _rb = GetComponent<Rigidbody>();
     }
 
-    //Fonction de prise de dÈg‚ts
+    //Fonction de prise de d√©g√¢ts
     public void TakeDamage(float amount, bool ignoreParticle = false) {
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
@@ -68,6 +73,22 @@ public class RB_Health : MonoBehaviour {
         }
         if (_particleDamage)
             Instantiate(_particleDamage, transform.position, Quaternion.identity);
+        //triggering the animation
+        if (_animPlayer) _animPlayer.SetTrigger("isDamage");
+        else Debug.LogWarning("No _animPlayer in RB_Health");
+
+        if (_animUX) _animUX.SetTrigger("isDamage");
+        else Debug.LogWarning("No _animUX in RB_Health");
+
+        if (_animUIPlayer)
+        {
+            //Change the text of the UI Text with the amount of damage
+            _animUIPlayer.gameObject.GetComponentInChildren<TMP_Text>().text = (-amount).ToString();
+            //Trigger the last animation
+            _animUIPlayer.SetTrigger("isDamage");
+        }
+        else Debug.LogWarning("No _animUIPlayer in RB_Health");
+        
     }
 
     public void TakeKnockback(Vector3 direction, float knockbackForce)

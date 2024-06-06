@@ -53,8 +53,4 @@ public class RB_Boss : RB_Enemy
         return Vector3.Distance(transform.position, PlayerPosition.position) <= DetectionRadius;
     }
 
-    
-
-    
-    
 } 

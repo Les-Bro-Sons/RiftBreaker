@@ -87,7 +87,6 @@ public class RB_Scythe : RB_Items
         //     RB_AudioManager.Instance.SfxSource.Stop();
         // }
     }
-
     private void LoopSound() {
         _timer -= Time.deltaTime;
         if (_timer<=0)

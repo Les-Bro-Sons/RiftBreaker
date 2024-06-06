@@ -30,6 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6364608749509880830}
+  - {fileID: 4808940779969784054}
   - {fileID: 8304114567082461872}
   - {fileID: 1755633059025996507}
   m_Father: {fileID: 0}
@@ -139,8 +140,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionCanvas: {fileID: 0}
   SpeedType: 0
-  FadeType: 0
+  FadeType: 1
   CurrentTransition: {fileID: 0}
+  PlayButton: Niveau1-MVP
   AnimationCurves:
     _serializedList:
     - Key: 0
@@ -304,9 +306,9 @@ Canvas:
   m_GameObject: {fileID: 7995973177813662557}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -316,7 +318,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!1001 &1393867520187112097
 PrefabInstance:
@@ -516,4 +518,78 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5407594929873760607, guid: 25e781b5c240795489094e9a602a9188,
     type: 3}
   m_PrefabInstance: {fileID: 1393867520187112097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5619702430676101288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2844205410739935513}
+    m_Modifications:
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748299860135567294, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_Name
+      value: InputMenuManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ce16fe68972cf0d4883fae2c67ad1c43, type: 3}
+--- !u!4 &4808940779969784054 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1099436581881905246, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+    type: 3}
+  m_PrefabInstance: {fileID: 5619702430676101288}
   m_PrefabAsset: {fileID: 0}

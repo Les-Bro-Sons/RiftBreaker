@@ -145,8 +145,8 @@ Transform:
   m_GameObject: {fileID: 7051855330456273059}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5723591724661758270}
@@ -192,7 +192,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 18bb63baab70bfd4c80996c882fcaca8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c46b66471058e4f44a9ddba7a6d3e518, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _specialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 0
@@ -278,7 +279,25 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 303392580688658768}
   HudSprite: {fileID: 0}
+  CurrentSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 1
+  CanMoveDuringSpecialAttack: 0
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  _zonePrefab: {fileID: 6379153291856199861, guid: cfa322bc17e5e6f4c9e51aa1d6d29480,
+    type: 3}
+  _zoneGrowthSpeed: 5
+  _maxZoneSize: 5
+  NoteSprites:
+  - {fileID: 21300000, guid: 524f3370ab6e1e5409d1e10cd3c6bb38, type: 3}
+  - {fileID: 21300000, guid: 4332913de8ac78a40a18b33c33c599aa, type: 3}
+  - {fileID: 21300000, guid: fe3a404178e54d84fa7ab6c51040d028, type: 3}
+  - {fileID: 21300000, guid: c8a1b4de992075245a33bcb03c436bf7, type: 3}
+  - {fileID: 21300000, guid: 6ecd5473e3194e44bb25b81483f2a432, type: 3}
+  - {fileID: 21300000, guid: 70b1c158299dba94c96f295d1b7cd822, type: 3}
+  - {fileID: 21300000, guid: f0ce89f9c515e1741bf24c6b5a2aff56, type: 3}
+  - {fileID: 21300000, guid: 089e27426bee91841b77d52d4aa56f67, type: 3}
 --- !u!1 &8067806801707449436
 GameObject:
   m_ObjectHideFlags: 0

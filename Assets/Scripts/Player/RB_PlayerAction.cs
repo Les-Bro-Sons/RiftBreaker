@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MANAGERS;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -58,8 +59,12 @@ public class RB_PlayerAction : MonoBehaviour
 
     //Debug
     [Header("Debug")]
-    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback; 
+    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
 
+
+    
+
+    //Awake
     private void Awake()
     {
         if (Instance == null)
@@ -72,6 +77,16 @@ public class RB_PlayerAction : MonoBehaviour
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
+
+    //Update
+    private void Update()
+    {
+        //count the time the player press the attack button
+        TimerChargeAttack();
+        
+    }
+
+    
 
     public void SetCurrentWeapon(string currentWeapon)
     {
@@ -101,7 +116,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (Item != null && CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4)
+        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || ( Item.CanAttackDuringAttack && Item.CanAttack())))
         {
             //Attack
             IsAttacking = true;
@@ -280,11 +295,7 @@ public class RB_PlayerAction : MonoBehaviour
         return false;
     }
 
-    private void Update()
-    {
-        //count the time the player press the attack button
-        TimerChargeAttack();
-    }
+    
 
     private void TimerChargeAttack()
     {

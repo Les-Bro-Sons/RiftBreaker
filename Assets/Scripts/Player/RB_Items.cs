@@ -58,6 +58,7 @@ public class RB_Items : MonoBehaviour
     //bool
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
+    public bool CanAttackDuringAttack;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
@@ -144,7 +145,8 @@ public class RB_Items : MonoBehaviour
     }
 
     public virtual void Attack()
-    { 
+    {
+        _lastUsedAttackTime = Time.time;
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
@@ -193,7 +195,7 @@ public class RB_Items : MonoBehaviour
     public virtual bool CanAttack()
     {
         //Cooldown dash
-        return Time.time > (_lastUsedAttackTime + _attackCooldown);
+        return Time.time >= (_lastUsedAttackTime + _attackCooldown);
     }
 
     public virtual IEnumerator OnEndOfAttack()

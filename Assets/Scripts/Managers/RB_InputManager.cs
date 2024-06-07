@@ -1,3 +1,6 @@
+using System;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -35,6 +38,8 @@ public class RB_InputManager : MonoBehaviour
 
     public bool IsMouse = false;
 
+    private Transform _playerTransform;
+
     private void Awake()
     {
         if (Instance == null)
@@ -46,6 +51,11 @@ public class RB_InputManager : MonoBehaviour
         {
             DestroyImmediate(gameObject); //destroy if another RB_InputManager is already in the scene
         }
+    }
+
+    private void Start()
+    {
+        _playerTransform = RB_PlayerAction.Instance.transform;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -118,11 +128,38 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector3 GetMouseDirection()
     {
+        
         Vector3 direction = new();
-        Vector3 screenMousePos = Input.mousePosition;
-        screenMousePos.z = Camera.main.nearClipPlane;
-        Vector3 adjustedWorldMousePos = Camera.main.ScreenToWorldPoint(screenMousePos) - Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, screenMousePos.z));
-        direction = new Vector3((adjustedWorldMousePos - Vector3.zero).x, 0, (adjustedWorldMousePos - Vector3.zero).z);
+        //Mouse direction
+        Vector3 playerPos = _playerTransform.position;
+        Vector3 worldMousePos = new();
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
+
+        // Sort hits by distance
+        Array.Sort(hits, (h1, h2) => h1.distance.CompareTo(h2.distance));
+
+        
+        foreach (var hit in hits)
+        {
+            if (hit.collider.gameObject == RB_GroundManager.Instance.gameObject)
+            {
+                //world mouse position by raycast
+                worldMousePos = hit.point;
+                break;
+            }
+        }
+
+        //The direction starting from the the position of the mouse on the camera and finishing to the world mouse pos
+        Vector3 cameraMouseDirection = -(worldMousePos - ray.origin).normalized;
+        
+        //Translate the world mouse position withe camera mouse direction acting like a Vector3.Up
+        worldMousePos += cameraMouseDirection;
+
+        //The direction from the player to the world mouse pos
+        direction = worldMousePos - _playerTransform.position;
+        direction.y = 0;
 
         return direction;
     }

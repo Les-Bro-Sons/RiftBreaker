@@ -586,6 +586,12 @@ AnimatorController:
   m_Name: PauseMenuAnim
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: IsPaused
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: IsOptionOpen
     m_Type: 4
     m_DefaultFloat: 0
@@ -812,7 +818,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle
+  m_Name: Pause
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

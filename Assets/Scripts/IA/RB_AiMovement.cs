@@ -51,11 +51,6 @@ public class RB_AiMovement : MonoBehaviour
         PushOverlapingBodies();
     }
 
-    private void Update()
-    {
-        UpdateAnimator();
-    }
-
     public void MoveIntoDirection(Vector3 direction, float? speed = null, float? acceleration = null, float? deltaTime = null) // deprecated
     {
         if (direction == Vector3.zero) return;
@@ -110,18 +105,6 @@ public class RB_AiMovement : MonoBehaviour
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
-    }
-
-    private void UpdateAnimator()
-    {
-        //Updating the enemy animator
-        if(_enemyAnimator != null)
-        {
-            _enemyAnimator.SetFloat("Horizontal", WalkDirection.x);
-            _enemyAnimator.SetFloat("Vertical", WalkDirection.z);
-            _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
-        }
-        
     }
 
     private void PushOverlapingBodies()

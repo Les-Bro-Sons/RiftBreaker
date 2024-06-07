@@ -92,7 +92,7 @@ public class RB_AddressableManager : MonoBehaviour
                    var audioSource = audioGameObject.GetComponent<AudioSource>(); // Assuming the prefab has an AudioSource
                     audioSource.clip = clip.Result;
 
-                    // Configure audio source based on your needs (playOnAwake, loop, etc.)
+                    // Configure audio _source based on your needs (playOnAwake, loop, etc.)
                     audioSource.playOnAwake = false;
                    // audioSource.loop = false;
                     // ... (other configuration)
@@ -190,7 +190,7 @@ public class RB_AddressableManager : MonoBehaviour
 //                     // Handle successful loading
 //                     var audioSource = gameObject.AddComponent<AudioSource>();
 //                     audioSource.clip = clip.Result;
-//                     // Configure audio source based on your needs (playOnAwake, loop, etc.)
+//                     // Configure audio _source based on your needs (playOnAwake, loop, etc.)
 //                     audioSource.playOnAwake = false;
 //                     audioSource.loop = false;
 //                     // ... (other configuration)

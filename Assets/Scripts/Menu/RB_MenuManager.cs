@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class RB_MenuManager : MonoBehaviour {
 
     public static RB_MenuManager Instance;
-    public bool IsPaused;
 
-    public Animator Animator;    
+    public bool IsOptionOpen;
+
+    public Animator Animator;
 
     enum MENUSTATE { 
         Audio, Video, Control
@@ -15,26 +16,21 @@ public class RB_MenuManager : MonoBehaviour {
 
     MENUSTATE _menuState;
 
-    public bool IsOptionOpen;
-    private void Start() {
-        if (Instance == null) { Instance = this; }
-        Animator = GetComponent<Animator>();
-        RB_MenuInputManager.Instance.EventPauseStarted.AddListener(Pause);
-    }
 
-    private void Update(){
-        if (IsPaused) {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 0f, Time.unscaledDeltaTime / 0.5F);
-        }
+    private void Awake() {
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
+        Animator = GetComponent<Animator>();
+        Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
     }
      
     public void Play() {
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
-    public void Pause() {
-        Debug.Log("Paused");
-        IsPaused = true;
+    public void MainMenu() {
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
     public void Options() {
@@ -43,7 +39,8 @@ public class RB_MenuManager : MonoBehaviour {
         _menuState = MENUSTATE.Audio;
     }
 
-    public void CloseOption() { 
+    public void CloseOption() {
+        Debug.Log("AAAAAA");
         IsOptionOpen = false;
     }
 

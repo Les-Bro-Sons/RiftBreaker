@@ -99,7 +99,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (Item != null && CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4)
+        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || ( Item.CanAttackDuringAttack && Item.CanAttack())))
         {
             //Attack
             IsAttacking = true;

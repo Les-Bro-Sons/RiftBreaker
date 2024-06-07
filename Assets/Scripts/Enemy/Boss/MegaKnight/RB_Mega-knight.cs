@@ -6,6 +6,7 @@ public class RB_Mega_knight : RB_Boss
 {
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+    private new Transform transform;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -41,6 +42,7 @@ public class RB_Mega_knight : RB_Boss
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
     protected override void Awake(){
+        transform = GetComponent<Transform>();
         if (Instance == null) {
             Instance = this;
         }

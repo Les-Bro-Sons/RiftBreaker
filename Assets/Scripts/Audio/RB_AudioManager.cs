@@ -59,7 +59,7 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			// PlayMusic("son_angaros");
+			PlayMusic("zik_hugoval_final");
 		}
 
 		public void PlayMusic(string nameClip)

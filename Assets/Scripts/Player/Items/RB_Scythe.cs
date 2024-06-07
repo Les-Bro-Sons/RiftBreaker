@@ -100,4 +100,9 @@ public class RB_Scythe : RB_Items
         base.SpecialAttack();
         RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 0.5f);
     }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, 0,.5f);
+    }
 }

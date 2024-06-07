@@ -1,3 +1,6 @@
+using System;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -125,10 +128,38 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector3 GetMouseDirection()
     {
+        
         Vector3 direction = new();
-        Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(_playerTransform.position);
-        Vector3 screenMousePos = Input.mousePosition;
-        direction = new Vector3((screenMousePos - playerScreenPosition).x, 0, (screenMousePos - playerScreenPosition).y);
+        //Mouse direction
+        Vector3 playerPos = _playerTransform.position;
+        Vector3 worldMousePos = new();
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
+
+        // Sort hits by distance
+        Array.Sort(hits, (h1, h2) => h1.distance.CompareTo(h2.distance));
+
+        
+        foreach (var hit in hits)
+        {
+            if (hit.collider.gameObject == RB_GroundManager.Instance.gameObject)
+            {
+                //world mouse position by raycast
+                worldMousePos = hit.point;
+                break;
+            }
+        }
+
+        //The direction starting from the the position of the mouse on the camera and finishing to the world mouse pos
+        Vector3 cameraMouseDirection = -(worldMousePos - ray.origin).normalized;
+        
+        //Translate the world mouse position withe camera mouse direction acting like a Vector3.Up
+        worldMousePos += cameraMouseDirection;
+
+        //The direction from the player to the world mouse pos
+        direction = worldMousePos - _playerTransform.position;
+        direction.y = 0;
 
         return direction;
     }

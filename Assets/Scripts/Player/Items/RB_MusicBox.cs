@@ -35,22 +35,13 @@ public class RB_MusicBox : RB_Items
 
     public override void Attack()
     {
-        if(_charging)
-        {
-            _charging = false;
-            _playerAnimator.SetBool("ChargingAttack", false);
-            _playerAction.StopAttack();
-            _playerAction.StopChargedAttack();
-            _playerAction.StopSpecialAttack();
-            return;
-        }
-        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/MusicNote"), _playerTransform.position, _playerTransform.rotation) as GameObject;
+        base.Attack();
+        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/MusicNote"), new Vector3(_playerTransform.position.x, 0, _playerTransform.position.z), _playerTransform.rotation) as GameObject;
         if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
         {
-            newObject.transform.position += projectile.transform.forward * projectile.SpawnDistanceFromPlayer;
+            newObject.transform.position = _playerTransform.position + projectile.transform.forward * projectile.SpawnDistanceFromPlayer;
             projectile.Team = TEAMS.Player;
         }
-        base.Attack();
         RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
     }
 
@@ -102,6 +93,14 @@ public class RB_MusicBox : RB_Items
         base.StopChargingAttack();
         StopChargeZone();
         Destroy(_instantiatedZone, _stayTime);
+        if (_charging)
+        {
+            _charging = false;
+            _playerAnimator.SetBool("ChargingAttack", false);
+            _playerAction.StopAttack();
+            _playerAction.StopChargedAttack();
+            _playerAction.StopSpecialAttack();
+        }
     }
 
     private void Update()

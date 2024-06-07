@@ -195,7 +195,7 @@ public class RB_Items : MonoBehaviour
     public virtual bool CanAttack()
     {
         //Cooldown dash
-        return Time.time > (_lastUsedAttackTime + _attackCooldown);
+        return Time.time >= (_lastUsedAttackTime + _attackCooldown);
     }
 
     public virtual IEnumerator OnEndOfAttack()

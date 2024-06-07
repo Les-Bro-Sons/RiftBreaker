@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MANAGERS;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -122,6 +123,7 @@ public class RB_LevelManager : MonoBehaviour
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
+        RB_AudioManager.Instance.PlaySFX("scream-no", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public IEnumerator PlayerLostUX()

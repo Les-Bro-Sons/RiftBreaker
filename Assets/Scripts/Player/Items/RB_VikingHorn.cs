@@ -149,4 +149,9 @@ public class RB_VikingHorn : RB_Items
         ComboTimer();
         UpdateAnim();
     }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("sheating_Horn", RB_PlayerController.Instance.transform.position, 0,.5f);
+    }
 }

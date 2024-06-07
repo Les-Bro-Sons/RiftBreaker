@@ -59,7 +59,7 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			// PlayMusic("son_angaros");
+			PlayMusic("zik_hugoval_final");
 		}
 
 		public void PlayMusic(string nameClip)
@@ -99,7 +99,8 @@ namespace MANAGERS
 			else
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
-			}
+				Destroy(_audioSource);
+            }
 		}
 
 		public void StopSFX() 

@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -264,5 +265,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("FinishChargingAttack");
     }
 
-
+    public virtual void ChooseSfx() {
+        
+    }
 }

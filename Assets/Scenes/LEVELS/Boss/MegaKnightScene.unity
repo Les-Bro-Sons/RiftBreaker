@@ -7600,6 +7600,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1079100266}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1084789660 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7214748225881584283, guid: f4f863f9616382e4a88bcc93eec0164a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2063922572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1105777438
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14935,6 +14941,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5424571959079900752, guid: f4f863f9616382e4a88bcc93eec0164a,
+        type: 3}
+      propertyPath: AiAnimator
+      value: 
+      objectReference: {fileID: 1084789660}
     - target: {fileID: 5424571959079900752, guid: f4f863f9616382e4a88bcc93eec0164a,
         type: 3}
       propertyPath: _landingKnockback

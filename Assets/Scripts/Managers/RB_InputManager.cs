@@ -35,6 +35,8 @@ public class RB_InputManager : MonoBehaviour
 
     public bool IsMouse = false;
 
+    private Transform _playerTransform;
+
     private void Awake()
     {
         if (Instance == null)
@@ -46,6 +48,11 @@ public class RB_InputManager : MonoBehaviour
         {
             DestroyImmediate(gameObject); //destroy if another RB_InputManager is already in the scene
         }
+    }
+
+    private void Start()
+    {
+        _playerTransform = RB_PlayerAction.Instance.transform;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -119,10 +126,9 @@ public class RB_InputManager : MonoBehaviour
     public Vector3 GetMouseDirection()
     {
         Vector3 direction = new();
+        Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(_playerTransform.position);
         Vector3 screenMousePos = Input.mousePosition;
-        screenMousePos.z = Camera.main.nearClipPlane;
-        Vector3 adjustedWorldMousePos = Camera.main.ScreenToWorldPoint(screenMousePos) - Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, screenMousePos.z));
-        direction = new Vector3((adjustedWorldMousePos - Vector3.zero).x, 0, (adjustedWorldMousePos - Vector3.zero).z);
+        direction = new Vector3((screenMousePos - playerScreenPosition).x, 0, (screenMousePos - playerScreenPosition).y);
 
         return direction;
     }

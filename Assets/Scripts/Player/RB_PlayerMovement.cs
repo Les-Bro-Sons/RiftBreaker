@@ -1,22 +1,18 @@
 using MANAGERS;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class RB_PlayerMovement : MonoBehaviour
 {
-    //Enums
-    public enum Direction { Back, Face, Left, Right}
-
     //Player movement properties
     [Header("Player movement properties")]
     [HideInInspector] public Vector3 LastDirection;
     [SerializeField] private float _movementAcceleration;
     [SerializeField] private float _movementMaxSpeed;
     [SerializeField] private float _movementFrictionForce;
+    public Vector3 ForwardDirection = new();
     public Vector3 DirectionToMove;
-    public Direction ActualDirection;
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
     private bool _canMove = true;
@@ -54,6 +50,10 @@ public class RB_PlayerMovement : MonoBehaviour
     private Vector3 _previousPosition;
     private Vector3 _currentPosition;
 
+    //Attack
+    Vector3 directionToAttack = new();
+    private bool _directionGot = false;
+
     public static RB_PlayerMovement Instance;
     private void Awake()
     {   
@@ -68,6 +68,74 @@ public class RB_PlayerMovement : MonoBehaviour
     private void Start()
     {
         Invoke("DebugSpeed", 0);
+    }
+
+    private void Update()
+    {
+        //Set the direction
+        UpdateDirection();
+        UpdateForward();
+
+        //Get the direction to move
+        GetDirection(RB_InputManager.Instance.MoveValue);
+        SetDirectionToAttack();
+    }
+
+    private void UpdateDirection()
+    {
+        if (_playerAction.IsDoingAnyAttack() || _playerAction.IsChargingAttack)
+        {
+            //If the player is currently atatcking or charging the attack
+            if((_playerAction.IsChargedAttacking || _playerAction.IsChargingAttack) && _playerAction.CurrentItem && !_playerAction.CurrentItem.FollowMouseOnChargeAttack)
+            {
+                //If the player has to reset the attack while the charge attack
+                ResetRotation();
+            }
+            else if (!_directionGot)
+            {
+                //If the direction of the attack is got set the direction to the attack direction
+                ForwardDirection = directionToAttack;
+                _directionGot = true;
+            }
+        }
+        else
+        {
+            //If the player is not doing any attack
+            if (_directionGot) //Reable the possiblity to get the attack of the direction
+                _directionGot = false;
+
+            //If the player is moving
+            if (_isMoving)
+                ForwardDirection = DirectionToMove; //Set the direction to the move direction
+        }
+    }
+
+    private void UpdateForward()
+    {
+        //Constantly set the direction of the player to the right direction
+        _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+    }
+
+    private void SetDirectionToAttack()
+    {
+        if (RB_InputManager.Instance.IsMouse)
+        {
+            //If the player is playing with the mouse the attack direction is set to the mouse direction
+            directionToAttack = RB_InputManager.Instance.GetMouseDirection();
+        }
+        else
+        {
+            //Otherwise, the attack direction is set to the move direction
+            directionToAttack = DirectionToMove;
+        }
+    }
+
+    private void ResetRotation()
+    {
+        //Set all the directions to front
+        ForwardDirection = Vector3.back;
+        directionToAttack = Vector3.back;
+        DirectionToMove = Vector3.back;
     }
 
     //Starting movement
@@ -85,33 +153,6 @@ public class RB_PlayerMovement : MonoBehaviour
     public void GetDirection(Vector3 direction)
     {
         DirectionToMove = new Vector3(direction.x, 0, direction.y);
-        if (!_playerAction.IsAttacking)
-        {
-            //setting the right direction in the state
-            if (Mathf.Abs(DirectionToMove.x) > Mathf.Abs(DirectionToMove.y))
-            {
-                if (DirectionToMove.x > 0)
-                    ActualDirection = Direction.Right;
-                else
-                    ActualDirection = Direction.Left;
-            }
-            else
-            {
-                if (DirectionToMove.z > 0)
-                    ActualDirection = Direction.Back;
-                else
-                    ActualDirection = Direction.Face;
-            }
-        }
-    }
-
-    public void SetDirection()
-    {
-        if (!_playerAction.IsDoingAnyAttack())
-        {
-            //Setting the direction to the player
-            _rb.MoveRotation(Quaternion.LookRotation(DirectionToMove));
-        }
     }
 
     public Vector3 GetDirectionToMove()
@@ -121,9 +162,7 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public void ResetDirection()
     {
-        ActualDirection = Direction.Face;
         _rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
-        DirectionToMove = Vector3.back;
     }
 
     private void ClampingSpeed()
@@ -232,11 +271,7 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        //Set the direction
-        SetDirection();
-    }
+    
 
     private void FixedUpdate()
     {
@@ -249,15 +284,12 @@ public class RB_PlayerMovement : MonoBehaviour
         //Calling the speed calcul in real time
         SetSpeed();
 
-        
 
+        
 
         //If the player can move
         if (CanMove())
         {
-            //Get the direction to move
-            GetDirection(RB_InputManager.Instance.MoveValue);
-
             //Call the movement function
             Move();
         }

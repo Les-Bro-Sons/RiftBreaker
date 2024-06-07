@@ -44,6 +44,12 @@ public class RB_MusicBox : RB_Items
             _playerAction.StopSpecialAttack();
             return;
         }
+        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/MusicNote"), _playerTransform.position, _playerTransform.rotation) as GameObject;
+        if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+        {
+            newObject.transform.position += projectile.transform.forward * projectile.SpawnDistanceFromPlayer;
+            projectile.Team = TEAMS.Player;
+        }
         base.Attack();
         RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
     }

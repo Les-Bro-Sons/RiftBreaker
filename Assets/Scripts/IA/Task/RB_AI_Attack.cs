@@ -139,6 +139,7 @@ public class RB_AI_Attack : RB_BTNode
                             if (WaitBeforeAttackCounter(_btParent.SlashDelay))
                             {
                                 if (_btParent.AiAnimator) _btParent.AiAnimator.SetTrigger("Attack"); else Debug.LogWarning("No AiAnimator on " + _transform.name);
+                                RB_AudioManager.Instance.PlaySFX("Basic_attack_Chess", _transform.position, 0, 1);
                                 Slash(_btParent.SlashDamage, _btParent.SlashRange, _btParent.SlashKnockback, _btParent.SlashCollisionSize, _btParent.SlashParticles);
                                 StopAttacking();
                             }
@@ -173,7 +174,7 @@ public class RB_AI_Attack : RB_BTNode
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
             {
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
-
+                RB_AudioManager.Instance.PlaySFX("Chess_explosion", _transform.position, 0, 1);
                 alreadyDamaged.Add(enemyHealth);
                 enemyHealth.TakeDamage(_btParent.ExplosionDamage);
                 enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, _transform.position), _btParent.ExplosionKnockback);

@@ -62,6 +62,7 @@ public class RB_ChessQueen : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
+        RB_AudioManager.Instance.PlaySFX("attack_Spe_Chess", _transform.position, 0, 1);
         foreach(GameObject spawnedChessPawn in SpawnedChessPawns)
         {
             //spawnedChessPawn.Boost();

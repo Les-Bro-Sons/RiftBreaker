@@ -34,7 +34,7 @@ public class RB_RobertLenec : RB_Boss
 
     [Header("Clone Attack (attack3)")]
     public GameObject Clone;
-    [SerializeField] private List<Transform> waypoints;
+    [SerializeField] private List<Transform> _waypoints;
     [SerializeField] private int _numberOfArrow;
     [SerializeField] private float _cloneAttackInterval = 0.5f;
     [SerializeField] private float _cloneAttackDelay = 1f;
@@ -42,7 +42,7 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _cooldownForReaparition = 1f;
     [SerializeField] private float _minCooldownForAttack = 10f;
     [SerializeField] private float _maxCooldownForAttack = 30f;
-    private List<GameObject> clones = new List<GameObject>();
+    private List<GameObject> _clones = new List<GameObject>();
     private Vector3 _lastPosition;
     protected float _currentCooldownBeforeReactivate;
 
@@ -93,7 +93,10 @@ public class RB_RobertLenec : RB_Boss
                 CurrentState = BOSSSTATES.Idle;
                 break;
         }
-
+        if (_currentCooldownBeforeTakeDamage <= 0)
+        {
+            _alreadyAreaDamageZoneDamaged.Clear();
+        }
     }
 
     private BOSSSTATES SwitchBossState()
@@ -135,11 +138,6 @@ public class RB_RobertLenec : RB_Boss
                 RandomMovement();
                 return CurrentState = BOSSSTATES.Moving;
             }
-        }
-
-        if (_currentCooldownBeforeTakeDamage <= 0)
-        {
-            _alreadyAreaDamageZoneDamaged.Clear();
         }
         
         //if (MovementSpeed >= 0.1f) //SWITCH TO MOVING
@@ -245,8 +243,8 @@ public class RB_RobertLenec : RB_Boss
         //Instantiation of clones
         for (int i = 0; i < 4; i++)
         {
-            GameObject clone = Instantiate(Clone, waypoints[i].position, Quaternion.identity);
-            clones.Add(clone);
+            GameObject clone = Instantiate(Clone, _waypoints[i].position, Quaternion.identity);
+            _clones.Add(clone);
         }
 
         //Coroutine for tp back the boss and destroy clones
@@ -260,11 +258,11 @@ public class RB_RobertLenec : RB_Boss
     {
         yield return new WaitForSeconds(duration);
 
-        foreach (GameObject clone in clones)
+        foreach (GameObject clone in _clones)
         {
             Destroy(clone);
         }
-        clones.Clear();
+        _clones.Clear();
         transform.position = _lastPosition;
     }
 

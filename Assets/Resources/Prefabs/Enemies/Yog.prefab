@@ -68,9 +68,9 @@ GameObject:
   - component: {fileID: 4403257837153332557}
   - component: {fileID: 263053956299020696}
   - component: {fileID: 7939403144304551523}
-  - component: {fileID: -5315812548548587530}
+  - component: {fileID: -8971773865608367034}
   m_Layer: 0
-  m_Name: RobertLenec
+  m_Name: Yog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 9101173564990518349}
   _animator: {fileID: 7214748225881584283}
   _health: {fileID: 263053956299020696}
-  _enemy: {fileID: 0}
+  _enemy: {fileID: -8971773865608367034}
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 463989f15a02a4a4099000ec1868306e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 3000
-  _hpMax: 3000
+  _hp: 1000
+  _hpMax: 1000
   Armor: 0
   Team: 0
   Dead: 0
@@ -187,7 +187,7 @@ MonoBehaviour:
   _movementMaxSpeed: 5
   _movementFrictionForce: 75
   _enemyAnimator: {fileID: 7214748225881584283}
---- !u!114 &-5315812548548587530
+--- !u!114 &-8971773865608367034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3453180199176938183}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501494f742c15d341a2c7851acdb5152, type: 3}
+  m_Script: {fileID: 11500000, guid: 8214a651fa297924f8eafdb7ed7233df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EventDead:
@@ -210,44 +210,59 @@ MonoBehaviour:
   AttackSpeed: 2
   DistanceFromPlayer: 0
   DetectionRadius: 100
-  CooldownAttack1: 10
-  CooldownAttack2: 10
-  CooldownAttack3: 10
+  CooldownAttack1: 3
+  CooldownAttack2: 5
+  CooldownAttack3: 0
   CooldownBetweenAttacks: 0
   WaitInIdle: 1
-  BossRB: {fileID: 7950358798519079587}
-  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
-    type: 3}
+  BossRB: {fileID: 0}
+  PlayerPosition: {fileID: 0}
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 0
   Health: {fileID: 0}
   CurrentState: 0
-  _minMovementDistance: 10
-  _maxMovementDistance: 20
-  _movementSpeed: 5
+  _minMovementDistance: 3
+  _maxMovementDistance: 10
+  _movementSpeed: 10
   _delayMovement: 1
-  RedBall: {fileID: 2082089089255593965, guid: c33db515c40ac79429f3547156974591, type: 3}
+  _timeForMoving: 6
+  _tentacleHitWidth: 1
+  _tentacleHitLength: 1
+  _tentacleHitRange: 1
+  _tentacleHitKnockback: 1
+  _tentacleHitDamage: 1
+  _tentacleHitDelay: 1
+  _numberTotalOfAttack: 5
+  _tentacleHitParticles: {fileID: 0}
+  _numberOfAttackDone: 
+  FireBall: {fileID: 2082089089255593965, guid: 0b48f0cc972742f4e9c8793896cac5ff,
+    type: 3}
   _minMovementBeforeAttackDistance: 3
   _maxMovementBeforeAttackDistance: 10
   _dashBeforeAttackSpeed: 10
   _redBallOffset: 1
-  WoodenPieceRainZone: {fileID: 4206258448558021486, guid: 3f1ce637d5db8c44bbfc8518f0b95385,
+  ExplosionZone: {fileID: 2082089089255593965, guid: 9cf225570db110340ad37297fdbdcad7,
     type: 3}
+  _explosionParticles: {fileID: 0}
   _areaDamageRadius: 1
-  _areaDamageInterval: 1
+  _areaDamageInterval: 0.1
   _areaDamageAmount: 1
   _areaDamageKnockback: 1
   _canAreaDamageZoneDamageMultipleTime: 1
-  Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
-  waypoints: []
-  _numberOfArrow: 0
-  _cloneAttackInterval: 0.5
-  _cloneAttackDelay: 1
-  _cloneLifeTime: 1
-  _cooldownForReaparition: 1
-  _minCooldownForAttack: 10
-  _maxCooldownForAttack: 30
+  CooldownBeforeExplosion: 1
+  _explosionDamage: 1
+  _explosionKnockback: 1
+  _explosionRadius: 1
+  _canExplosionDamageMultipleTime: 0
+  _enemies: []
+  _numberOfEnemies: 0
+  _minCooldownForAttack: 30
+  _maxCooldownForAttack: 45
+  _scaleHeight: 1
+  _timeForRescaling: 1
+  _allEnemies: []
+  _enemyAnimation: {fileID: 0}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +307,7 @@ GameObject:
   - component: {fileID: 9101173564990518349}
   - component: {fileID: 5698534233441271866}
   - component: {fileID: 7214748225881584283}
+  - component: {fileID: 6240177710667417376}
   m_Layer: 0
   m_Name: SpriteRenderer
   m_TagString: Untagged
@@ -308,8 +324,8 @@ Transform:
   m_GameObject: {fileID: 6261708983540323961}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8807292251387617910}
@@ -355,8 +371,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7f631363fad43df48ba12f6bfcf18950, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 24aaa91c8629b76499593bbab99a1932, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -388,7 +404,7 @@ Animator:
   m_GameObject: {fileID: 6261708983540323961}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: db10472cbf2f9ae43969450b1dbb9e5c, type: 2}
+  m_Controller: {fileID: 9100000, guid: b5d04a90e75d03e4f9e1ae699318a6d8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -399,3 +415,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6240177710667417376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261708983540323961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581feb76181cc9a49906f1b28e44edba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

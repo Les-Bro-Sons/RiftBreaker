@@ -40,7 +40,6 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void CloseOption() {
-        Debug.Log("AAAAAA");
         IsOptionOpen = false;
     }
 

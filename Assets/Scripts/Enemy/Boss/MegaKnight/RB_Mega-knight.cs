@@ -173,12 +173,6 @@ public class RB_Mega_knight : RB_Boss
         _currentCooldownAttack1 = CooldownAttack1;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f));
-    }
-
     private void StartJumpAttack() //START ATTACK 3
     {
         //Animations

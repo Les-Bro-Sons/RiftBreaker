@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _specialAttackChargeTime: 0
   _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 0
@@ -149,8 +150,10 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 297102425777051744}
   HudSprite: {fileID: 0}
-  FollowMouseOnChargeAttack: 0
+  CurrentSprite: {fileID: 0}
+  FollowMouseOnChargeAttack: 1
   CanMoveDuringSpecialAttack: 0
+  CanAttackDuringAttack: 0
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -299,7 +302,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d4b204134e1e2604497297b010352a49, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 193f005a14aa4334c8edc18921890863, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -1,6 +1,4 @@
 using System;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -128,9 +126,11 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector3 GetMouseDirection()
     {
-        
+        if(_playerTransform != null)
+            _playerTransform = RB_PlayerAction.Instance.transform;
+
         Vector3 direction = new();
-        //Mouse direction
+        //Mous)
         Vector3 playerPos = _playerTransform.position;
         Vector3 worldMousePos = new();
 

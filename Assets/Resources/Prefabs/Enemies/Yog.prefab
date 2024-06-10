@@ -215,11 +215,12 @@ MonoBehaviour:
   CooldownAttack3: 0
   CooldownBetweenAttacks: 0
   WaitInIdle: 1
-  BossRB: {fileID: 0}
-  PlayerPosition: {fileID: 0}
+  BossRB: {fileID: 7950358798519079587}
+  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
+    type: 3}
   PlayerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   Health: {fileID: 0}
   CurrentState: 0
   _minMovementDistance: 3
@@ -227,40 +228,38 @@ MonoBehaviour:
   _movementSpeed: 10
   _delayMovement: 1
   _timeForMoving: 6
-  _tentacleHitWidth: 1
+  _tentacleHitWidth: 5
   _tentacleHitLength: 1
-  _tentacleHitRange: 1
-  _tentacleHitKnockback: 1
-  _tentacleHitDamage: 1
-  _tentacleHitDelay: 1
+  _tentacleHitRange: 5
+  _tentacleHitKnockback: 15
+  _tentacleHitDamage: 20
+  _tentacleHitDelay: 4
   _numberTotalOfAttack: 5
-  _tentacleHitParticles: {fileID: 0}
-  _numberOfAttackDone: 
-  FireBall: {fileID: 2082089089255593965, guid: 0b48f0cc972742f4e9c8793896cac5ff,
+  _tentacleHitParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
-  _minMovementBeforeAttackDistance: 3
-  _maxMovementBeforeAttackDistance: 10
-  _dashBeforeAttackSpeed: 10
-  _redBallOffset: 1
+  _numberOfAttackDone: 
   ExplosionZone: {fileID: 2082089089255593965, guid: 9cf225570db110340ad37297fdbdcad7,
     type: 3}
   _explosionParticles: {fileID: 0}
-  _areaDamageRadius: 1
-  _areaDamageInterval: 0.1
-  _areaDamageAmount: 1
+  _areaDamageRadius: 0.5
+  _areaDamageInterval: 0.5
+  _areaDamageAmount: 2
   _areaDamageKnockback: 1
-  _canAreaDamageZoneDamageMultipleTime: 1
+  _canAreaDamageZoneDamageMultipleTime: 0
   CooldownBeforeExplosion: 1
-  _explosionDamage: 1
+  _explosionDamage: 20
   _explosionKnockback: 1
-  _explosionRadius: 1
+  _explosionRadius: 50
   _canExplosionDamageMultipleTime: 0
-  _enemies: []
-  _numberOfEnemies: 0
+  _enemies:
+  - {fileID: 8173794750066506861, guid: 2312d13daccd96d4b8c05df2086bd53c, type: 3}
+  - {fileID: 5379583502769917093, guid: 9a4e614d939ac324a8d91cb587143e82, type: 3}
+  - {fileID: 4636671935939786868, guid: db0b8fd01436fc349bfe4ccf3c12e9dc, type: 3}
+  _numberOfEnemies: 5
   _minCooldownForAttack: 30
   _maxCooldownForAttack: 45
-  _scaleHeight: 1
-  _timeForRescaling: 1
+  _scaleHeight: 0.1
+  _timeForRescaling: 15
   _allEnemies: []
   _enemyAnimation: {fileID: 0}
 --- !u!1 &6172118446137551482

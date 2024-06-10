@@ -25,8 +25,8 @@ public class RB_Scythe : RB_Items
     {
         base.Bind();
         //Set the current weapon to the animator
-        _playerAnimator.SetFloat("WeaponID", 4);
-        _colliderAnimator.SetFloat("WeaponID", 4);
+        _playerAnimator.SetFloat("WeaponID", 5);
+        _colliderAnimator.SetFloat("WeaponID", 5);
     }
     
     public override void StartChargingAttack()

@@ -40,7 +40,6 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void CloseOption() {
-        Debug.Log("AAAAAA");
         IsOptionOpen = false;
     }
 
@@ -79,8 +78,16 @@ public class RB_MenuManager : MonoBehaviour {
     }
     public void BackMainMenu() {
         Animator.SetBool("IsOptionOpen", false);
+        CloseOption();
     }
 
+    public void PauseAnim(){
+        Animator.SetBool("IsPaused",true);
+    }
+
+    public void UnPauseAnim(){
+        Animator.SetBool("IsPaused",false);
+    }
     public void SelectButton(GameObject gameObject) {
         if(gameObject.TryGetComponent(out Button button)) { 
             button.Select();

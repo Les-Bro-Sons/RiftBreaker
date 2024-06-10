@@ -19,7 +19,7 @@ public class RB_ButtonSelectioner : MonoBehaviour {
 
     public enum BUTTON_TYPE {Main, Quit, Options};
 
-    public void SelectMainButton(int ID) { _mainButtons[ID].Select(); }
+    public void SelectMainButton(int ID) { _mainButtons[ID].Select(); Debug.Log(_mainButtons[ID]); }
     public void SelectQuitButton(int ID) { _quitButtons[ID].Select(); }
     public void SelectOptionsButton(int ID) { _optionsButtons[ID].Select(); }
 }

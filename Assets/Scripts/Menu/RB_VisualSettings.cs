@@ -57,6 +57,7 @@ public class RB_VisualSettings : MonoBehaviour {
 
     // Apply the current resolution settings
     public void ApplyResolution() {
+        Debug.Log("Gyatt");
         Resolution resolution = _filteredResolutions[_currentResolutionID];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode, _currentRefreshRate);
         PlayerPrefs.SetInt("ResolutionID", _currentResolutionID);
@@ -81,6 +82,7 @@ public class RB_VisualSettings : MonoBehaviour {
 
     // Apply the current display mode settings
     public void ApplyDisplayMode() {
+        Debug.Log("Resoo");
         switch (_currentDisplayID) {
             case 0:
                 Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;

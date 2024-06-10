@@ -30,7 +30,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
             elapsedTime += Time.fixedDeltaTime;
             if (elapsedTime >= _waitForNextSprite){
                 if (!RB_TimeManager.Instance.IsRewinding) { 
-                    if(_hpPercent > 75) {
+                    if(_hpPercent > 66) {
                         if (_sprites1.Count > _currentSpriteID) {
                             _image.sprite = _sprites1[_currentSpriteID];
                             _currentSpriteID++;
@@ -39,7 +39,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                             _currentSpriteID = 0;
                     }
                     }
-                    else if(_hpPercent > 50) {
+                    else if(_hpPercent > 33) {
                         if (_sprites2.Count > _currentSpriteID) {
                             _image.sprite = _sprites2[_currentSpriteID];
                             _currentSpriteID++;
@@ -48,7 +48,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                             _currentSpriteID = 0;
                         }
                     }
-                    else if (_hpPercent > 25) {
+                    else if (_hpPercent > 5) {
                         if (_sprites3.Count > _currentSpriteID) {
                             _image.sprite = _sprites3[_currentSpriteID];
                             _currentSpriteID++;
@@ -68,7 +68,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                     }
                 }
                 else {
-                    if (_hpPercent > 75){
+                    if (_hpPercent > 66){
                         if (_currentSpriteID >= 0){
                             _image.sprite = _sprites1[_currentSpriteID];
                             _currentSpriteID--;
@@ -77,7 +77,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                             _currentSpriteID = _sprites1.Count - 1;
                         }
                     }
-                else if (_hpPercent > 50){
+                else if (_hpPercent > 33){
                     if (_currentSpriteID >= 0) {
                         _image.sprite = _sprites2[_currentSpriteID];
                         _currentSpriteID--;
@@ -86,7 +86,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         _currentSpriteID = _sprites2.Count - 1;
                     }
                 }
-                else if (_hpPercent > 25){
+                else if (_hpPercent > 5){
                     if (_currentSpriteID >= 0) {
                         _image.sprite = _sprites3[_currentSpriteID];
                         _currentSpriteID--;

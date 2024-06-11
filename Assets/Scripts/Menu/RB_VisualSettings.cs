@@ -55,7 +55,6 @@ public class RB_VisualSettings : MonoBehaviour {
 
     // Apply the current resolution settings
     public void ApplyResolution() {
-        Debug.Log(_currentResolutionID);
         Resolution resolution = _filteredResolutions[_currentResolutionID];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode, _currentRefreshRate);
         PlayerPrefs.SetInt("ResolutionID", _currentResolutionID);

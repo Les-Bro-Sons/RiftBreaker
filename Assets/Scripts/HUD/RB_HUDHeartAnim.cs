@@ -37,7 +37,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         }
                         else {
                             _currentSpriteID = 0;
-                    }
+                        }
                     }
                     else if(_hpPercent > 33) {
                         if (_sprites2.Count > _currentSpriteID) {

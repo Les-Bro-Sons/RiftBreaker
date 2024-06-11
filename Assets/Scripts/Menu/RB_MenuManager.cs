@@ -16,16 +16,20 @@ public class RB_MenuManager : MonoBehaviour {
 
     MENUSTATE _menuState;
 
+    [Header("Sliders")]
+    [SerializeField] Slider _sliderGeneral;
+    [SerializeField] Slider _sliderMusic;
+    [SerializeField] Slider _sliderSFX;
 
     private void Awake() {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); }
         Animator = GetComponent<Animator>();
         Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-
     }
      
     public void Play() {
+        RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
@@ -40,6 +44,7 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void CloseOption() {
+        RB_ButtonSelectioner.Instance.SelectMainButton(1);
         IsOptionOpen = false;
     }
 
@@ -79,6 +84,9 @@ public class RB_MenuManager : MonoBehaviour {
     public void BackMainMenu() {
         Animator.SetBool("IsOptionOpen", false);
         CloseOption();
+        _sliderGeneral.GetComponent<RB_MenuSlider>().ResetInteraction();
+        _sliderMusic.GetComponent<RB_MenuSlider>().ResetInteraction();
+        _sliderSFX  .GetComponent<RB_MenuSlider>().ResetInteraction();
     }
 
     public void PauseAnim(){

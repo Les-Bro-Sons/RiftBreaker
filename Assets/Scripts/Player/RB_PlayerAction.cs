@@ -127,6 +127,26 @@ public class RB_PlayerAction : MonoBehaviour
         }
     }
 
+    public void AddItemToList(RB_Items itemToAdd)
+    {
+        itemToAdd.transform.position = itemToAdd.transform.parent.position;
+        itemToAdd.Bind();
+        int currentItemId = Items.IndexOf(Item);
+        //Add the item gathered to the items
+        if (Items.Count >= 3)
+        {
+            Item.Drop();
+            Items.Insert(currentItemId, itemToAdd);
+        }
+        else
+        {
+            Items.Add(itemToAdd);
+            currentItemId += 1;
+        }
+        _playerController.ChoseItem(currentItemId);
+        EventItemGathered?.Invoke();
+    }
+
     public void Interact()
     {
         IsItemNearby = false;
@@ -137,20 +157,10 @@ public class RB_PlayerAction : MonoBehaviour
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
-                itemGathered.Bind();
+                
                 IsItemNearby = true;
-                //Add the item gathered to the items
-                if (Items.Count >= 3)
-                {
-                    Item.Drop();
-                    Items.Add(itemGathered);
-                }
-                else
-                {
-                    Items.Add(itemGathered);
-                }
-                _playerController.ChoseItem(Items.Count-1);
-                EventItemGathered?.Invoke();
+                AddItemToList(itemGathered);
+                
                 
                 RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
 

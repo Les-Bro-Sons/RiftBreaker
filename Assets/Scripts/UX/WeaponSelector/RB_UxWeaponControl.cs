@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,7 @@ public class RB_UxWeaponControl : MonoBehaviour
     private Quaternion _currentRotation;
     private float _lerpTime;
     private int _deltaWeaponIndex;
+    private bool _weaponInitialized;
 
     //Fading
     private bool _shouldFadeIn = false;
@@ -37,8 +39,9 @@ public class RB_UxWeaponControl : MonoBehaviour
 
     private void Start()
     {
+        _currentWeapon.sprite = null;
         //Bind to the event called when an item is gathered
-        RB_PlayerAction.Instance.EventItemGathered.AddListener(AddSprite);
+        RB_PlayerAction.Instance.EventItemGathered.AddListener(RefreshSprites);
 
         //Get the angle out of the direction of the first item slot
         Vector3 direction = _listWeapon[0].transform.position - _cursorTransform.position;
@@ -52,6 +55,23 @@ public class RB_UxWeaponControl : MonoBehaviour
 
         //Set the thickness of the outline mat to 1
         _outlineMaterial.SetFloat("_Thickness", 1);
+
+        Invoke(nameof(InitializeWeapons), RB_HUDManager.Instance.AnimatorHud.GetCurrentAnimatorClipInfo(0).Length);
+    }
+
+    private void InitializeWeapons()
+    {
+        RefreshSprites();
+        RB_PlayerController.Instance.ChoseItem(0);
+        _weaponInitialized = true;
+    }
+
+    private void RefreshSprites()
+    {
+        for (int i = 0; i < RB_PlayerAction.Instance.Items.Count; i++)
+        {
+            AddSprite(i);
+        }
     }
 
     private void StartFade()
@@ -126,10 +146,10 @@ public class RB_UxWeaponControl : MonoBehaviour
         Fade();
     }
 
-    private void AddSprite()
+    private void AddSprite(int id)
     {
         //When an item is gathered, add it to the weapon slots
-        _listWeapon[RB_PlayerAction.Instance.ItemId].sprite = RB_PlayerAction.Instance.Item.CurrentSprite;
+        _listWeapon[id].sprite = RB_PlayerAction.Instance.Items[id].CurrentSprite;
 
         //Set the current weapon the newly gathered weapon
         _currentWeapon.sprite = _listWeapon[_lastItemsId].sprite;
@@ -138,7 +158,7 @@ public class RB_UxWeaponControl : MonoBehaviour
         _currentWeapon.color = Color.white;
 
         //Same to the current weapon slot
-        _listWeapon[RB_PlayerAction.Instance.ItemId].color = Color.white;
+        _listWeapon[id].color = Color.white;
 
         SetMaterialOnCurrentWeapon(_lastItemsId);
     }
@@ -156,7 +176,7 @@ public class RB_UxWeaponControl : MonoBehaviour
 
     private void UxUpdate()
     {
-        if (_lastItemsId != RB_PlayerAction.Instance.ItemId)
+        if (_lastItemsId != RB_PlayerAction.Instance.ItemId && _weaponInitialized)
         {
             //Get the difference between the current weapon id and the last item id to have a constant lerp speed even when the switch is 1 to 3
             _deltaWeaponIndex = Mathf.Abs(_lastItemsId - RB_PlayerAction.Instance.ItemId);

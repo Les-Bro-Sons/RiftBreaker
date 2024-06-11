@@ -91,18 +91,18 @@ public class RB_Scythe : RB_Items
         _timer -= Time.deltaTime;
         if (_timer<=0)
         {
-            RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, 0, 0.5f);
+            RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, 0, 1f);
             _timer = RB_AudioManager.Instance.SfxSource.clip.length;
         }
     }
 
     public override void SpecialAttack() {
         base.SpecialAttack();
-        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 0.5f);
+        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 1f);
     }
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, 0,.5f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

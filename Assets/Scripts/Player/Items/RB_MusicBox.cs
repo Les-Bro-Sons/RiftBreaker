@@ -64,7 +64,7 @@ public class RB_MusicBox : RB_Items
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
-            RB_AudioManager.Instance.PlaySFX("musicBoxManivelle", RB_PlayerController.Instance.transform.position, .15f, .05f);
+            RB_AudioManager.Instance.PlaySFX("musicBoxManivelle", RB_PlayerController.Instance.transform.position, .15f, 1f);
         }
         
 
@@ -110,6 +110,6 @@ public class RB_MusicBox : RB_Items
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_music_box", RB_PlayerController.Instance.transform.position, 0,.5f);
+        RB_AudioManager.Instance.PlaySFX("sheating_music_box", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

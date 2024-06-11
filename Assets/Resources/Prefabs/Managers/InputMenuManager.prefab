@@ -73,6 +73,12 @@ MonoBehaviour:
   EventPauseCanceled:
     m_PersistentCalls:
       m_Calls: []
+  EventAnyStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventAnyCanceled:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5253739096490891372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +249,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0c525b8b-0e2e-4613-ac61-30242d7e5e76
     m_ActionName: UI/Pause[/XInputControllerWindows/start,/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnAny
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 69460faa-56b1-45e5-be9c-f3286b43b0ed
+    m_ActionName: UI/Any[/Keyboard/anyKey]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI

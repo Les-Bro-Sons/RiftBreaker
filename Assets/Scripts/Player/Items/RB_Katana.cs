@@ -38,6 +38,6 @@ public class RB_Katana : RB_Items
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Katana", RB_PlayerController.Instance.transform.position, 0,.5f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Katana", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

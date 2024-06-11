@@ -39,6 +39,6 @@ public class RB_MagicWand : RB_Items
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("Sheating_magic_wand", RB_PlayerController.Instance.transform.position, 0,.5f);
+        RB_AudioManager.Instance.PlaySFX("Sheating_magic_wand", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

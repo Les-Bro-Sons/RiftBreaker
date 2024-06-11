@@ -153,7 +153,7 @@ public class RB_Mega_knight : RB_Boss
     {
         //Animations
         _enemyAnimation.TriggerBasicAttack();
-        RB_AudioManager.Instance.PlaySFX("BigSwooosh", transform.position,1, .5f);
+        RB_AudioManager.Instance.PlaySFX("BigSwooosh", transform.position,1, 1f);
         List<RB_Health> alreadyDamaged = new();
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f), transform.rotation))
         {
@@ -210,7 +210,7 @@ public class RB_Mega_knight : RB_Boss
 
             if (_landingParticles)
             {
-                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,0, .5f);
+                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,0, 1f);
                 Instantiate(_landingParticles, transform.position, transform.rotation);
             }
 

@@ -127,7 +127,7 @@ public class RB_Items : MonoBehaviour
         _playerAction.Items.Remove(this);
         if (_playerAction.Item == this)
         {
-            _playerAction.ItemId--;
+            _playerAction.ItemId = Mathf.Clamp(_playerAction.ItemId - 1, 0, 5);
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }

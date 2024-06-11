@@ -48,6 +48,7 @@ public class RB_RoomCreator : MonoBehaviour
         {
             foreach (Transform room in transform)
             {
+                room.gameObject.layer = 1 << LayerMask.NameToLayer("Room");
                 room.parent = _roomManager.transform;
             }
             maxIteration--;

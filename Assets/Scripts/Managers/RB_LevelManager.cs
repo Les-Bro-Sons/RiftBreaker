@@ -41,6 +41,9 @@ public class RB_LevelManager : MonoBehaviour
             DestroyImmediate(gameObject);
             return;
         }
+        _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
+        _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
+        _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
     }
 
     private void Start()

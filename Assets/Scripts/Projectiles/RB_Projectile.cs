@@ -46,6 +46,10 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _damageOnExplosion = false;
     [SerializeField] private float _explosionRadius = 1;
 
+    [Header("Bounce")]
+    [SerializeField] private bool _isBouncing = false;
+    [SerializeField] private int _maxBounces = 3;
+
     [Header("Sounds")] 
     [SerializeField] private string _explosionSounds;
     
@@ -163,6 +167,12 @@ public class RB_Projectile : MonoBehaviour
                 DestroyParticle();
             }
             
+        }
+        if (_isBouncing && Physics.Raycast(_transform.position, _rb.velocity.normalized, out RaycastHit hitInfo, _wallDetectionLength, 1 << 3))
+        {
+            Vector3 velocity = _rb.velocity;
+            Vector3 direction = Vector3.Reflect(_rb.velocity.normalized, hitInfo.normal);
+            _rb.velocity = direction * velocity.magnitude;
         }
     }
 

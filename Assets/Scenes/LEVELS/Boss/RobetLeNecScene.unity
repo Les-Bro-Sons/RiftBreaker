@@ -4202,6 +4202,11 @@ PrefabInstance:
       objectReference: {fileID: 513824827}
     - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
         type: 3}
+      propertyPath: _spawnInPhase
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
+        type: 3}
       propertyPath: SpriteRenderer
       value: 
       objectReference: {fileID: 513824828}
@@ -8546,6 +8551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6569541875425142197, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 25.399902
       objectReference: {fileID: 0}
     - target: {fileID: 6987414079591780448, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -14146,7 +14156,7 @@ GameObject:
   - component: {fileID: 1911910122}
   - component: {fileID: 1911910121}
   m_Layer: 0
-  m_Name: MegaKnightTrigger
+  m_Name: BossTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

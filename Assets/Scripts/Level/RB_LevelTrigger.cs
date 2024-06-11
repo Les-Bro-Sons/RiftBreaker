@@ -19,9 +19,9 @@ public class RB_LevelTrigger : MonoBehaviour
     {
         if ((_triggerOnPlayer && RB_Tools.TryGetComponentInParent<RB_PlayerController>(other.gameObject, out RB_PlayerController playerController)) || !_triggerOnPlayer)
         {
-            if (_triggerEnterKinematics || (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
+            if (!_triggerEnterKinematics && (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
             
-            if (_triggerEnterOnRewind || (!_triggerEnterOnRewind && !RB_TimeManager.Instance.IsRewinding))
+            if (_triggerEnterOnRewind || !RB_TimeManager.Instance.IsRewinding)
             {
                 EventTriggerEnter?.Invoke();
                 if (_oneTimeOnly)
@@ -37,9 +37,9 @@ public class RB_LevelTrigger : MonoBehaviour
     {
         if ((_triggerOnPlayer && RB_Tools.TryGetComponentInParent<RB_PlayerController>(other.gameObject, out RB_PlayerController playerController)) || !_triggerOnPlayer)
         {
-            if (_triggerExitKinematics || (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
+            if (!_triggerExitKinematics && (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
 
-            if (_triggerExitOnRewind || (!_triggerExitOnRewind && !RB_TimeManager.Instance.IsRewinding))
+            if (_triggerExitOnRewind || !RB_TimeManager.Instance.IsRewinding)
             {
                 EventTriggerExit?.Invoke();
                 if (_oneTimeOnly)

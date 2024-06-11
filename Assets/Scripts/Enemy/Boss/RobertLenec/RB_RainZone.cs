@@ -18,6 +18,7 @@ public class RB_RainZone : MonoBehaviour
     [SerializeField] private bool _isDisappearing = false;
     [SerializeField] private SpriteRenderer _sprite;
     private float _appearTimer = 0;
+    private float _appearAlpha = 0;
 
     [Header("Properties (useless if MegaKnight spawn them)")]
     [SerializeField] private float _damage;
@@ -28,50 +29,67 @@ public class RB_RainZone : MonoBehaviour
 
     public TEAMS Team = TEAMS.Ai;
 
+    [SerializeField] private ParticleSystem _particles;
+
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
         //_collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
         _appearTimer = 0;
         _isAppearing = true;
-        Destroy(gameObject, _lifetime);
+        _appearAlpha = _sprite.color.a;
+    }
+
+    private void Start()
+    {
+        ParticleSystem.ShapeModule partShape = _particles.shape;
+        partShape.radius = transform.lossyScale.x / 2f; //set the radius of particles
     }
 
     private void Update()
     {
         if (_isAppearing)
         {
-            if (_appearTimer >= _appearingDuration)
+            if (_appearTimer >= _appearingDuration) //end of appearing
             {
-                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 1);
+                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, _appearAlpha);
                 _isAppearing = false;
             }
-            else
+            else //is appearing
             {
-                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, Mathf.Lerp(0, 1, _appearTimer / _appearingDuration));
+                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, Mathf.Lerp(0, _appearAlpha, _appearTimer / _appearingDuration));
                 _appearTimer += Time.deltaTime;
             }
         }
         else if (_isDisappearing)
         {
-            if (_appearTimer >= _disappearingDuration)
+            if (_appearTimer >= _disappearingDuration) //end of disappearing
             {
                 _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 0);
                 _isDisappearing = false;
             }
-            else
+            else //is disappearing
             {
-                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, Mathf.Lerp(1, 0, _appearTimer / _disappearingDuration));
+                _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, Mathf.Lerp(_appearAlpha, 0, _appearTimer / _disappearingDuration));
                 _appearTimer += Time.deltaTime;
             }
         }
-        if (!_isAppearing && _damageTimer >= DamageCooldown) CheckForEnemies();
+        if (!_isAppearing && _damageTimer >= DamageCooldown) CheckForEnemies(); //collision check
 
-        if (!_isDisappearing && _lifetime <= _lifetimeTimer)
+        if (!_isDisappearing && _lifetime <= _lifetimeTimer) //activate disappearing
         {
             _appearTimer = 0;
             _isAppearing = false;
             _isDisappearing = true;
+        }
+        if (_lifetimeTimer >= _lifetime) //lifetime check
+        {
+            _particles.transform.parent = null;
+            _particles.Stop();
+            _particles.transform.localScale = Vector3.one;
+            Destroy(_particles, _particles.main.duration);
+            Destroy(gameObject);
+            return;
         }
         _damageTimer += Time.deltaTime;
         _lifetimeTimer += Time.deltaTime;

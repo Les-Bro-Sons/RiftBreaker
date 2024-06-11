@@ -85,6 +85,10 @@ public class RB_RobertLenec : RB_Boss
 
     private void FixedUpdate()
     {
+        int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -102,8 +106,7 @@ public class RB_RobertLenec : RB_Boss
                 SwitchBossState();
                 break;
             case BOSSSTATES.Attack2:
-                _currentWaitInIdle = WaitInIdle;
-                CurrentState = BOSSSTATES.Idle; //wait in idle
+                SwitchBossState();
                 break;
             case BOSSSTATES.Attack3:
                 _currentWaitInIdle = WaitInIdle;
@@ -151,11 +154,11 @@ public class RB_RobertLenec : RB_Boss
                 return CurrentState = BOSSSTATES.Attack2;
             }
             
-            if (_currentCooldownBetweenMovement <= 0)
+            /*if (_currentCooldownBetweenMovement <= 0)
             {
                 RandomMovement();
                 return CurrentState = BOSSSTATES.Moving;
-            }
+            }*/
         }
         
         return CurrentState = BOSSSTATES.Moving;

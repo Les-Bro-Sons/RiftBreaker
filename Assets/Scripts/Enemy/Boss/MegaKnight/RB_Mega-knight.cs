@@ -292,27 +292,4 @@ public class RB_Mega_knight : RB_Boss
             //DealDamageToPlayer();
         }
     }
-    void DealDamageToPlayer()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, DamageRadius, PlayerLayer);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            RB_PlayerController player = hitCollider.GetComponent<RB_PlayerController>();
-            if (player != null)
-            {
-                Health.TakeDamage(50f);
-            }
-        }
-    }
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, _rangeOfAttack);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, DamageRadius);
-    }*/
 }

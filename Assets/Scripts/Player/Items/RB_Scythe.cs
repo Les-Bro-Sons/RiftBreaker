@@ -1,4 +1,5 @@
 using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_Scythe : RB_Items
@@ -82,10 +83,6 @@ public class RB_Scythe : RB_Items
         {
             LoopSound();
         }
-        // else
-        // {
-        //     RB_AudioManager.Instance.SfxSource.Stop();
-        // }
     }
     private void LoopSound() {
         _timer -= Time.deltaTime;
@@ -98,6 +95,22 @@ public class RB_Scythe : RB_Items
 
     public override void SpecialAttack() {
         base.SpecialAttack();
+        int? currentPlayerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        print(currentPlayerRoom);
+        if (currentPlayerRoom != null)
+        {
+            List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEnemies;
+            foreach (RB_Health enemy in detectedEnemies)
+            {
+                if (enemy.Dead)
+                {
+                    enemy.Team = TEAMS.Player;
+                    enemy.GetComponent<RB_Enemy>().UnTombstone();
+                }
+            }
+        }
+        
+
         RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 0.5f);
     }
     

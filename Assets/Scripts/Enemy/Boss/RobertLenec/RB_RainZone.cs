@@ -12,9 +12,6 @@ public class RB_RainZone : MonoBehaviour
     [Header("Main Properties")]
     [SerializeField] private float _lifetime = 1;
 
-    [Header("Properties (useless if MegaKnight spawn them)")]
-    [SerializeField] private float _damage;
-    [SerializeField] private float _knockback;
 
 
     private void Awake()

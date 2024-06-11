@@ -24,8 +24,10 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _tentacleHitKnockback = 1f;
     [SerializeField] private float _tentacleHitDamage = 1f;
     [SerializeField] private float _tentacleHitDelay = 1f;
+    [SerializeField] private float _delayBeforeHit = 0.2f;
     [SerializeField] private int _numberTotalOfAttack = 5;
     [SerializeField] private GameObject _tentacleHitParticles;
+    [SerializeField] private GameObject _tentacleHitAnimation;
     [SerializeField] private List<int> _numberOfAttackDone;
     private int AttackDone;
     private float _tentacleHitDelayTimer = 0;
@@ -60,6 +62,7 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _scaleHeight = 1f;
     [SerializeField] private float _timeForRescaling = 1f;
     private GameObject _enemy;
+    private Rigidbody _enemyRigidbody;
     [SerializeField] private List<GameObject> _allEnemies = new List<GameObject>();
     protected float _currentCooldownBeforeReactivate;
 
@@ -115,7 +118,7 @@ public class RB_Yog : RB_Boss
                 SpawnEnemies();
                 if (_numberOfAttackDone.Count < 5)
                 {
-                    transform.forward = _currentTarget.position - transform.position;
+                    
                     if (WaitForAttack1())
                     {
                         TentacleHit();
@@ -200,14 +203,22 @@ public class RB_Yog : RB_Boss
         
     }
 
-
-    public void TentacleHit() //ATTACK 1
+    public void TentacleHit()
     {
-        
+        StartCoroutine(TentacleHitCoroutine());
+    }
+    IEnumerator TentacleHitCoroutine() //ATTACK 1
+    {
+        transform.forward = _currentTarget.position - transform.position;
+        float range = Vector3.Distance(_currentTarget.position, transform.position);
+
+        yield return new WaitForSeconds(_delayBeforeHit);
+
         _enemyAnimation.TriggerBasicAttack();
         List<RB_Health> alreadyDamaged = new();
-        float range = Vector3.Distance(_currentTarget.position, transform.position);
-        Vector3 size = new Vector3(_tentacleHitLength, 1, range + 1);
+        Vector3 size = new Vector3(_tentacleHitLength, 1, range + 10);
+        GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * _tentacleHitRange / 2), transform.rotation);
+        previsualization.transform.localScale = size;
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _tentacleHitRange / 2), size, transform.rotation))
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
@@ -227,8 +238,8 @@ public class RB_Yog : RB_Boss
         AttackDone = new int();
         _numberOfAttackDone.Add(AttackDone);
         _currentCooldownAttack1 = CooldownAttack1;
+        Destroy(previsualization, 0.5f);
     }
-
     private bool WaitForAttack1() //TIMER ATTACK 1
     {
         _tentacleHitDelayTimer -= Time.fixedDeltaTime;
@@ -242,7 +253,6 @@ public class RB_Yog : RB_Boss
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size);
         Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size2);
-
     }
 
     public void ExplosionAttack() //ATTACK 2
@@ -319,14 +329,16 @@ public class RB_Yog : RB_Boss
         foreach (GameObject en in _allEnemies)
         {
             _enemy = en;
-            
+            StartCoroutine(FreezeSpawnedEnemy());
             if (_enemy.transform.localScale.x <= 1)
             {
                 Vector3 rescalingHeight = new Vector3(1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60);
                 _enemy.transform.localScale += rescalingHeight;
                 if (_enemy.transform.localScale.x > 1)
                 {
-                    _enemy.transform.localScale = Vector3.one;
+                    _enemyRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                    _enemyRigidbody.detectCollisions = true;
+                    _enemy.transform.localScale = new Vector3(1, 1, 1);
                 }
             }
 
@@ -336,4 +348,12 @@ public class RB_Yog : RB_Boss
             }
         }
     } 
+    IEnumerator FreezeSpawnedEnemy()
+    {
+        
+        _enemyRigidbody = _enemy.GetComponent<Rigidbody>();
+        _enemyRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        _enemyRigidbody.detectCollisions = false;
+        yield return new WaitForSeconds(_timeForRescaling);
+    }
 }

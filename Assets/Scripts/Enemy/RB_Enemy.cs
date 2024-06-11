@@ -10,7 +10,7 @@ public class RB_Enemy : MonoBehaviour
     public SpriteRenderer SpriteRenderer; //PLACEHOLDER
     public Animator AiAnimator;
 
-    private Rigidbody _rb;
+    protected Rigidbody _rb;
     private RB_AI_BTTree _btTree;
 
     private bool _isTombstoned = false;
@@ -91,7 +91,7 @@ public class RB_Enemy : MonoBehaviour
             if (AiAnimator) AiAnimator.enabled = false;
             _isTombstoned = true;
             SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
-            _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
+            _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
             _rb.velocity = Vector3.zero;
             //Create charge special attack particles
             GameObject instantiatedChargeSpecialAttackParticleSystem = Instantiate(RB_LevelManager.Instance.ChargeSpecialAttackParticlePrefab, transform);

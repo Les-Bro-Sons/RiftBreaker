@@ -51,11 +51,6 @@ public class RB_InputManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        _playerTransform = RB_PlayerAction.Instance.transform;
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
@@ -126,8 +121,14 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector3 GetMouseDirection()
     {
-        if(_playerTransform != null)
-            _playerTransform = RB_PlayerAction.Instance.transform;
+        if (RB_PlayerAction.Instance.transform == null) //If there's a player in the current scene
+        {
+            if (_playerTransform == null) //If there's no registered player
+                _playerTransform = RB_PlayerAction.Instance.transform; //Set it to the current player
+        }
+        else
+            return Vector3.zero; //If there's no player in the current scene return a vector zero
+        
 
         Vector3 direction = new();
         //Mous)

@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 7051855330456273059}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -264,7 +264,7 @@ MonoBehaviour:
   ChargeTime: 1
   _specialAttackChargeTime: 20
   _chargeZoom: 0.85
-  _attackCooldown: 0.1
+  _attackCooldown: 0
   _attackDamage: 0
   _chargedAttackDamage: 0
   _specialAttackDamage: 0
@@ -282,6 +282,7 @@ MonoBehaviour:
   CurrentSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 1
   CanMoveDuringSpecialAttack: 0
+  CanAttackDuringAttack: 1
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []

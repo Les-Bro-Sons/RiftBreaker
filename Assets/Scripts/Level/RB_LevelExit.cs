@@ -67,7 +67,8 @@ public class RB_LevelExit : MonoBehaviour
             RB_AudioManager.Instance.PlaySFX("rift_closing", RB_PlayerController.Instance.transform.position, 0,1);
             if (_goToNextSceneID) //switch scene to next build index
             {
-                RB_SceneTransitionManager.Instance.NewScene(SceneManager.GetActiveScene().buildIndex + 1); 
+                RB_SaveManager.Instance.SaveToJson();
+                RB_SceneTransitionManager.Instance.NewScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
             else
             {

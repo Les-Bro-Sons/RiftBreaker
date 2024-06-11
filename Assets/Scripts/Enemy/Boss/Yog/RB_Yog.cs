@@ -234,16 +234,6 @@ public class RB_Yog : RB_Boss
         _tentacleHitDelayTimer -= Time.fixedDeltaTime;
         return (_tentacleHitDelayTimer <= 0);
     }
-    private void OnDrawGizmos()
-    {
-        float range = Vector3.Distance(_currentTarget.position, transform.position);
-        Vector3 size = new Vector3(_tentacleHitLength, 1, range+1);
-        Vector3 size2 = new Vector3(range+1, 1, _tentacleHitLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size);
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size2);
-
-    }
 
     public void ExplosionAttack() //ATTACK 2
     {

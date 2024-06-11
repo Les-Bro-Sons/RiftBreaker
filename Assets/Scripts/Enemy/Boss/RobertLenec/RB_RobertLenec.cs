@@ -7,6 +7,7 @@ using UnityEngine;
 public class RB_RobertLenec : RB_Boss
 {
     public static RB_RobertLenec Instance;
+    private new Transform transform;
 
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
@@ -59,6 +60,7 @@ public class RB_RobertLenec : RB_Boss
             DestroyImmediate(gameObject);
         }
         base.Awake();
+        transform = GetComponent<Transform>();
     }
 
     protected override void Start()
@@ -92,7 +94,7 @@ public class RB_RobertLenec : RB_Boss
                 }
                 break;
             case BOSSSTATES.Moving:
-                transform.forward = (_currentTarget.position - transform.position).normalized;
+                //transform.forward = (_currentTarget.position - transform.position).normalized;
                 Movement();
                 SwitchBossState();
                 break;
@@ -131,23 +133,24 @@ public class RB_RobertLenec : RB_Boss
 
         if (_currentCooldownBetweenAttacks <= 0)
         {
+            if (_currentCooldownAttack3 <= 0) //SWITCH TO ATTACK3
+            {
+                CloneAttack();
+                return CurrentState = BOSSSTATES.Attack3;
+            }
+
             if (_currentCooldownAttack1 <= 0 && GetTargetDistance() > 5f) //SWITCH TO ATTACK1
             {
                 ShootAttack();
                 return CurrentState = BOSSSTATES.Attack1;
             }
         
-            if (_currentCooldownAttack2 <= 0 && GetTargetDistance() < 5f) //SWITCH TO ATTACK2
+            if (_currentCooldownAttack2 <= 0 && GetTargetDistance() < 5f && GetTargetDistance() > 2f) //SWITCH TO ATTACK2
             {
                 WoodenPieceRainZoneAttack();
                 return CurrentState = BOSSSTATES.Attack2;
             }
-        
-            if (_currentCooldownAttack3 <= 0) //SWITCH TO ATTACK3
-            {
-                CloneAttack();
-                return CurrentState = BOSSSTATES.Attack3;
-            }
+            
             if (_currentCooldownBetweenMovement <= 0)
             {
                 RandomMovement();
@@ -155,14 +158,7 @@ public class RB_RobertLenec : RB_Boss
             }
         }
         
-        //if (MovementSpeed >= 0.1f) //SWITCH TO MOVING
-        //{
         return CurrentState = BOSSSTATES.Moving;
-        //}
-        //SWITCH TO IDLE
-
-        _currentWaitInIdle = WaitInIdle;
-        return BOSSSTATES.Idle;
     }
 
     public void Movement()
@@ -176,7 +172,7 @@ public class RB_RobertLenec : RB_Boss
         //Boss goes away the player if he's too far away
         else if (GetTargetDistance() < 5f)
         {
-            _movement.MoveIntoDirection(transform.position + _currentTarget.position);
+            _movement.MoveIntoDirection(transform.position - _currentTarget.position);
         }
 
     }
@@ -231,55 +227,52 @@ public class RB_RobertLenec : RB_Boss
         //Spawn of the zone attack (attack n°2)
         float offset = 0.99f;
         Vector3 areaDamageSpawn = new Vector3(_currentTarget.position.x, _currentTarget.position.y - offset, _currentTarget.position.z);
-        Instantiate(WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>().Sylvashot = this;
+        RB_RainZone rainZone = Instantiate(WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>();
+        rainZone.Sylvashot = this;
+        rainZone.DamageCooldown = _areaDamageInterval;
         WoodenPieceRainZone.transform.localScale = new Vector3(_areaDamageRadius * 2, WoodenPieceRainZone.transform.localScale.y, _areaDamageRadius * 2);
         _currentCooldownAttack2 = CooldownAttack2;
     }
 
-    public void ApplyRainZoneDamage(RB_Health enemyHealth)
+    public void ApplyRainZoneDamage(List<RB_Health> enemyHealths)
     {
         //Application of damages for the zone attack (attack 2)
-        if (Health.Team == enemyHealth.Team || (_alreadyAreaDamageZoneDamaged.Contains(enemyHealth) && !_canAreaDamageZoneDamageMultipleTime)) return;
-        _alreadyAreaDamageZoneDamaged.Add(enemyHealth);
-        enemyHealth.TakeDamage(_areaDamageAmount);
-        enemyHealth.TakeKnockback((enemyHealth.transform.position - transform.position).normalized, _areaDamageKnockback);
-
+        foreach (RB_Health enemyHealth in enemyHealths)
+        {
+            if (Health.Team == enemyHealth.Team || (_alreadyAreaDamageZoneDamaged.Contains(enemyHealth) && !_canAreaDamageZoneDamageMultipleTime)) continue;
+            _alreadyAreaDamageZoneDamaged.Add(enemyHealth);
+            enemyHealth.TakeDamage(_areaDamageAmount);
+        }
+        
         //Cooldown
-        _currentCooldownBeforeTakeDamage = _areaDamageInterval;
+        //_currentCooldownBeforeTakeDamage = _areaDamageInterval;
     }
     public void CloneAttack()
     {
-        //get the position of the boss before the attack
-        _lastPosition = transform.position;
-
-        //tp the boss out of the map
-        transform.position = new Vector3(transform.position.x + 3000, transform.position.y, transform.position.z);
-
         //Instantiation of clones
         for (int i = 0; i < 4; i++)
         {
-            GameObject clone = Instantiate(Clone, _waypoints[i].position, Quaternion.identity);
-            _clones.Add(clone);
+            GameObject clone = Instantiate(Clone, transform.position, Quaternion.identity);
+            RB_Clones cloneScript = clone.GetComponent<RB_Clones>();
+            cloneScript.TargetPosition = _waypoints[i].position;
+            cloneScript.Lifetime = _cloneLifeTime;
         }
 
-        //Coroutine for tp back the boss and destroy clones
-        StartCoroutine(CloneDestruction(_cloneLifeTime));
+        //get the position of the boss before the attack
+        _lastPosition = transform.position;
+        //tp the boss out of the map
+        transform.position = new Vector3(transform.position.x + 3000, transform.position.y, transform.position.z);
 
         //Cooldown
-        _currentCooldownAttack3 = Random.Range(_minCooldownForAttack,_maxCooldownForAttack);
+        _currentCooldownAttack3 = Random.Range(_minCooldownForAttack, _maxCooldownForAttack);
+
+        StartCoroutine(ReturnToLastPos(_cloneLifeTime));
     }
 
-    IEnumerator CloneDestruction(float duration)
+    IEnumerator ReturnToLastPos(float duration)
     {
         yield return new WaitForSeconds(duration);
 
-        foreach (GameObject clone in _clones)
-        {
-            Destroy(clone);
-        }
-        _clones.Clear();
-        transform.position = _lastPosition;
+        _rb.MovePosition(_lastPosition);
     }
-
-    
 }

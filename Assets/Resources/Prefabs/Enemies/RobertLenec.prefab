@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkDirection: {x: 0, y: 0, z: 0}
+  _pushForce: 3
   LastDirection: {x: 0, y: 0, z: 0}
   _movementAcceleration: 150
   _movementMaxSpeed: 5
@@ -204,6 +205,7 @@ MonoBehaviour:
   _isAttachedToAPhase: 1
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 0}
+  AiAnimator: {fileID: 0}
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -225,37 +227,27 @@ MonoBehaviour:
   _maxMovementDistance: 20
   _movementSpeed: 5
   _delayMovement: 1
-  _slashDamage: 30
-  _slashKnockback: 15
-  _slashRange: 3
-  _slashDelay: 0.5
-  _slashParticles: {fileID: 0}
-  PieceOfWood: {fileID: 2082089089255593965, guid: c33db515c40ac79429f3547156974591,
-    type: 3}
+  RedBall: {fileID: 2082089089255593965, guid: c33db515c40ac79429f3547156974591, type: 3}
   _minMovementBeforeAttackDistance: 3
   _maxMovementBeforeAttackDistance: 10
   _dashBeforeAttackSpeed: 10
-  _shootDelay: 0.5
-  _pieceOfWoodSpeed: 0.75
-  _pieceOfWoodDamage: 10
-  _pieceOfWoodKnockback: 10
-  _pieceOfWoodOffset: 10
-  _canPieceOfWoodDamageMultipleTime: 1
+  _redBallOffset: 1
   WoodenPieceRainZone: {fileID: 4206258448558021486, guid: 3f1ce637d5db8c44bbfc8518f0b95385,
     type: 3}
-  _areaDamageInterval: 1
   _areaDamageRadius: 1
+  _areaDamageInterval: 1
   _areaDamageAmount: 1
   _areaDamageKnockback: 1
-  _areaDamageDuration: 1
   _canAreaDamageZoneDamageMultipleTime: 1
-  Clone: {fileID: 0}
+  Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
   waypoints: []
   _numberOfArrow: 0
   _cloneAttackInterval: 0.5
   _cloneAttackDelay: 1
   _cloneLifeTime: 1
   _cooldownForReaparition: 1
+  _minCooldownForAttack: 10
+  _maxCooldownForAttack: 30
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

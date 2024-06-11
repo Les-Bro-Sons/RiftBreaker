@@ -6,6 +6,7 @@ public class RB_Mega_knight : RB_Boss
 {
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+    private new Transform transform;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -22,6 +23,7 @@ public class RB_Mega_knight : RB_Boss
     [SerializeField] private float _spikeDamage = 10;
     [SerializeField] private float _spikeKnockback = 10;
     [SerializeField] private bool _canSpikeDamageMultipleTime = false;
+    [SerializeField] private float _spikeDelayIncrementation = 0.1f;
     private List<RB_Health> _alreadySpikeDamaged = new();
 
     [Header("Jump (attack3)")]
@@ -41,6 +43,7 @@ public class RB_Mega_knight : RB_Boss
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
     protected override void Awake(){
+        transform = GetComponent<Transform>();
         if (Instance == null) {
             Instance = this;
         }
@@ -171,12 +174,6 @@ public class RB_Mega_knight : RB_Boss
         _currentCooldownAttack1 = CooldownAttack1;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f));
-    }
-
     private void StartJumpAttack() //START ATTACK 3
     {
         //Animations
@@ -242,18 +239,27 @@ public class RB_Mega_knight : RB_Boss
         */
 
         //Animations
-        _enemyAnimation.TriggerSecondAttack();
+        
 
         float currentLength = 0;
         Vector3 placingdir = (_currentTarget.position - transform.position);
         placingdir = new Vector3(placingdir.x, 0, placingdir.z).normalized;
         Vector3 placingPos = transform.position + (placingdir * _spikesSpaces);
         placingPos.y = Spikes.transform.position.y;
+
+        BossRB.MoveRotation(Quaternion.LookRotation(placingdir));
+        _enemyAnimation.TriggerSecondAttack();
+
+        float delay = 0;
+
         while (currentLength < _spikesLength)
         {
             placingPos.y = Spikes.transform.position.y;
-            Instantiate(Spikes, placingPos, Quaternion.identity).GetComponent<RB_Spikes>().MegaKnight = this;
-            
+            RB_Spikes spike = Instantiate(Spikes, placingPos, Quaternion.identity).GetComponent<RB_Spikes>();
+            spike.MegaKnight = this;
+            spike.GoingUpDelay = delay;
+
+            delay += _spikeDelayIncrementation;
             placingPos += placingdir * _spikesSpaces;
             currentLength += _spikesSpaces;
         }

@@ -61,6 +61,7 @@ public class KawaseBlur : ScriptableRendererFeature
             tmpRT1 = new RenderTargetIdentifier(tmpId1);
             tmpRT2 = new RenderTargetIdentifier(tmpId2);
             
+
             ConfigureTarget(tmpRT1);
             ConfigureTarget(tmpRT2);
         }
@@ -123,7 +124,7 @@ public class KawaseBlur : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        var src = renderer.cameraColorTarget;
+        var src = renderer.cameraColorTargetHandle;
         scriptablePass.Setup(src);
         renderer.EnqueuePass(scriptablePass);
     }

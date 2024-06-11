@@ -17,7 +17,7 @@ public class RB_Transition : MonoBehaviour
         //FadeTransition("SampleScene", 5f, speedType: RB_SceneTransitionManager.Instance.SpeedType);
     }
 
-    public virtual IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
+    public virtual IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
     {
         yield return null;
     }

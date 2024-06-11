@@ -80,14 +80,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a2af8c374782e41a94b7c6f02fcec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
-  _totalDistance: 20
+  _speed: 10
+  _totalDistance: 90
   _projectileType: 1
   _launchForce: {x: 0, y: 0, z: 0}
   _totalLifeTime: 5
   Team: 0
-  _destroyOnWall: 1
-  _wallDetectionLength: 1
+  _destroyOnWall: 0
+  _wallDetectionLength: 6
   _followParticles: {fileID: 0}
   _destroyParticles: {fileID: 0}
   _continuousForceScreenshake: 0
@@ -102,6 +102,11 @@ MonoBehaviour:
   _isDestroyingOnDamage: 1
   _damageOnExplosion: 0
   _explosionRadius: 1
+  _isBouncing: 1
+  _maxBounces: 3
+  _explosionSounds: 
+  _projectileAnimator: {fileID: 0}
+  SpawnDistanceFromPlayer: 0
 --- !u!54 &6081443060094107756
 Rigidbody:
   m_ObjectHideFlags: 0

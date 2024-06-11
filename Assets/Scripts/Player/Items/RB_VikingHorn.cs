@@ -24,6 +24,9 @@ public class RB_VikingHorn : RB_Items
     [SerializeField] private string _specialAttackParticle;
     private string _currentParticle;
 
+    //Position
+    Vector3 _startPosition = new();
+
 
 
     public override void Bind()
@@ -98,6 +101,7 @@ public class RB_VikingHorn : RB_Items
     {
         if (!_isJumping)
         {
+            _startPosition = _transform.position;
             _currentParticle = particle;
             //Start the jump attack
             _shouldJump = true;
@@ -112,7 +116,7 @@ public class RB_VikingHorn : RB_Items
             //Get the horizontal and vertical next position
             Vector3 horizontalPosition = _rb.position + RB_PlayerAction.Instance.transform.forward * _jumpDistance * Time.fixedDeltaTime;
             horizontalPosition.y = 0;
-            Vector3 verticalPosition = new Vector3(0, _jumpCurve.Evaluate(_heightIndex) * _jumpHeight);
+            Vector3 verticalPosition = new Vector3(0, _startPosition.y + _jumpCurve.Evaluate(_heightIndex) * _jumpHeight);
             _heightIndex += Time.fixedDeltaTime;
             //Set the position to the player
             Vector3 position = new Vector3(_rb.position.x, verticalPosition.y, _rb.position.z);

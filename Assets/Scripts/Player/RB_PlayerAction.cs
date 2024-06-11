@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MANAGERS;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -58,8 +59,12 @@ public class RB_PlayerAction : MonoBehaviour
 
     //Debug
     [Header("Debug")]
-    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback; 
+    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
 
+
+    
+
+    //Awake
     private void Awake()
     {
         if (Instance == null)
@@ -72,6 +77,16 @@ public class RB_PlayerAction : MonoBehaviour
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
+
+    //Update
+    private void Update()
+    {
+        //count the time the player press the attack button
+        TimerChargeAttack();
+        
+    }
+
+    
 
     public void SetCurrentWeapon(string currentWeapon)
     {
@@ -101,7 +116,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (Item != null && CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4)
+        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || ( Item.CanAttackDuringAttack && Item.CanAttack())))
         {
             //Attack
             IsAttacking = true;
@@ -110,6 +125,26 @@ public class RB_PlayerAction : MonoBehaviour
             print("charge attack annulé et attaque commencé");
             //_impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(0.1f, 0.2f));
         }
+    }
+
+    public void AddItemToList(RB_Items itemToAdd)
+    {
+        itemToAdd.transform.position = itemToAdd.transform.parent.position;
+        itemToAdd.Bind();
+        int currentItemId = Items.IndexOf(Item);
+        //Add the item gathered to the items
+        if (Items.Count >= 3)
+        {
+            Item.Drop();
+            Items.Insert(currentItemId, itemToAdd);
+        }
+        else
+        {
+            Items.Add(itemToAdd);
+            currentItemId += 1;
+        }
+        _playerController.ChoseItem(currentItemId);
+        EventItemGathered?.Invoke();
     }
 
     public void Interact()
@@ -122,20 +157,10 @@ public class RB_PlayerAction : MonoBehaviour
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
-                itemGathered.Bind();
+                
                 IsItemNearby = true;
-                //Add the item gathered to the items
-                if (Items.Count >= 3)
-                {
-                    Item.Drop();
-                    Items.Add(itemGathered);
-                }
-                else
-                {
-                    Items.Add(itemGathered);
-                }
-                _playerController.ChoseItem(Items.Count-1);
-                EventItemGathered?.Invoke();
+                AddItemToList(itemGathered);
+                
                 
                 RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
 
@@ -280,11 +305,7 @@ public class RB_PlayerAction : MonoBehaviour
         return false;
     }
 
-    private void Update()
-    {
-        //count the time the player press the attack button
-        TimerChargeAttack();
-    }
+    
 
     private void TimerChargeAttack()
     {

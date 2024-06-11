@@ -4,7 +4,7 @@ public class RB_HUDManager : MonoBehaviour
 {
     public static RB_HUDManager Instance;
 
-    private Animator _animatorHud;
+    public Animator AnimatorHud;
 
     public RB_HUDHealthBar BossHealthBar;
 
@@ -19,11 +19,11 @@ public class RB_HUDManager : MonoBehaviour
             DestroyImmediate(gameObject);
         }
 
-        _animatorHud = GetComponent<Animator>();
+        AnimatorHud = GetComponent<Animator>();
     }
 
     public void PlayAnimation(string animationName)
     {
-        _animatorHud.Play(animationName);
+        AnimatorHud.Play(animationName);
     }
 }

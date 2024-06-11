@@ -6,6 +6,8 @@ public class RB_MenuManager : MonoBehaviour {
 
     public static RB_MenuManager Instance;
 
+    public bool IsOptionOpen;
+
     public Animator Animator;
 
     enum MENUSTATE { 
@@ -14,13 +16,20 @@ public class RB_MenuManager : MonoBehaviour {
 
     MENUSTATE _menuState;
 
-    public bool IsOptionOpen;
-    private void Start() {
+
+    private void Awake() {
         if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
         Animator = GetComponent<Animator>();
+        Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+    }
+     
+    public void Play() {
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
-    public void Play() {
+    public void MainMenu() {
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
@@ -30,7 +39,7 @@ public class RB_MenuManager : MonoBehaviour {
         _menuState = MENUSTATE.Audio;
     }
 
-    public void CloseOption() { 
+    public void CloseOption() {
         IsOptionOpen = false;
     }
 
@@ -69,8 +78,16 @@ public class RB_MenuManager : MonoBehaviour {
     }
     public void BackMainMenu() {
         Animator.SetBool("IsOptionOpen", false);
+        CloseOption();
     }
 
+    public void PauseAnim(){
+        Animator.SetBool("IsPaused",true);
+    }
+
+    public void UnPauseAnim(){
+        Animator.SetBool("IsPaused",false);
+    }
     public void SelectButton(GameObject gameObject) {
         if(gameObject.TryGetComponent(out Button button)) { 
             button.Select();

@@ -1,7 +1,5 @@
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEditor;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.Events;
 

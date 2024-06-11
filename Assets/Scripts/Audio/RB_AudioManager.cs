@@ -99,7 +99,8 @@ namespace MANAGERS
 			else
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
-			}
+				Destroy(_audioSource);
+            }
 		}
 
 		public void StopSFX() 

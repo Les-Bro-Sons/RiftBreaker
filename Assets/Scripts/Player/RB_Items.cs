@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class RB_Items : MonoBehaviour
 {
@@ -84,6 +85,11 @@ public class RB_Items : MonoBehaviour
             _impulseSource = impulseSource;
         //Get the sprite of the item
         CurrentSprite = GetComponentInChildren<SpriteRenderer>().sprite;
+
+        if(RB_Tools.TryGetComponentInParent<RB_PlayerAction>(gameObject, out _playerAction))
+        {
+            _playerAction.AddItemToList(this);
+        }
     }
 
     private void Update()

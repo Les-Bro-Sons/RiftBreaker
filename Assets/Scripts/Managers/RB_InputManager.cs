@@ -121,10 +121,9 @@ public class RB_InputManager : MonoBehaviour
 
     public Vector3 GetMouseDirection()
     {
-        if (RB_PlayerAction.Instance.transform == null) //If there's a player in the current scene
+        if (RB_PlayerAction.Instance != null) //If there's a player in the current scene
         {
-            if (_playerTransform == null) //If there's no registered player
-                _playerTransform = RB_PlayerAction.Instance.transform; //Set it to the current player
+            _playerTransform = RB_PlayerAction.Instance.transform; //Set it to the current player
         }
         else
             return Vector3.zero; //If there's no player in the current scene return a vector zero

@@ -31,7 +31,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
             if (elapsedTime >= _waitForNextSprite){
                 if (!RB_TimeManager.Instance.IsRewinding) { 
                     if(_hpPercent > 66) {
-                        if (_sprites1.Count > _currentSpriteID) {
+                        if (_sprites1.Count-1 >= _currentSpriteID) {
                             _image.sprite = _sprites1[_currentSpriteID];
                             _currentSpriteID++;
                         }
@@ -40,7 +40,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         }
                     }
                     else if(_hpPercent > 33) {
-                        if (_sprites2.Count > _currentSpriteID) {
+                        if (_sprites2.Count-1 >= _currentSpriteID) {
                             _image.sprite = _sprites2[_currentSpriteID];
                             _currentSpriteID++;
                         }
@@ -48,8 +48,8 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                             _currentSpriteID = 0;
                         }
                     }
-                    else if (_hpPercent > 5) {
-                        if (_sprites3.Count > _currentSpriteID) {
+                    else if (_hpPercent > 0) {
+                        if (_sprites3.Count - 1 >= _currentSpriteID) {
                             _image.sprite = _sprites3[_currentSpriteID];
                             _currentSpriteID++;
                         }
@@ -58,7 +58,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         }
                     }
                     else {
-                        if (_sprites4.Count > _currentSpriteID) {
+                        if (_sprites4.Count - 1 >= _currentSpriteID) {
                             _image.sprite = _sprites4[_currentSpriteID];
                             _currentSpriteID++;
                         }
@@ -86,7 +86,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         _currentSpriteID = _sprites2.Count - 1;
                     }
                 }
-                else if (_hpPercent > 5){
+                else if (_hpPercent > 0){
                     if (_currentSpriteID >= 0) {
                         _image.sprite = _sprites3[_currentSpriteID];
                         _currentSpriteID--;

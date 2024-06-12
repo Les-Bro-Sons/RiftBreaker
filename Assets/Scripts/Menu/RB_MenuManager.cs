@@ -28,7 +28,12 @@ public class RB_MenuManager : MonoBehaviour {
         Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
      
-    public void Play() {
+    public void NewGame() {
+        RB_ButtonSelectioner.Instance.BlockInteraction();
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+    }
+
+    public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }

@@ -13,9 +13,14 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     [SerializeField] float _offsetHover;
     [SerializeField] float _offsetSpeed;
 
+    Selectable _oldUp;
+    Selectable _oldDown;
+
     private void Awake() {
         _originalXPos = _textTrasform.localPosition.x;
         _button = GetComponent<Button>();
+        _oldUp = _button.navigation.selectOnUp.gameObject.GetComponent<Selectable>();
+        _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -30,10 +35,31 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     public void OnSelect(BaseEventData eventData){
         RB_MainMenuButtonManager.Instance.CurrentButton = currentButton;
         _isSelected = true;
+        Navigation buttonNavigation = _button.navigation;
+        if (!buttonNavigation.selectOnUp.gameObject.GetComponent<Button>().enabled)
+        {
+            buttonNavigation.selectOnUp = _button.navigation.selectOnUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
+            _button.navigation = buttonNavigation;
+        }
+        else {
+            buttonNavigation.selectOnUp = _oldUp;
+            _button.navigation = buttonNavigation;
+        }
+        if (!buttonNavigation.selectOnDown.gameObject.GetComponent<Button>().enabled)
+        {
+            buttonNavigation.selectOnDown = _button.navigation.selectOnDown.navigation.selectOnDown.gameObject.GetComponent<Button>();
+            _button.navigation = buttonNavigation;
+        }
+        else
+        {
+            buttonNavigation.selectOnDown = _oldDown;
+            _button.navigation = buttonNavigation;
+        }
     }
 
     public void OnDeselect(BaseEventData eventData){
         _isSelected = false;
+        
     }
 
     private void Update() {

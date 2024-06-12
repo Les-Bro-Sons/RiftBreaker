@@ -645,10 +645,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 681638918}
+    m_SelectOnDown: {fileID: 420121239}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentButton: 3
   _textTrasform: {fileID: 475164342}
-  _offsetHover: 100
+  _offsetHover: 150
   _offsetSpeed: 10
 --- !u!114 &85793567 stripped
 MonoBehaviour:
@@ -6275,7 +6275,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 49848243}
-    m_SelectOnDown: {fileID: 1640701478}
+    m_SelectOnDown: {fileID: 1363676820}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -6367,7 +6367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentButton: 4
   _textTrasform: {fileID: 1406570309}
-  _offsetHover: 100
+  _offsetHover: 150
   _offsetSpeed: 10
 --- !u!114 &423395314 stripped
 MonoBehaviour:
@@ -10235,10 +10235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1640701478}
+    m_SelectOnDown: {fileID: 49848243}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -10330,7 +10330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentButton: 2
   _textTrasform: {fileID: 1706269702}
-  _offsetHover: 100
+  _offsetHover: 150
   _offsetSpeed: 10
 --- !u!1 &687358855
 GameObject:
@@ -20398,7 +20398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentButton: 0
   _textTrasform: {fileID: 902583239}
-  _offsetHover: 100
+  _offsetHover: 150
   _offsetSpeed: 10
 --- !u!114 &1363676820
 MonoBehaviour:
@@ -20416,7 +20416,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 420121239}
-    m_SelectOnDown: {fileID: 681638918}
+    m_SelectOnDown: {fileID: 1640701478}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -20446,7 +20446,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1775722174}
         m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
-        m_MethodName: Play
+        m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25342,21 +25342,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 772765846}
-    - target: {fileID: 4923631939715227225, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4923631939715227225, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4923631939715227225, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_PlaneDistance
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 7398817321108974792, guid: 51fd2ae82528e2642868b3cbe99454d8,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.size
@@ -25411,11 +25396,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8359700300739246703, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: FadeType
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -26244,7 +26224,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640701476}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -26252,7 +26232,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 420121239}
+    m_SelectOnUp: {fileID: 1363676820}
     m_SelectOnDown: {fileID: 681638918}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -26283,7 +26263,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1775722174}
         m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
-        m_MethodName: Play
+        m_MethodName: Continue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26345,7 +26325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentButton: 1
   _textTrasform: {fileID: 654837860}
-  _offsetHover: 100
+  _offsetHover: 150
   _offsetSpeed: 10
 --- !u!114 &1657712887 stripped
 MonoBehaviour:
@@ -31994,8 +31974,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2011283042}
   m_HandleRect: {fileID: 2011283041}
   m_Direction: 2
-  m_Value: 0.99999964
-  m_Size: 0.44408593
+  m_Value: 0.9999999
+  m_Size: 0.444086
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -51,7 +51,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private Vector3 _currentPosition;
 
     //Attack
-    Vector3 directionToAttack = new();
+    public Vector3 DirectionToAttack = new();
     private bool _directionGot = false;
 
     public static RB_PlayerMovement Instance;
@@ -94,7 +94,7 @@ public class RB_PlayerMovement : MonoBehaviour
             else if (!_directionGot)
             {
                 //If the direction of the attack is got set the direction to the attack direction
-                ForwardDirection = directionToAttack;
+                ForwardDirection = DirectionToAttack;
                 _directionGot = true;
             }
         }
@@ -121,12 +121,12 @@ public class RB_PlayerMovement : MonoBehaviour
         if (RB_InputManager.Instance.IsMouse)
         {
             //If the player is playing with the mouse the attack direction is set to the mouse direction
-            directionToAttack = RB_InputManager.Instance.GetMouseDirection();
+            DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
         }
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            directionToAttack = DirectionToMove;
+            DirectionToAttack = DirectionToMove;
         }
     }
 
@@ -134,7 +134,7 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         //Set all the directions to front
         ForwardDirection = Vector3.back;
-        directionToAttack = Vector3.back;
+        DirectionToAttack = Vector3.back;
         DirectionToMove = Vector3.back;
     }
 

@@ -115,6 +115,8 @@ MonoBehaviour:
   _launchForce: {x: 10, y: 10, z: 10}
   _totalLifeTime: 2
   Team: 0
+  _destroyOnWall: 0
+  _wallDetectionLength: 1
   _followParticles: {fileID: 5559467424925952968, guid: 55fef1c9bfb97d645b2a346b16f239c1,
     type: 3}
   _destroyParticles: {fileID: 0}
@@ -127,6 +129,12 @@ MonoBehaviour:
   _isDealingKnockbackMultipleTime: 1
   _canDamageAlly: 0
   _canKnockbackAlly: 0
+  _isDestroyingOnDamage: 0
+  _damageOnExplosion: 0
+  _explosionRadius: 1
+  _explosionSounds: gory-explosion
+  _projectileAnimator: {fileID: 0}
+  SpawnDistanceFromPlayer: 0
 --- !u!114 &6230509986263376554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +176,6 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _health: {fileID: 0}
   _enemy: {fileID: 0}
-  _particleSystem: {fileID: 0}
 --- !u!114 &499330220030018901
 MonoBehaviour:
   m_ObjectHideFlags: 0

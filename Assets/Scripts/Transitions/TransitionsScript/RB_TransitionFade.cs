@@ -20,10 +20,10 @@ public class RB_TransitionFade : RB_Transition
 
     void Start()
     {
-        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(RB_SaveManager.Instance.SaveObject.CurrentLevel, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
-    public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
+    public override IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
     {
         yield return StartCoroutine(FadeImage(_fadeImage, true, duration * 0.5f, speedType)); // Fade in for half the duration.
         RB_SceneTransitionManager.Instance.NewScene(nameScene);

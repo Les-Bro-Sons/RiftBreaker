@@ -1,10 +1,12 @@
-using UnityEngine;
+ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RB_MenuManager : MonoBehaviour {
 
     public static RB_MenuManager Instance;
+
+    public bool IsOptionOpen;
 
     public Animator Animator;
 
@@ -14,14 +16,25 @@ public class RB_MenuManager : MonoBehaviour {
 
     MENUSTATE _menuState;
 
-    public bool IsOptionOpen;
-    private void Start() {
+    [Header("Sliders")]
+    [SerializeField] Slider _sliderGeneral;
+    [SerializeField] Slider _sliderMusic;
+    [SerializeField] Slider _sliderSFX;
+
+    private void Awake() {
         if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
         Animator = GetComponent<Animator>();
+        Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+    }
+     
+    public void Play() {
+        RB_ButtonSelectioner.Instance.BlockInteraction();
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
-    public void Play() {
-        RB_SceneTransitionManager.Instance.NewScene((int)(SceneManager.GetActiveScene().buildIndex + 1));
+    public void MainMenu() {
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
     }
 
     public void Options() {
@@ -30,7 +43,8 @@ public class RB_MenuManager : MonoBehaviour {
         _menuState = MENUSTATE.Audio;
     }
 
-    public void CloseOption() { 
+    public void CloseOption() {
+        RB_ButtonSelectioner.Instance.SelectMainButton(1);
         IsOptionOpen = false;
     }
 
@@ -54,8 +68,8 @@ public class RB_MenuManager : MonoBehaviour {
         }
     }
 
-    public void Credits() { 
-    
+    public void Credits() {
+        Animator.SetTrigger("Credits");
     }
 
     public void Quit() {
@@ -69,8 +83,19 @@ public class RB_MenuManager : MonoBehaviour {
     }
     public void BackMainMenu() {
         Animator.SetBool("IsOptionOpen", false);
+        CloseOption();
+        _sliderGeneral.GetComponent<RB_MenuSlider>().ResetInteraction();
+        _sliderMusic.GetComponent<RB_MenuSlider>().ResetInteraction();
+        _sliderSFX  .GetComponent<RB_MenuSlider>().ResetInteraction();
     }
 
+    public void PauseAnim(){
+        Animator.SetBool("IsPaused",true);
+    }
+
+    public void UnPauseAnim(){
+        Animator.SetBool("IsPaused",false);
+    }
     public void SelectButton(GameObject gameObject) {
         if(gameObject.TryGetComponent(out Button button)) { 
             button.Select();

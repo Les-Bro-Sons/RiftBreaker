@@ -12,6 +12,7 @@ public class RB_Spikes : MonoBehaviour
     [Header("Main Properties")]
     [SerializeField] private float _lifetime = 1;
     private float _lifetimeTimer = 0;
+    public float GoingUpDelay = 0;
     [SerializeField] private float _goingUpDuration = 0.2f;
     [SerializeField] private float _goingDownDuration = 0.2f;
     [SerializeField] private float _activeHeight = 1f; //height the spike will go up to
@@ -21,6 +22,7 @@ public class RB_Spikes : MonoBehaviour
     private bool _isGoingUp = false;
     private bool _isGoingDown = false;
     private float _movingTimer = 0f;
+    private float _delayTimer = 0f;
 
     [Header("Properties (useless if MegaKnight spawn them)")]
     [SerializeField] private float _damage;
@@ -34,6 +36,7 @@ public class RB_Spikes : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, _inactiveHeight, transform.position.z);
         _movingTimer = 0;
+        _delayTimer = 0;
         _isGoingUp = true;
 
         _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
@@ -45,12 +48,15 @@ public class RB_Spikes : MonoBehaviour
     {
         if (_isGoingUp)
         {
-            
             if (_movingTimer >= _goingUpDuration)
             {
                 transform.position = new Vector3(transform.position.x, _activeHeight, transform.position.z);
                 _isGoingUp = false;
                 if (_hasEnemyEnteredDuringMovement) CheckForEnemies();
+            }
+            else if (_delayTimer < GoingUpDelay)
+            {
+                _delayTimer += Time.deltaTime;
             }
             else
             {
@@ -76,6 +82,7 @@ public class RB_Spikes : MonoBehaviour
         if (!_isGoingDown && _lifetime <= _lifetimeTimer)
         {
             _movingTimer = 0;
+            _isGoingUp = false;
             _isGoingDown = true;
         }
         _lifetimeTimer += Time.deltaTime;

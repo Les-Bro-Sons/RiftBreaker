@@ -1,5 +1,6 @@
 using BehaviorTree;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_AICheck_EnemyInRoom : RB_BTNode
@@ -35,6 +36,12 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
         else
         {
             _enemies = RB_RoomManager.Instance.GetDetectedEnemies(room.Value);
+        }
+
+        foreach (RB_Health enemy in _enemies.ToList())
+        {
+            if (enemy.Dead)
+                _enemies.Remove(enemy);
         }
 
         if (_enemies.Count == 0) return BTNodeState.FAILURE;

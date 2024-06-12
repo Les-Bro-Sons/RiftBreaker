@@ -34,11 +34,8 @@ public class RB_PlayerController : MonoBehaviour
             RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
             RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         }
-        else
-        {
-            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-            RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
-        }
+        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
 
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);

@@ -10,10 +10,10 @@ public class RB_TransitionRift : RB_Transition
     void Start()
     {
         _material.SetFloat("_MaskAmount", -0.1f);
-        StartCoroutine(Fade("SampleScene", Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(RB_SaveManager.Instance.SaveObject.CurrentLevel, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
-    public override IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
+    public override IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
     {
         yield return new WaitForSeconds(1);
 

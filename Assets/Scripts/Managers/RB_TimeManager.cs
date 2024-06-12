@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,7 +73,7 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                Time.timeScale += Time.fixedDeltaTime / 10f;
+                Time.timeScale += Time.fixedDeltaTime / 2.5f;
             }
         }
     }
@@ -118,6 +119,7 @@ public class RB_TimeManager : MonoBehaviour
             IsRewinding = true;
             _fullRewind = fullRewind;
             UxStartRewind(fullRewind);
+            RB_AudioManager.Instance.MusicSource.pitch = -1;
             EventStartRewinding?.Invoke();
         }
         else
@@ -145,6 +147,7 @@ public class RB_TimeManager : MonoBehaviour
                 NumberOfRewind = 3;
                 RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
             }
+            RB_AudioManager.Instance.MusicSource.pitch = 1;
             EventRecordFrame?.Invoke(); // used for interpolation
         }
     }
@@ -157,11 +160,13 @@ public class RB_TimeManager : MonoBehaviour
     private void UxStartRewind(bool fullRewind = false)
     {
         RB_UXRewindManager.Instance.StartRewindTransition(fullRewind);
+        RB_AudioManager.Instance.MusicSource.pitch = -1;
 
     }
 
     private void UxStopRewind()
     {
         RB_UXRewindManager.Instance.StopRewindTransition();
+        RB_AudioManager.Instance.MusicSource.pitch = 1;
     }
 }

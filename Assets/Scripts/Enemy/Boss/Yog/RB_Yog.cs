@@ -61,6 +61,7 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _maxCooldownForAttack = 45f;
     [SerializeField] private float _scaleHeight = 1f;
     [SerializeField] private float _timeForRescaling = 1f;
+    private RB_AI_BTTree _btTree;
     private GameObject _enemy;
     private Rigidbody _enemyRigidbody;
     [SerializeField] private List<GameObject> _allEnemies = new List<GameObject>();
@@ -179,9 +180,9 @@ public class RB_Yog : RB_Boss
                 return CurrentState = BOSSSTATES.Attack1;
             }
         
-            if (GetTargetDistance() <= 2f) //SWITCH TO ATTACK2
+            if (GetTargetDistance() <= 2f && _currentCooldownAttack2 <= 0) //SWITCH TO ATTACK2
             {
-                ExplosionAttack();
+                AreaBeforeExplosionAttack();
                 return CurrentState = BOSSSTATES.Attack2;
             }
             
@@ -255,7 +256,7 @@ public class RB_Yog : RB_Boss
         Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size2);
     }
 
-    public void ExplosionAttack() //ATTACK 2
+    public void AreaBeforeExplosionAttack() //ATTACK 2
     {
         //Spawn of the zone attack (attack n°2)
 
@@ -329,18 +330,29 @@ public class RB_Yog : RB_Boss
         foreach (GameObject en in _allEnemies)
         {
             _enemy = en;
-            StartCoroutine(FreezeSpawnedEnemy());
+
             if (_enemy.transform.localScale.x <= 1)
             {
-                Vector3 rescalingHeight = new Vector3(1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60);
+                _enemyRigidbody = _enemy.GetComponent<Rigidbody>();
+                _btTree = _enemy.GetComponent<RB_AI_BTTree>();
+                _enemyRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                _enemyRigidbody.detectCollisions = false;
+                _btTree.enabled = false;
+                
+
+                Vector3 rescalingHeight = new Vector3((1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime);
                 _enemy.transform.localScale += rescalingHeight;
+
                 if (_enemy.transform.localScale.x > 1)
                 {
                     _enemyRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                     _enemyRigidbody.detectCollisions = true;
                     _enemy.transform.localScale = new Vector3(1, 1, 1);
+                    _btTree.enabled = true;
                 }
             }
+
+            
 
             if (_enemy.GetComponent<RB_Health>().Dead == true)
             {
@@ -348,12 +360,5 @@ public class RB_Yog : RB_Boss
             }
         }
     } 
-    IEnumerator FreezeSpawnedEnemy()
-    {
-        
-        _enemyRigidbody = _enemy.GetComponent<Rigidbody>();
-        _enemyRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        _enemyRigidbody.detectCollisions = false;
-        yield return new WaitForSeconds(_timeForRescaling);
-    }
+    
 }

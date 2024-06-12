@@ -13,7 +13,7 @@ public class RB_Items : MonoBehaviour
     protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
-    [SerializeField] private float _specialAttackChargeTime;
+    public float SpecialAttackChargeTime;
 
     [SerializeField] private float _chargeZoom = 0.85f;
 
@@ -100,25 +100,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        RechargeSpecialAttack();
-    }
-
-    public virtual void AddToSpecialChargeAttack(float amountToAdd)
-    {
-        //Add the specialAttackChargeAmount
-        _playerAction.SpecialAttackCharge += amountToAdd;
-    }
-
-    public virtual void RechargeSpecialAttack()
-    {
-        //Recharge over time the special attack
-        if(_playerAction.SpecialAttackCharge <= 100)
-        {
-            _playerAction.SpecialAttackCharge += (Time.deltaTime / _specialAttackChargeTime) * 100;
-        }
-    }
+    
 
     public virtual void Bind()
     {

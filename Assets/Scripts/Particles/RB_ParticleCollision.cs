@@ -62,7 +62,7 @@ public class RB_ParticleCollision : MonoBehaviour
             RB_PlayerAction.Instance.EventOnChargeSpecialAttackGathered?.Invoke();
             if(RB_Tools.TryGetComponentInParent<RB_Enemy>(gameObject, out RB_Enemy enemy))
             {
-                RB_PlayerAction.Instance.Item.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
+                RB_PlayerAction.Instance.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
             }
             
         }

@@ -1,9 +1,8 @@
 using Cinemachine;
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -84,7 +83,25 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //count the time the player press the attack button
         TimerChargeAttack();
-        
+        RechargeSpecialAttack();
+    }
+
+
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public virtual void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if (Item != null && SpecialAttackCharge <= 100 && Item.SpecialAttackChargeTime > 0)
+        {
+            SpecialAttackCharge += (Time.deltaTime / Item.SpecialAttackChargeTime) * 100;
+        }
+
     }
 
     public void SetCurrentWeapon(string currentWeapon)
@@ -301,7 +318,7 @@ public class RB_PlayerAction : MonoBehaviour
 
     private void TimerChargeAttack()
     {
-        if (Item != null && _shouldStartCharging)
+        if (Item != null && _shouldStartCharging && !IsItemNearby)
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;

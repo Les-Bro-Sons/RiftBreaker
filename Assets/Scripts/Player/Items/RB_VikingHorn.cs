@@ -67,7 +67,7 @@ public class RB_VikingHorn : RB_Items
 
     public override void StartChargingAttack() {
         base.StartChargingAttack();
-        RB_AudioManager.Instance.PlaySFX("growl", RB_PlayerController.Instance.transform.position, 0.15f, .5f);
+        RB_AudioManager.Instance.PlaySFX("growl", RB_PlayerController.Instance.transform.position, 0.15f, 1f);
     }
 
     public override void ChargedAttack() {
@@ -134,7 +134,7 @@ public class RB_VikingHorn : RB_Items
                 _shouldJump = false;
                 _isJumping = false;
                 CurrentAttackCombo = 0;
-                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0, .5f);
+                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0, 1f);
             }
         }
     }
@@ -152,6 +152,6 @@ public class RB_VikingHorn : RB_Items
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Horn", RB_PlayerController.Instance.transform.position, 0,.5f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Horn", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

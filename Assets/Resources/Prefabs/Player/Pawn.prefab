@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &3802911559949533877
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +154,7 @@ MonoBehaviour:
   MovementSpeedAggro: 8
   MovementSpeedFlee: 6
   AttackSpeed: 0.2
+  BoostMultiplier: 1
   SplineContainer: {fileID: 0}
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
@@ -272,6 +274,7 @@ MonoBehaviour:
   _movementAcceleration: 200
   _movementMaxSpeed: 12
   _movementFrictionForce: 100
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 0}
 --- !u!114 &761828085917391295
 MonoBehaviour:

@@ -46,6 +46,11 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _damageOnExplosion = false;
     [SerializeField] private float _explosionRadius = 1;
 
+    [Header("Bounce")]
+    [SerializeField] private bool _isBouncing = false;
+    [SerializeField] private int _maxBounces = 3;
+    private int _currentBounce = 0;
+
     [Header("Sounds")] 
     [SerializeField] private string _explosionSounds;
     
@@ -108,9 +113,7 @@ public class RB_Projectile : MonoBehaviour
             enemyHealth.TakeDamage(_damage);
             if (_isDestroyingOnDamage)
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                DestroyParticle();
+                DestroyProjectile();
             }
         }
     }
@@ -129,7 +132,7 @@ public class RB_Projectile : MonoBehaviour
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
         RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, 1);
-        DestroyParticle();
+        DestroyProjectile();
     }
 
     private void Start()
@@ -158,11 +161,20 @@ public class RB_Projectile : MonoBehaviour
             }
             else
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                DestroyParticle();
+                DestroyProjectile();
             }
             
+        }
+        if (_isBouncing && Physics.Raycast(_transform.position, _rb.velocity.normalized, out RaycastHit hitInfo, _wallDetectionLength, 1 << 3))
+        {
+            if (_currentBounce >= _maxBounces)
+            {
+                DestroyProjectile();
+                return;
+            }
+            Vector3 direction = Vector3.Reflect(_rb.velocity.normalized, hitInfo.normal);
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
+            _currentBounce += 1;
         }
     }
 
@@ -180,9 +192,7 @@ public class RB_Projectile : MonoBehaviour
             else
             {
                 //When it reaches the total distance, destroy the projectile
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                DestroyParticle();
+                DestroyProjectile();
             }
         }
         else
@@ -190,9 +200,7 @@ public class RB_Projectile : MonoBehaviour
             if(Time.time > (_creationTime + _totalLifeTime))
             {
                 //If the projectile is meant to be launched, when its life time is finished, destroy it
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                DestroyParticle();
+                DestroyProjectile();
             }
         }
         
@@ -230,9 +238,11 @@ public class RB_Projectile : MonoBehaviour
         }
     }
 
-    private void DestroyParticle() 
+    private void DestroyProjectile() 
     {
         RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, .1f);
+        if (_destroyParticles)
+            Instantiate(_destroyParticles, _transform.position, _transform.rotation);
         Destroy(gameObject);
     }
 }

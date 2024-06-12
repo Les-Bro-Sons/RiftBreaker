@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2143687700154857712}
   - component: {fileID: 4888524851607640154}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 263053956299020696}
   - component: {fileID: 7939403144304551523}
   - component: {fileID: -5315812548548587530}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RobertLenec
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,6 +168,9 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &7939403144304551523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +189,7 @@ MonoBehaviour:
   _movementAcceleration: 150
   _movementMaxSpeed: 5
   _movementFrictionForce: 75
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!114 &-5315812548548587530
 MonoBehaviour:
@@ -206,6 +210,7 @@ MonoBehaviour:
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 0}
   AiAnimator: {fileID: 0}
+  ChargeSpecialAttackAmount: 0
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -216,11 +221,6 @@ MonoBehaviour:
   CooldownBetweenAttacks: 0
   WaitInIdle: 1
   BossRB: {fileID: 7950358798519079587}
-  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
-    type: 3}
-  PlayerLayer:
-    serializedVersion: 2
-    m_Bits: 0
   Health: {fileID: 0}
   CurrentState: 0
   _minMovementDistance: 10
@@ -240,7 +240,7 @@ MonoBehaviour:
   _areaDamageKnockback: 1
   _canAreaDamageZoneDamageMultipleTime: 1
   Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
-  waypoints: []
+  _waypoints: []
   _numberOfArrow: 0
   _cloneAttackInterval: 0.5
   _cloneAttackDelay: 1
@@ -257,7 +257,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8807292251387617910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 9101173564990518349}
   - component: {fileID: 5698534233441271866}
   - component: {fileID: 7214748225881584283}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpriteRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,6 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &7214748225881584283
 Animator:
   serializedVersion: 5

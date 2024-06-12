@@ -102,6 +102,14 @@ public class RB_Health : MonoBehaviour {
         EventHeal.Invoke();
         if (_particleHeal && !ignoreParticle)
             Instantiate(_particleHeal, transform.position, Quaternion.identity);
+        if (Dead && _hp > 0)
+        {
+            Dead = false;
+            if (TryGetComponent<RB_Enemy>(out RB_Enemy enemy))
+            {
+                enemy.UnTombstone();
+            }
+        }
     }
 
     //Fonction de soin Maximum

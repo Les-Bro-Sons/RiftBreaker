@@ -48,7 +48,6 @@ public class RB_Spikes : MonoBehaviour
     {
         if (_isGoingUp)
         {
-            
             if (_movingTimer >= _goingUpDuration)
             {
                 transform.position = new Vector3(transform.position.x, _activeHeight, transform.position.z);

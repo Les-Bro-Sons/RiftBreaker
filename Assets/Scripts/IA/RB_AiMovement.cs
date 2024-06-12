@@ -14,6 +14,7 @@ public class RB_AiMovement : MonoBehaviour
     [SerializeField] private float _movementAcceleration; public float MovementAcceleration { get { return _movementAcceleration; } }
     [SerializeField] private float _movementMaxSpeed; public float MovementMaxSpeed { get { return _movementMaxSpeed; } }
     [SerializeField] private float _movementFrictionForce;
+    public float MoveSpeedBoost = 1;
 
     [Header("Components")]
     private Rigidbody _rb;
@@ -63,7 +64,7 @@ public class RB_AiMovement : MonoBehaviour
         if (_rb.velocity.magnitude < _movementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value);
+            _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value);
         }
         _transform.forward = direction;
         LastDirection = direction;
@@ -85,7 +86,7 @@ public class RB_AiMovement : MonoBehaviour
             Vector3 direction = (nextPos - _transform.position).normalized;
             WalkDirection = direction;
 
-            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value); //move
+            _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value); //move
             _rb.MoveRotation(Quaternion.LookRotation(direction));
 
             LastDirection = direction;

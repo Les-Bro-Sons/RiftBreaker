@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEditor;
 
 public class RB_Items : MonoBehaviour
 {
@@ -84,6 +85,11 @@ public class RB_Items : MonoBehaviour
             _impulseSource = impulseSource;
         //Get the sprite of the item
         CurrentSprite = GetComponentInChildren<SpriteRenderer>().sprite;
+
+        if(RB_Tools.TryGetComponentInParent<RB_PlayerAction>(gameObject, out _playerAction))
+        {
+            _playerAction.AddItemToList(this);
+        }
     }
 
     private void Update()
@@ -127,7 +133,7 @@ public class RB_Items : MonoBehaviour
         _playerAction.Items.Remove(this);
         if (_playerAction.Item == this)
         {
-            _playerAction.ItemId--;
+            _playerAction.ItemId = Mathf.Clamp(_playerAction.ItemId - 1, 0, 5);
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }

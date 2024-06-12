@@ -29,11 +29,6 @@ public class RB_Boss : RB_Enemy
 
     public Rigidbody BossRB;
 
-    [Header("PlayerInfos")]
-    public Transform PlayerPosition;
-    public LayerMask PlayerLayer;
-
-
     [HideInInspector] public RB_Health Health;
 
     protected virtual void Start()
@@ -47,10 +42,4 @@ public class RB_Boss : RB_Enemy
     {
         
     }
-
-    protected bool isPlayerInRange()
-    {
-        return Vector3.Distance(transform.position, PlayerPosition.position) <= DetectionRadius;
-    }
-
 } 

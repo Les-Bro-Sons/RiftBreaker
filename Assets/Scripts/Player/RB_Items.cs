@@ -220,6 +220,7 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ChargedAttack()
     {
+        print("charged attack");
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;

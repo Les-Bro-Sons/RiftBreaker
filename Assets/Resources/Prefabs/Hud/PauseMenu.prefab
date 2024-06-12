@@ -2011,7 +2011,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2511651fa6fd43447b8392d2fe86f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isSelected: 0
+  _isInteracting: 0
   _offsetValue: 10
+  _handler: {fileID: 7500189339567608689}
+  _default: {fileID: 21300000, guid: d9e5db3d73f453549a1e45dbff542e22, type: 3}
+  _selected: {fileID: 21300000, guid: 24866999413758d4bb708e9dac1a745d, type: 3}
 --- !u!1 &862308284532673861
 GameObject:
   m_ObjectHideFlags: 0
@@ -6914,7 +6919,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2511651fa6fd43447b8392d2fe86f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isSelected: 0
+  _isInteracting: 0
   _offsetValue: 10
+  _handler: {fileID: 2822006459361110758}
+  _default: {fileID: 21300000, guid: d9e5db3d73f453549a1e45dbff542e22, type: 3}
+  _selected: {fileID: 21300000, guid: 24866999413758d4bb708e9dac1a745d, type: 3}
 --- !u!1 &2815026717694091042
 GameObject:
   m_ObjectHideFlags: 0
@@ -14495,7 +14505,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2511651fa6fd43447b8392d2fe86f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isSelected: 0
+  _isInteracting: 0
   _offsetValue: 10
+  _handler: {fileID: 7699638508498680476}
+  _default: {fileID: 21300000, guid: d9e5db3d73f453549a1e45dbff542e22, type: 3}
+  _selected: {fileID: 21300000, guid: 24866999413758d4bb708e9dac1a745d, type: 3}
 --- !u!1 &6028626001020363833
 GameObject:
   m_ObjectHideFlags: 0
@@ -19572,11 +19587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a31a1cb2c0b3d2544b46d887751d15cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainButtons:
-  - {fileID: 7770900773933792688}
-  - {fileID: 2386207950096595517}
-  - {fileID: 0}
-  - {fileID: 134403945766717090}
+  mainButtons: []
   _quitButtons:
   - {fileID: 4866332513926775685}
   - {fileID: 7219583556332576255}
@@ -19599,6 +19610,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOptionOpen: 0
   Animator: {fileID: 1726602711789762615}
+  _sliderGeneral: {fileID: 7450819531551826616}
+  _sliderMusic: {fileID: 8609353914307135152}
+  _sliderSFX: {fileID: 2181894851225922505}
 --- !u!95 &1726602711789762615
 Animator:
   serializedVersion: 5

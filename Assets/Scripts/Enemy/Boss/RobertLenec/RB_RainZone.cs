@@ -20,9 +20,6 @@ public class RB_RainZone : MonoBehaviour
     private float _appearTimer = 0;
     private float _appearAlpha = 0;
 
-    [Header("Properties (useless if MegaKnight spawn them)")]
-    [SerializeField] private float _damage;
-    [SerializeField] private float _knockback;
 
     [HideInInspector] public float DamageCooldown;
     private float _damageTimer = 0;

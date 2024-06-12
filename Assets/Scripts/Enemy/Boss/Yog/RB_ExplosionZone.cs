@@ -54,7 +54,7 @@ public class RB_ExplosionZone : MonoBehaviour
 
     public void UpdateExplosionZone()
     {
-        _scaleChange = new Vector3(0.1f, 0.1f, 0.1f);
+        _scaleChange = new Vector3(0.3f, 0.3f, 0.3f);
         gameObject.transform.localScale += _scaleChange;
     }
 

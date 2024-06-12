@@ -231,6 +231,7 @@ public class RB_PlayerMovement : MonoBehaviour
         //Starting dash animation
         DashAnim();
         RB_AudioManager.Instance.PlaySFX("dashsound", RB_PlayerController.Instance.transform.position, 0, 1);
+        EventDash.Invoke();
     }
 
     
@@ -249,7 +250,6 @@ public class RB_PlayerMovement : MonoBehaviour
             if (distanceThisFrame >= _dashDistance || (Time.time >= _lastUsedDashTime + _totalDashTime && _currentVelocity.magnitude <= 1))
             {
                 StopDash();
-                EventDash.Invoke();
             }
             _rb.velocity = _dashSpeed * _dashDirection;
         }

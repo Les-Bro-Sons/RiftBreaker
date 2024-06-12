@@ -24,11 +24,14 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _tentacleHitKnockback = 1f;
     [SerializeField] private float _tentacleHitDamage = 1f;
     [SerializeField] private float _tentacleHitDelay = 1f;
+    [SerializeField] private float _delayBeforeHit = 0.2f;
     [SerializeField] private int _numberTotalOfAttack = 5;
     [SerializeField] private GameObject _tentacleHitParticles;
+    [SerializeField] private GameObject _tentacleHitAnimation;
     [SerializeField] private List<int> _numberOfAttackDone;
     private int AttackDone;
     private float _tentacleHitDelayTimer = 0;
+    private float _tentacleHitFirstDelayTimer = 3;
 
     [Header("AreaZonePreExplosion (attack2 part1)")]
     public GameObject ExplosionZone;
@@ -59,7 +62,9 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _maxCooldownForAttack = 45f;
     [SerializeField] private float _scaleHeight = 1f;
     [SerializeField] private float _timeForRescaling = 1f;
+    private RB_AI_BTTree _btTree;
     private GameObject _enemy;
+    private Rigidbody _rigidbody;
     [SerializeField] private List<GameObject> _allEnemies = new List<GameObject>();
     protected float _currentCooldownBeforeReactivate;
 
@@ -68,7 +73,6 @@ public class RB_Yog : RB_Boss
     protected override void Start()
     {
         base.Start();
-        SpawnEnemies();
     }
 
     protected override void Update()
@@ -89,6 +93,10 @@ public class RB_Yog : RB_Boss
 
     private void FixedUpdate()
     {
+        int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -115,12 +123,13 @@ public class RB_Yog : RB_Boss
                 SpawnEnemies();
                 if (_numberOfAttackDone.Count < 5)
                 {
-                    transform.forward = _currentTarget.position - transform.position;
-                    if (WaitForAttack1())
+                    
+                    if (WaitForTentacleHit())
                     {
                         TentacleHit();
                         _tentacleHitDelayTimer = _tentacleHitDelay;
                     }
+
                     CurrentState = BOSSSTATES.Attack1;
                 }
                 
@@ -171,14 +180,14 @@ public class RB_Yog : RB_Boss
         if (_currentCooldownBetweenAttacks <= 0)
         {
             transform.forward = (_currentTarget.position - transform.position).normalized;
-            if (GetTargetDistance() >= 2f) //SWITCH TO ATTACK1
+            if (GetTargetDistance() >= 3f) //SWITCH TO ATTACK1
             {
                 return CurrentState = BOSSSTATES.Attack1;
             }
         
-            if (GetTargetDistance() <= 2f) //SWITCH TO ATTACK2
+            if (GetTargetDistance() <= 3f && _currentCooldownAttack2 <= 0) //SWITCH TO ATTACK2
             {
-                ExplosionAttack();
+                AreaBeforeExplosionAttack();
                 return CurrentState = BOSSSTATES.Attack2;
             }
             
@@ -200,14 +209,27 @@ public class RB_Yog : RB_Boss
         
     }
 
-
-    public void TentacleHit() //ATTACK 1
+    public void TentacleHit()
     {
-        
+        StartCoroutine(TentacleHitCoroutine());
+    }
+    IEnumerator TentacleHitCoroutine() //ATTACK 1
+    {
+        if (_numberOfAttackDone.Count == 0)
+        {
+            //yield return new WaitForSeconds(1);
+        }
+        yield return new WaitForSeconds(1);
+        transform.forward = _currentTarget.position - transform.position;
+        float range = Vector3.Distance(_currentTarget.position, transform.position);
+
+        yield return new WaitForSeconds(_delayBeforeHit);
+
         _enemyAnimation.TriggerBasicAttack();
         List<RB_Health> alreadyDamaged = new();
-        float range = Vector3.Distance(_currentTarget.position, transform.position);
-        Vector3 size = new Vector3(_tentacleHitLength, 1, range + 1);
+        Vector3 size = new Vector3(_tentacleHitLength, 1, range + 10);
+        GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * _tentacleHitRange / 2), transform.rotation);
+        previsualization.transform.localScale = size;
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _tentacleHitRange / 2), size, transform.rotation))
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
@@ -227,21 +249,36 @@ public class RB_Yog : RB_Boss
         AttackDone = new int();
         _numberOfAttackDone.Add(AttackDone);
         _currentCooldownAttack1 = CooldownAttack1;
+        Destroy(previsualization, 0.5f);
     }
-
-    private bool WaitForAttack1() //TIMER ATTACK 1
+    private bool WaitForTentacleHit() //TIMER ATTACK 1
     {
         _tentacleHitDelayTimer -= Time.fixedDeltaTime;
         return (_tentacleHitDelayTimer <= 0);
+    } 
+    private bool WaitForFirstTentacleHit() //TIMER ATTACK 1
+    {
+        _tentacleHitFirstDelayTimer -= Time.fixedDeltaTime;
+        return (_tentacleHitFirstDelayTimer <= 0);
     }
 
-    public void ExplosionAttack() //ATTACK 2
+    /*private void OnDrawGizmos()
+    {
+        float range = Vector3.Distance(_currentTarget.position, transform.position);
+        Vector3 size = new Vector3(_tentacleHitLength, 1, range+1);
+        Vector3 size2 = new Vector3(range+1, 1, _tentacleHitLength);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size);
+        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size2);
+    }*/
+
+    public void AreaBeforeExplosionAttack() //ATTACK 2
     {
         //Spawn of the zone attack (attack n°2)
-
+        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         GameObject Bomb = Instantiate(ExplosionZone, transform.position, Quaternion.identity);
         Bomb.GetComponent<RB_ExplosionZone>().Yog = this;
-        Bomb.transform.localScale = new Vector3(_areaDamageRadius * 2, ExplosionZone.transform.localScale.y, _areaDamageRadius * 2);
+        Bomb.transform.localScale = Vector3.zero;
         _currentCooldownAttack2 = CooldownAttack2;   
     }
 
@@ -261,6 +298,7 @@ public class RB_Yog : RB_Boss
     public void Explosion(RB_Health enemyHealth)
     {
         //Application of damages for the explosion of zone attack (attack 2 part 2)
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         if (Health.Team == enemyHealth.Team || (_alreadyExplosionDamaged.Contains(enemyHealth) && !_canExplosionDamageMultipleTime)) return;
         _alreadyExplosionDamaged.Add(enemyHealth);
         enemyHealth.TakeDamage(_explosionDamage);
@@ -309,16 +347,29 @@ public class RB_Yog : RB_Boss
         foreach (GameObject en in _allEnemies)
         {
             _enemy = en;
-            
+
             if (_enemy.transform.localScale.x <= 1)
             {
-                Vector3 rescalingHeight = new Vector3(1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60, 1 / _timeForRescaling / 60);
+                _rigidbody = _enemy.GetComponent<Rigidbody>();
+                _btTree = _enemy.GetComponent<RB_AI_BTTree>();
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                _rigidbody.detectCollisions = false;
+                _btTree.enabled = false;
+                
+
+                Vector3 rescalingHeight = new Vector3((1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime);
                 _enemy.transform.localScale += rescalingHeight;
+
                 if (_enemy.transform.localScale.x > 1)
                 {
-                    _enemy.transform.localScale = Vector3.one;
+                    _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                    _rigidbody.detectCollisions = true;
+                    _enemy.transform.localScale = new Vector3(1, 1, 1);
+                    _btTree.enabled = true;
                 }
             }
+
+            
 
             if (_enemy.GetComponent<RB_Health>().Dead == true)
             {
@@ -326,4 +377,5 @@ public class RB_Yog : RB_Boss
             }
         }
     } 
+    
 }

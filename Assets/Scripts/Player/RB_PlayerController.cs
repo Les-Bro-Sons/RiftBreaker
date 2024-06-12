@@ -28,14 +28,13 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Start()
     {
+        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
         if (_item != null)
         {
-            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+           /* RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);*/
             RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         }
-        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
 
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);

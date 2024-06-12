@@ -122,7 +122,7 @@ public class RB_Projectile : MonoBehaviour
     {
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
         {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth) && enemyHealth.Team != Team)
             {
                 enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
                 enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);

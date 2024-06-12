@@ -363,7 +363,7 @@ MonoBehaviour:
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 8145346850076723994}
   AiAnimator: {fileID: 0}
-  ChargeSpecialAttackAmount: 0
+  ChargeSpecialAttackAmount: 5
 --- !u!114 &8504773875681969578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +447,12 @@ MonoBehaviour:
   MaxHeavySlashCombo: 5
   HeavySlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
+  ExplosionDamage: 30
+  ExplosionKnockback: 15
+  ExplosionRadius: 3
+  ExplosionDelay: 1
+  ExplosionStartRange: 1
+  ExplosionParticles: {fileID: 0}
 --- !u!114 &7875609813281947390
 MonoBehaviour:
   m_ObjectHideFlags: 0

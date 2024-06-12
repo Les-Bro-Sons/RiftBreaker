@@ -1,9 +1,8 @@
 using Cinemachine;
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +11,7 @@ public class RB_PlayerAction : MonoBehaviour
     public static RB_PlayerAction Instance;
 
     //Conditions
-    [HideInInspector] public bool IsChargingAttack;
+    [HideInInspector] public bool IsChargingAttack = false;
     [HideInInspector] public bool IsChargedAttacking;
     [HideInInspector] public bool IsSpecialAttacking;
     [HideInInspector] public bool IsAttacking;
@@ -22,6 +21,7 @@ public class RB_PlayerAction : MonoBehaviour
     [Range(0, 100)] public float SpecialAttackCharge; //from 0 to 100
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
+    private bool _shouldStartCharging = false;
 
     //Components
     private RB_PlayerMovement _playerMovement;
@@ -83,10 +83,26 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //count the time the player press the attack button
         TimerChargeAttack();
-        
+        RechargeSpecialAttack();
     }
 
-    
+
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public virtual void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if (Item != null && SpecialAttackCharge <= 100 && Item.SpecialAttackChargeTime > 0)
+        {
+            SpecialAttackCharge += (Time.deltaTime / Item.SpecialAttackChargeTime) * 100;
+        }
+
+    }
 
     public void SetCurrentWeapon(string currentWeapon)
     {
@@ -116,13 +132,12 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || ( Item.CanAttackDuringAttack && Item.CanAttack())))
+        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || (Item.CanAttackDuringAttack && Item.CanAttack())))
         {
             //Attack
             IsAttacking = true;
-            Item.Attack();
             EventBasicAttack?.Invoke();
-            print("charge attack annulé et attaque commencé");
+            Item.Attack();
             //_impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(0.1f, 0.2f));
         }
     }
@@ -209,16 +224,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StartChargeAttack()
     {
-        if (Item != null && CanAttack())
-        {
-            //Start charging attack
-            IsChargingAttack = true;
-            _isChargingAnimation = false;
-            _chargeAttackPressTime = 0;
-            if(_currentChargedAttack != null)
-                StopCoroutine(_currentChargedAttack);
-            _currentChargedAttack = StartCoroutine(ChargeAttack());
-        }
+        _shouldStartCharging = true;
+        _isChargingAnimation = false;
     }
 
     public bool IsDoingAnyAttack()
@@ -253,6 +260,8 @@ public class RB_PlayerAction : MonoBehaviour
             }
             Item.StopChargingAttack();
             IsChargingAttack = false;
+            _shouldStartCharging = false;
+            _chargeAttackPressTime = 0;
             EventStopChargingAttack?.Invoke();
         }
         
@@ -309,12 +318,18 @@ public class RB_PlayerAction : MonoBehaviour
 
     private void TimerChargeAttack()
     {
-        if (Item != null && IsChargingAttack)
+        if (Item != null && _shouldStartCharging && !IsItemNearby)
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;
-            if (_chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation)
+            if (Item != null && _chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation  && CanAttack())
             {
+                //Start charging attack
+                IsChargingAttack = true;
+                if (_currentChargedAttack != null)
+                    StopCoroutine(_currentChargedAttack);
+                _currentChargedAttack = StartCoroutine(ChargeAttack());
+
                 Item.StartChargingAttack();
                 _isChargingAnimation = true;
                 EventStartChargingAttack?.Invoke();

@@ -18,17 +18,19 @@ public class RB_Yog : RB_Boss
     protected float _currentCooldownBetweenMovement;
 
     [Header("Tentacle Hit (attack1)")]
+    [SerializeField] private bool _tentacleHitFullRange = true;
     [SerializeField] private float _tentacleHitWidth = 1f;
-    [SerializeField] private float _tentacleHitLength = 1f;
     [SerializeField] private float _tentacleHitRange = 1f;
     [SerializeField] private float _tentacleHitKnockback = 1f;
     [SerializeField] private float _tentacleHitDamage = 1f;
     [SerializeField] private float _tentacleHitDelay = 1f;
+    [SerializeField] private float _tentacleHitDuration = 1f;
+    [SerializeField] private float _tentacleRemoveDuration = 0.25f;
     [SerializeField] private float _delayBeforeHit = 0.2f;
     [SerializeField] private int _numberTotalOfAttack = 5;
     [SerializeField] private GameObject _tentacleHitParticles;
     [SerializeField] private GameObject _tentacleHitAnimation;
-    [SerializeField] private List<int> _numberOfAttackDone;
+    [SerializeField] private int _numberOfAttackDone = 0;
     private int AttackDone;
     private float _tentacleHitDelayTimer = 0;
     private float _tentacleHitFirstDelayTimer = 3;
@@ -109,7 +111,7 @@ public class RB_Yog : RB_Boss
                 break;
             case BOSSSTATES.Moving:
                 
-                _numberOfAttackDone.Clear();
+                _numberOfAttackDone = 0;
                 _movement.MoveIntoDirection(_currentTarget.position - transform.position,_movementSpeed, 1, _timeForMoving);
                 SpawnEnemies();
 
@@ -121,7 +123,7 @@ public class RB_Yog : RB_Boss
                 break;
             case BOSSSTATES.Attack1:
                 SpawnEnemies();
-                if (_numberOfAttackDone.Count < 5)
+                if (_numberOfAttackDone < 5)
                 {
                     
                     if (WaitForTentacleHit())
@@ -215,39 +217,76 @@ public class RB_Yog : RB_Boss
     }
     IEnumerator TentacleHitCoroutine() //ATTACK 1
     {
-        if (_numberOfAttackDone.Count == 0)
+        if (_numberOfAttackDone == 0)
         {
             //yield return new WaitForSeconds(1);
         }
         yield return new WaitForSeconds(1);
         transform.forward = _currentTarget.position - transform.position;
-        float range = Vector3.Distance(_currentTarget.position, transform.position);
+        float playerDistance = Vector3.Distance(_currentTarget.position, transform.position);
 
         yield return new WaitForSeconds(_delayBeforeHit);
 
         _enemyAnimation.TriggerBasicAttack();
-        List<RB_Health> alreadyDamaged = new();
-        Vector3 size = new Vector3(_tentacleHitLength, 1, range + 10);
-        GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * _tentacleHitRange / 2), transform.rotation);
-        previsualization.transform.localScale = size;
-        foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _tentacleHitRange / 2), size, transform.rotation))
-        {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
-            {
+        float rangeForward = (_tentacleHitFullRange)? playerDistance : _tentacleHitRange;
+        Vector3 fullSize = new Vector3(_tentacleHitWidth, 1, rangeForward);
+        GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * (rangeForward / 2)), transform.rotation);
+        //previsualization.transform.localScale = fullSize;
 
-                if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
-
-                alreadyDamaged.Add(enemyHealth);
-                enemyHealth.TakeDamage(_tentacleHitDamage);
-                enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position, _tentacleHitKnockback);
-            }
-        }
         if (_tentacleHitParticles)
         {
-            Instantiate(_tentacleHitParticles, transform.position + (transform.forward * _tentacleHitRange / 2), transform.rotation);
+            Instantiate(_tentacleHitParticles, transform.position + (transform.forward * rangeForward / 2), transform.rotation);
         }
-        AttackDone = new int();
-        _numberOfAttackDone.Add(AttackDone);
+
+        Vector3 baseSize = new Vector3(fullSize.x, fullSize.y, fullSize.normalized.z);
+        float tentacleTimer = 0;
+        List<RB_Health> alreadyDamaged = new();
+        Transform previTransform = previsualization.transform;
+        while (tentacleTimer < _tentacleHitDuration)
+        {
+            tentacleTimer += Time.deltaTime;
+
+            previTransform.localScale = Vector3.Lerp(baseSize, fullSize, tentacleTimer / _tentacleHitDuration);
+            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
+            foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+                {
+
+                    if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                    alreadyDamaged.Add(enemyHealth);
+                    enemyHealth.TakeDamage(_tentacleHitDamage);
+                    enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position, _tentacleHitKnockback);
+                }
+            }
+            yield return null;
+        }
+
+        tentacleTimer = 0;
+        Vector3 endSize = new Vector3(fullSize.x, fullSize.y, 0);
+        while (tentacleTimer < _tentacleRemoveDuration)
+        {
+            tentacleTimer += Time.deltaTime;
+
+            previTransform.localScale = Vector3.Lerp(fullSize, endSize, tentacleTimer / _tentacleRemoveDuration);
+            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
+            foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+                {
+
+                    if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                    alreadyDamaged.Add(enemyHealth);
+                    enemyHealth.TakeDamage(_tentacleHitDamage);
+                    enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position, _tentacleHitKnockback);
+                }
+            }
+            yield return null;
+        }
+
+        _numberOfAttackDone += 1;
         _currentCooldownAttack1 = CooldownAttack1;
         Destroy(previsualization, 0.5f);
     }
@@ -277,7 +316,9 @@ public class RB_Yog : RB_Boss
         //Spawn of the zone attack (attack n°2)
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         GameObject Bomb = Instantiate(ExplosionZone, transform.position, Quaternion.identity);
-        Bomb.GetComponent<RB_ExplosionZone>().Yog = this;
+        RB_ExplosionZone explosionZone = Bomb.GetComponent<RB_ExplosionZone>();
+        explosionZone.Yog = this;
+        explosionZone.FinalScale = Vector3.one * _explosionRadius;
         Bomb.transform.localScale = Vector3.zero;
         _currentCooldownAttack2 = CooldownAttack2;   
     }
@@ -295,14 +336,18 @@ public class RB_Yog : RB_Boss
         _currentCooldownBeforeTakeDamage = _areaDamageInterval;
     }
 
-    public void Explosion(RB_Health enemyHealth)
+    public void Explosion(List<RB_Health> enemyHealth)
     {
         //Application of damages for the explosion of zone attack (attack 2 part 2)
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        if (Health.Team == enemyHealth.Team || (_alreadyExplosionDamaged.Contains(enemyHealth) && !_canExplosionDamageMultipleTime)) return;
-        _alreadyExplosionDamaged.Add(enemyHealth);
-        enemyHealth.TakeDamage(_explosionDamage);
-        enemyHealth.TakeKnockback((enemyHealth.transform.position - transform.position).normalized, _explosionKnockback);
+        foreach (RB_Health eHealth in enemyHealth)
+        {
+            if (Health.Team == eHealth.Team || (_alreadyExplosionDamaged.Contains(eHealth) && !_canExplosionDamageMultipleTime)) return;
+
+            _alreadyExplosionDamaged.Add(eHealth);
+            eHealth.TakeDamage(_explosionDamage);
+            eHealth.TakeKnockback((eHealth.transform.position - transform.position).normalized, _explosionKnockback);
+        }
         
         if (_explosionParticles)
             Instantiate(_explosionParticles, transform.position, transform.rotation);
@@ -348,7 +393,7 @@ public class RB_Yog : RB_Boss
         {
             _enemy = en;
 
-            if (_enemy.transform.localScale.x <= 1)
+            if (_enemy.transform.localScale.x <= 1 || !_btTree.enabled)
             {
                 _rigidbody = _enemy.GetComponent<Rigidbody>();
                 _btTree = _enemy.GetComponent<RB_AI_BTTree>();
@@ -374,6 +419,7 @@ public class RB_Yog : RB_Boss
             if (_enemy.GetComponent<RB_Health>().Dead == true)
             {
                 _allEnemies.Remove(_enemy);
+                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
     } 

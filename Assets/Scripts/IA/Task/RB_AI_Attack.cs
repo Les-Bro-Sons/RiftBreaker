@@ -180,7 +180,7 @@ public class RB_AI_Attack : RB_BTNode
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                 RB_AudioManager.Instance.PlaySFX("Chess_explosion", _transform.position, 0, 1);
                 alreadyDamaged.Add(enemyHealth);
-                enemyHealth.TakeDamage(_btParent.ExplosionDamage);
+                _btParent.ApplyDamage(enemyHealth, _btParent.ExplosionDamage);
                 enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, _transform.position), _btParent.ExplosionKnockback);
             }
         }
@@ -189,11 +189,11 @@ public class RB_AI_Attack : RB_BTNode
         _btParent.AiHealth.TakeDamage(9999);
     }
 
-    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false) //used for the waitbeforeattack
+    private bool WaitBeforeAttackCounter(float wait, bool rotateTowardTarget = false, bool rotateWhenAttacking = false, bool applyBoost = true) //used for the waitbeforeattack
     {
         _waitBeforeAttackCounter += Time.deltaTime;
 
-        if (_waitBeforeAttackCounter > wait && !_btParent.GetBool("AlreadyAttacked"))
+        if (_waitBeforeAttackCounter > wait / _btParent.BoostMultiplier && !_btParent.GetBool("AlreadyAttacked"))
         {
             _btParent.BoolDictionnary["AlreadyAttacked"] = true;
 
@@ -225,7 +225,7 @@ public class RB_AI_Attack : RB_BTNode
                     _playSoundDamaged = false;
                 }
                 alreadyDamaged.Add(enemyHealth);
-                enemyHealth.TakeDamage(damage);
+                _btParent.ApplyDamage(enemyHealth, damage);
                 enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, knockback);
             }
         }
@@ -250,7 +250,7 @@ public class RB_AI_Attack : RB_BTNode
                     _playSoundDamaged = false;
                 }
                 alreadyDamaged.Add(enemyHealth);
-                enemyHealth.TakeDamage(_btParent.HeavySlashDamage);
+                _btParent.ApplyDamage(enemyHealth, _btParent.HeavySlashDamage);
                 enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.HeavySlashKnockback);
             }
         }
@@ -271,7 +271,7 @@ public class RB_AI_Attack : RB_BTNode
             yield return new WaitForSeconds(_btParent.HeavyBowDelayBetweenProjectile);
             RB_Projectile projectile = _btParent.SpawnPrefab(_btParent.HeavyArrowPrefab, _transform.position, _transform.rotation).GetComponent<RB_Projectile>();
             projectile.Team = _btParent.AiHealth.Team;
-            projectile.Damage = _btParent.HeavyBowDamage;
+            projectile.Damage = _btParent.ApplyDamage(_btParent.HeavyBowDamage);
             projectile.KnocbackExplosionForce = _btParent.HeavyBowKnockback;
             projectile.TotalDistance = _btParent.HeavyArrowDistance;
             projectile.Speed = _btParent.HeavyArrowSpeed;
@@ -294,7 +294,7 @@ public class RB_AI_Attack : RB_BTNode
     {
         RB_Projectile projectile = _btParent.SpawnPrefab(arrowPrefab, _transform.position + _transform.forward, _transform.rotation).GetComponent<RB_Projectile>();
         projectile.Team = _btParent.AiHealth.Team;
-        projectile.Damage = damage;
+        projectile.Damage = damage * _btParent.BoostMultiplier;
         projectile.KnocbackExplosionForce = knockback;
         projectile.Speed = speed;
         projectile.TotalDistance = distance;

@@ -21,6 +21,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MovementSpeedAggro = 8f;
     public float MovementSpeedFlee = 6f;
     public float AttackSpeed = 0.2f;
+    public float BoostMultiplier = 1f;
 
     [Header("Spline Parameters")]
     [HideInInspector] public SplineContainer SplineContainer;
@@ -168,8 +169,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     protected override RB_BTNode SetupTree()
     {
-        AiAnimator.SetFloat("EnemyID", (int)AiType);
-
+        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
+        else Debug.LogWarning("NO AiAnimator in " + gameObject.name);
         
         _infiltrationPhases.Add(PHASES.Infiltration);
         _combatPhases.Add(PHASES.Combat);
@@ -362,6 +363,25 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         });;
 
         return root;
+    }
+
+    public void Boost(float boost)
+    {
+        BoostMultiplier = boost;
+        AiMovement.MoveSpeedBoost = boost;
+    }
+
+    public float ApplyDamage(RB_Health enemy, float damage, bool applyBoost = true)
+    {
+        float dealDamage = damage * BoostMultiplier;
+        enemy.TakeDamage(damage * BoostMultiplier);
+        return dealDamage;
+    }
+
+    public float ApplyDamage(float damage, bool applyBoost = true)
+    {
+        float dealDamage = damage * BoostMultiplier;
+        return dealDamage;
     }
 
     public GameObject SpawnPrefab(GameObject prefab, Vector3 position, Quaternion rotation)

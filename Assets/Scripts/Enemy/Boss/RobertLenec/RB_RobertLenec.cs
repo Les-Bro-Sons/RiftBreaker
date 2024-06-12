@@ -233,7 +233,7 @@ public class RB_RobertLenec : RB_Boss
         RB_RainZone rainZone = Instantiate(WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>();
         rainZone.Sylvashot = this;
         rainZone.DamageCooldown = _areaDamageInterval;
-        WoodenPieceRainZone.transform.localScale = new Vector3(_areaDamageRadius * 2, WoodenPieceRainZone.transform.localScale.y, _areaDamageRadius * 2);
+        rainZone.transform.localScale = new Vector3(_areaDamageRadius * 2, WoodenPieceRainZone.transform.localScale.y, _areaDamageRadius * 2);
         _currentCooldownAttack2 = CooldownAttack2;
     }
 

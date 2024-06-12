@@ -5,6 +5,7 @@ public class RB_MagicWand : RB_Items
 {
     public override void Attack() {
         base.Attack();
+        ShootProjectile("BasicPowerBall");
         RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position,0, 1);
 
     }
@@ -24,6 +25,7 @@ public class RB_MagicWand : RB_Items
 
     public override void ChargedAttack() {
         base.ChargedAttack();
+        ShootProjectile("ChargePowerBall");
         RB_AudioManager.Instance.PlaySFX("boom-magic", RB_PlayerController.Instance.transform.position,0, 1);
     }
 
@@ -34,6 +36,7 @@ public class RB_MagicWand : RB_Items
 
     public override void SpecialAttack() {
         base.SpecialAttack();
+        ShootProjectile("SpecialPowerBall");
         RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position, .1f, 1);
     }
     

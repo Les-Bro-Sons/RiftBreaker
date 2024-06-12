@@ -36,12 +36,7 @@ public class RB_MusicBox : RB_Items
     public override void Attack()
     {
         base.Attack();
-        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/MusicNote"), new Vector3(_playerTransform.position.x, 0, _playerTransform.position.z), _playerTransform.rotation) as GameObject;
-        if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
-        {
-            newObject.transform.position = _playerTransform.position + projectile.transform.forward * projectile.SpawnDistanceFromPlayer;
-            projectile.Team = TEAMS.Player;
-        }
+        ShootProjectile("MusicNote");
         RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
     }
 

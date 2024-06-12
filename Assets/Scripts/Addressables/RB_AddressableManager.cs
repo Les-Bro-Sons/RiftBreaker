@@ -31,7 +31,7 @@
 //             audioSource.clip = clip.Result;
 //             audioSource.playOnAwake = false;
 //             audioSource.loop = false;
-//             audioSource.Play();
+//             audioSource.NewGame();
 //         };
 //     }
 // }
@@ -215,7 +215,7 @@ public class RB_AddressableManager : MonoBehaviour
 //                 {
 //                     var audioSource = GetComponent<AudioSource>(); // Assuming there's an AudioSource
 //                     audioSource.clip = clip.Result;
-//                     audioSource.Play();
+//                     audioSource.NewGame();
 //                 }
 //                 else
 //                 {

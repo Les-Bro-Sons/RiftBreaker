@@ -4044,7 +4044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.99994, y: -1099.9998}
+  m_AnchoredPosition: {x: -49.999878, y: -1099.9996}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4760646417064035920
@@ -4061,9 +4061,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _keybinderKeyboard: {fileID: 231480616868804390}
   _keybinderController: {fileID: 483299571329311846}
-  _panel: {fileID: 0}
-  _resetKeyboard: {fileID: 0}
-  _resetController: {fileID: 0}
+  _panel: {fileID: 5966625207977738292}
+  _resetKeyboard: {fileID: 6014480156590391002}
+  _resetController: {fileID: 2041086756563693893}
   CurrentBinder: 0
 --- !u!114 &3611901187388111002
 MonoBehaviour:
@@ -19587,7 +19587,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a31a1cb2c0b3d2544b46d887751d15cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainButtons: []
+  mainButtons:
+  - {fileID: 7770900773933792688}
+  - {fileID: 2386207950096595517}
+  - {fileID: 134403945766717090}
   _quitButtons:
   - {fileID: 4866332513926775685}
   - {fileID: 7219583556332576255}

@@ -22,6 +22,7 @@ public class RB_TimeManager : MonoBehaviour
     private bool _isRecording = true;
     public bool IsRewinding = false;
     private bool _fullRewind = false;
+    [SerializeField] private float _maxRewindSpeed = 15f;
 
     [Header("Hourglass")]
     public int NumberOfRewind = 3;
@@ -73,7 +74,7 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                Time.timeScale += Time.fixedDeltaTime / 2.5f;
+                Time.timeScale = Mathf.Clamp(Time.timeScale + Time.fixedDeltaTime / 2.5f, 0, _maxRewindSpeed);
             }
         }
     }

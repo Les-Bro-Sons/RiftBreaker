@@ -146,8 +146,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -618}
-  m_SizeDelta: {x: 1002.3, y: 500}
+  m_AnchoredPosition: {x: 0, y: -920}
+  m_SizeDelta: {x: 1000, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3424622123379468202
 CanvasRenderer:
@@ -177,16 +177,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<size=+10><u>Cheffe de projet :</u></size>\nManon Lamagnere - Amyssia\n\n<size=+10><u>Game
-    Designer :</u></size>\nArmand G\xE9meux - Tijano\n\n<size=+10><u>VFX :</u></size>\nArmand
-    G\xE9meux - Tijano\n\n<size=+10><u>Narrative Design :</u></size>\nArmand G\xE9meux
-    - Tijano\n\n<size=+10><u>Artistes :</u></size>\nPierre-Rapha\xEBl - Chihuahua_hua\nJessica
-    - Jessoou\n\n<size=+10><u>Programmeurs :</u></size>\nNohlan Rat - - M\xE9ril
-    - Lawice\nLoup Germon - Undefined\nGabriel Mimouni - UnPseudoTotalementNormal\n\n<size=+10><u>Doublage
-    :</u></size>\nAlexia Gallesio"
+  m_text: "<size=+15>Chefs de projet :</size>\nPaul MELON\nDorian DUCHASSIN\n\n<size=+15>D\xE9veloppeur
+    en chef :</size>\nGabriel MIMOUNI\n\n<size=+15>Direction Artistique :</size>\nCharlotte
+    ARBONA\n\n<size=+15>D\xE9veloppeurs :</size>\nNohlan RAT - - M\xC9RIL\nDoriann
+    XAVIER\nK\xE9vin TORRES\nZakaria DUTERTRE\nValentin MALVOISIN\nAlexis LAURENT\n\n<size=+15>Artiste
+    bonus :</size>\nNohlan RAT - - M\xC9RIL\n\n<size=+15>Concepteur de niveau :</size>\n
+    Zakaria DUTERTRE\n\n<size=+15>Effets Sonores (SFX) :</size>\nAlexis LAURENT\n\n<size=+15>Effets
+    Visuel (VFX) :</size>\nGabriel MIMOUNI\nValentin MALVOISIN"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 33afd87a9f65b8f42ab006fc490eb719, type: 2}
-  m_sharedMaterial: {fileID: -8329111759517986553, guid: 33afd87a9f65b8f42ab006fc490eb719, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
+  m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -246,10 +247,10 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -45.496033, y: 0, z: 0, w: 2.9179077}
+  m_margin: {x: 3.0745544, y: 0, z: 0, w: 2.9179077}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4617548279711943298
@@ -281,6 +282,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3174734912881790724}
+  - {fileID: 2533111542907364523}
   - {fileID: 849241949647769921}
   m_Father: {fileID: 3472642188951070558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -289,6 +291,81 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -933}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &6202241536570057177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2533111542907364523}
+  - component: {fileID: 4319908988321704024}
+  - component: {fileID: 6813242930456165662}
+  m_Layer: 0
+  m_Name: Burguer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2533111542907364523
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6202241536570057177}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1305326649196766532}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 865, y: -1943}
+  m_SizeDelta: {x: 300, y: 250}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &4319908988321704024
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6202241536570057177}
+  m_CullTransparentMesh: 1
+--- !u!114 &6813242930456165662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6202241536570057177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 8d5abcc7d0f78684d86ea40568eba06d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6644152460424680464
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,10 +398,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3472642188951070558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1753175251673613972
 CanvasRenderer:

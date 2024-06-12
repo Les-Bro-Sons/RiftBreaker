@@ -68,8 +68,8 @@ public class RB_MenuManager : MonoBehaviour {
         }
     }
 
-    public void Credits() { 
-    
+    public void Credits() {
+        Animator.SetTrigger("Credits");
     }
 
     public void Quit() {

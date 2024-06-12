@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _specialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 30
@@ -97,6 +98,9 @@ MonoBehaviour:
   HudSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5193897555094522839
 GameObject:
   m_ObjectHideFlags: 0

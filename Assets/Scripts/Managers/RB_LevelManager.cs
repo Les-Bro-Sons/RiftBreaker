@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using MANAGERS;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +22,12 @@ public class RB_LevelManager : MonoBehaviour
     [SerializeField] private string _phaseInfiltration = $"SkillsPhase{PHASES.Infiltration}";
     [SerializeField] private string _phaseInfiltrationWithoutWnim = $"SkillsPhase{PHASES.Infiltration}WithoutAnim";
     [SerializeField] private string _phaseCombat = $"SkillsPhase{PHASES.Combat}";
+    [SerializeField] private string _phaseBoss = $"SkillsPhase{PHASES.Boss}";
+
+
+
+
+    public GameObject ChargeSpecialAttackParticlePrefab;
 
 
     private void Awake()
@@ -33,12 +41,31 @@ public class RB_LevelManager : MonoBehaviour
             DestroyImmediate(gameObject);
             return;
         }
+        _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
+        _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
+        _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
     }
 
     private void Start()
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
+        if(CurrentPhase == PHASES.Boss)
+        {
+            switch (CurrentScene)
+            {
+                case SCENENAMES.Boss1:
+                    RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Mega_knight.Instance.GetComponent<RB_Health>();
+                    break;
+                case SCENENAMES.Boss2:
+                    RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
+                    break;
+                case SCENENAMES.Boss3:
+                    /*RB_HUDManager.Instance.BossHealthBar.Rb_health = */
+                    break;
+            }
+            RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
+        }
     }
 
     public void SwitchPhase()
@@ -50,6 +77,10 @@ public class RB_LevelManager : MonoBehaviour
             case PHASES.Infiltration:
                 RB_HUDManager.Instance.PlayAnimation(_phaseCombat);
                 CurrentPhase = PHASES.Combat;
+                break;
+            case PHASES.Boss:
+
+
                 break;
         }
 
@@ -95,6 +126,7 @@ public class RB_LevelManager : MonoBehaviour
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
+        RB_AudioManager.Instance.PlaySFX("scream-no", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public IEnumerator PlayerLostUX()

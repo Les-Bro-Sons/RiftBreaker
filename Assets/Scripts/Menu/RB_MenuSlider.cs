@@ -50,8 +50,7 @@ public class RB_MenuSlider : MonoBehaviour , ISelectHandler, IDeselectHandler{
         }
     }
 
-    public void OnSelect(BaseEventData eventData)
-    {
+    public void OnSelect(BaseEventData eventData){
         _isSelected = true;
     }
 

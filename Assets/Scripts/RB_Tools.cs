@@ -58,4 +58,15 @@ public class RB_Tools
 
         return false;
     }
+
+    public static Vector3 GetHorizontalDirection(Vector3 posA, Vector3 posB)
+    {
+        Vector3 knockbackDir = posA - posB;
+        knockbackDir = new Vector3(knockbackDir.x, 0, knockbackDir.z);
+        return knockbackDir.normalized;
+    }
+    public static Vector3 GetHorizontalDirection(Vector3 vector)
+    {
+        return new Vector3(vector.x, 0, vector.z).normalized;
+    }
 }

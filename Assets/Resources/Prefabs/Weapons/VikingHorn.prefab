@@ -294,8 +294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  _specialAttackChargeTime: 0
   _chargeZoom: 0.85
-  _attackCooldown: 0
+  _attackCooldown: 0.2
   _attackDamage: 35
   _chargedAttackDamage: 50
   _specialAttackDamage: 90
@@ -310,8 +311,13 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 6577973786371852535}
   HudSprite: {fileID: 0}
+  CurrentSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 1
   CanMoveDuringSpecialAttack: 1
+  CanAttackDuringAttack: 1
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
   _jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -349,4 +355,4 @@ MonoBehaviour:
   _jumpHeight: 5
   _comboDelay: 2
   _landingOnDirt: LandingDirt
-  _specialAttackParticle: 
+  _specialAttackParticle: LandingDirt

@@ -12,44 +12,30 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
     [SerializeField] private MODE _mode = MODE.Other;
 
-    [SerializeField] Slider _hpBar;
     [SerializeField] TextMeshProUGUI _hpText;
-    [SerializeField] RB_Health _rb_Health;
+    public RB_Health Rb_health;
 
     [SerializeField] TextMeshProUGUI _bossName;
 
     private void Start() {
         //Pour avoir le nom du boss au dessus de sa barre de vie
-        if (_mode == MODE.Boss && _rb_Health.Name != null) { 
-            _bossName.text = _rb_Health.Name;
+        if (_mode == MODE.Boss && Rb_health.Name != null) { 
+            _bossName.text = Rb_health.Name;
         }
         //Le joueur ne possède pas de système d'affichage de son nom
         else if( _bossName != null) {
             _bossName.text = "";
         }
 
-        /*      
-        //Quand les Event sont Invoke on Mets à jour la barre de vie
-        _rb_Health.EventTakeDamage.AddListener(RefreshHealth);
-        _rb_Health.EventHeal.AddListener(RefreshHealth);
-        */
-
         switch (_mode)
         {
             case MODE.Player:
-                _rb_Health = RB_PlayerController.Instance.GetComponent<RB_Health>();
+                Rb_health = RB_PlayerController.Instance.GetComponent<RB_Health>();
                 break;
         }
 
         UxStart();
     }
-
-    //Mise à jour de la barre de vie
-    /*  
-    void RefreshHealth(){
-        _hpBar.value = _rb_Health.Hp / _rb_Health.HpMax;
-        _hpText.text = _rb_Health.Hp.ToString() + " / " + _rb_Health.HpMax.ToString() + " ♥";
-    }*/
 
     private void Update()
     {
@@ -70,10 +56,10 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
     private void UxStart()
     {
-        _displayedHealth = _rb_Health.Hp;
+        _displayedHealth = Rb_health.Hp;
 
-        _frontHealthBar.fillAmount = _rb_Health.Hp / _rb_Health.HpMax;
-        _backHealthBar.fillAmount = _rb_Health.Hp / _rb_Health.HpMax;
+        _frontHealthBar.fillAmount = Rb_health.Hp / Rb_health.HpMax;
+        _backHealthBar.fillAmount = Rb_health.Hp / Rb_health.HpMax;
     }
 
     private void UxUpdateXHealthBar()
@@ -86,15 +72,15 @@ public class RB_HUDHealthBar : MonoBehaviour {
     {
         float fillF = _frontHealthBar.fillAmount;
         float fillB = _backHealthBar.fillAmount;
-        float hFraction = _rb_Health.Hp / _rb_Health.HpMax; // decimal 0 to 1
+        float hFraction = Rb_health.Hp / Rb_health.HpMax; // decimal 0 to 1
 
         if (fillB > hFraction) // background
         {
             _frontHealthBar.fillAmount = hFraction;
             _backHealthBar.color = Color.red;
-            _rb_Health.LerpTimer += Time.deltaTime;
+            Rb_health.LerpTimer += Time.deltaTime;
 
-            float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+            float percentComplete = Rb_health.LerpTimer / _chipSpeed;
             percentComplete = percentComplete * percentComplete;
 
             _backHealthBar.fillAmount = Mathf.Lerp(fillB, hFraction, percentComplete);
@@ -103,9 +89,9 @@ public class RB_HUDHealthBar : MonoBehaviour {
         {
             _backHealthBar.color = Color.green;
             _backHealthBar.fillAmount = hFraction;
-            _rb_Health.LerpTimer += Time.deltaTime;
+            Rb_health.LerpTimer += Time.deltaTime;
 
-            float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+            float percentComplete = Rb_health.LerpTimer / _chipSpeed;
             percentComplete = percentComplete * percentComplete;
 
             _frontHealthBar.fillAmount = Mathf.Lerp(fillF, hFraction, percentComplete);
@@ -114,12 +100,12 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
     private void UxRefreshText()
     {
-        _rb_Health.LerpTimer += Time.deltaTime;
+        Rb_health.LerpTimer += Time.deltaTime;
 
-        float percentComplete = _rb_Health.LerpTimer / _chipSpeed;
+        float percentComplete = Rb_health.LerpTimer / _chipSpeed;
         percentComplete = percentComplete * percentComplete;
 
-        _displayedHealth = Mathf.Lerp(_displayedHealth, _rb_Health.Hp, percentComplete);
-        _healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {_rb_Health.HpMax} ♥";
+        _displayedHealth = Mathf.Lerp(_displayedHealth, Rb_health.Hp, percentComplete);
+        //_healthTextPlayer.text = $"{Mathf.RoundToInt(_displayedHealth)} / {Rb_health.HpMax} ♥";
     }
 }

@@ -63,12 +63,15 @@ public class RB_RoomCreator : MonoBehaviour
         GameObject meshObject = new GameObject("Room");
         meshObject.AddComponent<RB_Room>();
         GameObject colliders = new GameObject("Colliders");
+        colliders.layer = LayerMask.NameToLayer("Room");
         meshObject.transform.parent = transform;
         colliders.transform.parent = meshObject.transform;
 
         for (int i = 0; i < ColliderPoints.Count; i++)
         {
             GameObject childObject = new GameObject("MeshCollider_" + i);
+
+            childObject.layer = LayerMask.NameToLayer("Room");
             childObject.AddComponent<RB_EntityDetector>();
             childObject.transform.parent = colliders.transform;
             childObject.transform.localPosition = Vector3.zero;

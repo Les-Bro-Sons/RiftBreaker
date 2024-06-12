@@ -6,7 +6,6 @@ public class RB_VisualSettings : MonoBehaviour {
     [SerializeField] TMP_Dropdown _resolutionDropdown;
     [SerializeField] TMP_Dropdown _displayDropdown;
 
-
     Resolution[] _allResolutions;
     List<Resolution> _filteredResolutions = new List<Resolution>();
     RefreshRate _currentRefreshRate;
@@ -16,24 +15,24 @@ public class RB_VisualSettings : MonoBehaviour {
     int _currentDisplayID;
 
     void Start() {
-        //obtiens tout les résolution disponible sur l'écran
+        // Get all available screen resolutions
         _allResolutions = Screen.resolutions;
 
         _resolutionDropdown.ClearOptions();
-        
-        //obtiens le taux de rafraichissment actuel de l'écran
+
+        // Get the current screen refresh rate
         _currentRefreshRate = Screen.currentResolution.refreshRateRatio;
 
-        //Filtre les résolutions disponible pour garder le même taux de refraichissment
-        for(int u = 0; u < _allResolutions.Length; u++) {
+        // Filter available resolutions to match the current refresh rate
+        for (int u = 0; u < _allResolutions.Length; u++) {
             if (_allResolutions[u].refreshRateRatio.value == _currentRefreshRate.value) {
                 _filteredResolutions.Add(_allResolutions[u]);
             }
         }
 
-        //Création du drop-down avec les résolution filtrée
+        // Create the dropdown list with filtered resolutions
         List<string> dropdownOptions = new List<string>();
-        for( int u = 0; u < _filteredResolutions.Count; ++u) { 
+        for (int u = 0; u < _filteredResolutions.Count; ++u) { 
             string resolutionOption = _filteredResolutions[u].width + " x " + _filteredResolutions[u].height;
             dropdownOptions.Add(resolutionOption);
             if (_filteredResolutions[u].width == Screen.width && _filteredResolutions[u].height == Screen.height) {
@@ -50,22 +49,24 @@ public class RB_VisualSettings : MonoBehaviour {
         ApplyDisplayMode();
     }
 
-    public void SetResolution(int  resolutionID) {
+    public void SetResolution(int resolutionID) {
         _currentResolutionID = resolutionID;
     }
 
+    // Apply the current resolution settings
     public void ApplyResolution() {
+        Debug.Log(_currentResolutionID);
         Resolution resolution = _filteredResolutions[_currentResolutionID];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode, _currentRefreshRate);
         PlayerPrefs.SetInt("ResolutionID", _currentResolutionID);
         PlayerPrefs.Save();
     }
 
+    // Initialize the resolution settings
     public void StartResolution() {
-        if (!PlayerPrefs.HasKey("ResolutionID")){
+        if (!PlayerPrefs.HasKey("ResolutionID")) {
             _currentResolutionID = _oldResolutionID;
-        }
-        else {
+        } else {
             _currentResolutionID = PlayerPrefs.GetInt("ResolutionID");
         }
         _resolutionDropdown.value = _currentResolutionID;
@@ -75,6 +76,7 @@ public class RB_VisualSettings : MonoBehaviour {
         _currentDisplayID = displayID;
     }
 
+    // Apply the current display mode settings
     public void ApplyDisplayMode() {
         switch (_currentDisplayID) {
             case 0:
@@ -94,25 +96,30 @@ public class RB_VisualSettings : MonoBehaviour {
         PlayerPrefs.Save();
     }
 
-
-    public void StartDisplayMode(){
-        if (!PlayerPrefs.HasKey("DisplayID")){
+    // Initialize the display mode settings
+    public void StartDisplayMode() {
+        if (!PlayerPrefs.HasKey("DisplayID")) {
             _currentDisplayID = 0;
-        }
-        else {
+        } else {
             _currentDisplayID = PlayerPrefs.GetInt("DisplayID");
         }
         _displayDropdown.value = _currentDisplayID;
     }
 
+    // Set display mode and resolution mode to default
     public void Default() {
+        // Reset display mode to default
         _currentDisplayID = 0;
         _displayDropdown.value = _currentDisplayID;
-
         ApplyDisplayMode();
+        PlayerPrefs.SetInt("DisplayID", _currentDisplayID); // Save default display mode
 
+        // Reset resolution to default
         _currentResolutionID = _oldResolutionID;
         _resolutionDropdown.value = _currentResolutionID;
         ApplyResolution();
+        PlayerPrefs.SetInt("ResolutionID", _currentResolutionID); // Save default resolution
+
+        PlayerPrefs.Save();
     }
 }

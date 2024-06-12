@@ -19,6 +19,14 @@ public class RB_MenuInputManager : MonoBehaviour {
     public UnityEvent EventCancelStarted;
     public UnityEvent EventCancelCanceled;
 
+    [Header("Pause")]
+    public UnityEvent EventPauseStarted;
+    public UnityEvent EventPauseCanceled;
+
+    [Header("Any")] 
+    public UnityEvent EventAnyStarted;
+    public UnityEvent EventAnyCanceled;
+
     private void Awake(){
         if (Instance == null){
             Instance = this;
@@ -45,5 +53,15 @@ public class RB_MenuInputManager : MonoBehaviour {
         if (context.started) { EventCancelStarted?.Invoke(); }
         else if (context.canceled) { EventCancelCanceled?.Invoke(); }
      }
+
+    public void OnPause(InputAction.CallbackContext context){
+        if (context.started) { EventPauseStarted?.Invoke(); }
+        else if (context.canceled) { EventPauseCanceled?.Invoke(); }
+    }
+
+    public void OnAny(InputAction.CallbackContext context) {
+        if (context.started) { EventAnyStarted?.Invoke(); }
+        else if (context.canceled) { EventAnyCanceled?.Invoke(); }
+    }
 
 }

@@ -6,6 +6,12 @@ public class RB_LevelTrigger : MonoBehaviour
     [SerializeField] private bool _triggerOnPlayer = true;
     [SerializeField] private bool _oneTimeOnly = true;
 
+    [SerializeField] private bool _triggerEnterOnRewind = false;
+    [SerializeField] private bool _triggerExitOnRewind = true;
+
+    [SerializeField] private bool _triggerEnterKinematics = false;
+    [SerializeField] private bool _triggerExitKinematics = true;
+
     public UnityEvent EventTriggerEnter;
     public UnityEvent EventTriggerExit;
 
@@ -13,10 +19,15 @@ public class RB_LevelTrigger : MonoBehaviour
     {
         if ((_triggerOnPlayer && RB_Tools.TryGetComponentInParent<RB_PlayerController>(other.gameObject, out RB_PlayerController playerController)) || !_triggerOnPlayer)
         {
-            EventTriggerEnter?.Invoke();
-            if (_oneTimeOnly)
+            if (!_triggerEnterKinematics && (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
+            
+            if (_triggerEnterOnRewind || !RB_TimeManager.Instance.IsRewinding)
             {
-                Destroy(gameObject);
+                EventTriggerEnter?.Invoke();
+                if (_oneTimeOnly)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
         
@@ -26,10 +37,15 @@ public class RB_LevelTrigger : MonoBehaviour
     {
         if ((_triggerOnPlayer && RB_Tools.TryGetComponentInParent<RB_PlayerController>(other.gameObject, out RB_PlayerController playerController)) || !_triggerOnPlayer)
         {
-            EventTriggerExit?.Invoke();
-            if (_oneTimeOnly)
+            if (!_triggerExitKinematics && (RB_Tools.TryGetComponentInParent<Rigidbody>(other.gameObject, out Rigidbody playerBody) && playerBody.isKinematic)) return;
+
+            if (_triggerExitOnRewind || !RB_TimeManager.Instance.IsRewinding)
             {
-                Destroy(gameObject);
+                EventTriggerExit?.Invoke();
+                if (_oneTimeOnly)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

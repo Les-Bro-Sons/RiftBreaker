@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerExitHandler, ISelectHandler, IDeselectHandler{
     [SerializeField] RB_MainMenuButtonManager.BUTTONS currentButton;
     Button _button;
-    bool _isHoovered;
     bool _isSelected;
     float _originalXPos;
 
@@ -20,14 +19,12 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        _isHoovered = true;
         RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
         _button.Select();
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         RB_MainMenuButtonManager.Instance.ButtonHooveredCount--;
-        _isHoovered = false;
     }
 
     public void OnSelect(BaseEventData eventData){
@@ -41,6 +38,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     private void Update() {
         if (!RB_MenuManager.Instance.IsOptionOpen){
+            //move the text when selected or hoovered
             if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
                 float xPos = _textTrasform.localPosition.x;
                 xPos = Mathf.Lerp(xPos, _originalXPos - _offsetHover, _offsetSpeed * Time.deltaTime);

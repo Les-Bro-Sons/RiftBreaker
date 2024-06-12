@@ -15,14 +15,24 @@ public class RB_EnemyAnimation : MonoBehaviour
     private void Awake()
     {
         _enemyAnimator = GetComponent<Animator>();
-        _rb = GetComponentInParent<Rigidbody>();
-        _transform = _rb.transform;
     }
+
+    private void Start()
+    {
+        if(RB_Tools.TryGetComponentInParent<RB_Enemy>(gameObject, out RB_Enemy enemy))
+        {
+            _rb = enemy.GetComponent<Rigidbody>();
+            _transform = _rb.transform;
+        }
+            
+    }
+
     private void UpdateAnim()
     {
         _enemyAnimator.SetFloat("Horizontal", _transform.forward.normalized.x);
         _enemyAnimator.SetFloat("Vertical", _transform.forward.normalized.z);
         _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
+        Debug.DrawRay(_transform.position, _transform.forward);
     }
 
     public void SpawnPrefab(string prefabToSpawn)

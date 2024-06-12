@@ -105,7 +105,7 @@ public class RB_Scythe : RB_Items
                 if (enemy.Dead)
                 {
                     enemy.Team = TEAMS.Player;
-                    enemy.GetComponent<RB_Enemy>().UnTombstone();
+                    enemy.Heal();
                 }
             }
         }

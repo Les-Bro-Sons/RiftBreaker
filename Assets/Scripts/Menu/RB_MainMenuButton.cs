@@ -35,9 +35,9 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     public void OnSelect(BaseEventData eventData){
         RB_MainMenuButtonManager.Instance.CurrentButton = currentButton;
         _isSelected = true;
+
         Navigation buttonNavigation = _button.navigation;
-        if (!buttonNavigation.selectOnUp.gameObject.GetComponent<Button>().enabled)
-        {
+        if (!buttonNavigation.selectOnUp.gameObject.GetComponent<Button>().enabled) {
             buttonNavigation.selectOnUp = _button.navigation.selectOnUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
@@ -45,13 +45,11 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
             buttonNavigation.selectOnUp = _oldUp;
             _button.navigation = buttonNavigation;
         }
-        if (!buttonNavigation.selectOnDown.gameObject.GetComponent<Button>().enabled)
-        {
+        if (!buttonNavigation.selectOnDown.gameObject.GetComponent<Button>().enabled) {
             buttonNavigation.selectOnDown = _button.navigation.selectOnDown.navigation.selectOnDown.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
-        else
-        {
+        else {
             buttonNavigation.selectOnDown = _oldDown;
             _button.navigation = buttonNavigation;
         }

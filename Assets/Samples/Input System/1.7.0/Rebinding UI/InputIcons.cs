@@ -11,7 +11,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     /// of a binding should be refreshed. It then checks whether we have an icon for the current binding
     /// and if so, replaces the default text display with an icon.
     /// </summary>
-    public class GamepadIconsExample : MonoBehaviour
+    public class InputIcons : MonoBehaviour
     {
         public GamepadIcons xbox;
         public GamepadIcons ps4;
@@ -67,7 +67,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             public Sprite buttonEast;
             public Sprite buttonWest;
             public Sprite select;
-            public Sprite start;
             //triggers/shoulder
             public Sprite leftTrigger;
             public Sprite rightTrigger;
@@ -102,7 +101,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     case "buttonNorth": return buttonNorth;
                     case "buttonEast": return buttonEast;
                     case "buttonWest": return buttonWest;
-                    case "start": return start;
                     case "select": return select;
                     case "leftTrigger": return leftTrigger;
                     case "rightTrigger": return rightTrigger;

@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 // Ensure the GameObject has a ScrollRect component
 [RequireComponent(typeof(ScrollRect))]
-public class RB_MenuAutomaticScrollRect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
+public class RB_MenuAutomaticScrollRect : MonoBehaviour{
     
     public float ScrollSpeed = 10f;
-    bool _isHoovered = false;
 
     // List to store all selectable UI elements within the ScrollRect
     List<Selectable> _selectables = new List<Selectable>();
@@ -43,8 +42,9 @@ public class RB_MenuAutomaticScrollRect : MonoBehaviour, IPointerEnterHandler, I
     void Update() {
         // Handle input-based scrolling
         InputScroll();
+
         // Smoothly scroll to the new position if the pointer is not over the scroll area
-        if (!_isHoovered) { 
+        if (!RB_MenuInputManager.Instance.IsLastInputMouse) { 
             _scrollRect.normalizedPosition = Vector2.Lerp(_scrollRect.normalizedPosition, _newScrollBarPos, ScrollSpeed * Time.unscaledDeltaTime);
         }
         // Update the new scroll bar position if the pointer is over the scroll area
@@ -79,14 +79,5 @@ public class RB_MenuAutomaticScrollRect : MonoBehaviour, IPointerEnterHandler, I
                 _newScrollBarPos = new Vector2(0, 1 - (selectedID / ((float)_selectables.Count - 1)));
             }
         }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData) {
-        _isHoovered = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData) {
-        _isHoovered = false;
-        ScrollToSelected(false);
     }
 }

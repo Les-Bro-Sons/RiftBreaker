@@ -24,12 +24,19 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
 
+    [Header("Static Mode Parameters")]
+    public bool IsStatic = false;
+    public Vector3 StaticLookDirection = Vector3.forward;
+    public bool StaticPositionOnStart = true;
+    public Vector3 StaticPosition;
+    [HideInInspector] public bool IsOnStaticPoint = false;
+
     [Header("Spline Parameters")]
-    [HideInInspector] public SplineContainer SplineContainer;
     public float WaitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
     public int PatrolSplineIndex = 0;
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
+    [HideInInspector] public SplineContainer SplineContainer;
 
     [Header("Spot Parameters")]
     public bool InRange = false;
@@ -180,6 +187,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         _combatPhases.Add(PHASES.Boss);
         this.SplineContainer = RB_SplineManager.Splines;
 
+        if (StaticPositionOnStart) StaticPosition = transform.position;
+
         RB_BTNode root = new RB_BTSelector(new List<RB_BTNode>
         {
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
@@ -187,6 +196,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
+                        new RB_AI_StaticWatchOut(this),
+                        new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
+                    }),
+
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_EnemyTouchDetection(this, true),

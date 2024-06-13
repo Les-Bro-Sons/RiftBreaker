@@ -5,6 +5,7 @@ using UnityEngine;
 public class RB_AI_PlayerInFov : RB_BTNode
 {
     private RB_AI_BTTree _btParent;
+    private Rigidbody _rb;
 
     private Transform _transform;
     private static int _layerMaskPlayer = 1 << 7;
@@ -19,10 +20,14 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private bool _isLoadingSpotBar = false;
     private bool _isUnloadingSpotBar = false;
 
-    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range)
+    private bool _lookAtSuspicious;
+
+    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range, bool lookAtSuspicious = true)
     {
         _btParent = BtParent;
+        _rb = _btParent.AiRigidbody;
         _transform = _btParent.transform;
+        _lookAtSuspicious = lookAtSuspicious;
         // _animator = transform.GetComponent<Animator>();
     }
 
@@ -159,6 +164,11 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     if (!_btParent.GetBool("HasACorrectView"))
                     {
                         LoadSpotBar();
+                        //look at player
+                        if (_lookAtSuspicious)
+                        {
+                            _rb.MoveRotation(Quaternion.LookRotation(target.position - _transform.position));
+                        }
                     }
 
                     if (_btParent.ImageSpotBar.fillAmount >= 1)

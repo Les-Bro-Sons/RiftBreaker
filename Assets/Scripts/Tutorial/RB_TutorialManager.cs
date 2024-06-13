@@ -46,7 +46,7 @@ public class RB_TutorialManager : MonoBehaviour
     public float ChangeTimeSpeed;
 
     //Components
-    [SerializeField] private GameObject EnemyToSlowDownTimeByDistance;
+    [SerializeField] private RB_AI_BTTree EnemyToSlowDownTimeByDistance;
 
     private void Awake()
     {
@@ -57,6 +57,7 @@ public class RB_TutorialManager : MonoBehaviour
     private void Start()
     {
         IsTuto = !RB_SaveManager.Instance.SaveObject.TutoDone;
+        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartSlowDownTimeByDistance);
     }
 
     private void Update()
@@ -70,6 +71,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
+            print("slow down time started");
             _startEnemyDistance = Vector3.Distance(RB_PlayerMovement.Instance.transform.position, EnemyToSlowDownTimeByDistance.transform.position);
             _shouldSlowTimeByEnemyDistance = true;
         }

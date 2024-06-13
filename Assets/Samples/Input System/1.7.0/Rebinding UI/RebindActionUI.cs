@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 ////TODO: localization support
 
@@ -276,6 +275,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("<mouse>/scroll")
+                .WithControlsExcluding("<Gamepad>/start")
                 .WithControlsExcluding("<Gamepad>/leftStick/y").WithControlsExcluding("<Gamepad>/leftStick/x")
                 .WithControlsExcluding("<Gamepad>/rightStick/y").WithControlsExcluding("<Gamepad>/rightStick/x")
                 .WithControlsExcluding("<keyboard>/leftmeta").WithControlsExcluding("<keyboard>/rightmeta")

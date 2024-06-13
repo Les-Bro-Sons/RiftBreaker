@@ -27,6 +27,12 @@ public class RB_MenuInputManager : MonoBehaviour {
     public UnityEvent EventAnyStarted;
     public UnityEvent EventAnyCanceled;
 
+    [Header("MouseMoving")]
+    public UnityEvent EventMouseMovingStarted;
+    public UnityEvent EventMouseMovingCanceled;
+    public bool IsLastInputMouse;
+
+
     private void Awake(){
         if (Instance == null){
             Instance = this;
@@ -60,8 +66,19 @@ public class RB_MenuInputManager : MonoBehaviour {
     }
 
     public void OnAny(InputAction.CallbackContext context) {
-        if (context.started) { EventAnyStarted?.Invoke(); }
+        if (context.started) { EventAnyStarted?.Invoke();
+            if (context.action.activeControl.device.name != "Mouse") 
+            IsLastInputMouse = false;
+        }
         else if (context.canceled) { EventAnyCanceled?.Invoke(); }
     }
 
+    public void OnMouseMoving(InputAction.CallbackContext context){
+        if (context.action.activeControl.device.name == "Mouse")
+            IsLastInputMouse = true;
+        if (context.started) {
+            EventMouseMovingStarted?.Invoke(); 
+        }
+        else if (context.canceled) { EventMouseMovingCanceled?.Invoke(); }
+    }
 }

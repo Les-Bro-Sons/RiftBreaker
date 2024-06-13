@@ -6449,6 +6449,31 @@ PrefabInstance:
       objectReference: {fileID: 940450115}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _explosionDamage
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _explosionRadius
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _areaDamageAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _areaDamageRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _tentacleHitRange
       value: 15
       objectReference: {fileID: 0}
@@ -6479,8 +6504,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _tentacleHitFirstDelay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _tentacleRemoveDuration
       value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitFirstDelayTimer
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6491,6 +6531,16 @@ PrefabInstance:
         type: 3}
       propertyPath: _tentacleRemoveCurve.m_Curve.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6514,6 +6564,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].value
       value: 1
       objectReference: {fileID: 0}
@@ -6531,6 +6591,16 @@ PrefabInstance:
         type: 3}
       propertyPath: _tentacleHitCurve.m_Curve.Array.data[4].value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].outSlope
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6596,6 +6666,16 @@ PrefabInstance:
         type: 3}
       propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[1].value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -8561,6 +8641,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -38.302227
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226149130475184424, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226149130475184424, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1099.9995
       objectReference: {fileID: 0}
     - target: {fileID: 6053749853435809610, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}

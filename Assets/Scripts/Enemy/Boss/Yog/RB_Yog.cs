@@ -38,7 +38,8 @@ public class RB_Yog : RB_Boss
     [SerializeField] private int _numberOfAttackDone = 0;
     private int AttackDone;
     private float _tentacleHitDelayTimer = 0;
-    private float _tentacleHitFirstDelayTimer = 3;
+    [SerializeField] private float _tentacleHitFirstDelay = 3;
+    private float _tentacleHitFirstDelayTimer = 0;
 
     [Header("AreaZonePreExplosion (attack2 part1)")]
     public GameObject ExplosionZone;
@@ -48,6 +49,7 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _areaDamageAmount = 1f;
     [SerializeField] private float _areaDamageKnockback = 1f;
     [SerializeField] private bool _canAreaDamageZoneDamageMultipleTime = false;
+    [SerializeField] public AnimationCurve AreaExpandCurve;
     private List<RB_Health> _alreadyAreaDamageZoneDamaged = new();
     private List<GameObject> _explosion = new List<GameObject>();
 
@@ -85,6 +87,8 @@ public class RB_Yog : RB_Boss
     protected override void Start()
     {
         base.Start();
+
+        ResetTentacleHitTimer();
     }
 
     protected override void Update()
@@ -133,22 +137,32 @@ public class RB_Yog : RB_Boss
                 break;
             case BOSSSTATES.Attack1:
                 SpawnEnemies();
-                if (_numberOfAttackDone < 5)
+                if (_numberOfAttackDone == 0)
+                {
+                    if (WaitForFirstTentacleHit())
+                    {
+                        TentacleHit();
+                        ResetTentacleHitTimer();
+                    }
+                }
+                else if (_numberOfAttackDone < 5)
                 {
                     
                     if (WaitForTentacleHit())
                     {
                         TentacleHit();
-                        _tentacleHitDelayTimer = _tentacleHitDelay;
+                        ResetTentacleHitTimer();
                     }
 
                     CurrentState = BOSSSTATES.Attack1;
                 }
-                
                 else 
                 {
-                    _timeUntilNextState = 0;
-                    CurrentState = BOSSSTATES.Moving;
+                    if (WaitForTentacleHit())
+                    {
+                        _timeUntilNextState = 0;
+                        CurrentState = BOSSSTATES.Moving;
+                    }
                 }
                 
                 break;
@@ -172,6 +186,11 @@ public class RB_Yog : RB_Boss
         EnemyGestion();
     }
     
+    private void ResetTentacleHitTimer()
+    {
+        _tentacleHitDelayTimer = _tentacleHitDelay + _tentacleHitDuration + _tentacleRemoveDuration + _delayBeforeHit;
+    }
+
     private BOSSSTATES SwitchBossState()
     {
         GetTarget();
@@ -223,6 +242,7 @@ public class RB_Yog : RB_Boss
 
     public void TentacleHit()
     {
+        _numberOfAttackDone += 1;
         StartCoroutine(TentacleHitCoroutine());
     }
     IEnumerator TentacleHitCoroutine() //ATTACK 1
@@ -231,7 +251,7 @@ public class RB_Yog : RB_Boss
         {
             //yield return new WaitForSeconds(1);
         }
-        yield return new WaitForSeconds(1);
+        //yield return new WaitForSeconds(1);
         transform.forward = _currentTarget.position - transform.position;
         float playerDistance = Vector3.Distance(_currentTarget.position, transform.position);
 
@@ -296,9 +316,8 @@ public class RB_Yog : RB_Boss
             yield return null;
         }
 
-        _numberOfAttackDone += 1;
         _currentCooldownAttack1 = CooldownAttack1;
-        Destroy(previsualization, 0.5f);
+        Destroy(previsualization);
     }
     private bool WaitForTentacleHit() //TIMER ATTACK 1
     {
@@ -307,8 +326,14 @@ public class RB_Yog : RB_Boss
     } 
     private bool WaitForFirstTentacleHit() //TIMER ATTACK 1
     {
-        _tentacleHitFirstDelayTimer -= Time.fixedDeltaTime;
-        return (_tentacleHitFirstDelayTimer <= 0);
+        _tentacleHitFirstDelayTimer += Time.fixedDeltaTime;
+        bool finishedTimer = false;
+        if (_tentacleHitFirstDelayTimer >= _tentacleHitFirstDelay)
+        {
+            _tentacleHitFirstDelayTimer = 0;
+            finishedTimer = true;
+        }
+        return finishedTimer;
     }
 
     /*private void OnDrawGizmos()
@@ -352,7 +377,7 @@ public class RB_Yog : RB_Boss
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         foreach (RB_Health eHealth in enemyHealth)
         {
-            if (Health.Team == eHealth.Team || (_alreadyExplosionDamaged.Contains(eHealth) && !_canExplosionDamageMultipleTime)) return;
+            if (Health.Team == eHealth.Team || (_alreadyExplosionDamaged.Contains(eHealth) && !_canExplosionDamageMultipleTime)) continue;
 
             _alreadyExplosionDamaged.Add(eHealth);
             eHealth.TakeDamage(_explosionDamage);

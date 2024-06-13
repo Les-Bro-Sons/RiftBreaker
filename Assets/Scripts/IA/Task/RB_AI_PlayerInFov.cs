@@ -161,7 +161,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                     //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
                     //_btParent.CanvasUi.alpha = 0.0f;
-                    Debug.Log(target.name);
 
                     if (!_btParent.GetBool("HasACorrectView"))
                     {

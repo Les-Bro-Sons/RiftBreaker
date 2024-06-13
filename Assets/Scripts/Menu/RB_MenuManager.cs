@@ -30,6 +30,7 @@ public class RB_MenuManager : MonoBehaviour {
 
     private void Start(){
         RB_ButtonSelectioner.Instance.SelectMainButton(0);
+        Time.timeScale = 1f;
     }
 
     public void NewGame() {

@@ -69,7 +69,6 @@ namespace MANAGERS
 			if (_musicClip != null)
 			{
 				_musicSource.clip = _musicClip;
-				print("eeee");
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 

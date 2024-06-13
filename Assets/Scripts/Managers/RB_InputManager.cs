@@ -7,30 +7,42 @@ public class RB_InputManager : MonoBehaviour
 {
     public static RB_InputManager Instance;
 
-    public UnityEvent EventMoveStarted;
-    public UnityEvent EventMovePerformed;
-    public UnityEvent EventMoveCanceled;
+    [Header("Move")]
+    public bool MoveEnabled = true;
+    [HideInInspector] public UnityEvent EventMoveStarted;
+    [HideInInspector] public UnityEvent EventMovePerformed;
+    [HideInInspector] public UnityEvent EventMoveCanceled;
 
-    public UnityEvent EventAttackStarted;
-    public UnityEvent EventAttackCanceled;
+    [Header("Attack")]
+    public bool AttackEnabled = true;
+    [HideInInspector] public UnityEvent EventAttackStarted;
+    [HideInInspector] public UnityEvent EventAttackCanceled;
 
-    public UnityEvent EventSpecialAttackStarted;
-    public UnityEvent EventSpecialAttackCanceled;
+    [Header("Special Attack")]
+    public bool SpecialAttackEnabled = true;
+    [HideInInspector] public UnityEvent EventSpecialAttackStarted;
+    [HideInInspector] public UnityEvent EventSpecialAttackCanceled;
 
-    public UnityEvent EventDashStarted;
-    public UnityEvent EventDashCanceled;
+    [Header("Dash")]
+    public bool DashEnabled = true;
+    [HideInInspector] public UnityEvent EventDashStarted;
+    [HideInInspector] public UnityEvent EventDashCanceled;
 
-    public UnityEvent EventRewindStarted;
-    public UnityEvent EventRewindCanceled;
+    [Header("Rewind")]
+    public bool RewindEnabled = true;
+    [HideInInspector] public UnityEvent EventRewindStarted;
+    [HideInInspector] public UnityEvent EventRewindCanceled;
 
-    public UnityEvent EventItem1Started;
-    public UnityEvent EventItem1Canceled;
+    [Header("Items")]
+    public bool ItemsEnabled = true;
+    [HideInInspector] public UnityEvent EventItem1Started;
+    [HideInInspector] public UnityEvent EventItem1Canceled;
 
-    public UnityEvent EventItem2Started;
-    public UnityEvent EventItem2Canceled;
+    [HideInInspector] public UnityEvent EventItem2Started;
+    [HideInInspector] public UnityEvent EventItem2Canceled;
 
-    public UnityEvent EventItem3Started;
-    public UnityEvent EventItem3Canceled;
+    [HideInInspector] public UnityEvent EventItem3Started;
+    [HideInInspector] public UnityEvent EventItem3Canceled;
 
     public Vector2 MoveValue;
 
@@ -53,6 +65,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!MoveEnabled) return;
+
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
             EventMoveStarted?.Invoke();
@@ -65,6 +79,8 @@ public class RB_InputManager : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         IsMouse = (context.action.activeControl.device.name == "Mouse");
+        if (!AttackEnabled) return;
+
         if (context.started)
             EventAttackStarted?.Invoke();
         else if (context.canceled)
@@ -73,6 +89,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
+        if (!SpecialAttackEnabled) return;
+
         if (context.started)
             EventSpecialAttackStarted?.Invoke();
         else if (context.canceled)
@@ -81,6 +99,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        if (!DashEnabled) return;
+
         if (context.started)
             EventDashStarted?.Invoke();
         else if (context.canceled)
@@ -89,6 +109,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnRewind(InputAction.CallbackContext context)
     {
+        if (!RewindEnabled) return;
+
         if (context.started)
             EventRewindStarted?.Invoke();
         else if (context.canceled)
@@ -97,6 +119,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem1(InputAction.CallbackContext context)
     {
+        if (!ItemsEnabled) return;
+
         if (context.started)
             EventItem1Started?.Invoke();
         else if (context.canceled)
@@ -105,6 +129,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem2(InputAction.CallbackContext context)
     {
+        if (!ItemsEnabled) return;
+
         if (context.started)
             EventItem2Started?.Invoke();
         else if (context.canceled)
@@ -113,6 +139,8 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem3(InputAction.CallbackContext context)
     {
+        if (!ItemsEnabled) return;
+
         if (context.started)
             EventItem3Started?.Invoke();
         else if (context.canceled)

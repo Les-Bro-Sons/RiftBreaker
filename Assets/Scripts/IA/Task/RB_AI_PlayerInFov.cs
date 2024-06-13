@@ -101,7 +101,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         }
         else
         {
-            object t = GetData("target");
+            object t = _btParent.Root.GetData("target");
             if (t == null)
             {
                 //Debug.Log("Recherche de la cible...");
@@ -161,6 +161,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                     //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
                     //_btParent.CanvasUi.alpha = 0.0f;
+                    Debug.Log(target.name);
+
                     if (!_btParent.GetBool("HasACorrectView"))
                     {
                         LoadSpotBar();
@@ -184,7 +186,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     }
                     else
                     {
-                        _btParent.transform.forward = (target.transform.position - _btParent.transform.position).normalized;
                         _state = BTNodeState.RUNNING;
                         return _state;
                     }
@@ -217,7 +218,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             RaycastHit hit;
 
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
             {
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);
                 if (hitHealth && hitHealth.Team != _btParent.AiHealth.Team)

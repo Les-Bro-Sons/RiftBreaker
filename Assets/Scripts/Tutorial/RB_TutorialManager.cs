@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(RB_TutorialManager))]
 public class RB_CustomEditorTutoManager : Editor
 {
@@ -26,6 +27,7 @@ public class RB_CustomEditorTutoManager : Editor
         }
     }
 }
+#endif
 public class RB_TutorialManager : MonoBehaviour
 {
     //Instance
@@ -58,6 +60,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         IsTuto = !RB_SaveManager.Instance.SaveObject.TutoDone;
         EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartSlowDownTimeByDistance);
+        RB_TimeManager.Instance.EventStartRewinding.AddListener(SetNormalTime);
     }
 
     private void Update()
@@ -65,6 +68,14 @@ public class RB_TutorialManager : MonoBehaviour
         SlowTime();
         SpeedUpTime();
         SlowTimeByEnemyDistance();
+    }
+
+    public void SetNormalTime()
+    {
+        if (IsTuto)
+        {
+            Time.timeScale = 1.0f;
+        }
     }
 
     public void StartSlowDownTimeByDistance()

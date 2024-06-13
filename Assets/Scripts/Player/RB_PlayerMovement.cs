@@ -126,7 +126,7 @@ public class RB_PlayerMovement : MonoBehaviour
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = DirectionToMove;
+            DirectionToAttack = ForwardDirection;
         }
     }
 

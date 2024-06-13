@@ -30,16 +30,18 @@ public class RB_MenuManager : MonoBehaviour {
      
     public void NewGame() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
     }
 
     public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);
     }
 
     public void MainMenu() {
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+        Debug.Log("FDP FONCTIONE");
+        Time.timeScale = 1f;
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
     }
 
     public void Options() {

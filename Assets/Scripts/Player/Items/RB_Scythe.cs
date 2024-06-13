@@ -88,8 +88,10 @@ public class RB_Scythe : RB_Items
         _timer -= Time.deltaTime;
         if (_timer<=0)
         {
-            RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, 0, 1f);
-            _timer = RB_AudioManager.Instance.SfxSource.clip.length;
+            _timer = RB_AudioManager.Instance.PlaySFX("darkMagic",
+                RB_PlayerController.Instance.transform.position,
+                0,
+                1f).clip.length;
         }
     }
 

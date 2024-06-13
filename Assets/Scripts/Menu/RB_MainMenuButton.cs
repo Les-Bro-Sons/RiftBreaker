@@ -64,7 +64,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     private void Update() {
-        if (!RB_MenuManager.Instance.IsOptionOpen){
+        if (!RB_MenuManager.Instance.IsOptionOpen && _button.enabled){
             //move the text when selected or hoovered
             if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
                 float xPos = _textTrasform.localPosition.x;

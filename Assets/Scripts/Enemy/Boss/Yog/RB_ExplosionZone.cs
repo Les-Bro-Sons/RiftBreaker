@@ -10,18 +10,16 @@ public class RB_ExplosionZone : MonoBehaviour
     private RB_CollisionDetection _collisionDetection;
     private Vector3 _baseScale;
     public Vector3 FinalScale;
-    private float _beforeExplosionDuration = 5;
+    public float AreaExpandingTime = 5;
     private float _lifetimeTimer = 0;
 
-    private AnimationCurve ExpandCurve;
+    public AnimationCurve ExpandCurve;
 
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
         _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
-        _beforeExplosionDuration = Yog.CooldownBeforeExplosion;
         _baseScale = transform.localScale;
-        ExpandCurve = Yog.AreaExpandCurve;
     }
 
     private void Start()
@@ -62,12 +60,12 @@ public class RB_ExplosionZone : MonoBehaviour
 
     public void UpdateExplosionZone()
     {
-        gameObject.transform.localScale = Vector3.Lerp(_baseScale, FinalScale, ExpandCurve.Evaluate(_lifetimeTimer / _beforeExplosionDuration));
+        gameObject.transform.localScale = Vector3.Lerp(_baseScale, FinalScale, ExpandCurve.Evaluate(_lifetimeTimer / AreaExpandingTime));
     }
 
     IEnumerator WaitForExplosion()
     {
-        yield return new WaitForSeconds(Yog.CooldownBeforeExplosion);
+        yield return new WaitForSeconds(AreaExpandingTime);
         List<RB_Health> enemyList = new List<RB_Health>();
         foreach (GameObject enemy in _collisionDetection.GetDetectedObjects())
         {

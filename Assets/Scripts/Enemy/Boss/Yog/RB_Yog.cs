@@ -48,18 +48,17 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _areaDamageInterval = 1f;
     [SerializeField] private float _areaDamageAmount = 1f;
     [SerializeField] private float _areaDamageKnockback = 1f;
+    [SerializeField] private float _areaExpandingTime = 1f;
     [SerializeField] private bool _canAreaDamageZoneDamageMultipleTime = false;
     [SerializeField] public AnimationCurve AreaExpandCurve;
     private List<RB_Health> _alreadyAreaDamageZoneDamaged = new();
     private List<GameObject> _explosion = new List<GameObject>();
 
     [Header("AreaZoneExplosion (attack2 part2)")]
-    public float CooldownBeforeExplosion = 1f;
     [SerializeField] private float _explosionDamage = 1f;
     [SerializeField] private float _explosionKnockback = 1f;
-    [SerializeField] private float _explosionRadius = 1f;
     [SerializeField] private bool _canExplosionDamageMultipleTime = false;
-    protected float _currentCooldownBeforeTakeDamage, _currentCooldownBeforeExplosion;
+    protected float _currentCooldownBeforeTakeDamage;
     private List<RB_Health> _alreadyExplosionDamaged = new();
 
 
@@ -100,7 +99,6 @@ public class RB_Yog : RB_Boss
         _currentCooldownAttack3 -= Time.deltaTime;
         _currentCooldownBetweenMovement -= Time.deltaTime;
         _currentCooldownBeforeTakeDamage -= Time.deltaTime;
-        _currentCooldownBeforeExplosion -= Time.deltaTime;
         _currentCooldownBeforeReactivate -= Time.deltaTime;
         _timeUntilNextState += Time.deltaTime;
         //_mouvement.MoveIntoDirection(PlayerPosition.position);
@@ -336,16 +334,6 @@ public class RB_Yog : RB_Boss
         return finishedTimer;
     }
 
-    /*private void OnDrawGizmos()
-    {
-        float range = Vector3.Distance(_currentTarget.position, transform.position);
-        Vector3 size = new Vector3(_tentacleHitLength, 1, range+1);
-        Vector3 size2 = new Vector3(range+1, 1, _tentacleHitLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size);
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _tentacleHitRange / 2), size2);
-    }*/
-
     public void AreaBeforeExplosionAttack() //ATTACK 2
     {
         //Spawn of the zone attack (attack n°2)
@@ -353,7 +341,9 @@ public class RB_Yog : RB_Boss
         GameObject Bomb = Instantiate(ExplosionZone, transform.position, Quaternion.identity);
         RB_ExplosionZone explosionZone = Bomb.GetComponent<RB_ExplosionZone>();
         explosionZone.Yog = this;
-        explosionZone.FinalScale = Vector3.one * _explosionRadius;
+        explosionZone.ExpandCurve = AreaExpandCurve;
+        explosionZone.AreaExpandingTime = _areaExpandingTime;
+        explosionZone.FinalScale = Vector3.one * _areaDamageRadius;
         Bomb.transform.localScale = Vector3.zero;
         _currentCooldownAttack2 = CooldownAttack2;   
     }
@@ -454,8 +444,6 @@ public class RB_Yog : RB_Boss
                     enemyTree.enabled = true;
                 }
             }
-
-            
 
             if (_enemy.GetComponent<RB_Health>().Dead == true)
             {

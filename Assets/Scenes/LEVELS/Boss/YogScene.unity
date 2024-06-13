@@ -6450,7 +6450,7 @@ PrefabInstance:
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: _explosionDamage
-      value: 100
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6481,6 +6481,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _tentacleHitWidth
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _explosionKnockback
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6565,12 +6570,12 @@ PrefabInstance:
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[0].inSlope
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[1].inSlope
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6595,12 +6600,12 @@ PrefabInstance:
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[0].outSlope
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[1].outSlope
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -6670,12 +6675,12 @@ PrefabInstance:
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[0].tangentMode
-      value: 0
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: AreaExpandCurve.m_Curve.Array.data[1].tangentMode
-      value: 0
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}

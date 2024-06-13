@@ -21,7 +21,6 @@ public class RB_PauseMenu : MonoBehaviour {
 
             if (Time.timeScale < 0.05f) {
                 Time.timeScale = 0;
-                
             }
         }
         else if (_isUnpausing) {

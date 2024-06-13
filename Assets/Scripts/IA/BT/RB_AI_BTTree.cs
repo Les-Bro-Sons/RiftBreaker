@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 {
@@ -61,6 +62,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSlashCollisionSize = 3;
     [SerializeField] public float InfSpottedMoveSpeed = 11;
     [SerializeField] public GameObject InfSlashParticles;
+    [HideInInspector] public UnityEvent EventOnSpotted;
 
     [Header("Faible")]
     [SerializeField] public float SlashRange;
@@ -165,6 +167,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
         spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         RB_AudioManager.Instance.PlaySFX("hey", transform.position, 0,1);
+        EventOnSpotted?.Invoke();
     }
 
     protected override RB_BTNode SetupTree()

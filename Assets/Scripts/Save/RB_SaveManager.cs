@@ -23,6 +23,7 @@ public class RB_SaveManager : MonoBehaviour
     public void SaveToJson()
     {
         SaveObject.CurrentLevel = SceneManager.GetActiveScene().buildIndex+1; //Save the next level
+        SaveObject.TutoDone = !RB_TutorialManager.Instance.IsTuto;
 
         //Save everything to json
         string saveObjectData = JsonUtility.ToJson(SaveObject);

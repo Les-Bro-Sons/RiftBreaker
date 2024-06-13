@@ -58,10 +58,13 @@ public class RB_DialogueWriting : MonoBehaviour
         BoxGestion();
     }
 
+    //To Close the box when Pressing buttons
     private void BoxGestion() {
         if (_dialogueBoxOpen)
         {
             _timer -= Time.deltaTime;
+            
+            // Key Pressed Once
             if (_anyKeyPressed && _index == 0)
             {
                 _writingSpeed = 0;
@@ -72,13 +75,15 @@ public class RB_DialogueWriting : MonoBehaviour
             {
                 _index++;
             }
-
+            
+            // Key Pressed Twice
             if (_anyKeyPressed && _index == 1)
             {
                 _dialogueBox.text = _completeText;
                 _index++;
             }
-
+            
+            // Key Pressed Thrice
             if (_anyKeyPressed && _index >= 2 || _anyKeyPressed && _allTextWritten)
             {
                 _index = 0;
@@ -96,6 +101,7 @@ public class RB_DialogueWriting : MonoBehaviour
         _anyKeyPressed = false;
     }
 
+    //To Pop Up the dialogue by their Index
     public void ShowDialogue(int indexOfScriptable) {
         foreach (var scriptable in _scriptableDialogues)
         {

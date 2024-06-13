@@ -34,15 +34,15 @@ public class RB_SaveManager : MonoBehaviour
 
     public void LoadFromJson()
     {
-        if (SaveObject.CurrentLevel == 0)
-            SaveObject.CurrentLevel = 1; //If the level is set to the menu, set it to the first level
-
-        //Load everything from json
+        
         string filePath = Application.persistentDataPath + "/SaveObjectData.json";
         if (!File.Exists(filePath))
         {
             SaveToJson();
         }
+        //Load everything from json
+        if (SaveObject.CurrentLevel == 0)
+            SaveObject.CurrentLevel = 1; //If the level is set to the menu, set it to the first level
         string saveObjectData = System.IO.File.ReadAllText(filePath);
         SaveObject = JsonUtility.FromJson<RB_SaveObject>(saveObjectData);
         print("Chargement effectué");

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,6 +8,8 @@ using UnityEngine;
 public class RB_Yog : RB_Boss
 {
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+
+    public static RB_Yog Instance;
 
     [Header("Movement")]
     [SerializeField] private float _minMovementDistance = 3f;
@@ -26,6 +29,8 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _tentacleHitDelay = 1f;
     [SerializeField] private float _tentacleHitDuration = 1f;
     [SerializeField] private float _tentacleRemoveDuration = 0.25f;
+    [SerializeField] private AnimationCurve _tentacleHitCurve;
+    [SerializeField] private AnimationCurve _tentacleRemoveCurve;
     [SerializeField] private float _delayBeforeHit = 0.2f;
     [SerializeField] private int _numberTotalOfAttack = 5;
     [SerializeField] private GameObject _tentacleHitParticles;
@@ -64,13 +69,18 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _maxCooldownForAttack = 45f;
     [SerializeField] private float _scaleHeight = 1f;
     [SerializeField] private float _timeForRescaling = 1f;
-    private RB_AI_BTTree _btTree;
     private GameObject _enemy;
     private Rigidbody _rigidbody;
     [SerializeField] private List<GameObject> _allEnemies = new List<GameObject>();
     protected float _currentCooldownBeforeReactivate;
 
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        if (!Instance) Instance = this;
+    }
 
     protected override void Start()
     {
@@ -246,7 +256,7 @@ public class RB_Yog : RB_Boss
         {
             tentacleTimer += Time.deltaTime;
 
-            previTransform.localScale = Vector3.Lerp(baseSize, fullSize, tentacleTimer / _tentacleHitDuration);
+            previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
             foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
             {
@@ -269,7 +279,7 @@ public class RB_Yog : RB_Boss
         {
             tentacleTimer += Time.deltaTime;
 
-            previTransform.localScale = Vector3.Lerp(fullSize, endSize, tentacleTimer / _tentacleRemoveDuration);
+            previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
             foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
             {
@@ -389,17 +399,23 @@ public class RB_Yog : RB_Boss
     public void EnemyGestion()
     {
         //Gestion of enemys (rescaling before spawn)
-        foreach (GameObject en in _allEnemies)
+        foreach (GameObject en in _allEnemies.ToList())
         {
-            _enemy = en;
+            if (!en)
+            {
+                _allEnemies.Remove(en);
+                continue;
+            }
 
-            if (_enemy.transform.localScale.x <= 1 || !_btTree.enabled)
+            _enemy = en;
+            RB_AI_BTTree enemyTree = en.GetComponent<RB_AI_BTTree>(); 
+
+            if (_enemy.transform.localScale.x < 1 || !enemyTree.enabled)
             {
                 _rigidbody = _enemy.GetComponent<Rigidbody>();
-                _btTree = _enemy.GetComponent<RB_AI_BTTree>();
                 _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 _rigidbody.detectCollisions = false;
-                _btTree.enabled = false;
+                enemyTree.enabled = false;
                 
 
                 Vector3 rescalingHeight = new Vector3((1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime);
@@ -410,7 +426,7 @@ public class RB_Yog : RB_Boss
                     _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                     _rigidbody.detectCollisions = true;
                     _enemy.transform.localScale = new Vector3(1, 1, 1);
-                    _btTree.enabled = true;
+                    enemyTree.enabled = true;
                 }
             }
 

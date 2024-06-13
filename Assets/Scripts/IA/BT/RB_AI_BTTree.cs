@@ -198,15 +198,15 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 {
                     new RB_BTSequence(new List<RB_BTNode>
                     {
-                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
-                        new RB_AI_StaticWatchOut(this),
-                        new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
+                        new RB_AICheck_EnemyTouchDetection(this, true),
+                        new RB_AI_DoFailure(),
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode>
                     {
-                        new RB_AICheck_EnemyTouchDetection(this, true),
-                        new RB_AI_DoFailure(),
+                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
+                        new RB_AI_StaticWatchOut(this),
+                        new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
 
                     new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target

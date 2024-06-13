@@ -16,7 +16,6 @@ public class RB_PauseMenu : MonoBehaviour {
 
     private void Update(){
         if (IsPaused) {
-            _oldTimeScale = Time.timeScale;
             Time.timeScale = Mathf.Lerp(Time.timeScale, 0f, Time.unscaledDeltaTime * _timeScaleSpeed);
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);
 
@@ -24,8 +23,14 @@ public class RB_PauseMenu : MonoBehaviour {
                 Time.timeScale = 0;
             }
         }
-        else if (_isUnpausing) {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);
+        else if (_isUnpausing) { 
+            if(_oldTimeScale > 1f) {
+                Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);
+            }
+            else {
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);
+            }
+
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, 0f, Time.unscaledDeltaTime * _timeScaleSpeed);
             RB_MenuManager.Instance.UnPauseAnim();
 
@@ -49,6 +54,7 @@ public class RB_PauseMenu : MonoBehaviour {
             IsPaused = true;
             RB_MenuManager.Instance.PauseAnim();
             RB_ButtonSelectioner.Instance.SelectMainButton(0);
+            _oldTimeScale = Time.timeScale;
         }
         else {
             UnPause();

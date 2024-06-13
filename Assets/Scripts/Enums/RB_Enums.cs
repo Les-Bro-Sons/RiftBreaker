@@ -102,3 +102,10 @@ public enum SETTINGSTATES
     Controls
 }
 
+public enum MIXERNAME
+{
+    Master,
+    SFX,
+    Music
+}
+

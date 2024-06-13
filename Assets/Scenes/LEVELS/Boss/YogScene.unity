@@ -789,6 +789,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 87440146}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &88995364 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 263053956299020696, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+    type: 3}
+  m_PrefabInstance: {fileID: 940450114}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463989f15a02a4a4099000ec1868306e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &89827087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6437,8 +6449,273 @@ PrefabInstance:
       objectReference: {fileID: 940450115}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _explosionDamage
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _explosionRadius
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _areaDamageAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _areaDamageRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitRange
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _explosionKnockback
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _isAttachedToAPhase
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _maxMovementDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitFullRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitFirstDelay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveDuration
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitFirstDelayTimer
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].time
+      value: 0.5939098
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[4].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].value
+      value: 0.38613552
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[4].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].inSlope
+      value: 2.895023
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].outSlope
+      value: 2.895023
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: AreaExpandCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[2].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleHitCurve.m_Curve.Array.data[3].outWeight
+      value: 0.07318294
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _tentacleRemoveCurve.m_Curve.Array.data[1].outSlope
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3453180199176938183, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -8278,7 +8555,7 @@ PrefabInstance:
     - target: {fileID: 2184557290665475729, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: CurrentScene
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2409490027977200568, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -8369,6 +8646,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -38.302227
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226149130475184424, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226149130475184424, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1099.9995
       objectReference: {fileID: 0}
     - target: {fileID: 6053749853435809610, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -8505,7 +8792,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _enemyToKill.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 88995364}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

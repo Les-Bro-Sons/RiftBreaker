@@ -18,11 +18,8 @@ namespace MANAGERS
 		[Header("Mixer")]
 		[SerializeField] private AudioMixer _mixer;
 		[SerializeField] private AudioSource _musicSource; public AudioSource MusicSource { get { return _musicSource; } }
-		[SerializeField] private AudioSource _sfxSource; public AudioSource SfxSource { get { return _sfxSource; } }
-		/*[SerializeField] private AudioSource _eatSource;
-����[SerializeField] private List<AudioClip> _eatClips = new();*/
 
-
+		
 		[Header("Animation")]
 		public Animator AnimatorSetting;
 		public GameObject SettingsCanvas;
@@ -72,6 +69,7 @@ namespace MANAGERS
 			if (_musicClip != null)
 			{
 				_musicSource.clip = _musicClip;
+				print("eeee");
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 
@@ -84,44 +82,41 @@ namespace MANAGERS
 		}
 
 
-		public void PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation, float volume) {
+		public AudioSource PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX) {
+			
 			GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-			_sfxSource = _audioSource.GetComponent<AudioSource>();
+			
+			AudioSource sfxSource = _audioSource.GetComponent<AudioSource>();
+			
 			AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
-			_sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-			_sfxSource.volume = volume;
+			
+			sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			
+			sfxSource.volume = volume;
+			
+			// Assignez le groupe à l'AudioSource
+			sfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
+			
 			if (_sfxClip != null)
 			{
-				_sfxSource.clip = _sfxClip;
-				_sfxSource.Play();
+				sfxSource.clip = _sfxClip;
+				sfxSource.Play();
 				Destroy(_audioSource,_sfxClip.length);
+				return sfxSource;
 			}
 			else
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
 				Destroy(_audioSource);
+				return null;
             }
 		}
 
 		public void StopSFX() 
 		{
-			_sfxSource.Stop();
+			Debug.LogWarning("doesn't work");
 		}
-
-		public void PlayJingle(string nameClip)
-		{
-			StartCoroutine(PlayJingleCoroutine(nameClip));
-		}
-
-		private IEnumerator PlayJingleCoroutine(string nameClip)
-		{
-			AudioClip jingle = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
-			_sfxSource.PlayOneShot(jingle);
-			_musicSource.Pause();
-			yield return new WaitForSeconds(jingle.length);
-			_musicSource.UnPause();
-			yield return null;
-		}
+		
 		//private void LoadVolume() // Volume saved in AudioSettings.cs
 		//{
 		//	float masterVolume = PlayerPrefs.GetFloat(MASTER_KEY, 1f);

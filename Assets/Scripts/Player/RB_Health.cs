@@ -59,6 +59,8 @@ public class RB_Health : MonoBehaviour {
 
     //Fonction de prise de dégâts
     public void TakeDamage(float amount, bool ignoreParticle = false) {
+        if (amount == 0) return;
+
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
@@ -91,6 +93,8 @@ public class RB_Health : MonoBehaviour {
 
     public void TakeKnockback(Vector3 direction, float knockbackForce)
     {
+        if (knockbackForce == 0) return;
+
         //push the enemy away when getting hit
         _rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
     }

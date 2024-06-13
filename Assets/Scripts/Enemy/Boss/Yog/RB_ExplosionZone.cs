@@ -8,13 +8,18 @@ public class RB_ExplosionZone : MonoBehaviour
 
     public RB_Yog Yog;
     private RB_CollisionDetection _collisionDetection;
-    private Vector3 _scaleChange;
+    private Vector3 _baseScale;
+    public Vector3 FinalScale;
+    public float AreaExpandingTime = 5;
+    private float _lifetimeTimer = 0;
+
+    public AnimationCurve ExpandCurve;
 
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
         _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
-        Destroy(gameObject, Yog.CooldownBeforeExplosion);
+        _baseScale = transform.localScale;
     }
 
     private void Start()
@@ -23,8 +28,9 @@ public class RB_ExplosionZone : MonoBehaviour
     }
     private void Update()
     {
-        CheckForEnemies();
+        //CheckForEnemies();
         UpdateExplosionZone();
+        _lifetimeTimer += Time.deltaTime;
     }
 
     private void CheckForEnemies()
@@ -54,20 +60,21 @@ public class RB_ExplosionZone : MonoBehaviour
 
     public void UpdateExplosionZone()
     {
-        _scaleChange = new Vector3(0.3f, 0.3f, 0.3f);
-        gameObject.transform.localScale += _scaleChange;
+        gameObject.transform.localScale = Vector3.Lerp(_baseScale, FinalScale, ExpandCurve.Evaluate(_lifetimeTimer / AreaExpandingTime));
     }
 
     IEnumerator WaitForExplosion()
     {
-        yield return new WaitForSeconds(Yog.CooldownBeforeExplosion - 0.1f);
+        yield return new WaitForSeconds(AreaExpandingTime);
+        List<RB_Health> enemyList = new List<RB_Health>();
         foreach (GameObject enemy in _collisionDetection.GetDetectedObjects())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
             {
-                if (Yog)
-                    Yog.Explosion(enemyHealth);
+                enemyList.Add(enemyHealth);
             }
         }
+        if (Yog) Yog.Explosion(enemyList);
+        Destroy(gameObject);
     }
 }

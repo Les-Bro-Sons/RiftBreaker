@@ -47,4 +47,10 @@ public class RB_SaveManager : MonoBehaviour
         SaveObject = JsonUtility.FromJson<RB_SaveObject>(saveObjectData);
         print("Chargement effectué");
     }
+
+    public void ResetSave()
+    {
+        string filePath = Application.persistentDataPath + "/SaveObjectData.json";
+        File.Delete(filePath);
+    }
 }

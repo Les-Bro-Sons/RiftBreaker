@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class RB_SaveManager : MonoBehaviour
 {
@@ -38,6 +39,10 @@ public class RB_SaveManager : MonoBehaviour
 
         //Load everything from json
         string filePath = Application.persistentDataPath + "/SaveObjectData.json";
+        if (!File.Exists(filePath))
+        {
+            SaveToJson();
+        }
         string saveObjectData = System.IO.File.ReadAllText(filePath);
         SaveObject = JsonUtility.FromJson<RB_SaveObject>(saveObjectData);
         print("Chargement effectué");

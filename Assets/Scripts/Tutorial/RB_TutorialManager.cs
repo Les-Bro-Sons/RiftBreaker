@@ -83,7 +83,7 @@ public class RB_TutorialManager : MonoBehaviour
         if (IsTuto)
         {
             print("slow down time started");
-            _startEnemyDistance = Vector3.Distance(RB_PlayerMovement.Instance.transform.position, EnemyToSlowDownTimeByDistance.transform.position);
+            _startEnemyDistance = 10;
             _shouldSlowTimeByEnemyDistance = true;
         }
     }

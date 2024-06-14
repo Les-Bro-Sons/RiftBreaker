@@ -18,13 +18,7 @@ namespace MANAGERS
 		[Header("Mixer")]
 		[SerializeField] private AudioMixer _mixer;
 		[SerializeField] private AudioSource _musicSource; public AudioSource MusicSource { get { return _musicSource; } }
-
 		
-		[Header("Animation")]
-		public Animator AnimatorSetting;
-		public GameObject SettingsCanvas;
-
-
 		public const string ROOT_PATH = "Audio";
 
 		public const string MASTER_KEY = "masterVolume";

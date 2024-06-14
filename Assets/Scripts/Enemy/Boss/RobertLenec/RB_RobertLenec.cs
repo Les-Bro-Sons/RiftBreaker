@@ -16,7 +16,17 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _maxMovementDistance = 10f;
     [SerializeField] private float _movementSpeed = 10f;
     [SerializeField] private float _delayMovement = 1f;
+    [SerializeField] private float _distanceBehind = 1f;
+    [SerializeField] private float _movingDuration = 1f;
+    [SerializeField] private float _dashKnockback = 1f;
+    private float _movingTimer = 0f;
+    private bool _movingBehindPlayer = false;
+    private Vector3 _startPosition;
+    private Vector3 positionBehindPlayer;
+    [SerializeField] private float tooCloseTimer = 0;
     protected float _currentCooldownBetweenMovement;
+    private LayerMask _layerMask;
+    private RaycastHit hit;
 
     [Header("Single Shot (attack1)")]
     public GameObject RedBall;
@@ -61,11 +71,13 @@ public class RB_RobertLenec : RB_Boss
         }
         base.Awake();
         transform = GetComponent<Transform>();
+        
     }
 
     protected override void Start()
     {
         base.Start();
+        _layerMask = 3;
         WoodenPieceRainZoneAttack();
     }
 
@@ -89,6 +101,7 @@ public class RB_RobertLenec : RB_Boss
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
 
+        Repositionning();
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -173,11 +186,11 @@ public class RB_RobertLenec : RB_Boss
         }
 
         //Boss goes away the player if he's too far away
-        else if (GetTargetDistance() < 5f)
+        else if (GetTargetDistance() < 5f && tooCloseTimer < 5f)
         {
             _movement.MoveIntoDirection(transform.position - _currentTarget.position);
         }
-
+        
     }
 
     public void RandomMovement()
@@ -268,7 +281,6 @@ public class RB_RobertLenec : RB_Boss
 
         //Cooldown
         _currentCooldownAttack3 = Random.Range(_minCooldownForAttack, _maxCooldownForAttack);
-
         StartCoroutine(ReturnToLastPos(_cloneLifeTime));
     }
 
@@ -278,4 +290,64 @@ public class RB_RobertLenec : RB_Boss
 
         _rb.MovePosition(_lastPosition);
     }
+
+    public void Repositionning()
+    {
+
+        if (GetTargetDistance() < 4f)
+        {
+            tooCloseTimer += Time.deltaTime;
+            if (tooCloseTimer <= 3f)
+            {
+                positionBehindPlayer = Vector3.zero;
+            }  
+            else
+            {
+                if (_movingTimer <= _movingDuration)
+                {
+                    if (positionBehindPlayer == Vector3.zero)
+                    {
+                        positionBehindPlayer = _currentTarget.position - _currentTarget.forward * _distanceBehind;
+                    }
+
+                    foreach (Collider enemy in Physics.OverlapBox(transform.position, Vector3.one, transform.rotation))
+                    {
+                        if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+                        {
+                            enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position, _dashKnockback);
+                        }
+                    }
+
+                    Vector3 startPosition = transform.position;
+
+                    Vector3 dashDirection = positionBehindPlayer - startPosition;
+                    float dashDistance = dashDirection.magnitude;
+
+                    if (Physics.Raycast(startPosition, dashDirection, out RaycastHit hit, dashDistance, _layerMask))
+                    {
+                        _rb.MovePosition(hit.point);
+                    }
+                    else
+                    {
+                        _rb.MovePosition(Vector3.Lerp(startPosition, positionBehindPlayer, _movingTimer / _movingDuration));
+                    }
+
+                    _movingTimer += Time.deltaTime;
+
+                    if (_movingTimer >= _movingDuration)
+                    {
+                        tooCloseTimer = 0;
+                        
+                    }
+                }
+            }
+        }
+        else
+        { 
+            tooCloseTimer = 0f;
+            _movingTimer = 0;
+            positionBehindPlayer = Vector3.zero;
+        }
+    }
 }
+

@@ -33,7 +33,7 @@ public class RB_MenuInputManager : MonoBehaviour {
     public bool IsLastInputMouse;
 
 
-    private void Awake(){
+    private void Awake() {
         if (Instance == null){
             Instance = this;
             DontDestroyOnLoad(gameObject);//make this object don't destroy on load
@@ -60,7 +60,7 @@ public class RB_MenuInputManager : MonoBehaviour {
         else if (context.canceled) { EventCancelCanceled?.Invoke(); }
      }
 
-    public void OnPause(InputAction.CallbackContext context){
+    public void OnPause(InputAction.CallbackContext context) {
         if (context.started) { EventPauseStarted?.Invoke(); }
         else if (context.canceled) { EventPauseCanceled?.Invoke(); }
     }

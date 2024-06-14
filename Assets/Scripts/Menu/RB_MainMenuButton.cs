@@ -23,9 +23,11 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
     }
 
-    public void OnPointerEnter(PointerEventData eventData) {
-        RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
-        _button.Select();
+    public void OnPointerEnter(PointerEventData eventData){
+        if (_button.enabled) {
+            RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
+            _button.Select();
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -48,7 +50,6 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
             _button.navigation = buttonNavigation;
         }
         if (!_oldDown.enabled) {
-            Debug.LogWarning(buttonNavigation.selectOnDown.gameObject);
             buttonNavigation.selectOnDown = _oldDown.navigation.selectOnDown.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
@@ -64,7 +65,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     private void Update() {
-        if (!RB_MenuManager.Instance.IsOptionOpen && _button.enabled){
+        if (!RB_MenuManager.Instance.IsOptionOpen){
             //move the text when selected or hoovered
             if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
                 float xPos = _textTrasform.localPosition.x;

@@ -11,8 +11,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     /// <summary>
     /// A reusable component with a self-contained UI for rebinding a single action.
     /// </summary>
-    public class RebindActionUI : MonoBehaviour
-    {
+    public class RebindActionUI : MonoBehaviour { 
         public PLAYERINPUT inputType { 
             get => m_InputType;
             set => m_InputType = value;
@@ -47,8 +46,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        public InputBinding.DisplayStringOptions displayStringOptions
-        {
+        public InputBinding.DisplayStringOptions displayStringOptions{
             get => m_DisplayStringOptions;
             set
             {
@@ -168,8 +166,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// <param name="action"></param>
         /// <param name="bindingIndex"></param>
         /// <returns></returns>
-        public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
-        {
+        public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex) { 
             bindingIndex = -1;
 
             action = m_Action?.action;
@@ -207,7 +204,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
                 if (bindingIndex != -1)
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+
+                var bindingDisplayString = action.bindings[bindingIndex].effectivePath;
             }
+
+
 
             // Set on label (if any).
             if (m_BindingText != null)
@@ -247,6 +248,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
                 return;
 
+            Debug.Log("Resolved action: " + action.name + ", binding index: " + bindingIndex);
+
             // If the binding is a composite, we need to rebind each part in turn.
             if (action.bindings[bindingIndex].isComposite)
             {
@@ -256,6 +259,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
             else
             {
+                Debug.Log("Performing interactive rebind for binding index: " + bindingIndex);
                 PerformInteractiveRebind(action, bindingIndex);
             }
         }
@@ -270,16 +274,25 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 m_RebindOperation = null;
             }
 
+            var escapeRebing = new InputActionRebindingExtensions.RebindingOperation();
+
             action.Disable();
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("<mouse>/scroll")
-                .WithControlsExcluding("<Gamepad>/start")
                 .WithControlsExcluding("<Gamepad>/leftStick/y").WithControlsExcluding("<Gamepad>/leftStick/x")
                 .WithControlsExcluding("<Gamepad>/rightStick/y").WithControlsExcluding("<Gamepad>/rightStick/x")
                 .WithControlsExcluding("<keyboard>/leftmeta").WithControlsExcluding("<keyboard>/rightmeta")
                 .WithCancelingThrough("<keyboard>/escape")
+                .OnPotentialMatch(operation =>
+                {
+                    if (operation.selectedControl.path == "/Gamepad/start")
+                    {
+                        operation.Cancel();
+                        return;
+                    }
+                })
                 .OnCancel(
                     operation =>
                     {
@@ -288,23 +301,31 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         m_RebindOverlay?.SetActive(false);
                         m_PanelOverlay?.SetActive(false);
                         UpdateBindingDisplay();
+                        Debug.Log("Rebind canceled");
                         CleanUp();
                     })
                 .OnComplete(
                     operation =>
                     {
-                        action.Enable();
-                        m_RebindOverlay?.SetActive(false);
-                        m_PanelOverlay?.SetActive(false);
-                        m_RebindStopEvent?.Invoke(this, operation);
+                        Debug.Log("Rebind completed");
+                        Debug.Log($"Old binding path: {action.bindings[bindingIndex].effectivePath}");
+                        var newBindingPath = operation.selectedControl.path;
+                        action.ApplyBindingOverride(bindingIndex, newBindingPath);
+                        Debug.Log($"New binding path: {action.bindings[bindingIndex].effectivePath}");
 
-                        if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts)) {
+                        if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts))
+                        {
+                            Debug.LogWarning("Duplicate binding detected");
                             action.RemoveBindingOverride(bindingIndex);
                             CleanUp();
                             PerformInteractiveRebind(action, bindingIndex, allCompositeParts);
                             return;
                         }
 
+                        action.Enable();
+                        m_RebindOverlay?.SetActive(false);
+                        m_PanelOverlay?.SetActive(false);
+                        m_RebindStopEvent?.Invoke(this, operation);
                         UpdateBindingDisplay();
                         CleanUp();
 
@@ -314,7 +335,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         {
                             var nextBindingIndex = bindingIndex + 1;
                             if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
+                            {
+                                Debug.Log("Starting rebind for the next part of the composite");
                                 PerformInteractiveRebind(action, nextBindingIndex, true);
+                            }
                         }
                     });
 
@@ -344,6 +368,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             m_RebindOperation.Start();
         }
+
 
         bool CheckForDuplicateBind(InputAction action, int bindingIndex, bool allCompositeParts = false) {
             InputBinding newBinding = action.bindings[bindingIndex];

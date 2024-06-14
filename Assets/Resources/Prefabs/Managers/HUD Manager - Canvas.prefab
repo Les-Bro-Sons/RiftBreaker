@@ -1696,7 +1696,6 @@ GameObject:
   - component: {fileID: 592018989136561387}
   - component: {fileID: 7068237864217238907}
   - component: {fileID: 6522423774458506696}
-  - component: {fileID: 5275368006826823193}
   m_Layer: 5
   m_Name: Dash
   m_TagString: Untagged
@@ -1757,24 +1756,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &5275368006826823193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2858868455580866295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7157678e0953b24eb3ce108d2e34e37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  helpText: {fileID: 0}
-  moveSpeed: 0
-  rotateSpeed: 0
-  throwForce: 0
-  pickupDistance: 0
-  holdDistance: 0
 --- !u!1 &3228673595864230909
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,11 @@
+
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using System;
 
-#if UNITY_EDITOR
 public class FindMissingScriptsEditor : EditorWindow
 {
     [MenuItem("Window/Utilities/Find Missing Scripts")]

@@ -55,8 +55,10 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void CloseOption() {
-        RB_ButtonSelectioner.Instance.SelectMainButton(1);
-        IsOptionOpen = false;
+        if (IsOptionOpen) {
+            RB_ButtonSelectioner.Instance.SelectMainButton(2);  
+            IsOptionOpen = false;
+        }
     }
 
     public void OptionAudio() {

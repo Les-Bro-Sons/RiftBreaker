@@ -20,13 +20,11 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _movingDuration = 1f;
     [SerializeField] private float _dashKnockback = 1f;
     private float _movingTimer = 0f;
-    private bool _movingBehindPlayer = false;
-    private Vector3 _startPosition;
     private Vector3 positionBehindPlayer;
     [SerializeField] private float tooCloseTimer = 0;
     protected float _currentCooldownBetweenMovement;
     private LayerMask _layerMask;
-    private RaycastHit hit;
+
 
     [Header("Single Shot (attack1)")]
     public GameObject RedBall;
@@ -55,7 +53,6 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _cooldownForReaparition = 1f;
     [SerializeField] private float _minCooldownForAttack = 10f;
     [SerializeField] private float _maxCooldownForAttack = 30f;
-    private List<GameObject> _clones = new List<GameObject>();
     private Vector3 _lastPosition;
     protected float _currentCooldownBeforeReactivate;
 

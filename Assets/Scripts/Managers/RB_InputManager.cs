@@ -69,7 +69,10 @@ public class RB_InputManager : MonoBehaviour
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
+        {
+            Debug.Log("working1");
             EventMoveStarted?.Invoke();
+        }
         else if (context.performed)
             EventMovePerformed?.Invoke();
         else if (context.canceled)
@@ -100,11 +103,12 @@ public class RB_InputManager : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         if (!DashEnabled) return;
-
-        if (context.started)
+        if (context.started) {
+            Debug.Log("working2");
             EventDashStarted?.Invoke();
+        }
         else if (context.canceled)
-            EventDashCanceled?.Invoke();
+        EventDashCanceled?.Invoke();
     }
 
     public void OnRewind(InputAction.CallbackContext context)

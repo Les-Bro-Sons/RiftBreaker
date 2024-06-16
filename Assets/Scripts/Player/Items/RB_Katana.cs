@@ -33,7 +33,9 @@ public class RB_Katana : RB_Items
 
     public override void SpecialAttack() {
         base.SpecialAttack();
+        
         RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position,0, 1);
+        RB_AudioManager.Instance.PlaySFX("Explosion_KatanaSpe", RB_PlayerController.Instance.transform.position,0, 1);
     }
     
     public override void ChooseSfx() {

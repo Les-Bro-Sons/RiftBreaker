@@ -178,6 +178,7 @@ public class RB_PlayerAction : MonoBehaviour
                 
                 
                 RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
+                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, 0, 1);
 
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding

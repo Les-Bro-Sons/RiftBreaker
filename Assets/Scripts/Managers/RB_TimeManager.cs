@@ -147,7 +147,6 @@ public class RB_TimeManager : MonoBehaviour
                 NumberOfRewind = 3;
                 RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
             }
-            RB_AudioManager.Instance.MusicSource.pitch = 1;
             EventRecordFrame?.Invoke(); // used for interpolation
         }
     }

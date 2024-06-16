@@ -120,7 +120,6 @@ public class RB_TimeManager : MonoBehaviour
             IsRewinding = true;
             _fullRewind = fullRewind;
             UxStartRewind(fullRewind);
-            RB_AudioManager.Instance.MusicSource.pitch = -1;
             EventStartRewinding?.Invoke();
         }
         else

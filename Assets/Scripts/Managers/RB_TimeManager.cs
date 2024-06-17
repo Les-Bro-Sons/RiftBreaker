@@ -48,15 +48,6 @@ public class RB_TimeManager : MonoBehaviour
 
         RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            ResetCurrentRewind();
-        }
-    }
-
     private void FixedUpdate()
     {
         if (_isRecording && !IsRewinding) // doesn't record if rewinding
@@ -163,18 +154,9 @@ public class RB_TimeManager : MonoBehaviour
 
     public void ResetCurrentRewind()
     {
-        if (IsRewinding)
-        {
-            _currentTime = _startRewindTime;
-            EventResetRewinding?.Invoke();
-            StopRewinding();
-        }
-    }
-
-    private IEnumerator StopRewindInAFrame()
-    {
-        yield return new WaitForEndOfFrame();
         StopRewinding();
+        _currentTime = _startRewindTime;
+        EventResetRewinding?.Invoke();
     }
 
     private void Rewind()

@@ -213,7 +213,6 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     private void ResetRewinding()
     {
         _pointsInTime = _oldPointsInTime.ToList();
-        _oldPointsInTime.Clear();
         Rewind(false, _pointsInTime[_pointsInTime.Count - 1]);
     }
 

@@ -99,28 +99,31 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
         //PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
 
-        RemoveLastPointIfFuture(currentTime);
-
         PointInTime currentP;
-        PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
-        if (_pointsInTime.Count > 1) 
+        if (!GoToPointInTime.HasValue)
         {
-            PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
-            if (interpolate)
+            RemoveLastPointIfFuture(currentTime);
+
+        
+            PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
+            if (_pointsInTime.Count > 1) 
             {
-                currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime); //INTERPOLATION
+                PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
+                if (interpolate)
+                {
+                    currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime); //INTERPOLATION
+                }
+                else
+                {
+                    currentP = nextPointInTime;
+                }
             }
             else
             {
-                currentP = nextPointInTime;
+                currentP = closestPointInTime;
             }
         }
         else
-        {
-            currentP = closestPointInTime;
-        }
-
-        if (GoToPointInTime.HasValue) 
         {
             currentP = GoToPointInTime.Value;
         }

@@ -21,6 +21,8 @@ public class RB_Yog : RB_Boss
     protected float _currentCooldownBetweenMovement;
 
     [Header("Tentacle Hit (attack1)")]
+    [SerializeField] private RB_Tentacles _tentacle;
+    [SerializeField] private RB_CollisionDetection _tentacleCollision;
     [SerializeField] private bool _tentacleHitFullRange = true;
     [SerializeField] private float _tentacleHitWidth = 1f;
     [SerializeField] private float _tentacleHitRange = 1f;
@@ -258,8 +260,8 @@ public class RB_Yog : RB_Boss
         _enemyAnimation.TriggerBasicAttack();
         float rangeForward = (_tentacleHitFullRange)? playerDistance : _tentacleHitRange;
         Vector3 fullSize = new Vector3(_tentacleHitWidth, 1, rangeForward);
-        GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * (rangeForward / 2)), transform.rotation);
-        //previsualization.transform.localScale = fullSize;
+        //GameObject previsualization = Instantiate(_tentacleHitAnimation, transform.position + (transform.forward * (rangeForward / 2)), transform.rotation);
+        _tentacle.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
         if (_tentacleHitParticles)
         {
@@ -269,16 +271,17 @@ public class RB_Yog : RB_Boss
         Vector3 baseSize = new Vector3(fullSize.x, fullSize.y, fullSize.normalized.z);
         float tentacleTimer = 0;
         List<RB_Health> alreadyDamaged = new();
-        Transform previTransform = previsualization.transform;
+        //Transform previTransform = previsualization.transform;
         while (tentacleTimer < _tentacleHitDuration)
         {
             tentacleTimer += Time.deltaTime;
 
-            previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
-            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
-            foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
+            _tentacle.Size = Mathf.Lerp(0, rangeForward, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
+            /*previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
+            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
             {
-                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
 
                     if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
@@ -297,11 +300,13 @@ public class RB_Yog : RB_Boss
         {
             tentacleTimer += Time.deltaTime;
 
-            previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
-            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);
-            foreach (Collider enemy in Physics.OverlapBox(previTransform.position, previTransform.localScale / 2f, previTransform.rotation))
+
+            _tentacle.Size = Mathf.Lerp(rangeForward, 0, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
+            /*previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
+            previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
             {
-                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
 
                     if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
@@ -315,7 +320,7 @@ public class RB_Yog : RB_Boss
         }
 
         _currentCooldownAttack1 = CooldownAttack1;
-        Destroy(previsualization);
+        //Destroy(previsualization);
     }
     private bool WaitForTentacleHit() //TIMER ATTACK 1
     {

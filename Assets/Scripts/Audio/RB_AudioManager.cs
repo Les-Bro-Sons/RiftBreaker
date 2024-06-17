@@ -18,18 +18,14 @@ namespace MANAGERS
 		[Header("Mixer")]
 		[SerializeField] private AudioMixer _mixer;
 		[SerializeField] private AudioSource _musicSource; public AudioSource MusicSource { get { return _musicSource; } }
-
 		
-		[Header("Animation")]
-		public Animator AnimatorSetting;
-		public GameObject SettingsCanvas;
-
-
 		public const string ROOT_PATH = "Audio";
 
 		public const string MASTER_KEY = "masterVolume";
 		public const string MUSIC_KEY = "musicVolume";
 		public const string SFX_KEY = "sfxVolume";
+
+		public List<AudioSource> AudioSources = new List<AudioSource>();
 
 		private void Awake()
 		{
@@ -39,20 +35,10 @@ namespace MANAGERS
 				DontDestroyOnLoad(gameObject);
 			}
 			else
-
-
+			{
 				DestroyImmediate(gameObject);
-
-			//LoadVolume();
+			}
 		}
-		/*
-����public void EatSFX()
-����{
-������AudioClip clip = _eatClips[Random.Range(0, _eatClips.Count)];
-
-������_eatSource.PlayOneShot(clip);
-����}
-����*/
 
 		private void Start()
 		{
@@ -69,7 +55,6 @@ namespace MANAGERS
 			if (_musicClip != null)
 			{
 				_musicSource.clip = _musicClip;
-				print("eeee");
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 
@@ -85,14 +70,14 @@ namespace MANAGERS
 		public AudioSource PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX) {
 			
 			GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-			
 			AudioSource sfxSource = _audioSource.GetComponent<AudioSource>();
-			
 			AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+			RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
 			
 			sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-			
 			sfxSource.volume = volume;
+			sfxSource.spatialBlend = 1;
+			sfxSource.loop = false;
 			
 			// Assignez le groupe à l'AudioSource
 			sfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
@@ -101,7 +86,7 @@ namespace MANAGERS
 			{
 				sfxSource.clip = _sfxClip;
 				sfxSource.Play();
-				Destroy(_audioSource,_sfxClip.length);
+				//Destroy(_audioSource,_sfxClip.length);
 				return sfxSource;
 			}
 			else
@@ -116,27 +101,5 @@ namespace MANAGERS
 		{
 			Debug.LogWarning("doesn't work");
 		}
-		
-		//private void LoadVolume() // Volume saved in AudioSettings.cs
-		//{
-		//	float masterVolume = PlayerPrefs.GetFloat(MASTER_KEY, 1f);
-		//	float musicVolume = PlayerPrefs.GetFloat(MUSIC_KEY, 1f);
-		//	float sfxVolume = PlayerPrefs.GetFloat(SFX_KEY, 1f);
-
-		//	_mixer.SetFloat(RB_AudioSettings.MIXER_MASTER, Mathf.Log10(masterVolume) * 20);
-		//	_mixer.SetFloat(RB_AudioSettings.MIXER_MUSIC, Mathf.Log10(musicVolume) * 20);
-		//	_mixer.SetFloat(RB_AudioSettings.MIXER_SFX, Mathf.Log10(sfxVolume) * 20);
-		//}
-
-
-		//	public void ToggleSettingsButton()
-		//	{
-		//		RB_GameManager.Instance.ToggleSettingsButton();
-		//	}
-
-		//	public void EventDiscordLink(Animator animator)
-		//	{
-		//		RB_GameManager.Instance.EventOpenDiscord(animator);
-		//	}
 	}
 }

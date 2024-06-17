@@ -212,18 +212,16 @@ public class RB_AI_Attack : RB_BTNode
 
     public void Slash(float damage, float range, float knockback, float collSize, GameObject particle) //ATTACK 0 LIGHT
     {
-        _playSoundDamaged = true;
+        _playSoundDamaged = false;
         List<RB_Health> alreadyDamaged = new();
         foreach (Collider enemy in Physics.OverlapBox(_transform.position + (_transform.forward * collSize / 2), Vector3.one * (collSize / 2f), _transform.rotation))
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
             {
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
-                if (_playSoundDamaged)
-                {
-                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f, 1f);
-                    _playSoundDamaged = false;
-                }
+                RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, 0f, 1f);
+                _playSoundDamaged = true;
+                
                 alreadyDamaged.Add(enemyHealth);
                 _btParent.ApplyDamage(enemyHealth, damage);
                 enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, knockback);

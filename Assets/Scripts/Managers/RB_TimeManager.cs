@@ -25,6 +25,7 @@ public class RB_TimeManager : MonoBehaviour
     [SerializeField] private float _maxRewindSpeed = 15f;
 
     [Header("Hourglass")]
+    public int NumberOfRewindMax = 3;
     public int NumberOfRewind = 3;
     public List<GameObject> HourglassList = new();
 
@@ -120,7 +121,6 @@ public class RB_TimeManager : MonoBehaviour
             IsRewinding = true;
             _fullRewind = fullRewind;
             UxStartRewind(fullRewind);
-            RB_AudioManager.Instance.MusicSource.pitch = -1;
             EventStartRewinding?.Invoke();
         }
         else
@@ -148,7 +148,6 @@ public class RB_TimeManager : MonoBehaviour
                 NumberOfRewind = 3;
                 RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
             }
-            RB_AudioManager.Instance.MusicSource.pitch = 1;
             EventRecordFrame?.Invoke(); // used for interpolation
         }
     }
@@ -161,13 +160,10 @@ public class RB_TimeManager : MonoBehaviour
     private void UxStartRewind(bool fullRewind = false)
     {
         RB_UXRewindManager.Instance.StartRewindTransition(fullRewind);
-        RB_AudioManager.Instance.MusicSource.pitch = -1;
-
     }
 
     private void UxStopRewind()
     {
         RB_UXRewindManager.Instance.StopRewindTransition();
-        RB_AudioManager.Instance.MusicSource.pitch = 1;
     }
 }

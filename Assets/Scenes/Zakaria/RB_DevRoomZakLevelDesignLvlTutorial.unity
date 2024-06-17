@@ -4434,6 +4434,7 @@ GameObject:
   - component: {fileID: 361335519}
   - component: {fileID: 361335518}
   - component: {fileID: 361335520}
+  - component: {fileID: 361335521}
   m_Layer: 5
   m_Name: UpButton
   m_TagString: Untagged
@@ -4481,7 +4482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1125577870, guid: c9dc28289c252064fbf8c7b5ba0c7a38, type: 3}
+  m_Sprite: {fileID: -1116746464, guid: b1df064fd8d757044be3ad2666d78aa2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4508,9 +4509,30 @@ CanvasGroup:
   m_GameObject: {fileID: 361335516}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!95 &361335521
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361335516}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 53e418b637cf75e4e85c8839ec050474, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &369939069
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10355,6 +10377,7 @@ GameObject:
   - component: {fileID: 765755387}
   - component: {fileID: 765755386}
   - component: {fileID: 765755388}
+  - component: {fileID: 765755389}
   m_Layer: 5
   m_Name: RightButton
   m_TagString: Untagged
@@ -10402,7 +10425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1154364464, guid: c9dc28289c252064fbf8c7b5ba0c7a38, type: 3}
+  m_Sprite: {fileID: -1820114777, guid: eca3569645485314f9d27fdc02bdc8e9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10429,9 +10452,30 @@ CanvasGroup:
   m_GameObject: {fileID: 765755384}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!95 &765755389
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765755384}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5837778e45149704db38e441e0526401, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &765876728
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24174,6 +24218,7 @@ GameObject:
   - component: {fileID: 1195480044}
   - component: {fileID: 1195480043}
   - component: {fileID: 1195480045}
+  - component: {fileID: 1195480046}
   m_Layer: 5
   m_Name: LeftButton
   m_TagString: Untagged
@@ -24221,7 +24266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 288362278, guid: c9dc28289c252064fbf8c7b5ba0c7a38, type: 3}
+  m_Sprite: {fileID: 482744015, guid: 14599ea6dce8a0f4ba34bd9e4af655a2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -24248,9 +24293,30 @@ CanvasGroup:
   m_GameObject: {fileID: 1195480041}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!95 &1195480046
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195480041}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 69d5e26f11976d8458de8b8ac00632fc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1198975803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27235,6 +27301,7 @@ GameObject:
   - component: {fileID: 1424505717}
   - component: {fileID: 1424505716}
   - component: {fileID: 1424505715}
+  - component: {fileID: 1424505718}
   m_Layer: 5
   m_Name: DashButton
   m_TagString: Untagged
@@ -27294,7 +27361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1308434647, guid: c9dc28289c252064fbf8c7b5ba0c7a38, type: 3}
+  m_Sprite: {fileID: 336278707, guid: 9669e4a7430b3894b8132c6d80bba429, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27312,6 +27379,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424505713}
   m_CullTransparentMesh: 1
+--- !u!95 &1424505718
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424505713}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b494a9f7eeba2747aee8e5af5cf627c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1430978061
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27398,6 +27486,7 @@ GameObject:
   - component: {fileID: 1449469349}
   - component: {fileID: 1449469348}
   - component: {fileID: 1449469350}
+  - component: {fileID: 1449469351}
   m_Layer: 5
   m_Name: DownButton
   m_TagString: Untagged
@@ -27445,7 +27534,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1234314872, guid: c9dc28289c252064fbf8c7b5ba0c7a38, type: 3}
+  m_Sprite: {fileID: 344111097, guid: 16e1456b9f05b974cbecd8b8700274bd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27472,9 +27561,30 @@ CanvasGroup:
   m_GameObject: {fileID: 1449469346}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!95 &1449469351
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449469346}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 450202bfe6faaa94eb098136198bc808, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1450964669
 PrefabInstance:
   m_ObjectHideFlags: 0

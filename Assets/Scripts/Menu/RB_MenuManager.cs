@@ -35,6 +35,7 @@ public class RB_MenuManager : MonoBehaviour {
 
     public void NewGame() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
+        RB_SaveManager.Instance.ResetSave();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
     }
 

@@ -3642,6 +3642,7 @@ GameObject:
   - component: {fileID: 5440602729256104578}
   - component: {fileID: 4760646417064035920}
   - component: {fileID: 3611901187388111002}
+  - component: {fileID: 8261130738054361486}
   m_Layer: 5
   m_Name: Control
   m_TagString: Untagged
@@ -3762,6 +3763,19 @@ MonoBehaviour:
     LMB: {fileID: 21300000, guid: e85e096d350acff44af8fbd661a1063c, type: 3}
     RMB: {fileID: 21300000, guid: 346c2010e5990e84298597a7c005deda, type: 3}
     MMB: {fileID: 21300000, guid: ab368ff6235d57645b08727520f6864e, type: 3}
+--- !u!114 &8261130738054361486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571985798278988640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6c2da2db9374dada6761b5e35121c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: 2be19c4d736fe9f428a04d9670072a42, type: 3}
 --- !u!1 &1607975321189592410
 GameObject:
   m_ObjectHideFlags: 0

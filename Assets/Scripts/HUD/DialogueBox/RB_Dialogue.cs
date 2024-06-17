@@ -75,7 +75,6 @@ public class RB_Dialogue : MonoBehaviour
 
     private void DrawText()
     {
-        print(_shouldWriteText);
         if (_shouldWriteText && Time.unscaledTime > _writingLetterTime + _currentWritingDelay)
         {
             if (_currentLetterIndex < _currentParagraph.Length)

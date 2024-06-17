@@ -137,8 +137,8 @@ public class RB_TimeManager : MonoBehaviour
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
             Time.timeScale = 1;
-            EventStopRewinding?.Invoke();
             IsRewinding = false;
+            EventStopRewinding?.Invoke();
             UxStopRewind();
             if (!stopFullRewind)
             {

@@ -87,8 +87,7 @@ MonoBehaviour:
   _nameMusicGame: SheathingSound
   _mixer: {fileID: 24100000, guid: 331b24101625e8b45aa98eb584e08a3a, type: 2}
   _musicSource: {fileID: 6621290690904026540}
-  AnimatorSetting: {fileID: 0}
-  SettingsCanvas: {fileID: 0}
+  AudioSources: []
 --- !u!114 &6351173265087525059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,6 +101,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioMixer: {fileID: 24100000, guid: 331b24101625e8b45aa98eb584e08a3a, type: 2}
+  GeneralSlider: {fileID: 0}
+  GeneralVolume: {fileID: 0}
+  MusicSlider: {fileID: 0}
+  MusicVolume: {fileID: 0}
+  SFXSlider: {fileID: 0}
+  SFXVolume: {fileID: 0}
+  ResetButton: {fileID: 0}
 --- !u!1 &7313658995141611838
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +671,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415031896022608482, guid: 65adb6d08fcf91d479a777be1db666da,
+        type: 3}
+      propertyPath: _isMusic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
+        type: 3}
+      propertyPath: Loop
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}

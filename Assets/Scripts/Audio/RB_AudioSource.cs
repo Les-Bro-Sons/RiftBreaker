@@ -11,7 +11,7 @@ public class RB_AudioSource : MonoBehaviour
 
     [SerializeField] private bool _isMusic;
 
-    private void Awake()
+    private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
         _basePitch = _audioSource.pitch;

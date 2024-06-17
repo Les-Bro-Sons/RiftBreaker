@@ -204,11 +204,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
                 if (bindingIndex != -1)
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
-
-                var bindingDisplayString = action.bindings[bindingIndex].effectivePath;
             }
-
-
 
             // Set on label (if any).
             if (m_BindingText != null)
@@ -308,10 +304,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     operation =>
                     {
                         Debug.Log("Rebind completed");
-                        Debug.Log($"Old binding path: {action.bindings[bindingIndex].effectivePath}");
+/*                        Debug.Log($"Old binding path: {action.bindings[bindingIndex].effectivePath}");
                         var newBindingPath = operation.selectedControl.path;
                         action.ApplyBindingOverride(bindingIndex, newBindingPath);
-                        Debug.Log($"New binding path: {action.bindings[bindingIndex].effectivePath}");
+                        Debug.Log($"New binding path: {action.bindings[bindingIndex].effectivePath}");*/
 
                         if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts))
                         {

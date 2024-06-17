@@ -19,6 +19,8 @@ public class RB_CollisionDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger) return;
+
         //When an object is entering the trigger and has a life script add it to the list
         if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
@@ -31,6 +33,8 @@ public class RB_CollisionDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.isTrigger) return;
+
         //When an object is exiting the trigger, if it's in the DetectedObjects list then remove it
         if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {

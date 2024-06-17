@@ -2723,18 +2723,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51fd2ae82528e2642868b3cbe99454d8, type: 3}
---- !u!114 &1596403795 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6351173265087525059, guid: 51fd2ae82528e2642868b3cbe99454d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1596403794}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa090cacdde2945448d0cc4edcf03b4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1629667002
 GameObject:
   m_ObjectHideFlags: 0
@@ -17306,8 +17294,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6647936969413021412}
   m_HandleRect: {fileID: 8907494648847858898}
   m_Direction: 2
-  m_Value: 0.9999987
-  m_Size: 0.444086
+  m_Value: 0.99999917
+  m_Size: 0.44408596
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18398,7 +18386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -27287,16 +27275,6 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
       objectReference: {fileID: 8892750468816644302}
-    - target: {fileID: 6895956211854990916, guid: d24ad226be588174fb3ec39dd328d9e2,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895956211854990916, guid: d24ad226be588174fb3ec39dd328d9e2,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1596403795}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

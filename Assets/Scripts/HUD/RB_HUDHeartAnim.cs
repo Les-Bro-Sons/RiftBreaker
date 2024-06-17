@@ -69,7 +69,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                 }
                 else {
                     if (_hpPercent > 66){
-                        if (_currentSpriteID >= 0){
+                        if (_currentSpriteID >= 0 && _currentSpriteID<= _sprites1.Count -1){
                             _image.sprite = _sprites1[_currentSpriteID];
                             _currentSpriteID--;
                         }
@@ -78,7 +78,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                         }
                     }
                 else if (_hpPercent > 33){
-                    if (_currentSpriteID >= 0) {
+                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites2.Count - 1) {
                         _image.sprite = _sprites2[_currentSpriteID];
                         _currentSpriteID--;
                     }
@@ -87,7 +87,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                     }
                 }
                 else if (_hpPercent > 0){
-                    if (_currentSpriteID >= 0) {
+                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites3.Count - 1) {
                         _image.sprite = _sprites3[_currentSpriteID];
                         _currentSpriteID--;
                     }
@@ -96,7 +96,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                     }
                 }
                 else {
-                    if (_currentSpriteID >= 0) {
+                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites4.Count - 1) {
                         _image.sprite = _sprites4[_currentSpriteID];
                         _currentSpriteID--;
                     }

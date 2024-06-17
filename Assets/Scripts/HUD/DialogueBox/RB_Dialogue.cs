@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class RB_DialogueManager : MonoBehaviour
+public class RB_Dialogue : MonoBehaviour
 {
-    public static RB_DialogueManager Instance;
 
     //Component
     [SerializeField] private TextMeshProUGUI _dialogueBox;
@@ -14,6 +13,7 @@ public class RB_DialogueManager : MonoBehaviour
 
     //Click
     private int _clickIndex = 0;
+    [SerializeField] private bool _clickable = true;
 
     //Text properties
     private int _currentDialogueIndex;
@@ -27,17 +27,6 @@ public class RB_DialogueManager : MonoBehaviour
     private float _currentWritingDelay;
     [SerializeField] private float _writingDelay;
     [SerializeField] private float _writingSpeedingDelay;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-            DestroyImmediate(gameObject);
-    }
 
     private void Start()
     {
@@ -59,7 +48,7 @@ public class RB_DialogueManager : MonoBehaviour
     public IEnumerator StartDialogueAfterOpenAnim() //Initialize the dialogue system just after the animation started
     {
         yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(_dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        yield return new WaitForSecondsRealtime(_dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
         _currentDialogueIndex = 0;
         _currentDialogueFinished = false;
         _clickIndex = 0;
@@ -79,18 +68,19 @@ public class RB_DialogueManager : MonoBehaviour
     private void StartDrawText(int DialogueIndex)
     {
         _shouldWriteText = true; //Start the drawing of the text
-        _writingLetterTime = Time.time; //Delay of the drawing
+        _writingLetterTime = Time.unscaledTime; //Delay of the drawing
         _currentParagraph = _scriptableDialogues[DialogueIndex].Paragraph; //Current paragraph
         _currentLetterIndex = 0;
     }
 
     private void DrawText()
     {
-        if (_shouldWriteText && Time.time > _writingLetterTime + _currentWritingDelay)
+        print(_shouldWriteText);
+        if (_shouldWriteText && Time.unscaledTime > _writingLetterTime + _currentWritingDelay)
         {
-            if(_currentLetterIndex < _currentParagraph.Length)
+            if (_currentLetterIndex < _currentParagraph.Length)
             {
-                _writingLetterTime = Time.time; //Delay of the drawing 
+                _writingLetterTime = Time.unscaledTime; //Delay of the drawing 
                 _currentLetter = _currentParagraph[_currentLetterIndex];
                 _dialogueBox.text += _currentLetter; //Drawing of the text
                 _currentLetterIndex++;
@@ -131,7 +121,7 @@ public class RB_DialogueManager : MonoBehaviour
                 }
                 _clickIndex++;
             }
-            else //If the current dialogue is finished show the next dialogue
+            else if(_clickable)//If the current dialogue is finished show the next dialogue
             {
                 NextDialogue();
             }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,9 @@ public class RB_CustomEditorTutoManager : Editor
 #endif
 public class RB_TutorialManager : MonoBehaviour
 {
+    //Enums
+    enum Movements { up, left, right, down, dash};
+
     //Instance
     public static RB_TutorialManager Instance;
 
@@ -52,18 +56,31 @@ public class RB_TutorialManager : MonoBehaviour
     private float _startEnemyDistance;
     private Vector3 _targetEnemyPos;
     private Vector3 _startRobertPos;
+    private Vector3 _tutoPos;
+    private bool _positionGot = false;
 
     //Properties
     public float ChangeSpeed;
     public float RobertMoveHeight;
     public float RobertMoveSpeed;
+    public float MinimumRewindTime;
+    public RB_Room _tutorialRoom;
 
     //Components
     [SerializeField] private RB_AI_BTTree EnemyToSlowDownTimeByDistance;
+    [SerializeField] private RB_Dialogue _robertLeNecRewindDialogue;
+    [SerializeField] private RB_Dialogue _robertLeNecMovementDialogue;
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private Image _rewindTutoImage;
     [SerializeField] private Image _roberLeNec;
-    Transform robertTransform;
+    [SerializeField] private List<CanvasGroup> _movementButtons;
+    private Transform robertTransform;
+
+    //Rewind
+    private float _startRewindTime;
+
+    //movements
+    private List<Movements> _movementsPerformed = new();
 
     private void Awake()
     {
@@ -75,14 +92,9 @@ public class RB_TutorialManager : MonoBehaviour
     private void Start()
     {
         IsTuto = !RB_SaveManager.Instance.SaveObject.TutoDone;
-        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartSlowDownTimeByDistance);
-        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartDarkenBackground);
-        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartFadeIn);
-        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(StartAnimateRobert);
-        RB_TimeManager.Instance.EventStartRewinding.AddListener(SetNormalTime);
-        RB_TimeManager.Instance.EventStartRewinding.AddListener(StartBrightenBackground);
-        RB_TimeManager.Instance.EventStartRewinding.AddListener(StartFadeOut);
-        RB_TimeManager.Instance.EventStartRewinding.AddListener(StopAnimateRobert);
+        InitializeRewindTuto();
+        InitializeMovementTuto();
+        _startRobertPos = robertTransform.localPosition;
         InititializeImages();
     }
 
@@ -98,129 +110,129 @@ public class RB_TutorialManager : MonoBehaviour
         AnimateRobert();
     }
 
-    private void InititializeImages()
-    {
-        print("initialize");
-        _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0);
-        _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
-        _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
-    }
+    #region Movement tuto
 
-    public void StartAnimateRobert()
+    private void InitializeMovementTuto()
     {
         if (IsTuto)
         {
-            _shouldAnimateRobertLeNec = true;
-            _startRobertPos = robertTransform.localPosition;
+            RB_InputManager.Instance.EventMovePerformed.AddListener(OnMovementPerformed);
+            RB_InputManager.Instance.EventDashStarted.AddListener(OnDashPerformed);
+            _tutorialRoom.CloseRoom();
+            _robertLeNecMovementDialogue.StartDialogue();
         }
     }
 
-    public void StopAnimateRobert()
+    private void OnDashPerformed()
     {
-        if (IsTuto)
+        if (!_movementsPerformed.Contains(Movements.dash))
+            _movementsPerformed.Add(Movements.dash);
+        _movementButtons[4].alpha = .2f;
+        _movementButtons[4].GetComponent<RectTransform>().localScale = Vector3.one * .7f;
+        if (_movementsPerformed.Count >= 5)
         {
-            _shouldAnimateRobertLeNec = false;
+            AchieveMovementTuto();
         }
     }
 
-    public void AnimateRobert()
+    private void OnMovementPerformed()
     {
-        if(IsTuto && _shouldAnimateRobertLeNec)
+        Movements movementPerformed = new();
+        int movementPerformedIndex = 0;
+        if (RB_InputManager.Instance.MoveValue.y > 0)
         {
-            print("animate robert");
-            robertTransform.localPosition = new Vector3(robertTransform.localPosition.x, _startRobertPos.y + RobertMoveHeight * Mathf.Sin(Time.unscaledTime * RobertMoveSpeed), robertTransform.localPosition.z);
+            movementPerformed = Movements.up;
+            movementPerformedIndex = 0;
+        }
+        else if (RB_InputManager.Instance.MoveValue.y < 0)
+        {
+            movementPerformed = Movements.down;
+            movementPerformedIndex = 1;
+        }
+        else if (RB_InputManager.Instance.MoveValue.x < 0)
+        {
+            movementPerformed = Movements.left;
+            movementPerformedIndex = 2;
+        }
+        else if (RB_InputManager.Instance.MoveValue.x > 0)
+        {
+            movementPerformed = Movements.right;
+            movementPerformedIndex = 3;
+        }
+        
+
+        _movementButtons[movementPerformedIndex].alpha = .2f;
+        _movementButtons[movementPerformedIndex].GetComponent<RectTransform>().localScale = Vector3.one * .7f;
+
+        if (!_movementsPerformed.Contains(movementPerformed))
+            _movementsPerformed.Add(movementPerformed);
+        if(_movementsPerformed.Count >= 5)
+        {
+            AchieveMovementTuto();
         }
     }
 
-    public void StartBrightenBackground()
+    private void AchieveMovementTuto()
     {
-        if (IsTuto)
+        RB_InputManager.Instance.EventMovePerformed.RemoveListener(OnMovementPerformed);
+        _tutorialRoom.OpenRoom();
+        foreach(CanvasGroup _movementButton in _movementButtons)
         {
-            _shouldBrightenBackground = true;
-            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, .6f);
+            _movementButton.gameObject.SetActive(false);
         }
+        _robertLeNecMovementDialogue.StopDialogue();
     }
 
-    public void BrightenBackground()
+    #endregion
+
+    #region Rewind tuto
+    private void InitializeRewindTuto() 
     {
-        if(IsTuto && _shouldBrightenBackground)
-        {
-            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, _backgroundImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
-            if (_backgroundImage.color.a <= 0)
-            {
-                _shouldBrightenBackground = false;
-            }
-        }
+        EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(InitializeTuto); //When the enemy spot the player
+        RB_TimeManager.Instance.EventStartRewinding.AddListener(AchieveTuto); //When the rewind is started
+        RB_TimeManager.Instance.EventStopRewinding.AddListener(OnRewindStopped); //When the rewind is stopped
     }
 
-    public void StartFadeOut()
+    private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
     {
-        if (IsTuto)
-        {
-            _shouldFadeOutRewindTuto = true;
-            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 1);
-            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 1);
-        }
+        RB_UxHourglass.Instance.CreateOneHourglass(); //Add one rewind to the player
+        RB_TimeManager.Instance.NumberOfRewind++;
+        RB_PlayerMovement.Instance.GetComponent<Rigidbody>().MovePosition(_tutoPos); //Tp to the start position of the rewind
+        InitializeTuto(); //Reinitialize the tutorial
+        StopTime(); //Stop the time again
     }
 
-    public void FadeOut()
+    public void OnRewindStarted()
     {
-        if(IsTuto && _shouldFadeOutRewindTuto)
-        {
-            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
-            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
-            if (_rewindTutoImage.color.a <= 0)
-            {
-                _shouldFadeOutRewindTuto = false;
-            }
-        }
+        _startRewindTime = Time.unscaledTime; //Set the time when the rewind started
     }
 
-    public void StartFadeIn()
+    public void OnRewindStopped() //When the player release the rewind button
     {
-        if (IsTuto)
+        if (_startRewindTime + MinimumRewindTime < Time.unscaledTime) //If the player pressed it long enough
         {
-            _shouldFadeInRewindTuto = true;
-            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
-            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
+            EnemyToSlowDownTimeByDistance.EventOnSpotted.RemoveListener(InitializeTuto); //Stop the rewind tutorial
+            RB_TimeManager.Instance.EventStartRewinding.RemoveListener(AchieveTuto);
+            RB_TimeManager.Instance.EventStopRewinding.RemoveListener(OnRewindStopped);
+        }
+        else //If the player didn't press long enough
+        {
+            OnRewindTutoFailed();
         }
     }
 
-    public void FadeIn()
+    private void GetRewindFirstPos() //Get the position of the player when he started the rewind
     {
-        if (IsTuto && _shouldFadeInRewindTuto)
+        if (!_positionGot)
         {
-            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
-            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
-            if (_rewindTutoImage.color.a >= 1)
-            {
-                _shouldFadeInRewindTuto = false;
-            }
+            _tutoPos = RB_PlayerMovement.Instance.transform.position;
+            _positionGot = true;
         }
     }
+    #endregion
 
-    public void StartDarkenBackground()
-    {
-        if (IsTuto)
-        {
-            _shouldDarkenBackground = true;
-            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0);
-        }
-    }
-
-    public void DarkenBackground()
-    {
-        if (IsTuto && _shouldDarkenBackground)
-        {
-            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, _backgroundImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
-            if (_backgroundImage.color.a >= .6f)
-            {
-                _shouldDarkenBackground = false;
-            }
-        }
-    }
-
-    public void SetNormalTime()
+    #region time managing
+    public void SetNormalTime() //Set the time scale back to the normal one
     {
         if (IsTuto)
         {
@@ -228,7 +240,15 @@ public class RB_TutorialManager : MonoBehaviour
         }
     }
 
-    public void StartSlowDownTimeByDistance()
+    private void StopTime() //Set the time scale to 0
+    {
+        if (IsTuto)
+        {
+            Time.timeScale = 0f;
+        }
+    }
+
+    public void StartSlowDownTimeByDistance() //Start the slow down of the time by the tuto enemy
     {
         if (IsTuto)
         {
@@ -237,19 +257,19 @@ public class RB_TutorialManager : MonoBehaviour
         }
     }
 
-    public void SlowTimeByEnemyDistance()
+    public void SlowTimeByEnemyDistance() //Slow down time by the distance of the tutorial enemy and the player
     {
         if (IsTuto && _shouldSlowTimeByEnemyDistance)
         {
             Time.timeScale = Vector3.Distance(RB_PlayerMovement.Instance.transform.position, EnemyToSlowDownTimeByDistance.transform.position) / _startEnemyDistance;
-            if(Time.timeScale <= .5f)
+            if (Time.timeScale <= .5f)
             {
                 StartSlowTime();
             }
         }
     }
 
-    public void StartSpeedUpTime()
+    public void StartSpeedUpTime() //Start speeding up time to the normal one
     {
         if (IsTuto)
         {
@@ -260,7 +280,7 @@ public class RB_TutorialManager : MonoBehaviour
         }
     }
 
-    public void SpeedUpTime()
+    public void SpeedUpTime() //Speed up time to the normal one
     {
         if (IsTuto && _shouldSpeedUpTime)
         {
@@ -274,19 +294,197 @@ public class RB_TutorialManager : MonoBehaviour
         }
     }
 
-    public void SlowTime()
+    public void SlowTime() //Slow the time untill it reaches 0
     {
         if (IsTuto && _shouldSlowTime)
         {
             Time.timeScale -= Time.unscaledDeltaTime * ChangeSpeed;
             if (Time.timeScale <= 0.1)
             {
-                print("time = slow");
                 Time.timeScale = 0;
                 _shouldSlowTime = false;
+                GetRewindFirstPos();
             }
         }
     }
+    #endregion
+
+    #region Robert
+    public void StartAnimateRobert() //Start the animation of robert
+    {
+        if (IsTuto)
+        {
+            _shouldAnimateRobertLeNec = true;
+        }
+    }
+
+    public void StopAnimateRobert() //Stop the animation of robert
+    {
+        if (IsTuto)
+        {
+            _shouldAnimateRobertLeNec = false;
+        }
+    }
+
+    public void AnimateRobert() //Make robert go up then down with a sin
+    {
+        if (IsTuto && _shouldAnimateRobertLeNec)
+        {
+            print("animate robert");
+            robertTransform.localPosition = new Vector3(robertTransform.localPosition.x, _startRobertPos.y + RobertMoveHeight * Mathf.Sin(Time.unscaledTime * RobertMoveSpeed), robertTransform.localPosition.z);
+        }
+    }
+    #endregion
+
+    #region general tuto
+    private void InititializeImages() //Initialize all the images
+    {
+        _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0);
+        _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
+        _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
+    }
+
+    private void InitializeTuto() //Initialize everything for the tutorial
+    {
+        StartSlowDownTimeByDistance();
+        StartDarkenBackground();
+        StartFadeIn();
+        StartAnimateRobert();
+        _robertLeNecRewindDialogue.StartDialogue();
+    }
+
+    private void AchieveTuto() //Finish the tutorial 
+    {
+        SetNormalTime();
+        StartBrightenBackground();
+        StartFadeOut();
+        StopAnimateRobert();
+        _robertLeNecRewindDialogue.StopDialogue();
+        OnRewindStarted();
+    }
+
+    public void StartBrightenBackground() //start the background brightning
+    {
+        if (IsTuto)
+        {
+            _shouldBrightenBackground = true;
+            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, .6f);
+        }
+    }
+
+    public void BrightenBackground() //Brighten the background
+    {
+        if (IsTuto && _shouldBrightenBackground)
+        {
+            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, _backgroundImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
+            if (_backgroundImage.color.a <= 0)
+            {
+                _shouldBrightenBackground = false;
+            }
+        }
+    }
+
+    public void StartFadeOut() //Start the fade out of everything that have to be faded out
+    {
+        if (IsTuto)
+        {
+            _shouldFadeOutRewindTuto = true;
+            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 1);
+            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 1);
+        }
+    }
+
+    public void FadeOut() //Fade out of everything that have to be faded out
+    {
+        if (IsTuto && _shouldFadeOutRewindTuto)
+        {
+            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
+            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a - Time.unscaledDeltaTime * ChangeSpeed);
+            if (_rewindTutoImage.color.a <= 0)
+            {
+                _shouldFadeOutRewindTuto = false;
+            }
+        }
+    }
+
+    public void StartFadeIn() //Start fade in of everything that have to be faded out
+    {
+        if (IsTuto)
+        {
+            _shouldFadeInRewindTuto = true;
+            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
+            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, 0);
+        }
+    }
+
+    public void FadeIn() //Fade in of everything that have to be faded out
+    {
+        if (IsTuto && _shouldFadeInRewindTuto)
+        {
+            _rewindTutoImage.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
+            _roberLeNec.color = new Color(_rewindTutoImage.color.r, _rewindTutoImage.color.g, _rewindTutoImage.color.b, _rewindTutoImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
+            if (_rewindTutoImage.color.a >= 1)
+            {
+                _shouldFadeInRewindTuto = false;
+            }
+        }
+    }
+
+    public void StartDarkenBackground() //Start the darkening of the background
+    {
+        if (IsTuto)
+        {
+            _shouldDarkenBackground = true;
+            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0);
+        }
+    }
+
+    public void DarkenBackground() //Darken the background
+    {
+        if (IsTuto && _shouldDarkenBackground)
+        {
+            _backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, _backgroundImage.color.a + Time.unscaledDeltaTime * ChangeSpeed);
+            if (_backgroundImage.color.a >= .6f)
+            {
+                _shouldDarkenBackground = false;
+            }
+        }
+    }
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void StartTuto()
     {

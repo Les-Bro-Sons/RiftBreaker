@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SaveObject:
     CurrentLevel: 0
+    TutoDone: 0
 --- !u!1 &7995973177813662557
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,11 +451,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
-        type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_ActionId
       value: e6bcbc05-ea6c-4efb-9515-8b26a0b9ce94
       objectReference: {fileID: 0}
@@ -525,11 +521,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}
-      propertyPath: m_ActionEvents.Array.data[3].m_ActionName
-      value: Player/Dash[/Keyboard/space]
-      objectReference: {fileID: 0}
-    - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
-        type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_ActionName
       value: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
       objectReference: {fileID: 0}
@@ -597,11 +588,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[21].m_ActionName
       value: UI/Any[/Keyboard/anyKey,/Mouse/leftButton,/Mouse/rightButton]
-      objectReference: {fileID: 0}
-    - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnAttack
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

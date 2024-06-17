@@ -430,7 +430,7 @@ public class RB_Yog : RB_Boss
             _enemy = en;
             RB_AI_BTTree enemyTree = en.GetComponent<RB_AI_BTTree>(); 
 
-            if (_enemy.transform.localScale.x < 1 || !enemyTree.enabled)
+            if (_enemy.transform.localScale.x < 1)
             {
                 _rigidbody = _enemy.GetComponent<Rigidbody>();
                 _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
@@ -441,7 +441,7 @@ public class RB_Yog : RB_Boss
                 Vector3 rescalingHeight = new Vector3((1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime, (1f / _timeForRescaling) * Time.deltaTime);
                 _enemy.transform.localScale += rescalingHeight;
 
-                if (_enemy.transform.localScale.x > 1)
+                if (_enemy.transform.localScale.x > 1 && !enemyTree.enabled)
                 {
                     _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                     _rigidbody.detectCollisions = true;
@@ -452,8 +452,9 @@ public class RB_Yog : RB_Boss
 
             if (_enemy.GetComponent<RB_Health>().Dead == true)
             {
+                enemyTree.enabled = false;
                 _allEnemies.Remove(_enemy);
-                _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                //_rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
     } 

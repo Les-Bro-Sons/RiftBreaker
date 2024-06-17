@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 
 public class RB_Mega_knight : RB_Boss
 {
+    public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+    private new Transform transform;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -20,6 +23,7 @@ public class RB_Mega_knight : RB_Boss
     [SerializeField] private float _spikeDamage = 10;
     [SerializeField] private float _spikeKnockback = 10;
     [SerializeField] private bool _canSpikeDamageMultipleTime = false;
+    [SerializeField] private float _spikeDelayIncrementation = 0.1f;
     private List<RB_Health> _alreadySpikeDamaged = new();
 
     [Header("Jump (attack3)")]
@@ -38,8 +42,14 @@ public class RB_Mega_knight : RB_Boss
     //Animation
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
-    protected override void Awake()
-    {
+    protected override void Awake(){
+        transform = GetComponent<Transform>();
+        if (Instance == null) {
+            Instance = this;
+        }
+        else { 
+            DestroyImmediate(gameObject);
+        }
         base.Awake();
     }
 
@@ -59,6 +69,10 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
+        int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -126,15 +140,7 @@ public class RB_Mega_knight : RB_Boss
             }
         }
         
-
-        //if (MovementSpeed >= 0.1f) //SWITCH TO MOVING
-        //{
         return CurrentState = BOSSSTATES.Moving;
-        //}
-        //SWITCH TO IDLE
-
-        _currentWaitInIdle = WaitInIdle;
-        return BOSSSTATES.Idle;
     }
 
     private bool WaitForSlash() //TIMER ATTACK 1
@@ -147,7 +153,7 @@ public class RB_Mega_knight : RB_Boss
     {
         //Animations
         _enemyAnimation.TriggerBasicAttack();
-
+        RB_AudioManager.Instance.PlaySFX("BigSwooosh", transform.position,1, 1f);
         List<RB_Health> alreadyDamaged = new();
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f), transform.rotation))
         {
@@ -158,7 +164,7 @@ public class RB_Mega_knight : RB_Boss
 
                 alreadyDamaged.Add(enemyHealth);
                 enemyHealth.TakeDamage(_slashDamage);
-                enemyHealth.TakeKnockback(enemyHealth.transform.position - transform.position ,_slashKnockback);
+                enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, transform.position) ,_slashKnockback);
             }
         }
         if (_slashParticles)
@@ -168,14 +174,11 @@ public class RB_Mega_knight : RB_Boss
         _currentCooldownAttack1 = CooldownAttack1;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f));
-    }
-
     private void StartJumpAttack() //START ATTACK 3
     {
+        //Animations
+        _enemyAnimation.TriggerThirdAttack();
+
         _currentJumpDuration = 0;
         _jumpStartPos = transform.position;
         _jumpEndPos = _currentTarget.position;
@@ -184,9 +187,6 @@ public class RB_Mega_knight : RB_Boss
 
     public void JumpAttack() //ATTACK 3
     {
-        //Animations
-        _enemyAnimation.TriggerThirdAttack();
-
         //jump calculation
         _currentJumpDuration += Time.fixedDeltaTime;
         float percentComplete = _currentJumpDuration / _jumpDuration;
@@ -204,12 +204,13 @@ public class RB_Mega_knight : RB_Boss
                     if (enemyHealth.Team == Health.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                     alreadyDamaged.Add(enemyHealth);
                     enemyHealth.TakeDamage(_landingDamage);
-                    enemyHealth.TakeKnockback((collider.transform.position - transform.position).normalized, _landingKnockback);
+                    enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(collider.transform.position, transform.position), _landingKnockback);
                 }
             }
 
             if (_landingParticles)
             {
+                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,0, 1f);
                 Instantiate(_landingParticles, transform.position, transform.rotation);
             }
 
@@ -238,18 +239,27 @@ public class RB_Mega_knight : RB_Boss
         */
 
         //Animations
-        _enemyAnimation.TriggerSecondAttack();
+        
 
         float currentLength = 0;
         Vector3 placingdir = (_currentTarget.position - transform.position);
         placingdir = new Vector3(placingdir.x, 0, placingdir.z).normalized;
         Vector3 placingPos = transform.position + (placingdir * _spikesSpaces);
         placingPos.y = Spikes.transform.position.y;
+
+        BossRB.MoveRotation(Quaternion.LookRotation(placingdir));
+        _enemyAnimation.TriggerSecondAttack();
+
+        float delay = 0;
+
         while (currentLength < _spikesLength)
         {
             placingPos.y = Spikes.transform.position.y;
-            Instantiate(Spikes, placingPos, Quaternion.identity).GetComponent<RB_Spikes>().MegaKnight = this;
-            
+            RB_Spikes spike = Instantiate(Spikes, placingPos, Quaternion.identity).GetComponent<RB_Spikes>();
+            spike.MegaKnight = this;
+            spike.GoingUpDelay = delay;
+
+            delay += _spikeDelayIncrementation;
             placingPos += placingdir * _spikesSpaces;
             currentLength += _spikesSpaces;
         }
@@ -263,7 +273,7 @@ public class RB_Mega_knight : RB_Boss
 
         _alreadySpikeDamaged.Add(enemyHealth);
         enemyHealth.TakeDamage(_spikeDamage);
-        enemyHealth.TakeKnockback((enemyHealth.transform.position - transform.position).normalized, _spikeKnockback);
+        enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, transform.position), _spikeKnockback);
     }
     
 
@@ -282,27 +292,4 @@ public class RB_Mega_knight : RB_Boss
             //DealDamageToPlayer();
         }
     }
-    void DealDamageToPlayer()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, DamageRadius, PlayerLayer);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            RB_PlayerController player = hitCollider.GetComponent<RB_PlayerController>();
-            if (player != null)
-            {
-                Health.TakeDamage(50f);
-            }
-        }
-    }
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, _rangeOfAttack);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, DamageRadius);
-    }*/
 }

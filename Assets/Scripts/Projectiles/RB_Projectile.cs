@@ -1,5 +1,6 @@
 using Cinemachine;
 using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 
 public class RB_Projectile : MonoBehaviour
@@ -45,6 +46,14 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _damageOnExplosion = false;
     [SerializeField] private float _explosionRadius = 1;
 
+    [Header("Bounce")]
+    [SerializeField] private bool _isBouncing = false;
+    [SerializeField] private int _maxBounces = 3;
+    private int _currentBounce = 0;
+
+    [Header("Sounds")] 
+    [SerializeField] private string _explosionSounds;
+    
     //Components
     private Rigidbody _rb;
     private Transform _transform;
@@ -104,9 +113,7 @@ public class RB_Projectile : MonoBehaviour
             enemyHealth.TakeDamage(_damage);
             if (_isDestroyingOnDamage)
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
     }
@@ -115,7 +122,7 @@ public class RB_Projectile : MonoBehaviour
     {
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
         {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth) && enemyHealth.Team != Team)
             {
                 enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
                 enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
@@ -124,7 +131,8 @@ public class RB_Projectile : MonoBehaviour
         }
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-        Destroy(gameObject);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, 1);
+        DestroyProjectile();
     }
 
     private void Start()
@@ -153,11 +161,20 @@ public class RB_Projectile : MonoBehaviour
             }
             else
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
             
+        }
+        if (_isBouncing && Physics.Raycast(_transform.position, _rb.velocity.normalized, out RaycastHit hitInfo, _wallDetectionLength, 1 << 3))
+        {
+            if (_currentBounce >= _maxBounces)
+            {
+                DestroyProjectile();
+                return;
+            }
+            Vector3 direction = Vector3.Reflect(_rb.velocity.normalized, hitInfo.normal);
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
+            _currentBounce += 1;
         }
     }
 
@@ -175,9 +192,7 @@ public class RB_Projectile : MonoBehaviour
             else
             {
                 //When it reaches the total distance, destroy the projectile
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
         else
@@ -185,9 +200,7 @@ public class RB_Projectile : MonoBehaviour
             if(Time.time > (_creationTime + _totalLifeTime))
             {
                 //If the projectile is meant to be launched, when its life time is finished, destroy it
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
         
@@ -223,5 +236,13 @@ public class RB_Projectile : MonoBehaviour
             _projectileAnimator.SetFloat("Horizontal", _transform.TransformDirection(Vector3.forward).x);
             _projectileAnimator.SetFloat("Vertical", _transform.TransformDirection(Vector3.forward).z);
         }
+    }
+
+    private void DestroyProjectile() 
+    {
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, .1f);
+        if (_destroyParticles)
+            Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+        Destroy(gameObject);
     }
 }

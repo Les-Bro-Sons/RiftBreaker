@@ -7,6 +7,11 @@ public class RB_Tools
         return new Vector3((x)? Random.Range(min, max) : 0, (y)? Random.Range(min, max) : 0, (z)? Random.Range(min, max) : 0);
     }
 
+    public static bool TryGetComponentInParent<T>(Transform selfObject, out T componentToGet) where T : Component
+    {
+        return TryGetComponentInParent<T>(selfObject.gameObject, out componentToGet);
+    }
+
     public static bool TryGetComponentInParent<T>(GameObject selfObject, out T componentToGet) where T : Component
     {
         componentToGet = null;
@@ -52,5 +57,16 @@ public class RB_Tools
         }
 
         return false;
+    }
+
+    public static Vector3 GetHorizontalDirection(Vector3 posA, Vector3 posB)
+    {
+        Vector3 knockbackDir = posA - posB;
+        knockbackDir = new Vector3(knockbackDir.x, 0, knockbackDir.z);
+        return knockbackDir.normalized;
+    }
+    public static Vector3 GetHorizontalDirection(Vector3 vector)
+    {
+        return new Vector3(vector.x, 0, vector.z).normalized;
     }
 }

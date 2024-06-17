@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd0f18d2b7b1e149ab4b761bdfbb167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveEnabled: 1
   EventMoveStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -54,30 +55,35 @@ MonoBehaviour:
   EventMoveCanceled:
     m_PersistentCalls:
       m_Calls: []
+  AttackEnabled: 1
   EventAttackStarted:
     m_PersistentCalls:
       m_Calls: []
   EventAttackCanceled:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackEnabled: 1
   EventSpecialAttackStarted:
     m_PersistentCalls:
       m_Calls: []
   EventSpecialAttackCanceled:
     m_PersistentCalls:
       m_Calls: []
+  DashEnabled: 1
   EventDashStarted:
     m_PersistentCalls:
       m_Calls: []
   EventDashCanceled:
     m_PersistentCalls:
       m_Calls: []
+  RewindEnabled: 1
   EventRewindStarted:
     m_PersistentCalls:
       m_Calls: []
   EventRewindCanceled:
     m_PersistentCalls:
       m_Calls: []
+  ItemsEnabled: 1
   EventItem1Started:
     m_PersistentCalls:
       m_Calls: []
@@ -97,6 +103,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   MoveValue: {x: 0, y: 0}
+  IsMouse: 0
 --- !u!114 &5636846860869108747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +193,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 666402a3-7bcc-4669-97d1-f4420241d892
-    m_ActionName: Player/Dash[/Keyboard/shift,/Keyboard/space]
+    m_ActionName: Player/Dash[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8940931488551022478}

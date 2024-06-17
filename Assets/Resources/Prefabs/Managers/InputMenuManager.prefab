@@ -1,0 +1,251 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2748299860135567294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1099436581881905246}
+  - component: {fileID: 8465813697238113616}
+  - component: {fileID: 5253739096490891372}
+  m_Layer: 0
+  m_Name: InputMenuManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1099436581881905246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2748299860135567294}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8465813697238113616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2748299860135567294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b16297db8cb9d43bbc7886d3e057f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventNavigateStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventNavigatePerformed:
+    m_PersistentCalls:
+      m_Calls: []
+  EventNavigateCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  NavigationValue: {x: 0, y: 0}
+  EventSubmitStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventSubmitCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventCancelStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventCancelCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventPauseStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventPauseCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventAnyStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventAnyCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventMouseMovingStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventMouseMovingCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  IsLastInputMouse: 0
+--- !u!114 &5253739096490891372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2748299860135567294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: adbeed5e27eeb554e8960076b752efd7,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 31e05f13-1e22-4b82-b690-3702134b392f
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnNavigate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 49c7ea76-1d9d-45f1-a2cf-09ee47cb9d22
+    m_ActionName: UI/NavigateValue[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnSubmit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3aa409a2-f0e0-4527-9959-09acdcb64634
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnCancel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 481a4e62-9dfd-4479-ac05-89243077b2c1
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0ef8e14c-43ba-493e-aa66-2cc2954ce332
+    m_ActionName: UI/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9eeaf651-6ce3-4d25-890d-68fcb64b2aac
+    m_ActionName: UI/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57178171-b6a0-4b53-a53f-9cae7b5fc02a
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 295e3066-1210-4b74-b00b-f8d4deed0798
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 50b6435e-b852-47cc-91f6-2840e9483dca
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnCancel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 00845529-539f-4412-916b-6c07416a8a0c
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3dcbf011-8ddc-4c61-a665-7a6d2d0a6a42
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8465813697238113616}
+        m_TargetAssemblyTypeName: RB_MenuInputManager, Assembly-CSharp
+        m_MethodName: OnAny
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5c8cc996-6820-4c0c-b8d3-796ef074a9a0
+    m_ActionName: UI/CancelSelection[/Mouse/press]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 24b2fa7a-ca2b-4597-90c2-b1354e1eaf8a
+    m_ActionName: UI/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6bdec2ec-0687-4d5d-8270-463255e17f77
+    m_ActionName: UI/Any[/Keyboard/anyKey,/Mouse/leftButton,/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 36cd7c80-472c-43f3-9d47-cb594bc6d0f6
+    m_ActionName: UI/MouseMouv[/Mouse/position]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

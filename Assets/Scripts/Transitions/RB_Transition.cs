@@ -11,13 +11,15 @@ public class RB_Transition : MonoBehaviour
     //public float FadeOutTime;
     public float Duration;
 
+    public int NextSceneID;
+
     // Start is called before the first frame update
     void Start()
     {
         //FadeTransition("SampleScene", 5f, speedType: RB_SceneTransitionManager.Instance.SpeedType);
     }
 
-    public virtual IEnumerator Fade(string nameScene, float duration, SPEEDTYPES speedType)
+    public virtual IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
     {
         yield return null;
     }
@@ -26,11 +28,11 @@ public class RB_Transition : MonoBehaviour
     {
         float targetAlpha = fadeIn ? 1f : 0f;
         float startAlpha = image.color.a;
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
 
         while (image.color.a < targetAlpha)
         {
-            float elapsedTime = (Time.time - startTime) / duration;
+            float elapsedTime = (Time.unscaledTime - startTime) / duration;
             float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
             image.color = new Color(image.color.r, image.color.g, image.color.b, newAlpha);
             yield return null;

@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 463989f15a02a4a4099000ec1868306e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 3000
-  _hpMax: 3000
+  _hp: 1000
+  _hpMax: 1000
   Armor: 0
   Team: 0
   Dead: 0
@@ -168,6 +168,9 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &5424571959079900752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +189,8 @@ MonoBehaviour:
   _isAttachedToAPhase: 0
   _spawnInPhase: 2
   SpriteRenderer: {fileID: 9101173564990518349}
+  AiAnimator: {fileID: 7214748225881584283}
+  ChargeSpecialAttackAmount: 0
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -215,6 +220,7 @@ MonoBehaviour:
   _spikeDamage: 10
   _spikeKnockback: 10
   _canSpikeDamageMultipleTime: 0
+  _spikeDelayIncrementation: 0.1
   JumpHeight: 4
   DamageRadius: 5
   _jumpAttackCurve:
@@ -279,6 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkDirection: {x: 0, y: 0, z: 0}
+  _pushForce: 3
   LastDirection: {x: 0, y: 0, z: 0}
   _movementAcceleration: 150
   _movementMaxSpeed: 5

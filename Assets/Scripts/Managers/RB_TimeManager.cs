@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,9 +7,10 @@ public class RB_TimeManager : MonoBehaviour
 {
     public static RB_TimeManager Instance;
 
-    public UnityEvent EventRecordFrame;
-    public UnityEvent EventStartRewinding;
-    public UnityEvent EventStopRewinding;
+    [HideInInspector] public UnityEvent EventRecordFrame;
+    [HideInInspector] public UnityEvent EventStartRewinding;
+    [HideInInspector] public UnityEvent EventStopRewinding;
+
 
     [SerializeField] private float _recordDelay = 0.1f;
     public float DurationRewind = 5f;
@@ -18,6 +21,12 @@ public class RB_TimeManager : MonoBehaviour
 
     private bool _isRecording = true;
     public bool IsRewinding = false;
+    private bool _fullRewind = false;
+    [SerializeField] private float _maxRewindSpeed = 15f;
+
+    [Header("Hourglass")]
+    public int NumberOfRewind = 3;
+    public List<GameObject> HourglassList = new();
 
     private void Awake()
     {
@@ -33,10 +42,9 @@ public class RB_TimeManager : MonoBehaviour
 
     private void Start()
     {
-        RB_InputManager.Instance.EventRewindStarted.AddListener(StartRewinding); // TO TEST
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(StopRewinding); // TO TEST
-
         StartRecording();
+
+        RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
     }
 
     private void FixedUpdate()
@@ -53,12 +61,21 @@ public class RB_TimeManager : MonoBehaviour
         }
         else if (IsRewinding)
         {
-            if (GetRewindLastingTime() >= DurationRewind) 
+            if (GetRewindLastingTime() >= DurationRewind && !_fullRewind) 
             {
                 StopRewinding();
                 return;
             }
+            else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
+            {
+                StopRewinding(true);
+                return;
+            }
             Rewind();
+            if (_fullRewind)
+            {
+                Time.timeScale = Mathf.Clamp(Time.timeScale + Time.fixedDeltaTime / 2.5f, 0, _maxRewindSpeed);
+            }
         }
     }
 
@@ -92,21 +109,46 @@ public class RB_TimeManager : MonoBehaviour
         _isRecording = false;
     }
 
-    private void StartRewinding()
+    public void StartRewinding(bool skipChecks = false, bool fullRewind = false)
     {
-        _startedRewind = Time.time;
-        EventRecordFrame?.Invoke(); // used for interpolation
-        IsRewinding = true;
-        UxStartRewind();
-        EventStartRewinding?.Invoke();
+        if (IsRewinding) return;
+
+        if (NumberOfRewind > 0 || skipChecks)
+        { 
+            _startedRewind = Time.time;
+            EventRecordFrame?.Invoke(); // used for interpolation
+            IsRewinding = true;
+            _fullRewind = fullRewind;
+            UxStartRewind(fullRewind);
+            EventStartRewinding?.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("Aucun sablier dans la liste !");
+        }
     }
 
-    private void StopRewinding()
+    public void StopRewinding(bool stopFullRewind = false)
     {
-        EventStopRewinding?.Invoke();
-        IsRewinding = false;
-        UxStopRewind();
-        EventRecordFrame?.Invoke(); // used for interpolation
+        if (!IsRewinding) return;
+
+        if (IsRewinding && (!_fullRewind || stopFullRewind))
+        {
+            Time.timeScale = 1;
+            EventStopRewinding?.Invoke();
+            IsRewinding = false;
+            UxStopRewind();
+            if (!stopFullRewind)
+            {
+                NumberOfRewind -= 1;
+            }
+            else
+            {
+                NumberOfRewind = 3;
+                RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
+            }
+            EventRecordFrame?.Invoke(); // used for interpolation
+        }
     }
 
     private void Rewind()
@@ -114,9 +156,9 @@ public class RB_TimeManager : MonoBehaviour
         _currentTime -= Time.fixedDeltaTime;
     }
 
-    private void UxStartRewind()
+    private void UxStartRewind(bool fullRewind = false)
     {
-        RB_UXRewindManager.Instance.StartRewindTransition();
+        RB_UXRewindManager.Instance.StartRewindTransition(fullRewind);
     }
 
     private void UxStopRewind()

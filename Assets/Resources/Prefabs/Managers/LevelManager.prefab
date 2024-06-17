@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4666110500101839638}
   - component: {fileID: 546095685850756499}
+  - component: {fileID: 2763210329592905285}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -44,3 +45,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed80171e47ae914fbcd1efb134a2b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentPhase: 0
+  LastPhase: 0
+  CurrentScene: 0
+  EventPlayerLost:
+    m_PersistentCalls:
+      m_Calls: []
+  EventPlayerWon:
+    m_PersistentCalls:
+      m_Calls: []
+  _phaseInfiltration: SkillsPhaseInfiltration
+  _phaseInfiltrationWithoutWnim: SkillsPhaseInfiltrationWithoutAnim
+  _phaseCombat: SkillsPhaseCombat
+  ChargeSpecialAttackParticlePrefab: {fileID: 2399308156020313816, guid: 5937deb4480cdab499f2ba681eabbdad,
+    type: 3}
+--- !u!114 &2763210329592905285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972350077837005602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956c35150b281de40be91d869fc9ac99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entityType: 0
+  _spriteRenderer: {fileID: 0}
+  _animator: {fileID: 0}
+  _health: {fileID: 0}
+  _enemy: {fileID: 0}

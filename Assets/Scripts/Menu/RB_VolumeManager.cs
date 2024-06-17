@@ -62,7 +62,7 @@ public class RB_VolumeManager : MonoBehaviour{
     public void SetGeneralVolume(float volume) {
         //float volume = GeneralSlider.value;
         print(volume);
-        _audioMixer.SetFloat("master", Mathf.Log10(volume) * 20);
+        _audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
 
         // Save the current slider values to PlayerPrefs
         PlayerPrefs.SetFloat("GeneralVolume", volume);
@@ -72,7 +72,7 @@ public class RB_VolumeManager : MonoBehaviour{
     // Set the music volume based on the music slider value
     public void SetMusicVolume(float volume) { 
         //float volume = MusicSlider.value;
-        _audioMixer.SetFloat("music", Mathf.Log10(volume)*20);
+        _audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume)*20);
 
         // Save the current slider values to PlayerPrefs
         PlayerPrefs.SetFloat("MusicVolume", volume);
@@ -82,7 +82,7 @@ public class RB_VolumeManager : MonoBehaviour{
     // Set the SFX volume based on the music slider value
     public void SetSFXVolume(float volume) {
         //float volume = SFXSlider.value;
-        _audioMixer.SetFloat("sfx", Mathf.Log10(volume) * 20);
+        _audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20);
 
         // Save the current slider values to PlayerPrefs
         PlayerPrefs.SetFloat("SFXVolume", volume);

@@ -28,6 +28,8 @@ public class RB_UxHourglass : MonoBehaviour
 
     public void CreateMaxNumberOfHourglass()
     {
+        RB_TimeManager.Instance.NumberOfRewind = RB_TimeManager.Instance.NumberOfRewindMax;
+
         if (RB_TimeManager.Instance.HourglassList.Count > 0)
         {
             for (int i = 0; i < RB_TimeManager.Instance.HourglassList.Count; i++)
@@ -40,10 +42,9 @@ public class RB_UxHourglass : MonoBehaviour
         StartCoroutine(EventStartCreateHourglass(intervalTime: 0.5f));
     }
 
-    public void CreateOneHourglass()
+    public void CreateNumberHourglass(int howHourglass)
     {
-        GameObject obj = Instantiate(_prefabHourglass, _hourglassHolster.transform);
-        RB_TimeManager.Instance.HourglassList.Add(obj);
+        StartCoroutine(EventStartCreateHourglass(howHourglass, intervalTime: 0.5f));
     }
 
     public void StartUseHourglassUx()
@@ -97,6 +98,16 @@ public class RB_UxHourglass : MonoBehaviour
     {
         for (int i = 0; i < RB_TimeManager.Instance.NumberOfRewind; i++)
         {
+            StartCoroutine(StartCreateHourglass(i));
+            yield return new WaitForSeconds(intervalTime);
+        }
+    }
+
+    private IEnumerator EventStartCreateHourglass(int howMuchHourglass, float intervalTime)
+    {
+        for (int i = 0; i < howMuchHourglass; i++)
+        {
+            RB_TimeManager.Instance.NumberOfRewind++;
             StartCoroutine(StartCreateHourglass(i));
             yield return new WaitForSeconds(intervalTime);
         }

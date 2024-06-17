@@ -25,6 +25,7 @@ public class RB_TimeManager : MonoBehaviour
     [SerializeField] private float _maxRewindSpeed = 15f;
 
     [Header("Hourglass")]
+    public int NumberOfRewindMax = 3;
     public int NumberOfRewind = 3;
     public List<GameObject> HourglassList = new();
 

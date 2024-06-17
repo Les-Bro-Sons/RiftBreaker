@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using MANAGERS;
 using UnityEngine;
@@ -10,14 +11,15 @@ public class RB_TimeManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventRecordFrame;
     [HideInInspector] public UnityEvent EventStartRewinding;
     [HideInInspector] public UnityEvent EventStopRewinding;
+    [HideInInspector] public UnityEvent EventResetRewinding;
 
 
     [SerializeField] private float _recordDelay = 0.1f;
     public float DurationRewind = 5f;
-    private float _startedRewind = 0f;
     private float _timeWaited = 9999f; // used for delay, it's set at 9999 so it record the first frame
 
     private float _currentTime = 0; public float CurrentTime { get { return _currentTime; } }
+    private float _startRewindTime = 0; public float StartRewindtTime { get { return _startRewindTime; } }
 
     private bool _isRecording = true;
     public bool IsRewinding = false;
@@ -46,7 +48,6 @@ public class RB_TimeManager : MonoBehaviour
 
         RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
     }
-
     private void FixedUpdate()
     {
         if (_isRecording && !IsRewinding) // doesn't record if rewinding
@@ -81,17 +82,17 @@ public class RB_TimeManager : MonoBehaviour
 
     public float GetRewindLastingTime()
     {
-        return Mathf.Abs(_startedRewind - Time.time);
+        return Mathf.Abs(_startRewindTime - Time.time);
     }
 
     public float GetRewindRemainingTime()
     {
-        return DurationRewind - Mathf.Abs(_startedRewind - Time.time);
+        return DurationRewind - Mathf.Abs(_startRewindTime - Time.time);
     }
 
     public float GetRewindRemainingTimeInSecond()
     {
-        return (DurationRewind - Mathf.Abs(_startedRewind - Time.time)) ;
+        return (DurationRewind - Mathf.Abs(_startRewindTime - Time.time)) ;
     }
 
     private void RecordFrame()
@@ -115,7 +116,7 @@ public class RB_TimeManager : MonoBehaviour
 
         if (NumberOfRewind > 0 || skipChecks)
         { 
-            _startedRewind = Time.time;
+            _startRewindTime = Time.time;
             EventRecordFrame?.Invoke(); // used for interpolation
             IsRewinding = true;
             _fullRewind = fullRewind;
@@ -149,6 +150,13 @@ public class RB_TimeManager : MonoBehaviour
             }
             EventRecordFrame?.Invoke(); // used for interpolation
         }
+    }
+
+    public void ResetCurrentRewind()
+    {
+        StopRewinding();
+        _currentTime = _startRewindTime;
+        EventResetRewinding?.Invoke();
     }
 
     private void Rewind()

@@ -304,7 +304,6 @@ public class RB_RobertLenec : RB_Boss
                 {
                     if (positionBehindPlayer == Vector3.zero)
                     {
-                        print("new dash pos");
                         positionBehindPlayer = (_currentTarget.position - transform.position).normalized * _distanceBehind;
                     }
 

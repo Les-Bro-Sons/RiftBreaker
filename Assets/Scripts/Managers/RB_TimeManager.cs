@@ -159,13 +159,10 @@ public class RB_TimeManager : MonoBehaviour
     private void UxStartRewind(bool fullRewind = false)
     {
         RB_UXRewindManager.Instance.StartRewindTransition(fullRewind);
-        RB_AudioManager.Instance.MusicSource.pitch = -1;
-
     }
 
     private void UxStopRewind()
     {
         RB_UXRewindManager.Instance.StopRewindTransition();
-        RB_AudioManager.Instance.MusicSource.pitch = 1;
     }
 }

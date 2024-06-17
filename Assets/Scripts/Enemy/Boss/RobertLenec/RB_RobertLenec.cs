@@ -304,7 +304,8 @@ public class RB_RobertLenec : RB_Boss
                 {
                     if (positionBehindPlayer == Vector3.zero)
                     {
-                        positionBehindPlayer = _currentTarget.position - _currentTarget.forward * _distanceBehind;
+                        print("new dash pos");
+                        positionBehindPlayer = (_currentTarget.position - transform.position).normalized * _distanceBehind;
                     }
 
                     foreach (Collider enemy in Physics.OverlapBox(transform.position, Vector3.one, transform.rotation))
@@ -320,14 +321,12 @@ public class RB_RobertLenec : RB_Boss
                     Vector3 dashDirection = positionBehindPlayer - startPosition;
                     float dashDistance = dashDirection.magnitude;
 
-                    if (Physics.Raycast(startPosition, dashDirection, out RaycastHit hit, dashDistance, _layerMask))
+
+                    if (Physics.Raycast(startPosition, dashDirection.normalized, out RaycastHit hit, dashDistance, 1 << 3))
                     {
-                        _rb.MovePosition(hit.point);
+                        positionBehindPlayer = hit.point;
                     }
-                    else
-                    {
-                        _rb.MovePosition(Vector3.Lerp(startPosition, positionBehindPlayer, _movingTimer / _movingDuration));
-                    }
+                    _rb.MovePosition(Vector3.Lerp(startPosition, positionBehindPlayer, _movingTimer / _movingDuration));
 
                     _movingTimer += Time.deltaTime;
 

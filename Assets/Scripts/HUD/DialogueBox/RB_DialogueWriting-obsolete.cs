@@ -5,9 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RB_DialogueWriting : MonoBehaviour
+public class RB_DialogueWritingObsolete : MonoBehaviour
 {
-    public static RB_DialogueWriting Instance;
+    public static RB_DialogueWritingObsolete Instance;
     
     [SerializeField] private float _writingSpeed;
     [SerializeField] private TextMeshProUGUI _dialogueBox;
@@ -26,10 +26,12 @@ public class RB_DialogueWriting : MonoBehaviour
 
     private float _timer = 0;
     
-    private int _index = 0;
+    private int _clickIndex = 0;
 
     private string _completeText;
-    
+
+    private int CurrentDialogueIndex = 0;
+
     private void Awake() 
     {
         if (Instance == null)
@@ -42,14 +44,30 @@ public class RB_DialogueWriting : MonoBehaviour
         
     }
 
-    private void Start() {
+    private void Start() 
+    {
         RB_MenuInputManager.Instance.EventAnyStarted.AddListener(AnyKeyPressed);
         RB_MenuInputManager.Instance.EventAnyCanceled.AddListener(AnyKeyCanceled);
     }
 
-    public void WriteText(Sprite characterI,string textToWrite) {
+    public void OpenDialogue()
+    {
+        PlayOpenAnim();
+        _dialogueBoxOpen = true;
+        ShowDialogue(CurrentDialogueIndex);
+    }
+
+    public void WriteText(Sprite characterI,string textToWrite) 
+    {
         _allTextWritten = false;
-        _characterImage.sprite = characterI;
+        if(characterI != null)
+        {
+            _characterImage.sprite = characterI;
+        }
+        else
+        {
+            _characterImage.color = new Color(1, 1, 1, 0);
+        }
         _completeText = textToWrite;
         StartCoroutine(DelayWriting(textToWrite));
     }
@@ -59,62 +77,67 @@ public class RB_DialogueWriting : MonoBehaviour
     }
 
     //To Close the box when Pressing buttons
-    private void BoxGestion() {
+    private void BoxGestion() 
+    {
         if (_dialogueBoxOpen)
         {
             _timer -= Time.deltaTime;
             
             // Key Pressed Once
-            if (_anyKeyPressed && _index == 0)
+            if (_anyKeyPressed && _clickIndex == 0)
             {
                 _writingSpeed = 0;
                 _timer = 0.2f;
             }
 
-            if (_timer <= 0 && _writingSpeed == 0 && _index == 0)
+            if (_timer <= 0 && _writingSpeed == 0 && _clickIndex == 0)
             {
-                _index++;
+                _clickIndex++;
             }
             
             // Key Pressed Twice
-            if (_anyKeyPressed && _index == 1)
+            if (_anyKeyPressed && _clickIndex == 1)
             {
                 _dialogueBox.text = _completeText;
-                _index++;
+                _clickIndex++;
             }
             
             // Key Pressed Thrice
-            if (_anyKeyPressed && _index >= 2 || _anyKeyPressed && _allTextWritten)
+            if (_anyKeyPressed && _clickIndex >= 2 || _anyKeyPressed && _allTextWritten)
             {
-                _index = 0;
+                _clickIndex = 0;
                 _writingSpeed = 0.03f;
-                CloseDialogue();
+                if (CurrentDialogueIndex >= _scriptableDialogues.Count-1)
+                {
+                    CloseDialogue();
+                }
+                else
+                {
+                    ShowDialogue(CurrentDialogueIndex);
+                }
+                CurrentDialogueIndex++;
             }
         }
     }
     
-    private void AnyKeyPressed() {
+    private void AnyKeyPressed() 
+    {
         _anyKeyPressed = true;
     }
 
-    private void AnyKeyCanceled() {
+    private void AnyKeyCanceled() 
+    {
         _anyKeyPressed = false;
     }
 
     //To Pop Up the dialogue by their Index
-    public void ShowDialogue(int indexOfScriptable) {
-        foreach (var scriptable in _scriptableDialogues)
-        {
-            if (scriptable.Index == indexOfScriptable)
-            {
-                instanceScriptable = scriptable;
-            }
-        }
+    public void ShowDialogue(int indexOfScriptable) 
+    {
+        instanceScriptable = _scriptableDialogues[indexOfScriptable];
         if (instanceScriptable != null)
         {
             _characterImage.sprite = null;
             _dialogueBox.text = "";
-            PlayOpenAnim();
             StartCoroutine(WaitDialogueAnim());
         }
         else
@@ -123,21 +146,25 @@ public class RB_DialogueWriting : MonoBehaviour
         }
     }
 
-    public void CloseDialogue() {
+    public void CloseDialogue() 
+    {
         PlayCloseAnim();
         _dialogueBoxOpen = false;
     }
     
-    private void ButtonCloseDialogue() {
+    private void ButtonCloseDialogue() 
+    {
         PlayCloseAnim();
     }
     
-    private void PlayOpenAnim() {
+    private void PlayOpenAnim() 
+    {
         _dialogueAnimator.SetBool("open", true);
         _dialogueAnimator.SetBool("close", false);
     }
 
-    private void PlayCloseAnim() {
+    private void PlayCloseAnim() 
+    {
         _dialogueAnimator.SetBool("close", true);
         _dialogueAnimator.SetBool("open", false);
     }
@@ -160,11 +187,10 @@ public class RB_DialogueWriting : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator WaitDialogueAnim() {
+    public IEnumerator WaitDialogueAnim() 
+    {
         yield return new WaitForSeconds(_dialogueAnimator.GetCurrentAnimatorStateInfo(0).length  );
         
-        WriteText(instanceScriptable.Character_Sprite, instanceScriptable.Paragraphe);
-        
-        _dialogueBoxOpen = true;
+        WriteText(instanceScriptable.Character_Sprite, instanceScriptable.Paragraph);
     }
 }

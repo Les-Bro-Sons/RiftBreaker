@@ -23,9 +23,11 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
     }
 
-    public void OnPointerEnter(PointerEventData eventData) {
-        RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
-        _button.Select();
+    public void OnPointerEnter(PointerEventData eventData){
+        if (_button.enabled) {
+            RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
+            _button.Select();
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -35,23 +37,23 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     public void OnSelect(BaseEventData eventData){
         RB_MainMenuButtonManager.Instance.CurrentButton = currentButton;
         _isSelected = true;
+
         Navigation buttonNavigation = _button.navigation;
-        if (!buttonNavigation.selectOnUp.gameObject.GetComponent<Button>().enabled)
-        {
-            buttonNavigation.selectOnUp = _button.navigation.selectOnUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
+
+
+        if (!_oldUp.enabled) {
+            buttonNavigation.selectOnUp = _oldUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
         else {
             buttonNavigation.selectOnUp = _oldUp;
             _button.navigation = buttonNavigation;
         }
-        if (!buttonNavigation.selectOnDown.gameObject.GetComponent<Button>().enabled)
-        {
-            buttonNavigation.selectOnDown = _button.navigation.selectOnDown.navigation.selectOnDown.gameObject.GetComponent<Button>();
+        if (!_oldDown.enabled) {
+            buttonNavigation.selectOnDown = _oldDown.navigation.selectOnDown.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
-        else
-        {
+        else {
             buttonNavigation.selectOnDown = _oldDown;
             _button.navigation = buttonNavigation;
         }

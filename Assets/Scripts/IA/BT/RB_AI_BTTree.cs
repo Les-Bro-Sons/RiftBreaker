@@ -23,6 +23,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MovementSpeedFlee = 6f;
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
+    public ParticleSystem BoostParticle;
 
     [Header("Static Mode Parameters")]
     public bool IsStatic = false;
@@ -135,6 +136,19 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         base.Update();
         SpotCanvasAlpha();
+        ApplyBoostParticles();
+    }
+
+    private void ApplyBoostParticles()
+    {
+        if (BoostMultiplier > 1 && !BoostParticle.isPlaying) 
+        {
+            BoostParticle.Play();
+        }
+        else if (BoostParticle.isPlaying)
+        {
+            BoostParticle.Stop();
+        }
     }
 
     private void SpotCanvasAlpha() //handle the alpha of the spot canvas when needed

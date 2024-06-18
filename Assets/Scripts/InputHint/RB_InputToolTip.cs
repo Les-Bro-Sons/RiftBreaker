@@ -33,7 +33,7 @@ public class RB_InputToolTIp : MonoBehaviour {
         //Get display string from action.
         InputAction action = _action?.action;
         if (action != null) {
-            int bindingIndex = action.bindings.IndexOf(u => u.id.CompareTo(int));
+            int bindingIndex = action.bindings.IndexOf(u => u.id.ToString() == _bindingID);
             if (bindingIndex != -1) {
                 displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
             }

@@ -44786,6 +44786,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
+    - target: {fileID: 685318079495592156, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 972639614009032283, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -57196,6 +57201,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 60.99
       objectReference: {fileID: 0}
+    - target: {fileID: 7712330528408617551, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: objectToDrawOn
+      value: 
+      objectReference: {fileID: 1271669397}
     - target: {fileID: 8501065723057423468, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_NavMeshData
@@ -61199,6 +61209,12 @@ PrefabInstance:
 --- !u!4 &1271669396 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1923272360307034216, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1271669395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1271669397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8205009862052656636, guid: 24ec74371e597bc41bec89689e31652b,
     type: 3}
   m_PrefabInstance: {fileID: 1271669395}
   m_PrefabAsset: {fileID: 0}

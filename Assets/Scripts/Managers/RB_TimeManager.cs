@@ -27,7 +27,6 @@ public class RB_TimeManager : MonoBehaviour
     [SerializeField] private float _maxRewindSpeed = 15f;
 
     [Header("Hourglass")]
-    public int NumberOfRewind = 3;
     public List<GameObject> HourglassList = new();
 
     private void Awake()
@@ -69,6 +68,7 @@ public class RB_TimeManager : MonoBehaviour
             }
             else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
             {
+                if (_fullRewind) RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
                 StopRewinding(true);
                 return;
             }
@@ -114,19 +114,12 @@ public class RB_TimeManager : MonoBehaviour
     {
         if (IsRewinding) return;
 
-        if (NumberOfRewind > 0 || skipChecks)
-        { 
-            _startRewindTime = Time.time;
-            EventRecordFrame?.Invoke(); // used for interpolation
-            IsRewinding = true;
-            _fullRewind = fullRewind;
-            UxStartRewind(fullRewind);
-            EventStartRewinding?.Invoke();
-        }
-        else
-        {
-            Debug.LogWarning("Aucun sablier dans la liste !");
-        }
+        _startRewindTime = Time.time;
+        EventRecordFrame?.Invoke(); // used for interpolation
+        IsRewinding = true;
+        _fullRewind = fullRewind;
+        UxStartRewind(fullRewind);
+        EventStartRewinding?.Invoke();
     }
 
     public void StopRewinding(bool stopFullRewind = false, bool recordFrame = false)
@@ -139,15 +132,6 @@ public class RB_TimeManager : MonoBehaviour
             EventStopRewinding?.Invoke();
             IsRewinding = false;
             UxStopRewind();
-            if (!stopFullRewind)
-            {
-                NumberOfRewind -= 1;
-            }
-            else
-            {
-                NumberOfRewind = 3;
-                RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
-            }
             if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
         }
     }

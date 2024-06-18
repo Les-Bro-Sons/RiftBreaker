@@ -14,7 +14,7 @@ public class RB_UxClockRewind : MonoBehaviour
 
     void Update()
     {
-        if (RB_TimeManager.Instance.IsRewinding && RB_TimeManager.Instance.NumberOfRewind > 0)
+        if (RB_TimeManager.Instance.IsRewinding && RB_PlayerAction.Instance.RewindLeft > 0)
         {
             EnableUx();
         }

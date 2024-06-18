@@ -6,7 +6,7 @@ public class RB_Room : MonoBehaviour
     //Properties
     [Header("Properties")]
     public bool IsClosedRoom;
-    private bool isRoomClosed;
+    private bool _isRoomClosed;
 
     //In room
     [Header("In Room")]
@@ -17,10 +17,10 @@ public class RB_Room : MonoBehaviour
 
     private void Update()
     {
-        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
+        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !_isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
         {
             CloseRoom();
-        }else if (isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
+        }else if (_isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
         {
             OpenRoom();
         }
@@ -28,7 +28,7 @@ public class RB_Room : MonoBehaviour
 
     public void CloseRoom()
     {
-        isRoomClosed = true;
+        _isRoomClosed = true;
         foreach (RB_Door door in Doors)
         {
             door.Close();
@@ -37,7 +37,7 @@ public class RB_Room : MonoBehaviour
 
     public void OpenRoom()
     {
-        isRoomClosed = false;
+        _isRoomClosed = false;
         foreach (RB_Door door in Doors)
         {
             door.Open();

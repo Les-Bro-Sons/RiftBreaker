@@ -138,10 +138,15 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             }
             else
             {
-                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation);
+                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation); 
             }
         }
-        
+
+        if (GoToPointInTime.HasValue)
+        {
+            _savedVelocity = Vector3.zero;
+        }
+
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {

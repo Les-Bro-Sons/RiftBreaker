@@ -384,7 +384,7 @@ MonoBehaviour:
   MovementSpeedFlee: 6
   AttackSpeed: 0.3
   BoostMultiplier: 1
-  BoostParticle: {fileID: 0}
+  BoostParticle: {fileID: 762171231365305212}
   IsStatic: 0
   StaticLookDirection: {x: 0, y: 0, z: 1}
   StaticPositionOnStart: 1
@@ -1124,6 +1124,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5dc2160632700f438c3e149942ca617, type: 3}
+--- !u!198 &762171231365305212 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4621504212126512635, guid: b5dc2160632700f438c3e149942ca617,
+    type: 3}
+  m_PrefabInstance: {fileID: 5382126091098433159}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2374078794446194297 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,

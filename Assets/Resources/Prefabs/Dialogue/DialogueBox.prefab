@@ -36,10 +36,10 @@ RectTransform:
   - {fileID: 2663453761279256072}
   m_Father: {fileID: 7933119062418324273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 13.8804}
-  m_SizeDelta: {x: 1574.3, y: 283.0609}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &831506247182206832
 CanvasRenderer:
@@ -132,10 +132,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7136152167368158319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 651.6705, y: 0}
-  m_SizeDelta: {x: 1161.6809, y: 197.5898}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -135.00015, y: 0}
+  m_SizeDelta: {x: -469.9997, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2174862935461291122
 CanvasRenderer:
@@ -394,7 +394,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7933119062418324273}
-  - component: {fileID: 7272696136987772028}
+  - component: {fileID: 7092642784933429506}
   m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
@@ -422,7 +422,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7272696136987772028
+--- !u!114 &7092642784933429506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -431,13 +431,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8056655219119007883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2892e2c1b9774b47a4a5eda20519046, type: 3}
+  m_Script: {fileID: 11500000, guid: dbaa699059812fc4b8e20b23430dd1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _writingSpeed: 0.02
   _dialogueBox: {fileID: 3536132881473344461}
-  _characterImage: {fileID: 8510501010909950960}
-  _dialogueAnimator: {fileID: 8507424863525421987}
   _scriptableDialogues:
   - {fileID: 11400000, guid: 1ee6b120a0d6fd9478d75128ae35a585, type: 2}
   - {fileID: 11400000, guid: be4103667b40cb64b89f8363efbf6e80, type: 2}
+  _dialogueAnimator: {fileID: 8507424863525421987}
+  _writingDelay: 0.02
+  _writingSpeedingDelay: 0

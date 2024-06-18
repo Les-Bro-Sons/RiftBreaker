@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_PauseMenu : MonoBehaviour {
@@ -8,6 +6,8 @@ public class RB_PauseMenu : MonoBehaviour {
     public bool IsPaused;
     [SerializeField] bool _isUnpausing;
     CanvasGroup _canvasGroup;
+
+    float _oldTimeScale = 1;
 
     void Start() {
         RB_MenuInputManager.Instance.EventPauseStarted.AddListener(Pause);
@@ -21,11 +21,16 @@ public class RB_PauseMenu : MonoBehaviour {
 
             if (Time.timeScale < 0.05f) {
                 Time.timeScale = 0;
-                
             }
         }
-        else if (_isUnpausing) {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);
+        else if (_isUnpausing) { 
+            if(_oldTimeScale > 1f) {
+                Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);
+            }
+            else {
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);
+            }
+
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, 0f, Time.unscaledDeltaTime * _timeScaleSpeed);
             RB_MenuManager.Instance.UnPauseAnim();
 
@@ -49,6 +54,7 @@ public class RB_PauseMenu : MonoBehaviour {
             IsPaused = true;
             RB_MenuManager.Instance.PauseAnim();
             RB_ButtonSelectioner.Instance.SelectMainButton(0);
+            _oldTimeScale = Time.timeScale;
         }
         else {
             UnPause();

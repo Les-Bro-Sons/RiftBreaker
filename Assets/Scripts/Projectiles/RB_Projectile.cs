@@ -87,6 +87,10 @@ public class RB_Projectile : MonoBehaviour
 
     private void EnemyEntered(GameObject enemy)
     {
+        RB_Health enemyHealth = enemy.GetComponent<RB_Health>();
+        bool isAlly = (enemyHealth.Team == Team);
+        if (isAlly) return;
+
         if (_damageOnExplosion)
         {
             Explode();
@@ -99,9 +103,6 @@ public class RB_Projectile : MonoBehaviour
             _alreadyDamaged.Add(enemy);
             isAlreadyDamaged = false;
         }
-        RB_Health enemyHealth = enemy.GetComponent<RB_Health>();
-
-        bool isAlly = (enemyHealth.Team == Team);
 
         if ((_isDealingKnockbackMultipleTime || !isAlreadyDamaged) && (_canKnockbackAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {

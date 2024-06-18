@@ -11,7 +11,7 @@ public class RB_Enemy : MonoBehaviour
     public Animator AiAnimator;
 
     protected Rigidbody _rb;
-    private RB_AI_BTTree _btTree;
+    protected RB_AI_BTTree _btTree;
 
     private bool _isTombstoned = false;
 

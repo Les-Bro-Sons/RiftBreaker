@@ -10,12 +10,13 @@ public class RB_TransitionRift : RB_Transition
     void Start()
     {
         _material.SetFloat("_MaskAmount", -0.1f);
-        StartCoroutine(Fade(RB_SaveManager.Instance.SaveObject.CurrentLevel, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(NextSceneID, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
     }
 
     public override IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
     {
-        yield return new WaitForSeconds(1);
+
+        yield return new WaitForSecondsRealtime(0);
 
         yield return StartCoroutine(FadeMaterial(_material, true, duration * 0.5f, speedType)); // Fade in for half the duration.
         RB_SceneTransitionManager.Instance.NewScene(nameScene);
@@ -44,11 +45,11 @@ public class RB_TransitionRift : RB_Transition
         float targetValue = fadeIn ? 0.7f : -.1f;
         float maskAmount = material.GetFloat("_MaskAmount");
         float startValue = maskAmount;
-        float startTime = Time.time;
+        float startTime = Time.unscaledTime;
 
         while (Mathf.Abs(targetValue - maskAmount) > 0.01f)
         {
-            float elapsedTime = (Time.time - startTime) / duration;
+            float elapsedTime = (Time.unscaledTime - startTime) / duration;
             maskAmount = Mathf.Lerp(startValue, targetValue, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime)); // avec le speed value
             material.SetFloat("_MaskAmount", maskAmount);
             yield return null;

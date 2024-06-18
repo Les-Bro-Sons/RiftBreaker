@@ -764,6 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &4265850386259287309
 Animator:
   serializedVersion: 5
@@ -835,6 +836,7 @@ Transform:
   - {fileID: 6554147553573485156}
   - {fileID: 2486585511892211472}
   - {fileID: 716940618610297596}
+  - {fileID: 1879792594821676858}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &559333866140052081
@@ -883,7 +885,7 @@ MonoBehaviour:
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 662286531341207993}
   AiAnimator: {fileID: 4265850386259287309}
-  ChargeSpecialAttackAmount: 0
+  ChargeSpecialAttackAmount: 5
 --- !u!114 &5090107859350373542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,11 +903,18 @@ MonoBehaviour:
   MovementSpeedAggro: 8
   MovementSpeedFlee: 6
   AttackSpeed: 0.2
-  SplineContainer: {fileID: 0}
+  BoostMultiplier: 1
+  BoostParticle: {fileID: 3492532441624390207}
+  IsStatic: 0
+  StaticLookDirection: {x: 0, y: 0, z: 1}
+  StaticPositionOnStart: 1
+  StaticPosition: {x: 0, y: 0, z: 0}
+  IsOnStaticPoint: 0
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
   HasAnInterval: 0
   StartWaitingWaypointInterval: 0
+  SplineContainer: {fileID: 0}
   InRange: 0
   FovRange: 10
   SpottedFovRange: 15
@@ -932,6 +941,9 @@ MonoBehaviour:
   InfSpottedMoveSpeed: 40
   InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
+  EventOnSpotted:
+    m_PersistentCalls:
+      m_Calls: []
   SlashRange: 2
   SlashDamage: 10
   SlashKnockback: 10
@@ -964,6 +976,12 @@ MonoBehaviour:
   CurrentHeavySlashCombo: 0
   MaxHeavySlashCombo: 5
   HeavySlashParticles: {fileID: 0}
+  ExplosionDamage: 30
+  ExplosionKnockback: 15
+  ExplosionRadius: 3
+  ExplosionDelay: 1
+  ExplosionStartRange: 1
+  ExplosionParticles: {fileID: 0}
 --- !u!114 &1461658186876301011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1016,6 +1034,7 @@ MonoBehaviour:
   _movementAcceleration: 200
   _movementMaxSpeed: 12
   _movementFrictionForce: 100
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 4265850386259287309}
 --- !u!114 &6190124264469965409
 MonoBehaviour:
@@ -1034,3 +1053,83 @@ MonoBehaviour:
   _animator: {fileID: 4265850386259287309}
   _health: {fileID: 1461658186876301011}
   _enemy: {fileID: 3747327528088888494}
+--- !u!1001 &8094400472586723268
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7118112953485518528}
+    m_Modifications:
+    - target: {fileID: 7515642646295648455, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_Name
+      value: BoostParticle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b5dc2160632700f438c3e149942ca617, type: 3}
+--- !u!4 &1879792594821676858 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+    type: 3}
+  m_PrefabInstance: {fileID: 8094400472586723268}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3492532441624390207 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4621504212126512635, guid: b5dc2160632700f438c3e149942ca617,
+    type: 3}
+  m_PrefabInstance: {fileID: 8094400472586723268}
+  m_PrefabAsset: {fileID: 0}

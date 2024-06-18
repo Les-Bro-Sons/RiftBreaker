@@ -61,7 +61,7 @@ public class RB_LevelManager : MonoBehaviour
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
                     break;
                 case SCENENAMES.Boss3:
-                    /*RB_HUDManager.Instance.BossHealthBar.Rb_health = */
+                    RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Yog.Instance.GetComponent<RB_Health>();
                     break;
             }
             RB_HUDManager.Instance.PlayAnimation(_phaseBoss);

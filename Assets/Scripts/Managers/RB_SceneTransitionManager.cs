@@ -70,11 +70,19 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     }
 
-    public void NewTransition(string nameTransition)
+    public void NewTransition(string nameTransition, int nextSceneIndex)
     {
         TransitionCanvas.worldCamera = Camera.main;
         if (CurrentTransition == null)
+        {
             CurrentTransition = Instantiate(Resources.Load<GameObject>($"{ROOT_PATH}/{nameTransition}"), transform).GetComponent<RB_Transition>();
+            CurrentTransition.NextSceneID = nextSceneIndex;
+        }
+    }
+
+    public void NewTransition(string nameTransition, string nextSceneName)
+    {
+        NewTransition(nameTransition, SceneManager.GetSceneByName(nextSceneName).buildIndex);
     }
 
     public void NewScene(string nameScene)

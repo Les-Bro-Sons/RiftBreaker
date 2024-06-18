@@ -1,10 +1,8 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor;
 
 public class RB_Items : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class RB_Items : MonoBehaviour
     protected float _currentHitScreenshakeForce;
     [HideInInspector] public float CurrentAttackCombo;
     public float ChargeTime;
-    [SerializeField] private float _specialAttackChargeTime;
+    public float SpecialAttackChargeTime;
 
     [SerializeField] private float _chargeZoom = 0.85f;
 
@@ -74,6 +72,16 @@ public class RB_Items : MonoBehaviour
         }
     }
 
+    public virtual void ShootProjectile(string projectileToShoot)
+    {
+        GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + projectileToShoot), _playerTransform.position, Quaternion.LookRotation(RB_PlayerMovement.Instance.DirectionToAttack)) as GameObject;
+        if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
+        {
+            newObject.transform.position += RB_PlayerMovement.Instance.DirectionToAttack * projectile.SpawnDistanceFromPlayer;
+            projectile.Team = TEAMS.Player;
+        }
+    }
+
     protected virtual void Start()
     {
         _playerTransform = RB_PlayerAction.Instance.transform;
@@ -92,25 +100,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        RechargeSpecialAttack();
-    }
-
-    public virtual void AddToSpecialChargeAttack(float amountToAdd)
-    {
-        //Add the specialAttackChargeAmount
-        _playerAction.SpecialAttackCharge += amountToAdd;
-    }
-
-    public virtual void RechargeSpecialAttack()
-    {
-        //Recharge over time the special attack
-        if(_playerAction.SpecialAttackCharge <= 100)
-        {
-            _playerAction.SpecialAttackCharge += (Time.deltaTime / _specialAttackChargeTime) * 100;
-        }
-    }
+    
 
     public virtual void Bind()
     {
@@ -212,6 +202,7 @@ public class RB_Items : MonoBehaviour
 
     public virtual void ChargedAttack()
     {
+        print("charged attack");
         //Starting charge attack animations
         _currentDamage = _chargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;

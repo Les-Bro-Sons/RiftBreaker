@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_MainMenuButtonManager : MonoBehaviour {
     public static RB_MainMenuButtonManager Instance;
 
-    public enum BUTTONS { Play, Options, Credits, Quit}
+    public enum BUTTONS { NewGame, Continue, Options, Credits, Quit}
     public enum PAUSE_BUTTONS { Continue, Options, MainMenu}
 
     public BUTTONS CurrentButton;

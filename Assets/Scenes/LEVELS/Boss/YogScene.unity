@@ -8309,6 +8309,11 @@ PrefabInstance:
       objectReference: {fileID: 940450117}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _delayBeforeHit
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _enemyAnimation
       value: 
       objectReference: {fileID: 940450115}
@@ -8321,6 +8326,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _explosionRadius
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: _numberOfEnemies
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
@@ -8349,6 +8359,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _timeForRescaling
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _tentacleCollision
       value: 
       objectReference: {fileID: 1798840980}
@@ -8370,7 +8385,7 @@ PrefabInstance:
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
       propertyPath: _tentacleHitDuration
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}

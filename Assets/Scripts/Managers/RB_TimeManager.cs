@@ -12,6 +12,7 @@ public class RB_TimeManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventStartRewinding;
     [HideInInspector] public UnityEvent EventStopRewinding;
     [HideInInspector] public UnityEvent EventResetRewinding;
+    [HideInInspector] public UnityEvent EventStopFullRewind;
 
 
     [SerializeField] private float _recordDelay = 0.1f;
@@ -133,6 +134,10 @@ public class RB_TimeManager : MonoBehaviour
             IsRewinding = false;
             UxStopRewind();
             if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
+            if (stopFullRewind && _fullRewind)
+            {
+                EventStopFullRewind?.Invoke();
+            }
         }
     }
 

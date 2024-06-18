@@ -189,17 +189,19 @@ public class RB_TutorialManager : MonoBehaviour
     private void InitializeRewindTuto() 
     {
         EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(InitializeTuto); //When the enemy spot the player
-        RB_TimeManager.Instance.EventStartRewinding.AddListener(AchieveTuto); //When the rewind is started
+        RB_TimeManager.Instance.EventStartRewinding.AddListener(OnRewindStarted); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopRewinding.AddListener(OnRewindStopped); //When the rewind is stopped
+    }
+
+    private void OnDeathRewindFinished()
+    {
+        RB_InputManager.Instance.EventMovePerformed.AddListener(AchieveTuto);
     }
 
     private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
     {
         RB_UxHourglass.Instance.CreateMaxNumberOfHourglass(); //Add one rewind to the player
-        //RB_PlayerMovement.Instance.GetComponent<Rigidbody>().MovePosition(_tutoPos); //Tp to the start position of the rewind
-        RB_TimeManager.Instance.ResetCurrentRewind();
-        InitializeTuto(); //Reinitialize the tutorial
-        StopTime(); //Stop the time again
+        _robertLeNecRewindDialogue.NextDialogue();
     }
 
     public void OnRewindStarted()
@@ -211,8 +213,9 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (_startRewindTime + MinimumRewindTime < Time.unscaledTime) //If the player pressed it long enough
         {
+            print("rewind tuto achieved");
             EnemyToSlowDownTimeByDistance.EventOnSpotted.RemoveListener(InitializeTuto); //Stop the rewind tutorial
-            RB_TimeManager.Instance.EventStartRewinding.RemoveListener(AchieveTuto);
+            RB_TimeManager.Instance.EventStartRewinding.RemoveListener(OnRewindStarted);
             RB_TimeManager.Instance.EventStopRewinding.RemoveListener(OnRewindStopped);
         }
         else //If the player didn't press long enough
@@ -360,7 +363,6 @@ public class RB_TutorialManager : MonoBehaviour
         StartFadeOut();
         StopAnimateRobert();
         _robertLeNecRewindDialogue.StopDialogue();
-        OnRewindStarted();
     }
 
     public void StartBrightenBackground() //start the background brightning

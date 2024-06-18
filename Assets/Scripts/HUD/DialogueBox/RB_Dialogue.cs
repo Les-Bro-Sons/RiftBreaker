@@ -134,14 +134,16 @@ public class RB_Dialogue : MonoBehaviour
         _currentDialogueFinished = true; //Finish the current dialogue
     }
 
-    private void NextDialogue()
+    public void NextDialogue()
     {
         _currentDialogueIndex++; //Set to the next dialogue
+        print("next dialogue 1");
         if(_currentDialogueIndex >= _scriptableDialogues.Count) //If there's no more dialogues stop the dialogue
         {
             StopDialogue();
             return;
         }
+        print("next dialogue 2");
         //Otherwise show the next dialogue
         _currentDialogueFinished = false;
         _currentWritingDelay = _writingDelay;

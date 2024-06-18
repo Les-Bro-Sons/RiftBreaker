@@ -11,7 +11,16 @@ public class RB_InputToolTIp : MonoBehaviour {
 
     [SerializeField] string _bindingID;
 
-    [SerializeField] TextMeshPro _bindingText;
+    [SerializeField] TextMeshProUGUI _bindingText;
+
+    public string bindingId{
+        get => _bindingID;
+        set {
+            _bindingID = value;
+            UpdateBindingDisplay();
+        }
+    }
+
 
     /// <summary>
     /// Trigger a refresh of the currently displayed binding.
@@ -24,7 +33,7 @@ public class RB_InputToolTIp : MonoBehaviour {
         //Get display string from action.
         InputAction action = _action?.action;
         if (action != null) {
-            int bindingIndex = action.bindings.IndexOf(u => u.id.ToString() == _bindingID);
+            int bindingIndex = action.bindings.IndexOf(u => u.id.CompareTo(int));
             if (bindingIndex != -1) {
                 displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
             }
@@ -35,5 +44,14 @@ public class RB_InputToolTIp : MonoBehaviour {
         }
     }
 
+    public void Update() {
+        UpdateBindingDisplay();
+    }
 
+#if UNITY_EDITOR
+    protected void OnValidate() {
+        UpdateBindingDisplay();
+    }
+
+#endif
 }

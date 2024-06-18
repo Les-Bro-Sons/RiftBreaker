@@ -21,6 +21,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     [SerializeField] Color _UnEnabledColor;
 
     TextMeshProUGUI _text;
+    Image _buttonImage;
 
     private void Awake() {
         _originalXPos = _textTrasform.localPosition.x;
@@ -28,6 +29,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         _oldUp = _button.navigation.selectOnUp.gameObject.GetComponent<Selectable>();
         _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
         _text = GetComponentInChildren<TextMeshProUGUI>();
+        _buttonImage = GetComponent<Image>();
     }
 
     public void OnPointerEnter(PointerEventData eventData){
@@ -90,10 +92,12 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
             if ( !RB_SaveManager.Instance.IsSaveExist && RB_MainMenuButtonManager.BUTTONS.Continue == currentButton) {
                 _button.enabled = false;
                 _text.color = _UnEnabledColor;
+                _buttonImage.raycastTarget = false;
             }
             else { 
                 _button.enabled = true;
                 _text.color = _defaultColor;
+                _buttonImage.raycastTarget = true;
             }
         }
 

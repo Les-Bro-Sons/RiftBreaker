@@ -111,7 +111,7 @@ public class RB_UxHourglass : MonoBehaviour
     {
         for (int i = 0; i < howMuchHourglass; i++)
         {
-            RB_TimeManager.Instance.NumberOfRewind++;
+            RB_PlayerAction.Instance.RewindLeft++;
             StartCoroutine(StartCreateHourglass(i));
             yield return new WaitForSecondsRealtime(intervalTime);
         }

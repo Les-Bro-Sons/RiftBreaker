@@ -191,11 +191,22 @@ public class RB_TutorialManager : MonoBehaviour
         EnemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(InitializeTuto); //When the enemy spot the player
         RB_TimeManager.Instance.EventStartRewinding.AddListener(OnRewindStarted); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopRewinding.AddListener(OnRewindStopped); //When the rewind is stopped
+        RB_TimeManager.Instance.EventStopFullRewind.AddListener(OnDeathRewindFinished); //When the death rewind is finished
+    }
+
+    private void AchieveRewindTuto()
+    {
+        RB_InputManager.Instance.EventMovePerformed.RemoveListener(AchieveRewindTuto);
+        SetNormalTime();
+        StartBrightenBackground();
+        StartFadeOut();
+        StopAnimateRobert();
+        _robertLeNecRewindDialogue.StopDialogue();
     }
 
     private void OnDeathRewindFinished()
     {
-        RB_InputManager.Instance.EventMovePerformed.AddListener(AchieveTuto);
+        RB_InputManager.Instance.EventMovePerformed.AddListener(AchieveRewindTuto);
     }
 
     private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
@@ -358,11 +369,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void AchieveTuto() //Finish the tutorial 
     {
-        SetNormalTime();
-        StartBrightenBackground();
-        StartFadeOut();
-        StopAnimateRobert();
-        _robertLeNecRewindDialogue.StopDialogue();
+        AchieveRewindTuto();
     }
 
     public void StartBrightenBackground() //start the background brightning

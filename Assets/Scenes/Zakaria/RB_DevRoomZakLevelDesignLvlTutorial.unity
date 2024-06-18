@@ -29619,6 +29619,7 @@ GameObject:
   - component: {fileID: 1587315774}
   - component: {fileID: 1587315776}
   - component: {fileID: 1587315775}
+  - component: {fileID: 1587315777}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -29665,7 +29666,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[z] pour avancer'
+  m_text: '[qsd] pour avancer'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -29743,6 +29744,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1587315773}
   m_CullTransparentMesh: 1
+--- !u!114 &1587315777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587315773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de5b6c25cd247947a8f248f34282536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BindToShow: 0
+  movementInputAction: {fileID: -6808785580087093499, guid: 2be19c4d736fe9f428a04d9670072a42,
+    type: 3}
 --- !u!1001 &1592040956
 PrefabInstance:
   m_ObjectHideFlags: 0

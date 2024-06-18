@@ -28,7 +28,7 @@ public class RB_UxHourglass : MonoBehaviour
 
     public void CreateMaxNumberOfHourglass()
     {
-        RB_TimeManager.Instance.NumberOfRewind = RB_TimeManager.Instance.NumberOfRewindMax;
+        //RB_TimeManager.Instance.NumberOfRewind = RB_TimeManager.Instance.NumberOfRewindMax;
 
         if (RB_TimeManager.Instance.HourglassList.Count > 0)
         {
@@ -49,17 +49,21 @@ public class RB_UxHourglass : MonoBehaviour
 
     public void StartUseHourglassUx()
     {
-        GameObject lastHourglass = RB_TimeManager.Instance.HourglassList[RB_TimeManager.Instance.NumberOfRewind - 1];
+        if(RB_TimeManager.Instance.HourglassList.Count >= 3)
+        {
+            GameObject lastHourglass = RB_TimeManager.Instance.HourglassList[RB_TimeManager.Instance.NumberOfRewind - 1];
 
-        CanvasGroup canvasGroup = lastHourglass.GetComponent<CanvasGroup>();
-        if (canvasGroup != null && canvasGroup.alpha != 0f)
-        {
-            StartCoroutine(StartHourglassUx(lastHourglass, canvasGroup));
+            CanvasGroup canvasGroup = lastHourglass.GetComponent<CanvasGroup>();
+            if (canvasGroup != null && canvasGroup.alpha != 0f)
+            {
+                StartCoroutine(StartHourglassUx(lastHourglass, canvasGroup));
+            }
+            else
+            {
+                Debug.LogWarning("Le dernier sablier a une valeur d'alpha égale à 0 !");
+            }
         }
-        else
-        {
-            Debug.LogWarning("Le dernier sablier a une valeur d'alpha égale à 0 !");
-        }
+        
     }
 
     public void StopUseHourglassUx()
@@ -75,18 +79,18 @@ public class RB_UxHourglass : MonoBehaviour
 
         while (currentRotation < _targetUsedRotation)
         {
-            float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.deltaTime;
+            float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.unscaledDeltaTime;
             hourglass.transform.localRotation *= Quaternion.Euler(0f, 0f, rotationThisFrame); // rotation delta
             currentRotation += rotationThisFrame;
             yield return null;
         }
 
-        //yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
+        //yield return new WaitForSecondsRealtime(_animator.GetCurrentAnimatorStateInfo(0).length);
 
         while (elapsedTime < _alphaDuration)
         {
-            canvasGroup.alpha -= Time.deltaTime / _alphaDuration;
-            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha -= Time.unscaledDeltaTime / _alphaDuration;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
@@ -99,7 +103,7 @@ public class RB_UxHourglass : MonoBehaviour
         for (int i = 0; i < RB_TimeManager.Instance.NumberOfRewind; i++)
         {
             StartCoroutine(StartCreateHourglass(i));
-            yield return new WaitForSeconds(intervalTime);
+            yield return new WaitForSecondsRealtime(intervalTime);
         }
     }
 
@@ -109,7 +113,7 @@ public class RB_UxHourglass : MonoBehaviour
         {
             RB_TimeManager.Instance.NumberOfRewind++;
             StartCoroutine(StartCreateHourglass(i));
-            yield return new WaitForSeconds(intervalTime);
+            yield return new WaitForSecondsRealtime(intervalTime);
         }
     }
 
@@ -131,17 +135,17 @@ public class RB_UxHourglass : MonoBehaviour
         {
             if (canvasGroup.alpha < 1f)
             {
-                canvasGroup.alpha += Time.deltaTime / _alphaDuration;
+                canvasGroup.alpha += Time.unscaledDeltaTime / _alphaDuration;
             }
 
             if (currentRotation > _targetNotUsedRotation)
             {
-                float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.deltaTime;
+                float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.unscaledDeltaTime;
                 obj.transform.localRotation *= Quaternion.Euler(0f, 0f, -rotationThisFrame);
                 currentRotation -= rotationThisFrame;
             }
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 

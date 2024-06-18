@@ -195,7 +195,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
     {
-        RB_UxHourglass.Instance.CreateNumberHourglass(1); //Add one rewind to the player
+        RB_UxHourglass.Instance.CreateMaxNumberOfHourglass(); //Add one rewind to the player
         //RB_PlayerMovement.Instance.GetComponent<Rigidbody>().MovePosition(_tutoPos); //Tp to the start position of the rewind
         RB_TimeManager.Instance.ResetCurrentRewind();
         InitializeTuto(); //Reinitialize the tutorial

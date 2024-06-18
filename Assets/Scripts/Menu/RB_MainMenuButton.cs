@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,11 +17,17 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     Selectable _oldUp;
     Selectable _oldDown;
 
+    [SerializeField] Color _defaultColor;
+    [SerializeField] Color _UnEnabledColor;
+
+    TextMeshProUGUI _text;
+
     private void Awake() {
         _originalXPos = _textTrasform.localPosition.x;
         _button = GetComponent<Button>();
         _oldUp = _button.navigation.selectOnUp.gameObject.GetComponent<Selectable>();
         _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
+        _text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void OnPointerEnter(PointerEventData eventData){
@@ -78,6 +85,15 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
                 float xPos = _textTrasform.localPosition.x;
                 xPos = Mathf.Lerp(xPos, _originalXPos, _offsetSpeed * Time.deltaTime);
                 _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
+            }
+
+            if ( !RB_SaveManager.Instance.IsSaveExist && RB_MainMenuButtonManager.BUTTONS.Continue == currentButton) {
+                _button.enabled = false;
+                _text.color = _UnEnabledColor;
+            }
+            else { 
+                _button.enabled = true;
+                _text.color = _defaultColor;
             }
         }
 

@@ -9,6 +9,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     new Transform transform; // to reduce performance cost of calling transform
     private Rigidbody _rb;
     private List<PointInTime> _pointsInTime = new();
+    private List<PointInTime> _oldPointsInTime = new();
 
     private bool _isRewinding = false;
 
@@ -44,6 +45,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     {
         RB_TimeManager.Instance.EventStartRewinding.AddListener(StartRewinding);
         RB_TimeManager.Instance.EventStopRewinding.AddListener(StopRewinding);
+        RB_TimeManager.Instance.EventResetRewinding.AddListener(ResetRewinding);
         RB_TimeManager.Instance.EventRecordFrame.AddListener(delegate { RecordTimeFrame(RB_TimeManager.Instance.CurrentTime); });
     }
 
@@ -85,7 +87,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         _timeEventForNextPoint.Clear();
     }
 
-    private void Rewind()
+    private void Rewind(bool interpolate = true, PointInTime? GoToPointInTime = null)
     {
         if (_pointsInTime.Count <= 1)
         {
@@ -97,36 +99,54 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
         //PointInTime closestPointInTime = GetClosestPointInTime(currentTime, true);
 
-        RemoveLastPointIfFuture(currentTime);
-
         PointInTime currentP;
-        PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
-        if (_pointsInTime.Count > 1) 
+        if (!GoToPointInTime.HasValue)
         {
-            ///////INTERPOLATION////////
-            PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
-            currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime);
-            ///////////////////////////
+            RemoveLastPointIfFuture(currentTime);
+
+        
+            PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
+            if (_pointsInTime.Count > 1) 
+            {
+                PointInTime nextPointInTime = _pointsInTime[_pointsInTime.Count - 2];
+                if (interpolate)
+                {
+                    currentP = closestPointInTime.InterpolateValues(nextPointInTime, currentTime); //INTERPOLATION
+                }
+                else
+                {
+                    currentP = nextPointInTime;
+                }
+            }
+            else
+            {
+                currentP = closestPointInTime;
+            }
         }
         else
         {
-            currentP = closestPointInTime;
+            currentP = GoToPointInTime.Value;
         }
 
         if (!currentP.Position.IsNaN())
         {
-            if (_rb)
+            if (_rb && !GoToPointInTime.HasValue)
             {
-                _rb.MovePosition(currentP.Position) ;
+                _rb.MovePosition(currentP.Position);
                 _rb.rotation = currentP.Rotation;
                 _savedVelocity = currentP.Velocity;
             }
             else
             {
-                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation);
+                transform.SetPositionAndRotation(currentP.Position, currentP.Rotation); 
             }
         }
-        
+
+        if (GoToPointInTime.HasValue)
+        {
+            _savedVelocity = Vector3.zero;
+        }
+
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {
@@ -169,6 +189,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void StartRewinding()
     {
+        _oldPointsInTime = _pointsInTime.ToList();
         _isRewinding = true;
         if (_rb)
             _rb.isKinematic = true;
@@ -195,6 +216,12 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_enemy)
             _enemy.enabled = true;
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
+    }
+    
+    private void ResetRewinding()
+    {
+        _pointsInTime = _oldPointsInTime.ToList();
+        Rewind(false, _pointsInTime[_pointsInTime.Count - 1]);
     }
 
     private PointInTime GetClosestPointInTime(float currentTime, bool removeFuture = false) //removeFuture: remove the point in future when it's not the closest anymore

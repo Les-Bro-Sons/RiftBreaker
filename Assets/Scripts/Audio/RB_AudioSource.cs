@@ -11,7 +11,7 @@ public class RB_AudioSource : MonoBehaviour
 
     [SerializeField] private bool _isMusic;
 
-    private void Awake()
+    private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
         _basePitch = _audioSource.pitch;
@@ -22,17 +22,15 @@ public class RB_AudioSource : MonoBehaviour
 
     private void Update()
     {
-        if (RB_TimeManager.Instance)
+        if (RB_TimeManager.Instance && RB_TimeManager.Instance.IsRewinding) //scale the pitch on rewind and timescale
         {
-            if (RB_TimeManager.Instance.IsRewinding) //scale the pitch on rewind and timescale
-            {
-                _audioSource.pitch = Mathf.Lerp(_audioSource.pitch, -_basePitch * Time.timeScale, 4 * Time.deltaTime);
-            }
-            else
-            {
-                _audioSource.pitch = Mathf.Lerp(_audioSource.pitch, _basePitch * Time.timeScale, 4 * Time.deltaTime);
-            }
+            _audioSource.pitch = Mathf.Lerp(_audioSource.pitch, -_basePitch * Time.timeScale, 4 * Time.deltaTime);
         }
+        else
+        {
+            _audioSource.pitch = Mathf.Lerp(_audioSource.pitch, _basePitch * Time.timeScale, 4 * Time.deltaTime);
+        }
+       
         
         if (!_audioSource.isPlaying)
         {

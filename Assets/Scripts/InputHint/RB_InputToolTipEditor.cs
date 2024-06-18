@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CustomEditor(typeof(RB_InputToolTIp))]
+[CustomEditor(typeof(RB_InputToolTip))]
 public class RB_InputToolTipEditor : UnityEditor.Editor
 {
 
@@ -12,6 +12,9 @@ public class RB_InputToolTipEditor : UnityEditor.Editor
     SerializedProperty _actionProperty;
     SerializedProperty _bindingIDProperty;
     SerializedProperty _bindingTextProperty;
+    SerializedProperty _bindingImageProperty;
+    SerializedProperty _updateBindingUIEventProperty;
+
 
     GUIContent _bindingLabel = new GUIContent("Binding");
     GUIContent[] _bindingOptions;
@@ -24,6 +27,8 @@ public class RB_InputToolTipEditor : UnityEditor.Editor
         _actionProperty = serializedObject.FindProperty("_action");
         _bindingIDProperty = serializedObject.FindProperty("_bindingID");
         _bindingTextProperty = serializedObject.FindProperty("_bindingText");
+        _bindingImageProperty = serializedObject.FindProperty("_bindingImage");
+        _updateBindingUIEventProperty = serializedObject.FindProperty("_updateBindingUIEvent");
         RefreshBindingOptions();
     }
 
@@ -49,6 +54,9 @@ public class RB_InputToolTipEditor : UnityEditor.Editor
 
             // Display the binding text property field
             EditorGUILayout.PropertyField(_bindingTextProperty);
+
+            //Display the binding image property field
+            EditorGUILayout.PropertyField(_bindingImageProperty);
         }
 
         // Apply any changes made in the inspector

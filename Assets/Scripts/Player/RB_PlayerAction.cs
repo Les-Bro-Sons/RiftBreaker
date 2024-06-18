@@ -57,6 +57,10 @@ public class RB_PlayerAction : MonoBehaviour
     public bool FirstItemGathered = false;
     public RB_Items Item; public RB_Items CurrentItem { get { return Item; } }
 
+    [Header("Rewind")]
+    public int RewindLeft = 3;
+    public int MaxRewind = 3;
+
     //Debug
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
@@ -312,10 +316,23 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanRewind()
     {
         //If can rewind
-        return false;
+        RB_TimeManager timeManager = RB_TimeManager.Instance;
+        return (!timeManager.IsRewinding && RewindLeft > 0);
     }
 
-    
+    public void Rewind()
+    {
+        if (CanRewind())
+        {
+            RewindLeft -= 1;
+            RB_TimeManager.Instance.StartRewinding(false, false);
+        }
+    }
+
+    public void StopRewind()
+    {
+        RB_TimeManager.Instance.StopRewinding(false);
+    }
 
     private void TimerChargeAttack()
     {

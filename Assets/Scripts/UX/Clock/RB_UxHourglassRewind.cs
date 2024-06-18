@@ -51,7 +51,7 @@ public class RB_UxHourglass : MonoBehaviour
     {
         if(RB_TimeManager.Instance.HourglassList.Count >= 3)
         {
-            GameObject lastHourglass = RB_TimeManager.Instance.HourglassList[RB_TimeManager.Instance.NumberOfRewind - 1];
+            GameObject lastHourglass = RB_TimeManager.Instance.HourglassList[RB_PlayerAction.Instance.RewindLeft - 1];
 
             CanvasGroup canvasGroup = lastHourglass.GetComponent<CanvasGroup>();
             if (canvasGroup != null && canvasGroup.alpha != 0f)
@@ -60,7 +60,7 @@ public class RB_UxHourglass : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Le dernier sablier a une valeur d'alpha égale à 0 !");
+                Debug.LogWarning("Le dernier sablier a une valeur d'alpha ï¿½gale ï¿½ 0 !");
             }
         }
         
@@ -100,7 +100,7 @@ public class RB_UxHourglass : MonoBehaviour
 
     private IEnumerator EventStartCreateHourglass(float intervalTime)
     {
-        for (int i = 0; i < RB_TimeManager.Instance.NumberOfRewind; i++)
+        for (int i = 0; i < RB_PlayerAction.Instance.RewindLeft; i++)
         {
             StartCoroutine(StartCreateHourglass(i));
             yield return new WaitForSecondsRealtime(intervalTime);

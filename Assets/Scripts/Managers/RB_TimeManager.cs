@@ -12,8 +12,11 @@ public class RB_TimeManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventStartRewinding;
     [HideInInspector] public UnityEvent EventStopRewinding;
     [HideInInspector] public UnityEvent EventResetRewinding;
+    [HideInInspector] public UnityEvent EventStartFullRewind;
+    [HideInInspector] public UnityEvent EventStartNormalRewind;
     [HideInInspector] public UnityEvent EventStopFullRewind;
     [HideInInspector] public UnityEvent EventStopNormalRewind;
+
 
 
     [SerializeField] private float _recordDelay = 0.1f;
@@ -122,6 +125,14 @@ public class RB_TimeManager : MonoBehaviour
         _fullRewind = fullRewind;
         UxStartRewind(fullRewind);
         EventStartRewinding?.Invoke();
+        if (fullRewind)
+        {
+            EventStartFullRewind?.Invoke();
+        }
+        else 
+        {
+            EventStartNormalRewind?.Invoke();
+        }
     }
 
     public void StopRewinding(bool stopFullRewind = false, bool recordFrame = false)

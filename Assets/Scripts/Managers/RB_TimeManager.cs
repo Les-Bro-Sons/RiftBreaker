@@ -130,7 +130,7 @@ public class RB_TimeManager : MonoBehaviour
         }
     }
 
-    public void StopRewinding(bool stopFullRewind = false)
+    public void StopRewinding(bool stopFullRewind = false, bool recordFrame = false)
     {
         if (!IsRewinding) return;
 
@@ -149,13 +149,13 @@ public class RB_TimeManager : MonoBehaviour
                 NumberOfRewind = 3;
                 RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
             }
-            EventRecordFrame?.Invoke(); // used for interpolation
+            if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
         }
     }
 
     public void ResetCurrentRewind()
     {
-        StopRewinding();
+        StopRewinding(false, false);
         _currentTime = _startRewindTime;
         EventResetRewinding?.Invoke();
     }

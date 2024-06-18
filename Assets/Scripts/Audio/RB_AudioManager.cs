@@ -68,16 +68,17 @@ namespace MANAGERS
 
 
 		public AudioSource PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX) {
-			
-			GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
+
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+            GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
 			AudioSource sfxSource = _audioSource.GetComponent<AudioSource>();
-			AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
 			RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
 			
 			sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
 			sfxSource.volume = volume;
 			sfxSource.spatialBlend = 1;
 			sfxSource.loop = false;
+			sfxSource.enabled = true;
 			
 			// Assignez le groupe à l'AudioSource
 			sfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];

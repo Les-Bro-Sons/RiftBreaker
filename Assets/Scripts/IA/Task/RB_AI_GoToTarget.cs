@@ -29,7 +29,6 @@ public class RB_AI_GoToTarget : RB_BTNode
             _state = BTNodeState.FAILURE;
             return _state;
         }
-        Debug.Log(target.name);
 
         Vector3 direction = target.position - _transform.position;
         float distance = direction.magnitude;

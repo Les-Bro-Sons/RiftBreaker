@@ -41,14 +41,17 @@ public class RB_AiMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Clamping the speed to the max speed
-        ClampingSpeed();
+        if (_rb && !_rb.isKinematic)
+        {
+            //Clamping the speed to the max speed
+            ClampingSpeed();
 
-        //Adding friction force
-        FrictionForce();
+            //Adding friction force
+            FrictionForce();
 
-        //add force to overlaping bodies
-        PushOverlapingBodies();
+            //add force to overlaping bodies
+            PushOverlapingBodies();
+        }
     }
 
     public void MoveIntoDirection(Vector3 direction, float? speed = null, float? acceleration = null, float? deltaTime = null) // deprecated
@@ -112,7 +115,8 @@ public class RB_AiMovement : MonoBehaviour
     {
         foreach (Rigidbody body in _overlapBodies)
         {
-            body.AddForce((body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
+            if (!body) _overlapBodies.Remove(body);
+            body.AddForce(RB_Tools.GetHorizontalDirection(body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
         }
     }
 

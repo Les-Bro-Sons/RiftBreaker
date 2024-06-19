@@ -287,7 +287,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
     {
-        RB_UxHourglass.Instance.CreateMaxNumberOfHourglass(); //Add one rewind to the player
+        RB_PlayerAction.Instance.RewindLeft = 3;
         _robertLeNecRewindDialogue.NextDialogue();
     }
 

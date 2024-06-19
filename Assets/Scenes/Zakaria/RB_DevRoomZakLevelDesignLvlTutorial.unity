@@ -3476,6 +3476,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1275489021}
     m_Modifications:
+    - target: {fileID: 2332363005199447887, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: IsControledByRoom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4186512075783864997, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3953,7 +3958,7 @@ PrefabInstance:
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: _scriptableDialogues.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
@@ -3965,7 +3970,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _scriptableDialogues.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 7fc92cc6ba665ba47928be835d41c283,
+      objectReference: {fileID: 11400000, guid: f581dce2afff89e4fa863c26a354b76c,
         type: 2}
     - target: {fileID: 7933119062418324273, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
@@ -5478,74 +5483,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e452e6337f63a4f98e57602c26e126, type: 3}
---- !u!1001 &243688310
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1011139572}
-    m_Modifications:
-    - target: {fileID: 4244062485352682178, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_Name
-      value: Katana
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e518f35ff9cbaf645b0638ada8414e59, type: 3}
 --- !u!1001 &247523173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14046,7 +13983,7 @@ MonoBehaviour:
   TutorialRoom: {fileID: 811094897}
   RewindTutoRoom: {fileID: 1275489022}
   LevelExit: {fileID: 1012579190}
-  EnemyToSlowDownTimeByDistance: {fileID: 438723416}
+  _enemyToSlowDownTimeByDistance: {fileID: 438723416}
   _robertLeNecRewindDialogue: {fileID: 1054353904}
   _robertLeNecMovementDialogue: {fileID: 267485999}
   _robertLeNecAttackDialogue: {fileID: 433554631}
@@ -27233,10 +27170,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 271224257}
-    - targetCorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1835605669}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ec74371e597bc41bec89689e31652b, type: 3}
 --- !u!4 &775518212 stripped
@@ -34472,12 +34405,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1009479587}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1011139572 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
-    type: 3}
-  m_PrefabInstance: {fileID: 775518211}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1012579187
 GameObject:
   m_ObjectHideFlags: 0
@@ -40822,64 +40749,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6651ca67b4bd1147b86c645bf34006c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xbox:
-    buttonSouth: {fileID: 21300000, guid: 2632819643689584b863f42fc81d74b9, type: 3}
-    buttonNorth: {fileID: 21300000, guid: 0584cc3b104107944b114cabf2c47acf, type: 3}
-    buttonEast: {fileID: 21300000, guid: 8f9d323fe3e48ec46997004f260cc528, type: 3}
-    buttonWest: {fileID: 21300000, guid: 42334f05007847548b45de3bd37c2865, type: 3}
-    select: {fileID: 21300000, guid: 746b522fc49cd4741b792789328367cd, type: 3}
-    leftTrigger: {fileID: 21300000, guid: 5393e1e6339b9f64cb5a47194c534535, type: 3}
-    rightTrigger: {fileID: 21300000, guid: 68f3bee87733aa94f9a8ba4209c740b7, type: 3}
-    leftShoulder: {fileID: 21300000, guid: c40be0546ac913a4c93db067a7d91241, type: 3}
-    rightShoulder: {fileID: 21300000, guid: a344643ac5544d847a2f5d6e78989f7b, type: 3}
-    dpad: {fileID: 21300000, guid: 51a6c49b2673e354392fdd7da07bca8c, type: 3}
-    dpadUp: {fileID: 21300000, guid: f7dd4e40bf2507043877fcc08cf75606, type: 3}
-    dpadDown: {fileID: 21300000, guid: 5e366c558688b8245880ca6661b7a96b, type: 3}
-    dpadLeft: {fileID: 21300000, guid: 9cbc208c62b959e4098fcc491c0487b6, type: 3}
-    dpadRight: {fileID: 21300000, guid: c41a788356bd16d4baaf732ddde03e57, type: 3}
-    leftStick: {fileID: 21300000, guid: fd22a2bcc97c3324c8a0a1c12ff27f85, type: 3}
-    leftStickPress: {fileID: 21300000, guid: 4a4604f184741ce45a85b8a583b24547, type: 3}
-    leftStickUp: {fileID: 21300000, guid: 79b6958e6c2f4c743ac4b44c1931e217, type: 3}
-    leftStickDown: {fileID: 21300000, guid: b12a7c51353180b4c83d519a230dd7ca, type: 3}
-    leftStickLeft: {fileID: 21300000, guid: 0b8849aec18eb884fb7b488dc908ec3d, type: 3}
-    leftStickRight: {fileID: 21300000, guid: 0654a40f2e3edae4a8742a710c62a295, type: 3}
-    rightStick: {fileID: 21300000, guid: a3efb92e0170aec438db6de33b1a29ae, type: 3}
-    rightStickPress: {fileID: 21300000, guid: a5b61d9215824df499a085ce89470b42, type: 3}
-    rightStickUp: {fileID: 21300000, guid: 9abee18af5c5ef947b110698653cd9a0, type: 3}
-    rightStickDown: {fileID: 21300000, guid: f7a005cc59f26a94db6e246c5e0a3314, type: 3}
-    rightStickLeft: {fileID: 21300000, guid: cae781bbdb603d44b8e91860df001629, type: 3}
-    rightStickRight: {fileID: 21300000, guid: 2e4f22bcc6781cc4086723285005d838, type: 3}
-  ps4:
-    buttonSouth: {fileID: 21300000, guid: 343bac1db75ca0447b61900222545f21, type: 3}
-    buttonNorth: {fileID: 21300000, guid: 42e27783ffe30fc40b764f625559b7ce, type: 3}
-    buttonEast: {fileID: 21300000, guid: f40ca73f9a8d6d348a548b9e565a8b25, type: 3}
-    buttonWest: {fileID: 21300000, guid: 3634c1d96dc2c2e40925788f2625bea1, type: 3}
-    select: {fileID: 21300000, guid: 746b522fc49cd4741b792789328367cd, type: 3}
-    leftTrigger: {fileID: 21300000, guid: 99eaf37d9574d6c438ceae2dbd2e0b18, type: 3}
-    rightTrigger: {fileID: 21300000, guid: bceb5e5354183dc4296686cafd4ca0d7, type: 3}
-    leftShoulder: {fileID: 21300000, guid: 271331cfe057e004485fe58ec21c5927, type: 3}
-    rightShoulder: {fileID: 21300000, guid: 9703022013dfca6438fc235f1f2c1ca8, type: 3}
-    dpad: {fileID: 21300000, guid: 51a6c49b2673e354392fdd7da07bca8c, type: 3}
-    dpadUp: {fileID: 21300000, guid: f7dd4e40bf2507043877fcc08cf75606, type: 3}
-    dpadDown: {fileID: 21300000, guid: 5e366c558688b8245880ca6661b7a96b, type: 3}
-    dpadLeft: {fileID: 21300000, guid: 9cbc208c62b959e4098fcc491c0487b6, type: 3}
-    dpadRight: {fileID: 21300000, guid: c41a788356bd16d4baaf732ddde03e57, type: 3}
-    leftStick: {fileID: 21300000, guid: fd22a2bcc97c3324c8a0a1c12ff27f85, type: 3}
-    leftStickPress: {fileID: 21300000, guid: 4a4604f184741ce45a85b8a583b24547, type: 3}
-    leftStickUp: {fileID: 21300000, guid: 79b6958e6c2f4c743ac4b44c1931e217, type: 3}
-    leftStickDown: {fileID: 21300000, guid: b12a7c51353180b4c83d519a230dd7ca, type: 3}
-    leftStickLeft: {fileID: 21300000, guid: 0b8849aec18eb884fb7b488dc908ec3d, type: 3}
+  Xbox:
+    buttonSouth: {fileID: 0}
+    buttonNorth: {fileID: 0}
+    buttonEast: {fileID: 0}
+    buttonWest: {fileID: 0}
+    select: {fileID: 0}
+    leftTrigger: {fileID: 0}
+    rightTrigger: {fileID: 0}
+    leftShoulder: {fileID: 0}
+    rightShoulder: {fileID: 0}
+    dpad: {fileID: 0}
+    dpadUp: {fileID: 0}
+    dpadDown: {fileID: 0}
+    dpadLeft: {fileID: 0}
+    dpadRight: {fileID: 0}
+    leftStick: {fileID: 0}
+    leftStickPress: {fileID: 0}
+    leftStickUp: {fileID: 0}
+    leftStickDown: {fileID: 0}
+    leftStickLeft: {fileID: 0}
     leftStickRight: {fileID: 0}
-    rightStick: {fileID: 21300000, guid: a3efb92e0170aec438db6de33b1a29ae, type: 3}
-    rightStickPress: {fileID: 21300000, guid: a5b61d9215824df499a085ce89470b42, type: 3}
-    rightStickUp: {fileID: 21300000, guid: 9abee18af5c5ef947b110698653cd9a0, type: 3}
-    rightStickDown: {fileID: 21300000, guid: f7a005cc59f26a94db6e246c5e0a3314, type: 3}
-    rightStickLeft: {fileID: 21300000, guid: cae781bbdb603d44b8e91860df001629, type: 3}
-    rightStickRight: {fileID: 21300000, guid: 2e4f22bcc6781cc4086723285005d838, type: 3}
-  mouse:
-    LMB: {fileID: 21300000, guid: e85e096d350acff44af8fbd661a1063c, type: 3}
-    RMB: {fileID: 21300000, guid: 346c2010e5990e84298597a7c005deda, type: 3}
-    MMB: {fileID: 21300000, guid: ab368ff6235d57645b08727520f6864e, type: 3}
+    rightStick: {fileID: 0}
+    rightStickPress: {fileID: 0}
+    rightStickUp: {fileID: 0}
+    rightStickDown: {fileID: 0}
+    rightStickLeft: {fileID: 0}
+    rightStickRight: {fileID: 0}
+  Ps4:
+    buttonSouth: {fileID: 0}
+    buttonNorth: {fileID: 0}
+    buttonEast: {fileID: 0}
+    buttonWest: {fileID: 0}
+    select: {fileID: 0}
+    leftTrigger: {fileID: 0}
+    rightTrigger: {fileID: 0}
+    leftShoulder: {fileID: 0}
+    rightShoulder: {fileID: 0}
+    dpad: {fileID: 0}
+    dpadUp: {fileID: 0}
+    dpadDown: {fileID: 0}
+    dpadLeft: {fileID: 0}
+    dpadRight: {fileID: 0}
+    leftStick: {fileID: 0}
+    leftStickPress: {fileID: 0}
+    leftStickUp: {fileID: 0}
+    leftStickDown: {fileID: 0}
+    leftStickLeft: {fileID: 0}
+    leftStickRight: {fileID: 0}
+    rightStick: {fileID: 0}
+    rightStickPress: {fileID: 0}
+    rightStickUp: {fileID: 0}
+    rightStickDown: {fileID: 0}
+    rightStickLeft: {fileID: 0}
+    rightStickRight: {fileID: 0}
+  Mouse:
+    LMB: {fileID: 0}
+    RMB: {fileID: 0}
+    MMB: {fileID: 0}
 --- !u!4 &1269982823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2817623833922658564, guid: 17e452e6337f63a4f98e57602c26e126,
@@ -52153,12 +52080,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1826257241}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1835605669 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
-    type: 3}
-  m_PrefabInstance: {fileID: 243688310}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1835636021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55692,7 +55613,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 223, y: 0}
+  m_AnchoredPosition: {x: 360, y: 0}
   m_SizeDelta: {x: 525, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1969632188

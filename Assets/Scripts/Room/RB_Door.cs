@@ -3,6 +3,7 @@ using UnityEngine;
 public class RB_Door : MonoBehaviour
 {
     private Animator _doorAnimator;
+    public bool IsControledByRoom = true;
 
     private void Awake()
     {

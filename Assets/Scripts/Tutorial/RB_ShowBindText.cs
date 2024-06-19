@@ -1,8 +1,11 @@
+using System;
 using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(RB_ShowBindText))]
@@ -10,14 +13,17 @@ public class RB_ShowBindTextEditor : UnityEditor.Editor
 {
 
     #region Serialized Properties
-    SerializedProperty _actionProperty;
-    SerializedProperty _bindingIDProperty;
-    SerializedProperty _bindingTextProperty;
+    private SerializedProperty _actionProperty;
+    private SerializedProperty _bindingIDProperty;
+    private SerializedProperty _bindingTextProperty;
+    private SerializedProperty _bindingImageProperty;
+    private SerializedProperty _updateBindingUIEventProperty;
 
-    GUIContent _bindingLabel = new GUIContent("Binding");
-    GUIContent[] _bindingOptions;
-    int _selectedBindingOption;
-    string[] _bindingOptionsValues;
+
+    private GUIContent _bindingLabel = new GUIContent("Binding");
+    private GUIContent[] _bindingOptions;
+    private int _selectedBindingOption;
+    private string[] _bindingOptionsValues;
     #endregion
 
     protected void OnEnable()
@@ -25,12 +31,13 @@ public class RB_ShowBindTextEditor : UnityEditor.Editor
         _actionProperty = serializedObject.FindProperty("_action");
         _bindingIDProperty = serializedObject.FindProperty("_bindingID");
         _bindingTextProperty = serializedObject.FindProperty("_bindingText");
+        _bindingImageProperty = serializedObject.FindProperty("_bindingImage");
+        _updateBindingUIEventProperty = serializedObject.FindProperty("_updateBindingUIEvent");
         RefreshBindingOptions();
     }
 
     public override void OnInspectorGUI()
     {
-
         EditorGUI.BeginChangeCheck();
 
         // Display the label for the binding options
@@ -51,6 +58,9 @@ public class RB_ShowBindTextEditor : UnityEditor.Editor
 
             // Display the binding text property field
             EditorGUILayout.PropertyField(_bindingTextProperty);
+
+            //Display the binding image property field
+            EditorGUILayout.PropertyField(_bindingImageProperty);
         }
 
         // Apply any changes made in the inspector
@@ -144,25 +154,31 @@ public class RB_ShowBindText : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _bindingText;
 
+
+
+    [SerializeField] Image _bindingImage;
+
+    [SerializeField] UpdateBindingUIEvent _updateBindingUIEvent;
+
     public static string ReplaceTextBetweenBrackets(string inputText, string replacementText)
     {
-        // Vérifier si le texte d'entrée contient des crochets
+        // Verify if string is empty or null
         if (string.IsNullOrEmpty(inputText) || string.IsNullOrEmpty(replacementText))
         {
             Debug.LogError("Le texte d'entrée ou le texte de remplacement est vide ou nul.");
             return inputText;
         }
 
-        // Boucle pour remplacer toutes les occurrences entre crochets
+        // Loop to replace all the occurences between brackets
         int startIndex = inputText.IndexOf('[');
         int endIndex = inputText.IndexOf(']');
 
         while (startIndex != -1 && endIndex != -1 && endIndex > startIndex)
         {
-            // Remplacer le texte entre crochets par le texte de remplacement
+            // Replace the between brackets text by the replacement text
             inputText = inputText.Substring(0, startIndex + 1) + replacementText + inputText.Substring(endIndex);
 
-            // Trouver les indices pour la prochaine itération
+            // Find indexes for the next iteration
             startIndex = inputText.IndexOf('[', startIndex + replacementText.Length + 1);
             endIndex = startIndex != -1 ? inputText.IndexOf(']', startIndex) : -1;
         }
@@ -170,6 +186,12 @@ public class RB_ShowBindText : MonoBehaviour
         return inputText;
     }
 
+    
+
+    /// <summary>
+    /// ID (in string form) of the binding that is to be rebound on the action.
+    /// </summary>
+    /// <seealso cref="InputBinding.id"/>
     public string bindingId
     {
         get => _bindingID;
@@ -179,6 +201,50 @@ public class RB_ShowBindText : MonoBehaviour
             UpdateBindingDisplay();
         }
     }
+
+    /// <summary>
+    /// Text component that receives the display string of the binding. Can be <c>null</c> in which
+    /// case the component entirely relies on <see cref="updateBindingUIEvent"/>.
+    /// </summary>
+    public TextMeshProUGUI bindingText
+    {
+        get => _bindingText;
+        set
+        {
+            _bindingText = value;
+            UpdateBindingDisplay();
+        }
+    }
+
+    public Image bindingImage
+    {
+        get => _bindingImage;
+        set
+        {
+            _bindingImage = value;
+            UpdateBindingDisplay();
+        }
+    }
+
+    /// <summary>
+    /// Event that is triggered every time the UI updates to reflect the current binding.
+    /// This can be used to tie custom visualizations to bindings.
+    /// </summary>
+    public UpdateBindingUIEvent updateBindingUIEvent
+    {
+        get
+        {
+            if (_updateBindingUIEvent == null)
+            {
+                _updateBindingUIEvent = new UpdateBindingUIEvent();
+            }
+            return _updateBindingUIEvent;
+        }
+    }
+
+    /// <summary>
+    /// Trigger a refresh of the currently displayed binding.
+    /// </summary>
 
     public void UpdateBindingDisplay()
     {
@@ -197,10 +263,14 @@ public class RB_ShowBindText : MonoBehaviour
             }
         }
 
+        // Set on label (if any).
         if (_bindingText != null)
         {
-            _bindingText.text = ReplaceTextBetweenBrackets(_bindingText.text, displayString);
+            _bindingText.text = $"[{displayString}]";
         }
+
+        // Give listeners a chance to configure UI in response.
+        _updateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
     }
 
     public void Update()
@@ -213,5 +283,8 @@ public class RB_ShowBindText : MonoBehaviour
     {
         UpdateBindingDisplay();
     }
+
 #endif
+
+    [Serializable] public class UpdateBindingUIEvent : UnityEvent<RB_ShowBindText, string, string, string> { }
 }

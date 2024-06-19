@@ -42,6 +42,7 @@ public class RB_PlayerAction : MonoBehaviour
     //Events
     public UnityEvent EventBasicAttack;
     public UnityEvent EventChargedAttack;
+    public UnityEvent EventSpecialAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
@@ -293,6 +294,7 @@ public class RB_PlayerAction : MonoBehaviour
             IsSpecialAttacking = true;
             SpecialAttackCharge = 0;
             Item.SpecialAttack();
+            EventSpecialAttack?.Invoke();
         }
     }
 

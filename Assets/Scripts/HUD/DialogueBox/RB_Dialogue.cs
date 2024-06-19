@@ -95,12 +95,10 @@ public class RB_Dialogue : MonoBehaviour
     private void PlayOpenAnim() //Play the open animation of the dialogue box
     {
         _dialogueAnimator.SetBool("open", true);
-        _dialogueAnimator.SetBool("close", false);
     }
 
     private void PlayCloseAnim() //Play the close animation of the dialogue box
     {
-        _dialogueAnimator.SetBool("close", true);
         _dialogueAnimator.SetBool("open", false);
     }
 

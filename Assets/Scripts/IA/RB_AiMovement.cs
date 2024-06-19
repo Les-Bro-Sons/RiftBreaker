@@ -83,7 +83,8 @@ public class RB_AiMovement : MonoBehaviour
             
             Vector3 nextPos = _navPath.corners[1];
             nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change
-            Vector3 direction = (nextPos - _transform.position).normalized;
+            Vector3 direction = (nextPos - _transform.position).normalized; 
+            direction = RB_Tools.GetHorizontalDirection(direction);
             WalkDirection = direction;
 
             _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value); //move

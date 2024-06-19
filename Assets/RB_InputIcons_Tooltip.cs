@@ -31,7 +31,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (string.IsNullOrEmpty(deviceLayoutName) || string.IsNullOrEmpty(controlPath))
                 return;
 
-            Debug.Log(deviceLayoutName);
+            //Debug.Log(deviceLayoutName);
             
             var icon = default(Sprite);
             if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "DualShockGamepad"))
@@ -41,7 +41,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             else if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse"))
                 icon = mouse.GetSprite(controlPath);
 
-            Debug.Log(icon == null);
+            //Debug.Log(icon == null);
             var textComponent = component.bindingText;
 
 

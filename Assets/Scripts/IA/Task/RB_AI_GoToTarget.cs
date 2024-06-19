@@ -22,13 +22,14 @@ public class RB_AI_GoToTarget : RB_BTNode
     {
         if (_btParent.GetBool("IsAttacking")) return _state = BTNodeState.SUCCESS;
 
-        Transform target = (Transform)GetData("target");
+        Transform target = (Transform)_btParent.Root.GetData("target");
 
         if (target == null)
         {
             _state = BTNodeState.FAILURE;
             return _state;
         }
+        Debug.Log(target.name);
 
         Vector3 direction = target.position - _transform.position;
         float distance = direction.magnitude;

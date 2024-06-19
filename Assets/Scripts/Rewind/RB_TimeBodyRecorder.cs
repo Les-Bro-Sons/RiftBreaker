@@ -20,6 +20,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private RB_Health _health;
     [SerializeField] private RB_Enemy _enemy;
+    [SerializeField] private RB_Door _door;
     private RB_AI_BTTree _btTree;
 
     private Vector3 _savedVelocity; //used because setting the velocity every frame is very unoptimized
@@ -39,6 +40,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _enemy = GetComponent<RB_Enemy>();
         _levelManager = GetComponent<RB_LevelManager>();
         _btTree = GetComponent<RB_AI_BTTree>();
+        _door = GetComponent<RB_Door>();
     }
 
     private void Start()
@@ -182,6 +184,12 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             {
                 case TYPETIMEEVENT.TookWeapon:
                     timeEvent.ItemTook.Drop();
+                    break;
+                case TYPETIMEEVENT.CloseDoor:
+                    _door.Open();
+                    break;
+                case TYPETIMEEVENT.OpenDoor:
+                    _door.Close();
                     break;
             }
         }

@@ -103,10 +103,16 @@ public class RB_Enemy : MonoBehaviour
     {
         if (_isTombstoned)
         {
-            if (_btTree && !RB_TimeManager.Instance.IsRewinding) _btTree.enabled = true;
+            if (_btTree && !RB_TimeManager.Instance.IsRewinding)
+            {
+                _btTree.Root.SetData("target", null);
+                _btTree.enabled = true;
+                _btTree.BoolDictionnary.Clear();
+            }
             if (AiAnimator && !RB_TimeManager.Instance.IsRewinding) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;
+            
         }
     }
 

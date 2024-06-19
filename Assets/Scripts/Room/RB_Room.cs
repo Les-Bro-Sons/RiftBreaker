@@ -68,6 +68,7 @@ public class RB_Room : MonoBehaviour
     {
         if (!DetectedEnemies.Contains(detectedEnemy))
         {
+            if (DetectedAllies.Contains(detectedEnemy)) DetectedAllies.Remove(detectedEnemy);
             DetectedEnemies.Add(detectedEnemy);
         }
     }
@@ -84,6 +85,7 @@ public class RB_Room : MonoBehaviour
     {
         if (!DetectedAllies.Contains(detectedAlly))
         {
+            if (DetectedEnemies.Contains(detectedAlly)) DetectedEnemies.Remove(detectedAlly);
             DetectedAllies.Add(detectedAlly);
         }
     }

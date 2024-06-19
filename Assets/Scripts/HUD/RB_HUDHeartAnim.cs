@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,12 +21,12 @@ public class RB_HUDHeartAnim : MonoBehaviour {
         _image = GetComponent<Image>();
     }
 
-    float elapsedTime = 0f;
+    float _elapsedTime = 0f;
 
     private void FixedUpdate() {
         _hpPercent = ((_rb_Health.Hp / _rb_Health.HpMax) * 100);
-            elapsedTime += Time.fixedDeltaTime;
-            if (elapsedTime >= _waitForNextSprite){
+            _elapsedTime += Time.fixedDeltaTime;
+            if (_elapsedTime >= _waitForNextSprite){
                 if (!RB_TimeManager.Instance.IsRewinding) { 
                     if(_hpPercent > 66) {
                         if (_sprites1.Count-1 >= _currentSpriteID && _currentSpriteID >= 0) {
@@ -107,7 +105,7 @@ public class RB_HUDHeartAnim : MonoBehaviour {
                 }
             }
 
-            elapsedTime = 0.0f;
+            _elapsedTime = 0.0f;
         }
     }
 

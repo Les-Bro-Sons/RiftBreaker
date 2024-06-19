@@ -103,7 +103,6 @@ public class RB_InputManager : MonoBehaviour
     {
         if (!DashEnabled) return;
         if (context.started) {
-            Debug.Log("working2");
             EventDashStarted?.Invoke();
         }
         else if (context.canceled)

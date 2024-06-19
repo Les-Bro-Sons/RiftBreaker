@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 4186512075783864997}
   - component: {fileID: 2845204191870378600}
   - component: {fileID: 2332363005199447887}
+  - component: {fileID: 3826415397631504062}
   m_Layer: 3
   m_Name: DoorParent
   m_TagString: Untagged
@@ -235,6 +236,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc663634af10c940897ca876d6c4ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventOpenDoor:
+    m_PersistentCalls:
+      m_Calls: []
+  EventCloseDoor:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3826415397631504062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8377527384094342296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956c35150b281de40be91d869fc9ac99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entityType: 0
+  _spriteRenderer: {fileID: 0}
+  _animator: {fileID: 0}
+  _health: {fileID: 0}
+  _enemy: {fileID: 0}
+  _door: {fileID: 0}
 --- !u!1 &8482238728534991074
 GameObject:
   m_ObjectHideFlags: 0

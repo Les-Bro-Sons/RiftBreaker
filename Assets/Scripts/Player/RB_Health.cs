@@ -96,6 +96,7 @@ public class RB_Health : MonoBehaviour {
         if (knockbackForce == 0) return;
 
         //push the enemy away when getting hit
+        direction = RB_Tools.GetHorizontalDirection(direction);
         _rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
     }
 

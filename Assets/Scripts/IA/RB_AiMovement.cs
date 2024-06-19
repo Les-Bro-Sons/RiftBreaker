@@ -62,6 +62,7 @@ public class RB_AiMovement : MonoBehaviour
         if (deltaTime == null) deltaTime = Time.deltaTime;
 
         direction = direction.normalized;
+        direction = RB_Tools.GetHorizontalDirection(direction);
         WalkDirection = direction.normalized;
 
         if (_rb.velocity.magnitude < _movementMaxSpeed)

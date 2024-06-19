@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.UI;
 
 ////TODO: have updateBindingUIEvent receive a control path string, too (in addition to the device layout name)
 

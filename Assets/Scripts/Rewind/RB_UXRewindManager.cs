@@ -24,14 +24,6 @@ public class RB_UXRewindManager : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(FadeInRewindEffect(_durationToSwitch * 0.5f));
-        if (!fullRewind)
-        {
-            RB_UxHourglass.Instance.StartUseHourglassUx();
-        }
-        else
-        {
-
-        }
     }
 
     public void StopRewindTransition()

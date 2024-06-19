@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &9218535658545753306
 Animator:
   serializedVersion: 5
@@ -733,6 +734,7 @@ Transform:
   - {fileID: 1595786244881112771}
   - {fileID: 4012903932925777726}
   - {fileID: 6725777611377474023}
+  - {fileID: 4561772942320886795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5430315136502736178
@@ -780,8 +782,8 @@ MonoBehaviour:
   _isAttachedToAPhase: 0
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 9059804118306368394}
-  AiAnimator: {fileID: 0}
-  ChargeSpecialAttackAmount: 0
+  AiAnimator: {fileID: 9218535658545753306}
+  ChargeSpecialAttackAmount: 5
 --- !u!114 &2165051490280340890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -799,11 +801,18 @@ MonoBehaviour:
   MovementSpeedAggro: 8
   MovementSpeedFlee: 6
   AttackSpeed: 0.3
-  SplineContainer: {fileID: 0}
+  BoostMultiplier: 1
+  BoostParticle: {fileID: 1526446451415822606}
+  IsStatic: 0
+  StaticLookDirection: {x: 0, y: 0, z: 1}
+  StaticPositionOnStart: 1
+  StaticPosition: {x: 0, y: 0, z: 0}
+  IsOnStaticPoint: 0
   WaitBeforeToMoveToNextWaypoint: 0.25
   PatrolSplineIndex: 0
   HasAnInterval: 0
   StartWaitingWaypointInterval: 0
+  SplineContainer: {fileID: 0}
   InRange: 0
   FovRange: 10
   SpottedFovRange: 10
@@ -820,7 +829,7 @@ MonoBehaviour:
   AiMovement: {fileID: 0}
   AiHealth: {fileID: 0}
   AiRigidbody: {fileID: 0}
-  AiAnimator: {fileID: 0}
+  AiAnimator: {fileID: 9218535658545753306}
   AiNavMeshAgent: {fileID: 0}
   InfSlashRange: 2
   InfSlashDamage: 300
@@ -830,6 +839,9 @@ MonoBehaviour:
   InfSpottedMoveSpeed: 11
   InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
+  EventOnSpotted:
+    m_PersistentCalls:
+      m_Calls: []
   SlashRange: 2
   SlashDamage: 10
   SlashKnockback: 10
@@ -863,6 +875,12 @@ MonoBehaviour:
   CurrentHeavySlashCombo: 0
   MaxHeavySlashCombo: 5
   HeavySlashParticles: {fileID: 0}
+  ExplosionDamage: 30
+  ExplosionKnockback: 15
+  ExplosionRadius: 3
+  ExplosionDelay: 1
+  ExplosionStartRange: 1
+  ExplosionParticles: {fileID: 0}
 --- !u!114 &3118707743781621416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,6 +933,7 @@ MonoBehaviour:
   _movementAcceleration: 200
   _movementMaxSpeed: 12
   _movementFrictionForce: 100
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 9218535658545753306}
 --- !u!114 &4609971931563923477
 MonoBehaviour:
@@ -1035,3 +1054,83 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1001 &6128809125717345525
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4174093935843183070}
+    m_Modifications:
+    - target: {fileID: 7515642646295648455, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_Name
+      value: BoostParticle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b5dc2160632700f438c3e149942ca617, type: 3}
+--- !u!198 &1526446451415822606 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4621504212126512635, guid: b5dc2160632700f438c3e149942ca617,
+    type: 3}
+  m_PrefabInstance: {fileID: 6128809125717345525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4561772942320886795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7657046528896819454, guid: b5dc2160632700f438c3e149942ca617,
+    type: 3}
+  m_PrefabInstance: {fileID: 6128809125717345525}
+  m_PrefabAsset: {fileID: 0}

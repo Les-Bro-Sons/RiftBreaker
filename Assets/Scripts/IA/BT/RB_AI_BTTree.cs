@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Splines;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 {
@@ -22,13 +23,21 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MovementSpeedFlee = 6f;
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
+    public ParticleSystem BoostParticle;
+
+    [Header("Static Mode Parameters")]
+    public bool IsStatic = false;
+    public Vector3 StaticLookDirection = Vector3.forward;
+    public bool StaticPositionOnStart = true;
+    public Vector3 StaticPosition;
+    [HideInInspector] public bool IsOnStaticPoint = false;
 
     [Header("Spline Parameters")]
-    [HideInInspector] public SplineContainer SplineContainer;
     public float WaitBeforeToMoveToNextWaypoint = 0.25f; // in seconds
     public int PatrolSplineIndex = 0;
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
+    [HideInInspector] public SplineContainer SplineContainer;
 
     [Header("Spot Parameters")]
     public bool InRange = false;
@@ -61,6 +70,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSlashCollisionSize = 3;
     [SerializeField] public float InfSpottedMoveSpeed = 11;
     [SerializeField] public GameObject InfSlashParticles;
+    [HideInInspector] public UnityEvent EventOnSpotted;
 
     [Header("Faible")]
     [SerializeField] public float SlashRange;
@@ -126,6 +136,19 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         base.Update();
         SpotCanvasAlpha();
+        ApplyBoostParticles();
+    }
+
+    private void ApplyBoostParticles()
+    {
+        if (BoostMultiplier > 1 && !BoostParticle.isPlaying) 
+        {
+            BoostParticle.Play();
+        }
+        else if (BoostParticle.isPlaying)
+        {
+            BoostParticle.Stop();
+        }
     }
 
     private void SpotCanvasAlpha() //handle the alpha of the spot canvas when needed
@@ -165,6 +188,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
         spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         RB_AudioManager.Instance.PlaySFX("hey", transform.position, 0,1);
+        EventOnSpotted?.Invoke();
     }
 
     protected override RB_BTNode SetupTree()
@@ -177,6 +201,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         _combatPhases.Add(PHASES.Boss);
         this.SplineContainer = RB_SplineManager.Splines;
 
+        if (StaticPositionOnStart) StaticPosition = transform.position;
+
         RB_BTNode root = new RB_BTSelector(new List<RB_BTNode>
         {
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
@@ -188,6 +214,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_AICheck_EnemyTouchDetection(this, true),
                         new RB_AI_DoFailure(),
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
+                        new RB_AI_StaticWatchOut(this),
+                        new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
 
                     new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target

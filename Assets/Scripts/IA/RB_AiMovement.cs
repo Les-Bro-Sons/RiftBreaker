@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,9 +20,8 @@ public class RB_AiMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
-    private NavMeshAgent _agent;
-    private NavMeshObstacle _obstacle;
     private RB_Health _health;
+    private RB_AI_BTTree _btTree;
 
     [Header("Animation")]
     [SerializeField] private Animator _enemyAnimator;
@@ -35,9 +35,8 @@ public class RB_AiMovement : MonoBehaviour
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _navPath = new NavMeshPath();
-        _agent = GetComponent<NavMeshAgent>();
-        _obstacle = GetComponent<NavMeshObstacle>();
         _health = GetComponent<RB_Health>();
+        _btTree = GetComponent<RB_AI_BTTree>();
     }
 
     private void FixedUpdate()
@@ -58,6 +57,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+
         direction = direction.normalized;
         WalkDirection = direction.normalized;
 
@@ -66,7 +66,7 @@ public class RB_AiMovement : MonoBehaviour
             //Adding velocity to player
             _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value);
         }
-        _transform.forward = direction;
+        _rb.MoveRotation(Quaternion.LookRotation(direction));
         LastDirection = direction;
     }
 

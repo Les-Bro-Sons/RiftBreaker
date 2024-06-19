@@ -27,14 +27,26 @@ public class RB_MenuManager : MonoBehaviour {
         Animator = GetComponent<Animator>();
         Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
-     
-    public void Play() {
+
+    private void Start(){
+        RB_ButtonSelectioner.Instance.SelectMainButton(0);
+        Time.timeScale = 1f;
+    }
+
+    public void NewGame() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+        RB_SaveManager.Instance.ResetSave();
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
+    }
+
+    public void Continue() {
+        RB_ButtonSelectioner.Instance.BlockInteraction();
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);
     }
 
     public void MainMenu() {
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString());
+        Time.timeScale = 1f;
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
     }
 
     public void Options() {
@@ -44,8 +56,10 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void CloseOption() {
-        RB_ButtonSelectioner.Instance.SelectMainButton(1);
-        IsOptionOpen = false;
+        if (IsOptionOpen) {
+            RB_ButtonSelectioner.Instance.SelectMainButton(2);  
+            IsOptionOpen = false;
+        }
     }
 
     public void OptionAudio() {

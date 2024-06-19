@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &8124303266802909437
 Animator:
   serializedVersion: 5
@@ -308,9 +309,11 @@ MonoBehaviour:
   _isDestroyingOnDamage: 0
   _damageOnExplosion: 0
   _explosionRadius: 7.94
+  _isBouncing: 0
+  _maxBounces: 3
   _explosionSounds: gory-explosion
   _projectileAnimator: {fileID: 8124303266802909437}
-  SpawnDistanceFromPlayer: 2
+  SpawnDistanceFromPlayer: 0.1
 --- !u!54 &3608295380498534000
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class RB_TransitionFade : RB_Transition
     [Header("Parameters")]
     [SerializeField] private Image _fadeImage;
     //private float fadeInDuration = FadeInTime > 0 ? FadeInTime : _duration;
+    
 
     void Awake()
     {
@@ -20,7 +21,8 @@ public class RB_TransitionFade : RB_Transition
 
     void Start()
     {
-        StartCoroutine(Fade(RB_SaveManager.Instance.SaveObject.CurrentLevel, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        StartCoroutine(Fade(NextSceneID, Duration, speedType : RB_SceneTransitionManager.Instance.SpeedType));
+        //RB_SaveManager.Instance.SaveObject.CurrentLevel
     }
 
     public override IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)

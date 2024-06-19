@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 290}
+  m_AnchoredPosition: {x: 0, y: -214}
   m_SizeDelta: {x: 430, y: 290}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &215534186683315374
@@ -90,7 +90,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3472642188951070558
 RectTransform:
   m_ObjectHideFlags: 0
@@ -180,10 +180,11 @@ MonoBehaviour:
   m_text: "<size=+15>Chefs de projet :</size>\nPaul MELON\nDorian DUCHASSIN\n\n<size=+15>D\xE9veloppeur
     en chef :</size>\nGabriel MIMOUNI\n\n<size=+15>Direction Artistique :</size>\nCharlotte
     ARBONA\n\n<size=+15>D\xE9veloppeurs :</size>\nNohlan RAT - - M\xC9RIL\nDoriann
-    XAVIER\nK\xE9vin TORRES\nZakaria DUTERTRE\nValentin MALVOISIN\nAlexis LAURENT\n\n<size=+15>Artiste
-    bonus :</size>\nNohlan RAT - - M\xC9RIL\n\n<size=+15>Concepteur de niveau :</size>\n
-    Zakaria DUTERTRE\n\n<size=+15>Effets Sonores (SFX) :</size>\nAlexis LAURENT\n\n<size=+15>Effets
-    Visuel (VFX) :</size>\nGabriel MIMOUNI\nValentin MALVOISIN"
+    XAVIER\nDorian DUCHASSIN\nK\xE9vin TORRES\nZakaria DUTERTRE\nValentin MALVOISIN\nAlexis
+    LAURENT\n\n<size=+15>Artiste bonus :</size>\nNohlan RAT - - M\xC9RIL\nDoriann
+    XAVIER\n\n<size=+15>Concepteur de niveau :</size>\n Zakaria DUTERTRE\n\n<size=+15>Effets
+    Sonores (SFX) :</size>\nAlexis LAURENT\n\n<size=+15>Effets Visuel (VFX) :</size>\nGabriel
+    MIMOUNI\nValentin MALVOISIN"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -286,10 +287,10 @@ RectTransform:
   - {fileID: 849241949647769921}
   m_Father: {fileID: 3472642188951070558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -933}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -999}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6202241536570057177
 GameObject:
@@ -325,7 +326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 865, y: -1943}
+  m_AnchoredPosition: {x: 865, y: -2353}
   m_SizeDelta: {x: 300, y: 250}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4319908988321704024

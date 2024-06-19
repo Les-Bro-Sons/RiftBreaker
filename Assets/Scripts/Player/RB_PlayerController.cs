@@ -28,14 +28,13 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Start()
     {
+        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
         if (_item != null)
         {
-            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+           /* RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);*/
             RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         }
-        RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
 
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
@@ -138,14 +137,16 @@ public class RB_PlayerController : MonoBehaviour
     {
         //start rewind in playeraction
         if (CanDoInput())
-            RB_TimeManager.Instance.StartRewinding(false, false);
+            _playerAction.Rewind();
+            //RB_TimeManager.Instance.StartRewinding(false, false);
     }
 
     public void OnStopRewind()
     {
         //stop rewind in playeraction
         if (CanDoInput(true))
-            RB_TimeManager.Instance.StopRewinding(false);
+            _playerAction.StopRewind();
+            //RB_TimeManager.Instance.StopRewinding(false);
     }
 
     private bool CanDoInput(bool ignoreRewind = false)

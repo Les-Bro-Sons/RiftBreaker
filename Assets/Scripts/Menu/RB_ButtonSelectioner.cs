@@ -24,10 +24,8 @@ public class RB_ButtonSelectioner : MonoBehaviour {
     public void SelectOptionsButton(int ID) { _optionsButtons[ID].Select(); }
     
     public void BlockInteraction() {
-        Debug.Log(mainButtons.Count);
         for (int u = 0; u < mainButtons.Count; u++) {
             mainButtons[u].enabled = false;
-            Debug.Log(mainButtons[u]);
         }
     }
 }

@@ -91,6 +91,7 @@ Transform:
   m_Children:
   - {fileID: 2143687700154857712}
   - {fileID: 8807292251387617910}
+  - {fileID: 3651856944829261503}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7950358798519079587
@@ -168,6 +169,9 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &7939403144304551523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +190,7 @@ MonoBehaviour:
   _movementAcceleration: 150
   _movementMaxSpeed: 5
   _movementFrictionForce: 75
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!114 &-8971773865608367034
 MonoBehaviour:
@@ -202,10 +207,11 @@ MonoBehaviour:
   EventDead:
     m_PersistentCalls:
       m_Calls: []
-  _isAttachedToAPhase: 1
-  _spawnInPhase: 0
-  SpriteRenderer: {fileID: 0}
-  AiAnimator: {fileID: 0}
+  _isAttachedToAPhase: 0
+  _spawnInPhase: 2
+  SpriteRenderer: {fileID: 9101173564990518349}
+  AiAnimator: {fileID: 7214748225881584283}
+  ChargeSpecialAttackAmount: 0
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -216,52 +222,126 @@ MonoBehaviour:
   CooldownBetweenAttacks: 0
   WaitInIdle: 1
   BossRB: {fileID: 7950358798519079587}
-  PlayerPosition: {fileID: 1430315345098359259, guid: f045d7b917debd74190631e500515f69,
-    type: 3}
-  PlayerLayer:
-    serializedVersion: 2
-    m_Bits: 128
   Health: {fileID: 0}
   CurrentState: 0
   _minMovementDistance: 3
-  _maxMovementDistance: 10
+  _maxMovementDistance: 5
   _movementSpeed: 10
   _delayMovement: 1
   _timeForMoving: 6
-  _tentacleHitWidth: 5
-  _tentacleHitLength: 1
-  _tentacleHitRange: 5
+  _tentacle: {fileID: 5134025535328651934}
+  _tentacleCollision: {fileID: 444311331260080428}
+  _tentacleHitFullRange: 0
+  _tentacleHitWidth: 1
+  _tentacleHitRange: 15
   _tentacleHitKnockback: 15
   _tentacleHitDamage: 20
-  _tentacleHitDelay: 4
+  _tentacleHitDelay: 0
+  _tentacleHitDuration: 0.25
+  _tentacleRemoveDuration: 0.75
+  _tentacleHitCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _tentacleRemoveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _delayBeforeHit: 0.05
   _numberTotalOfAttack: 5
   _tentacleHitParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
-  _numberOfAttackDone: 
+  _tentacleHitAnimation: {fileID: 1410564367627614499, guid: 2df439fc8a01002489b01cf09dece3d4,
+    type: 3}
+  _numberOfAttackDone: 0
+  _tentacleHitFirstDelay: 0.5
   ExplosionZone: {fileID: 2082089089255593965, guid: 9cf225570db110340ad37297fdbdcad7,
     type: 3}
   _explosionParticles: {fileID: 0}
-  _areaDamageRadius: 0.5
+  _areaDamageRadius: 10
   _areaDamageInterval: 0.5
-  _areaDamageAmount: 2
+  _areaDamageAmount: 0
   _areaDamageKnockback: 1
+  _areaExpandingTime: 1
   _canAreaDamageZoneDamageMultipleTime: 0
-  CooldownBeforeExplosion: 1
-  _explosionDamage: 20
-  _explosionKnockback: 1
-  _explosionRadius: 50
+  AreaExpandCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _explosionDamage: 40
+  _explosionKnockback: 1.25
   _canExplosionDamageMultipleTime: 0
   _enemies:
   - {fileID: 8173794750066506861, guid: 2312d13daccd96d4b8c05df2086bd53c, type: 3}
   - {fileID: 5379583502769917093, guid: 9a4e614d939ac324a8d91cb587143e82, type: 3}
   - {fileID: 4636671935939786868, guid: db0b8fd01436fc349bfe4ccf3c12e9dc, type: 3}
-  _numberOfEnemies: 5
+  _numberOfEnemies: 3
   _minCooldownForAttack: 30
   _maxCooldownForAttack: 45
   _scaleHeight: 0.1
-  _timeForRescaling: 15
+  _timeForRescaling: 5
   _allEnemies: []
-  _enemyAnimation: {fileID: 0}
+  _enemyAnimation: {fileID: 6240177710667417376}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +403,7 @@ Transform:
   m_GameObject: {fileID: 6261708983540323961}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 1.8, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -370,7 +450,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 24aaa91c8629b76499593bbab99a1932, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e616eb96714a2ab4c9282582008e0eea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -393,6 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &7214748225881584283
 Animator:
   serializedVersion: 5
@@ -424,5 +505,153 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 581feb76181cc9a49906f1b28e44edba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &7994204359991396098
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7043983935662915794}
+    m_Modifications:
+    - target: {fileID: 2188040741212598274, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_Name
+      value: Tentacle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eef3e99a6963a5944895f6b6d15c62f5, type: 3}
+--- !u!114 &444311331260080428 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7555804665617229358, guid: eef3e99a6963a5944895f6b6d15c62f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7994204359991396098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb5b1e692bde7f4aaff6e7404b85673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &3651856944829261503 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6656071795533013437, guid: eef3e99a6963a5944895f6b6d15c62f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7994204359991396098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5134025535328651934 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3012529400330980764, guid: eef3e99a6963a5944895f6b6d15c62f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7994204359991396098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf0addc8970b724c9db4117e4f9c36e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

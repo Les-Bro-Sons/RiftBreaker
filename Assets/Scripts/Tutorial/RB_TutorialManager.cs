@@ -163,6 +163,12 @@ public class RB_TutorialManager : MonoBehaviour
         RB_LevelManager.Instance.EventPlayerLost.AddListener(OnPlayerDeathAfterAttack);
         RewindTutoRoom.CloseRoom(); //Close the room
         DisplayAttackTuto();
+        _robertLeNecAttackDialogue.StartDialogue();
+        _robertLeNecDeathAfterAttack.StopDialogue();
+    }
+
+    private void OnKatanaGatheredAfterTutoFinished()
+    {
         _robertLeNecDeathAfterAttack.StopDialogue();
     }
 
@@ -192,6 +198,7 @@ public class RB_TutorialManager : MonoBehaviour
         RewindTutoRoom.OpenRoom();
         TutorialRoom.OpenRoom();
         _tutoKatana.EventOnItemGathered.RemoveListener(OnKatanaGathered);
+        _tutoKatana.EventOnItemGathered.AddListener(OnKatanaGatheredAfterTutoFinished);
         //Invoke(nameof(AchieveTuto), 3);
     }
 

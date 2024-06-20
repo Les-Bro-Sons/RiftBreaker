@@ -50,6 +50,8 @@ public class RB_InputManager : MonoBehaviour
 
     private Transform _playerTransform;
 
+    public bool IsKeyBoard = true;
+
     private void Awake()
     {
         if (Instance == null)
@@ -65,6 +67,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!MoveEnabled) return;
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
@@ -80,6 +83,7 @@ public class RB_InputManager : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         IsMouse = (context.action.activeControl.device.name == "Mouse");
+        IsKeyBoard = (context.action.activeControl.device.name == "Mouse");
         if (!AttackEnabled) return;
 
         if (context.started)
@@ -90,6 +94,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Mouse");
         if (!SpecialAttackEnabled) return;
 
         if (context.started)
@@ -100,6 +105,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!DashEnabled) return;
         if (context.started) {
             EventDashStarted?.Invoke();
@@ -110,6 +116,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnRewind(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!RewindEnabled) return;
 
         if (context.started)
@@ -120,6 +127,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem1(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!ItemsEnabled) return;
 
         if (context.started)
@@ -130,6 +138,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem2(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!ItemsEnabled) return;
 
         if (context.started)
@@ -140,6 +149,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem3(InputAction.CallbackContext context)
     {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (!ItemsEnabled) return;
 
         if (context.started)

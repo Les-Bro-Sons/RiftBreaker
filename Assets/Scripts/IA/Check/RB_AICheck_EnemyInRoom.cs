@@ -1,6 +1,7 @@
 using BehaviorTree;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class RB_AICheck_EnemyInRoom : RB_BTNode
@@ -26,16 +27,34 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
     {
         _state = BTNodeState.FAILURE;
 
-        int? room = RB_RoomManager.Instance.GetEntityRoom(_btParent.AiHealth.Team, _btParent.gameObject);
+        int? room = RB_RoomManager.Instance.GetEntityRoom(_btParent.AiHealth.Team, _btParent.gameObject); //get ai room
         if (room == null) return BTNodeState.FAILURE;
 
-        if (_btParent.AiHealth.Team == TEAMS.Ai)
+        if (_btParent.AiHealth.Team == TEAMS.Ai) //get ennemies depending on team
         {
-            _enemies = RB_RoomManager.Instance.GetDetectedAllies(room.Value);
+            _enemies = RB_RoomManager.Instance.GetDetectedAllies(room.Value).ToList();
         }
         else
         {
-            _enemies = RB_RoomManager.Instance.GetDetectedEnemies(room.Value);
+            _enemies = RB_RoomManager.Instance.GetDetectedEnemies(room.Value).ToList();
+        }
+
+        if (_enemies.Count == 0) //get nearby ennemy even if not in room
+        {
+            float nearbyDetectionRange = _btParent.FovRange;
+            foreach (Collider collider in Physics.OverlapSphere(_transform.position, nearbyDetectionRange))
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth) && enemyHealth.Team != _btParent.AiHealth.Team && Physics.Raycast(_transform.position, (enemyHealth.transform.position - _transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << 6) | (1 << 10))))
+                {
+                    if (RB_Tools.TryGetComponentInParent<RB_Health>(hit.collider.gameObject, out RB_Health enemyCheck))
+                    {
+                        if (enemyCheck == enemyHealth && !_enemies.Contains(enemyHealth))
+                        {
+                            _enemies.Add(enemyHealth);
+                        }
+                    }
+                }
+            }
         }
 
         foreach (RB_Health enemy in _enemies.ToList())

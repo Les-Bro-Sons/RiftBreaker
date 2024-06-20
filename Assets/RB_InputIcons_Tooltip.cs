@@ -12,7 +12,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI {
         protected void Start() {
             // Hook into all updateBindingUIEvents on all RebindActionUI components in our hierarchy.
             RB_InputToolTip[] rebindUIComponents = transform.GetComponentsInChildren<RB_InputToolTip>(true);
-            Debug.Log(rebindUIComponents.Length);
             foreach (RB_InputToolTip component in rebindUIComponents){
                 component.updateBindingUIEvent.AddListener(OnUpdateBindingDisplay);
                 component.UpdateBindingDisplay();
@@ -34,8 +33,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI {
             else if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse"))
                 icon = RB_IconsSprite.Instance.Mouse.GetSprite(controlPath);
             else if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Keyboard")) {
-                Debug.Log(RB_IconsSprite.Instance== null);
-                
                 icon = RB_IconsSprite.Instance.Keyboard.GetSprite(controlPath);
             }
                 

@@ -10,7 +10,7 @@ public class RB_IconsSprite : MonoBehaviour{
     public static RB_IconsSprite Instance;
 
     private void Awake(){
-        if(Instance == null) { Debug.Log("NIGGA"); Instance = this;}
+        if(Instance == null) { Instance = this;}
     }
 
     [Serializable]
@@ -146,7 +146,6 @@ public class RB_IconsSprite : MonoBehaviour{
         public Sprite Space;
 
         public Sprite GetSprite(string controlPath){
-            Debug.Log("Gyat");
             switch (controlPath) {
                 case "q": return A;
                 case "b": return B; 
@@ -175,8 +174,7 @@ public class RB_IconsSprite : MonoBehaviour{
                 case "y": return Y;
                 case "z": return W;
                 case "0": return Zero;
-                case "&": Debug.Log("nigga2"); return One;
-                case "1": Debug.Log("Nigga"); return One;
+                case "1":  return One;
                 case "2": return Two;
                 case "3": return Three;
                 case "4": return Four;

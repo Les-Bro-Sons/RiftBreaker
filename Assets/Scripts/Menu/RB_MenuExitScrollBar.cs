@@ -14,7 +14,7 @@ public class RB_MenuExitScrollBar : MonoBehaviour, IPointerDownHandler, IPointer
         _scrollbar = GetComponent<Scrollbar>();
     }
 
-    // Called when the pointer is released to select the next Selectable
+    // Called when the pointer is released to Select the next Selectable
     public void OnPointerUp(PointerEventData eventData){
         if (_isSelected) {
             // Temporarily disable and enable the scrollbar to refresh its state

@@ -25,88 +25,72 @@ public class RB_HUDHeartAnim : MonoBehaviour {
 
     private void FixedUpdate() {
         _hpPercent = ((_rb_Health.Hp / _rb_Health.HpMax) * 100);
-            _elapsedTime += Time.fixedDeltaTime;
-            if (_elapsedTime >= _waitForNextSprite){
-                if (!RB_TimeManager.Instance.IsRewinding) { 
-                    if(_hpPercent > 66) {
-                        if (_sprites1.Count-1 >= _currentSpriteID && _currentSpriteID >= 0) {
-                            _image.sprite = _sprites1[_currentSpriteID];
-                            _currentSpriteID++;
-                        }
-                        else {
-                            _currentSpriteID = 0;
-                        }
-                    }
-                    else if(_hpPercent > 33) {
-                        if (_sprites2.Count-1 >= _currentSpriteID && _currentSpriteID >= 0) {
-                            _image.sprite = _sprites2[_currentSpriteID];
-                            _currentSpriteID++;
-                        }
-                        else {
-                            _currentSpriteID = 0;
-                        }
-                    }
-                    else if (_hpPercent > 0) {
-                        if (_sprites3.Count - 1 >= _currentSpriteID && _currentSpriteID >= 0) {
-                            _image.sprite = _sprites3[_currentSpriteID];
-                            _currentSpriteID++;
-                        }
-                        else {
-                            _currentSpriteID = 0;
-                        }
-                    }
-                    else {
-                        if (_sprites4.Count - 1 >= _currentSpriteID && _currentSpriteID >= 0) {
-                            _image.sprite = _sprites4[_currentSpriteID];
-                            _currentSpriteID++;
-                        }
-                        else {
-                            _currentSpriteID = 0;
-                        }
-                    }
-                }
-                else {
-                    if (_hpPercent > 66){
-                        if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites1.Count -1){
-                            _image.sprite = _sprites1[_currentSpriteID];
-                            _currentSpriteID--;
-                        }
-                        else{
-                            _currentSpriteID = _sprites1.Count - 1;
-                        }
-                    }
-                else if (_hpPercent > 33){
-                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites2.Count - 1) {
-                        _image.sprite = _sprites2[_currentSpriteID];
-                        _currentSpriteID--;
-                    }
-                    else{
-                        _currentSpriteID = _sprites2.Count - 1;
-                    }
-                }
-                else if (_hpPercent > 0){
-                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites3.Count - 1) {
-                        _image.sprite = _sprites3[_currentSpriteID];
-                        _currentSpriteID--;
-                    }
-                    else{
-                        _currentSpriteID = _sprites3.Count - 1;
-                    }
-                }
-                else {
-                    if (_currentSpriteID >= 0 && _currentSpriteID <= _sprites4.Count - 1) {
-                        _image.sprite = _sprites4[_currentSpriteID];
-                        _currentSpriteID--;
-                    }
-                    else {
-                        _currentSpriteID = _sprites4.Count - 1;
-                    }
+        _elapsedTime += Time.fixedDeltaTime;
 
-                }
-            }
-
+        if (_elapsedTime >= _waitForNextSprite) {
+            UpdateSprite();
             _elapsedTime = 0.0f;
         }
     }
+
+    private void UpdateSprite(){
+        if (!RB_TimeManager.Instance.IsRewinding) {
+            UpdateSpriteForward();
+        }
+        else {
+            UpdateSpriteBackward();
+        }
+    }
+
+    private void UpdateSpriteForward() {
+        if (_hpPercent > 66){
+            UpdateSpriteList(_sprites1);
+        }
+        else if (_hpPercent > 33){
+            UpdateSpriteList(_sprites2);
+        }
+        else if (_hpPercent > 0) {
+            UpdateSpriteList(_sprites3);
+        }
+        else{
+            UpdateSpriteList(_sprites4);
+        }
+    }
+
+    private void UpdateSpriteBackward(){
+        if (_hpPercent > 66){
+            UpdateSpriteListBackward(_sprites1);
+        }
+        else if (_hpPercent > 33){
+            UpdateSpriteListBackward(_sprites2);
+        }
+        else if (_hpPercent > 0) {
+            UpdateSpriteListBackward(_sprites3);
+        }
+        else {
+            UpdateSpriteListBackward(_sprites4);
+        }
+    }
+
+    private void UpdateSpriteList(List<Sprite> sprites) {
+        if (_currentSpriteID >= 0 && _currentSpriteID < sprites.Count) {
+            _image.sprite = sprites[_currentSpriteID];
+            _currentSpriteID++;
+        }
+        else {
+            _currentSpriteID = 0;
+        }
+    }
+
+    private void UpdateSpriteListBackward(List<Sprite> sprites){
+        if (_currentSpriteID >= 0 && _currentSpriteID < sprites.Count) {
+            _image.sprite = sprites[_currentSpriteID];
+            _currentSpriteID--;
+        }
+        else  {
+            _currentSpriteID = sprites.Count - 1;
+        }
+    }
+
 
 }

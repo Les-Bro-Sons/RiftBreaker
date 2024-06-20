@@ -83,12 +83,23 @@ public class RB_PlayerAction : MonoBehaviour
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
 
+    private void Start()
+    {
+        GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
+    }
     //Update
     private void Update()
     {
         //count the time the player press the attack button
         TimerChargeAttack();
         RechargeSpecialAttack();
+    }
+
+    private void OnDeath()
+    {
+        StopChargeAttack();
+        StopAttack();
+        StopSpecialAttack();
     }
 
 

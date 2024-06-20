@@ -3504,6 +3504,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorParent
       objectReference: {fileID: 0}
+    - target: {fileID: 8377527384094342296, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11329,7 +11334,7 @@ PrefabInstance:
     - target: {fileID: 5090107859350373542, guid: 2312d13daccd96d4b8c05df2086bd53c,
         type: 3}
       propertyPath: FovAngle
-      value: 75
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5090107859350373542, guid: 2312d13daccd96d4b8c05df2086bd53c,
         type: 3}
@@ -12251,6 +12256,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 775518211}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &455442664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8501065723057423468, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 775518211}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455442662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &455778319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16438,6 +16455,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 811094896}
     m_Modifications:
+    - target: {fileID: 2332363005199447887, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: IsControledByRoom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4186512075783864997, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16508,10 +16530,20 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 17.79
       objectReference: {fileID: 0}
+    - target: {fileID: 8175062331375544264, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8377527384094342296, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
         type: 3}
       propertyPath: m_Name
       value: DoorParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 8377527384094342296, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22019,6 +22051,11 @@ PrefabInstance:
       propertyPath: m_text
       value: '"'
       objectReference: {fileID: 0}
+    - target: {fileID: 1375521616456489527, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: Navmesh
+      value: 
+      objectReference: {fileID: 455442664}
     - target: {fileID: 1525157335243082997, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_text
@@ -27680,8 +27717,13 @@ PrefabInstance:
         type: 3}
       propertyPath: m_NavMeshData
       value: 
-      objectReference: {fileID: 23800000, guid: 014cc667e82e0a34a9c1638f9edbbad9,
+      objectReference: {fileID: 23800000, guid: 136a68b9be0b0e14fbd339d47496fa95,
         type: 2}
+    - target: {fileID: 8501065723057423468, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_LayerMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8544792474351518989, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_IsActive

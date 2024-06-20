@@ -317,7 +317,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //If can rewind
         RB_TimeManager timeManager = RB_TimeManager.Instance;
-        return (!timeManager.IsRewinding && RewindLeft > 0);
+        return (!timeManager.IsRewinding && RewindLeft > 0 && RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration);
     }
 
     public void Rewind()

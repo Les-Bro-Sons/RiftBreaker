@@ -11,13 +11,13 @@ public class RB_Room : MonoBehaviour
     //In room
     [Header("In Room")]
     public List<RB_Health> DetectedEnemies = new();
-    public List<GameObject> DetectedAllies = new();
+    public List<RB_Health> DetectedAllies = new();
     public List<RB_Door> Doors = new();
     public bool IsPlayerInRoom;
 
     private void Update()
     {
-        if(RB_LevelManager.Instance.CurrentPhase == PHASES.Combat && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
+        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
         {
             CloseRoom();
         }else if (isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
@@ -48,6 +48,7 @@ public class RB_Room : MonoBehaviour
     {
         if (!DetectedEnemies.Contains(detectedEnemy))
         {
+            if (DetectedAllies.Contains(detectedEnemy)) DetectedAllies.Remove(detectedEnemy);
             DetectedEnemies.Add(detectedEnemy);
         }
     }
@@ -60,15 +61,16 @@ public class RB_Room : MonoBehaviour
         }
     }
 
-    public void AddDectedAlly(GameObject detectedAlly)
+    public void AddDectedAlly(RB_Health detectedAlly)
     {
         if (!DetectedAllies.Contains(detectedAlly))
         {
+            if (DetectedEnemies.Contains(detectedAlly)) DetectedEnemies.Remove(detectedAlly);
             DetectedAllies.Add(detectedAlly);
         }
     }
 
-    public void RemoveDectedAlly(GameObject lostAlly)
+    public void RemoveDectedAlly(RB_Health lostAlly)
     {
         if (DetectedAllies.Contains(lostAlly))
         {

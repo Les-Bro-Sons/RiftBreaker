@@ -1,4 +1,5 @@
 using Cinemachine;
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,7 +11,7 @@ public class RB_PlayerAction : MonoBehaviour
     public static RB_PlayerAction Instance;
 
     //Conditions
-    [HideInInspector] public bool IsChargingAttack;
+    [HideInInspector] public bool IsChargingAttack = false;
     [HideInInspector] public bool IsChargedAttacking;
     [HideInInspector] public bool IsSpecialAttacking;
     [HideInInspector] public bool IsAttacking;
@@ -20,6 +21,7 @@ public class RB_PlayerAction : MonoBehaviour
     [Range(0, 100)] public float SpecialAttackCharge; //from 0 to 100
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
+    private bool _shouldStartCharging = false;
 
     //Components
     private RB_PlayerMovement _playerMovement;
@@ -43,6 +45,7 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
+    public UnityEvent EventOnChargeSpecialAttackGathered;
 
     //Interacts
     [SerializeField] private float _interactRange;
@@ -51,12 +54,21 @@ public class RB_PlayerAction : MonoBehaviour
     public List<RB_Items> Items = new();
     public bool IsItemNearby;
     public int ItemId = 0;
+    public bool FirstItemGathered = false;
     public RB_Items Item; public RB_Items CurrentItem { get { return Item; } }
+
+    [Header("Rewind")]
+    public int RewindLeft = 3;
+    public int MaxRewind = 3;
 
     //Debug
     [Header("Debug")]
-    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback; 
+    [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
 
+
+    
+
+    //Awake
     private void Awake()
     {
         if (Instance == null)
@@ -68,6 +80,32 @@ public class RB_PlayerAction : MonoBehaviour
         Item = GetComponentInChildren<RB_Items>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
+    }
+
+    //Update
+    private void Update()
+    {
+        //count the time the player press the attack button
+        TimerChargeAttack();
+        RechargeSpecialAttack();
+    }
+
+
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public virtual void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if (Item != null && SpecialAttackCharge <= 100 && Item.SpecialAttackChargeTime > 0)
+        {
+            SpecialAttackCharge += (Time.deltaTime / Item.SpecialAttackChargeTime) * 100;
+        }
+
     }
 
     public void SetCurrentWeapon(string currentWeapon)
@@ -83,6 +121,8 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //When the item is gathered, get it
         Item = Items[id];
+        ItemId = id;
+        Item.ChooseSfx();
     }
 
     public void StartDash()
@@ -96,15 +136,34 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void Attack()
     {
-        if (Item != null && CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4)
+        if (Item != null && ((CanAttack() && Item.CanAttack() && Item.CurrentAttackCombo < 4) || (Item.CanAttackDuringAttack && Item.CanAttack())))
         {
             //Attack
             IsAttacking = true;
-            Item.Attack();
             EventBasicAttack?.Invoke();
-            print("charge attack annulé et attaque commencé");
+            Item.Attack();
             //_impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(0.1f, 0.2f));
         }
+    }
+
+    public void AddItemToList(RB_Items itemToAdd)
+    {
+        itemToAdd.transform.position = itemToAdd.transform.parent.position;
+        itemToAdd.Bind();
+        int currentItemId = Items.IndexOf(Item);
+        //Add the item gathered to the items
+        if (Items.Count >= 3)
+        {
+            Item.Drop();
+            Items.Insert(currentItemId, itemToAdd);
+        }
+        else
+        {
+            Items.Add(itemToAdd);
+            currentItemId += 1;
+        }
+        _playerController.ChoseItem(currentItemId);
+        EventItemGathered?.Invoke();
     }
 
     public void Interact()
@@ -117,23 +176,14 @@ public class RB_PlayerAction : MonoBehaviour
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
                 itemGathered.transform.parent = _transform;
-                EventItemGathered?.Invoke();
-                itemGathered.Bind();
+                
                 IsItemNearby = true;
-                //Add the item gathered to the items
-                if (Items.Count >= 3)
-                {
-                    Item.Drop();
-                    Items.Add(itemGathered);
-                }
-                else
-                {
-                    Items.Add(itemGathered);
-                }
-                print(ItemId);
-                _playerController.ChoseItem(ItemId);
-                ItemId++;
-                ItemId = (ItemId >= 2) ? 2 : ItemId;
+                AddItemToList(itemGathered);
+                
+                
+                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
+                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, 0, 1);
+
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
@@ -179,16 +229,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void StartChargeAttack()
     {
-        if (Item != null && CanAttack())
-        {
-            //Start charging attack
-            IsChargingAttack = true;
-            _isChargingAnimation = false;
-            _chargeAttackPressTime = 0;
-            if(_currentChargedAttack != null)
-                StopCoroutine(_currentChargedAttack);
-            _currentChargedAttack = StartCoroutine(ChargeAttack());
-        }
+        _shouldStartCharging = true;
+        _isChargingAnimation = false;
     }
 
     public bool IsDoingAnyAttack()
@@ -223,6 +265,8 @@ public class RB_PlayerAction : MonoBehaviour
             }
             Item.StopChargingAttack();
             IsChargingAttack = false;
+            _shouldStartCharging = false;
+            _chargeAttackPressTime = 0;
             EventStopChargingAttack?.Invoke();
         }
         
@@ -272,23 +316,38 @@ public class RB_PlayerAction : MonoBehaviour
     public bool CanRewind()
     {
         //If can rewind
-        return false;
+        RB_TimeManager timeManager = RB_TimeManager.Instance;
+        return (!timeManager.IsRewinding && RewindLeft > 0 && RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration);
     }
 
-    private void Update()
+    public void Rewind()
     {
-        //count the time the player press the attack button
-        TimerChargeAttack();
+        if (CanRewind())
+        {
+            RewindLeft -= 1;
+            RB_TimeManager.Instance.StartRewinding(false, false);
+        }
+    }
+
+    public void StopRewind()
+    {
+        RB_TimeManager.Instance.StopRewinding(false);
     }
 
     private void TimerChargeAttack()
     {
-        if (Item != null && IsChargingAttack)
+        if (Item != null && _shouldStartCharging && !IsItemNearby)
         {
             //count the time the player press the attack button
             _chargeAttackPressTime += Time.deltaTime;
-            if (_chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation)
+            if (Item != null && _chargeAttackPressTime > _startChargingDelay && !_isChargingAnimation  && CanAttack())
             {
+                //Start charging attack
+                IsChargingAttack = true;
+                if (_currentChargedAttack != null)
+                    StopCoroutine(_currentChargedAttack);
+                _currentChargedAttack = StartCoroutine(ChargeAttack());
+
                 Item.StartChargingAttack();
                 _isChargingAnimation = true;
                 EventStartChargingAttack?.Invoke();

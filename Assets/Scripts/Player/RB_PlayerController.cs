@@ -28,24 +28,18 @@ public class RB_PlayerController : MonoBehaviour
 
     private void Start()
     {
-        if(_item != null)
+        RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
+        if (_item != null)
         {
-            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);
+           /* RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
+            RB_InputManager.Instance.EventAttackStarted.AddListener(OnChargeAttackStart);*/
             RB_InputManager.Instance.EventAttackCanceled.AddListener(OnChargeAttackStop);
         }
-        else
-        {
-            RB_InputManager.Instance.EventAttackStarted.RemoveAllListeners();
-            RB_InputManager.Instance.EventAttackStarted.AddListener(Interact);
-        }
-        
+
         RB_InputManager.Instance.EventMovePerformed.AddListener(OnMoveStart);
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
         RB_InputManager.Instance.EventSpecialAttackStarted.AddListener(OnSpecialAttack);
-        RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
 
         RB_InputManager.Instance.EventItem1Started.AddListener(delegate { ChoseItem(0); });
         RB_InputManager.Instance.EventItem2Started.AddListener(delegate { ChoseItem(1); });
@@ -69,25 +63,26 @@ public class RB_PlayerController : MonoBehaviour
     public void OnChargeAttackStart()
     {
         //Start charging attack
-        _playerAction.StartChargeAttack();
+        if (CanDoInput())
+            _playerAction.StartChargeAttack();
     }
 
     public void ChoseItem(int id)
     {
         //Chose the item wanted
-        if(_playerAction.Items.Count-1 >= id)
+        if (_playerAction.Items.Count - 1 >= id && CanDoInput())
         {
             _playerAction.SetCurrentWeapon(_playerAction.Items[id].name);
             _playerAction.Items[id].Bind();
             _playerAction.SetItem(id);
         }
-        
+
     }
 
     public void Interact()
     {
         //Interact with the object nearby
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.Interact();
     }
 
@@ -101,7 +96,7 @@ public class RB_PlayerController : MonoBehaviour
 
     public void OnChargeAttackStop()
     {
-        if (!_health.Dead)
+        if (CanDoInput())
         {
             //If charge attack completed start charged attack otherwise start normal attack
             _playerAction.StopChargeAttack();
@@ -111,42 +106,52 @@ public class RB_PlayerController : MonoBehaviour
     public void OnStartDash()
     {
         //Start dash
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.StartDash();
     }
 
     public void OnMoveStart()
     {
         //Start movement
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerMovement.StartMove();
     }
 
     public void OnMoveStop()
     {
         //Stop movement
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerMovement.StopMove();
     }
 
     public void OnSpecialAttack()
     {
         //Start special attack
-        if (!_health.Dead)
+        if (CanDoInput())
             _playerAction.SpecialAttack();
     }
 
     public void OnStartRewind()
     {
         //start rewind in playeraction
-        if (!_health.Dead)
-            RB_TimeManager.Instance.StartRewinding(false, false);
+        if (CanDoInput())
+            _playerAction.Rewind();
+            //RB_TimeManager.Instance.StartRewinding(false, false);
     }
 
     public void OnStopRewind()
     {
         //stop rewind in playeraction
-        if (!_health.Dead)
-            RB_TimeManager.Instance.StopRewinding(false);
+        if (CanDoInput(true))
+            _playerAction.StopRewind();
+            //RB_TimeManager.Instance.StopRewinding(false);
+    }
+
+    private bool CanDoInput(bool ignoreRewind = false)
+    {
+        if (!ignoreRewind)
+            return (!_health.Dead && !RB_TimeManager.Instance.IsRewinding);
+        else
+            return (!_health.Dead);
     }
 }

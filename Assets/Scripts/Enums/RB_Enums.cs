@@ -71,7 +71,16 @@ public enum ENEMYCLASS
 {
     Light,
     Medium,
-    Heavy
+    Heavy,
+    Pawn,
+    Tower,
+}
+
+public enum TARGETMODE
+{
+    Closest,
+    Furthest,
+    Random
 }
 
 // ~~~~~~~~~~ STATES ~~~~~~~~~~
@@ -91,5 +100,12 @@ public enum SETTINGSTATES
     Audio,
     Graphics,
     Controls
+}
+
+public enum MIXERNAME
+{
+    Master,
+    SFX,
+    Music
 }
 

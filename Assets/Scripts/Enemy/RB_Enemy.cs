@@ -10,8 +10,8 @@ public class RB_Enemy : MonoBehaviour
     public SpriteRenderer SpriteRenderer; //PLACEHOLDER
     public Animator AiAnimator;
 
-    private Rigidbody _rb;
-    private RB_AI_BTTree _btTree;
+    protected Rigidbody _rb;
+    protected RB_AI_BTTree _btTree;
 
     private bool _isTombstoned = false;
 
@@ -21,6 +21,7 @@ public class RB_Enemy : MonoBehaviour
 
     protected RB_AiMovement _movement;
 
+    public float ChargeSpecialAttackAmount;
     protected virtual void Awake()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(Death);
@@ -29,6 +30,7 @@ public class RB_Enemy : MonoBehaviour
         _originalExcludeLayer = _rb.excludeLayers;
         _movement = GetComponent<RB_AiMovement>();
         _btTree = GetComponent<RB_AI_BTTree>();
+        SetLayerToTeam();
     }
 
     protected virtual void Start()
@@ -40,6 +42,29 @@ public class RB_Enemy : MonoBehaviour
         }
         Spawned();
     }
+
+    private void SetLayerToTeam()
+    {
+        int layer;
+        TEAMS team = GetComponent<RB_Health>().Team;
+        if (team == TEAMS.Ai)
+            layer = LayerMask.NameToLayer("Enemy");
+        else
+            layer = LayerMask.NameToLayer("Ally");
+
+        gameObject.layer = layer;
+        SetLayerToAllChildren(layer, transform);
+    }
+
+    private void SetLayerToAllChildren(int layer, Transform obj)
+    {
+        foreach(Transform child in obj)
+        {
+            child.gameObject.layer = layer;
+            SetLayerToAllChildren(layer, child);
+        }
+    }  
+
 
     public virtual void Spawned() //when the enemy is spawned
     {
@@ -66,8 +91,11 @@ public class RB_Enemy : MonoBehaviour
             if (AiAnimator) AiAnimator.enabled = false;
             _isTombstoned = true;
             SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
-            _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain"));
+            _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
             _rb.velocity = Vector3.zero;
+            //Create charge special attack particles
+            GameObject instantiatedChargeSpecialAttackParticleSystem = Instantiate(RB_LevelManager.Instance.ChargeSpecialAttackParticlePrefab, transform);
+            instantiatedChargeSpecialAttackParticleSystem.transform.position = transform.position;
         }
     }
 
@@ -75,10 +103,16 @@ public class RB_Enemy : MonoBehaviour
     {
         if (_isTombstoned)
         {
-            if (_btTree && !RB_TimeManager.Instance.IsRewinding) _btTree.enabled = true;
+            if (_btTree && !RB_TimeManager.Instance.IsRewinding)
+            {
+                _btTree.Root.SetData("target", null);
+                _btTree.enabled = true;
+                _btTree.BoolDictionnary.Clear();
+            }
             if (AiAnimator && !RB_TimeManager.Instance.IsRewinding) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;
+            
         }
     }
 

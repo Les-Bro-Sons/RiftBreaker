@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,13 +15,13 @@ public class RB_AiMovement : MonoBehaviour
     [SerializeField] private float _movementAcceleration; public float MovementAcceleration { get { return _movementAcceleration; } }
     [SerializeField] private float _movementMaxSpeed; public float MovementMaxSpeed { get { return _movementMaxSpeed; } }
     [SerializeField] private float _movementFrictionForce;
+    public float MoveSpeedBoost = 1;
 
     [Header("Components")]
     private Rigidbody _rb;
     private Transform _transform;
-    private NavMeshAgent _agent;
-    private NavMeshObstacle _obstacle;
     private RB_Health _health;
+    private RB_AI_BTTree _btTree;
 
     [Header("Animation")]
     [SerializeField] private Animator _enemyAnimator;
@@ -34,26 +35,23 @@ public class RB_AiMovement : MonoBehaviour
         _rb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _navPath = new NavMeshPath();
-        _agent = GetComponent<NavMeshAgent>();
-        _obstacle = GetComponent<NavMeshObstacle>();
         _health = GetComponent<RB_Health>();
+        _btTree = GetComponent<RB_AI_BTTree>();
     }
 
     private void FixedUpdate()
     {
-        //Clamping the speed to the max speed
-        ClampingSpeed();
+        if (_rb && !_rb.isKinematic)
+        {
+            //Clamping the speed to the max speed
+            ClampingSpeed();
 
-        //Adding friction force
-        FrictionForce();
+            //Adding friction force
+            FrictionForce();
 
-        //add force to overlaping bodies
-        PushOverlapingBodies();
-    }
-
-    private void Update()
-    {
-        UpdateAnimator();
+            //add force to overlaping bodies
+            PushOverlapingBodies();
+        }
     }
 
     public void MoveIntoDirection(Vector3 direction, float? speed = null, float? acceleration = null, float? deltaTime = null) // deprecated
@@ -62,15 +60,17 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+
         direction = direction.normalized;
+        direction = RB_Tools.GetHorizontalDirection(direction);
         WalkDirection = direction.normalized;
 
         if (_rb.velocity.magnitude < _movementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value);
+            _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value);
         }
-        _transform.forward = direction;
+        _rb.MoveRotation(Quaternion.LookRotation(direction));
         LastDirection = direction;
     }
 
@@ -87,13 +87,13 @@ public class RB_AiMovement : MonoBehaviour
             
             Vector3 nextPos = _navPath.corners[1];
             nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change
-            Vector3 direction = (nextPos - _transform.position).normalized;
+            Vector3 direction = (nextPos - _transform.position).normalized; 
+            direction = RB_Tools.GetHorizontalDirection(direction);
             WalkDirection = direction;
 
-            _rb.AddForce(direction * speed.Value * deltaTime.Value * acceleration.Value); //move
+            _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value); //move
             _rb.MoveRotation(Quaternion.LookRotation(direction));
 
-            //_transform.forward = direction;
             LastDirection = direction;
         }
     }
@@ -112,23 +112,12 @@ public class RB_AiMovement : MonoBehaviour
         _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
     }
 
-    private void UpdateAnimator()
-    {
-        //Updating the enemy animator
-        if(_enemyAnimator != null)
-        {
-            _enemyAnimator.SetFloat("Horizontal", WalkDirection.x);
-            _enemyAnimator.SetFloat("Vertical", WalkDirection.z);
-            _enemyAnimator.SetFloat("Speed", _rb.velocity.magnitude);
-        }
-        
-    }
-
     private void PushOverlapingBodies()
     {
         foreach (Rigidbody body in _overlapBodies)
         {
-            body.AddForce((body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
+            if (!body) _overlapBodies.Remove(body);
+            body.AddForce(RB_Tools.GetHorizontalDirection(body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
         }
     }
 

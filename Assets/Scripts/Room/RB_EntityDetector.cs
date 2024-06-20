@@ -19,7 +19,7 @@ public class RB_EntityDetector : MonoBehaviour
             else if (entityHealth.Team == TEAMS.Player && entityHealth.TryGetComponent<RB_PlayerMovement>(out RB_PlayerMovement playerMovement) && RB_RoomManager.Instance.GetPlayerCurrentRoom() == null)//Otherwise if it's a player check the IsPlayerInRoom bool
                 _room.IsPlayerInRoom = true;
             else if(entityHealth.Team == TEAMS.Player)
-                _room.AddDectedAlly(entityHealth.gameObject);
+                _room.AddDectedAlly(entityHealth);
         }
         
     }
@@ -28,14 +28,13 @@ public class RB_EntityDetector : MonoBehaviour
     {
         if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health entityHealth))
         {
-            if(entityHealth.Team == TEAMS.Player)
+            if(entityHealth.Team == TEAMS.Player && (entityHealth.TryGetComponent<RB_PlayerController>(out RB_PlayerController playerController)))
             {
                 //If the player leaves then uncheck the IsPlayerInRoom
                 _room.IsPlayerInRoom = false;
-                return;
             }
             _room.RemoveDetectedEnemy(entityHealth);
-            _room.RemoveDectedAlly(other.gameObject);
+            _room.RemoveDectedAlly(entityHealth);
         }
     }
 }

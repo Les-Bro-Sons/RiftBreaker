@@ -1,4 +1,5 @@
 using Cinemachine;
+using MANAGERS;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,10 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] public TEAMS Team;
     [SerializeField] private bool _destroyOnWall;
     [SerializeField] private float _wallDetectionLength = 1;
+
+    [Header("Visual")]
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private AnimationCurve _alphaCurve;
 
     [Header("Particles")]
     [SerializeField] private GameObject _followParticles;
@@ -45,6 +50,14 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] private bool _damageOnExplosion = false;
     [SerializeField] private float _explosionRadius = 1;
 
+    [Header("Bounce")]
+    [SerializeField] private bool _isBouncing = false;
+    [SerializeField] private int _maxBounces = 3;
+    private int _currentBounce = 0;
+
+    [Header("Sounds")] 
+    [SerializeField] private string _explosionSounds;
+    
     //Components
     private Rigidbody _rb;
     private Transform _transform;
@@ -55,6 +68,7 @@ public class RB_Projectile : MonoBehaviour
     private float _traveledDistance;
     private Vector3 _firstPos;
     private float _creationTime;
+    private float _lifeTime = 0;
 
     //Spawn prefab
     public float SpawnDistanceFromPlayer;
@@ -78,6 +92,10 @@ public class RB_Projectile : MonoBehaviour
 
     private void EnemyEntered(GameObject enemy)
     {
+        RB_Health enemyHealth = enemy.GetComponent<RB_Health>();
+        bool isAlly = (enemyHealth.Team == Team);
+        if (isAlly) return;
+
         if (_damageOnExplosion)
         {
             Explode();
@@ -90,9 +108,6 @@ public class RB_Projectile : MonoBehaviour
             _alreadyDamaged.Add(enemy);
             isAlreadyDamaged = false;
         }
-        RB_Health enemyHealth = enemy.GetComponent<RB_Health>();
-
-        bool isAlly = (enemyHealth.Team == Team);
 
         if ((_isDealingKnockbackMultipleTime || !isAlreadyDamaged) && (_canKnockbackAlly || !isAlly)) // if it isn't already damaged or can damage multiple time
         {
@@ -104,9 +119,7 @@ public class RB_Projectile : MonoBehaviour
             enemyHealth.TakeDamage(_damage);
             if (_isDestroyingOnDamage)
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
     }
@@ -115,7 +128,7 @@ public class RB_Projectile : MonoBehaviour
     {
         foreach (Collider collider in Physics.OverlapSphere(_transform.position, _explosionRadius))
         {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth) && enemyHealth.Team != Team)
             {
                 enemyHealth.TakeKnockback(_transform.TransformDirection(_knockback.normalized), _knockback.magnitude);
                 enemyHealth.TakeKnockback(collider.transform.position - _transform.position, _knocbackExplosionForce);
@@ -124,7 +137,8 @@ public class RB_Projectile : MonoBehaviour
         }
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-        Destroy(gameObject);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, 1);
+        DestroyProjectile();
     }
 
     private void Start()
@@ -153,11 +167,20 @@ public class RB_Projectile : MonoBehaviour
             }
             else
             {
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
             
+        }
+        if (_isBouncing && Physics.Raycast(_transform.position, _rb.velocity.normalized, out RaycastHit hitInfo, _wallDetectionLength, 1 << 3))
+        {
+            if (_currentBounce >= _maxBounces)
+            {
+                DestroyProjectile();
+                return;
+            }
+            Vector3 direction = Vector3.Reflect(_rb.velocity.normalized, hitInfo.normal);
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
+            _currentBounce += 1;
         }
     }
 
@@ -175,9 +198,7 @@ public class RB_Projectile : MonoBehaviour
             else
             {
                 //When it reaches the total distance, destroy the projectile
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
         else
@@ -185,9 +206,7 @@ public class RB_Projectile : MonoBehaviour
             if(Time.time > (_creationTime + _totalLifeTime))
             {
                 //If the projectile is meant to be launched, when its life time is finished, destroy it
-                if (_destroyParticles)
-                    Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
         
@@ -202,6 +221,7 @@ public class RB_Projectile : MonoBehaviour
 
     private void Update()
     {
+        _lifeTime += Time.deltaTime;
         if (_continuousForceScreenshake != 0) //continuous screenshake
         {
             if (_currentContinousDelayScreenshake >= _continuousDelayScreenshake + _impulseSource.m_ImpulseDefinition.m_ImpulseDuration) //apply screenshake if the delay is met
@@ -214,6 +234,15 @@ public class RB_Projectile : MonoBehaviour
         }
 
         UpdateAnim();
+        UpdateAlpha();
+    }
+
+    private void UpdateAlpha()
+    {
+        if (_spriteRenderer)
+        {
+            _spriteRenderer.color = new Color(1, 1, 1, _alphaCurve.Evaluate(_lifeTime / _totalLifeTime));
+        }
     }
 
     private void UpdateAnim()
@@ -223,5 +252,13 @@ public class RB_Projectile : MonoBehaviour
             _projectileAnimator.SetFloat("Horizontal", _transform.TransformDirection(Vector3.forward).x);
             _projectileAnimator.SetFloat("Vertical", _transform.TransformDirection(Vector3.forward).z);
         }
+    }
+
+    private void DestroyProjectile() 
+    {
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, .1f);
+        if (_destroyParticles)
+            Instantiate(_destroyParticles, _transform.position, _transform.rotation);
+        Destroy(gameObject);
     }
 }

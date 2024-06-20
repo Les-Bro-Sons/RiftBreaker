@@ -1,3 +1,5 @@
+using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_MusicBox : RB_Items
@@ -13,12 +15,16 @@ public class RB_MusicBox : RB_Items
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
 
+    //Music Notes
+    public List<Sprite> NoteSprites = new();
+
 
     protected override void Start()
     {
         base.Start();
-
+        EventOnEndOfAttack.AddListener(EndOfAttack);
     }
+   
     public override void Bind()
     {
         base.Bind();
@@ -29,14 +35,9 @@ public class RB_MusicBox : RB_Items
 
     public override void Attack()
     {
-        if(_charging)
-        {
-            StartCoroutine(WaitToResetAttacks());
-            StartCoroutine(WaitToResetAttacks());
-            _charging = false;
-            return;
-        }
         base.Attack();
+        ShootProjectile("MusicNote");
+        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
     }
 
     public override void ChargedAttack()
@@ -44,6 +45,7 @@ public class RB_MusicBox : RB_Items
         base.ChargedAttack();
 
         _charging = false;
+        RB_AudioManager.Instance.PlaySFX("musicbox_Loop", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void StartChargingAttack()
@@ -54,7 +56,9 @@ public class RB_MusicBox : RB_Items
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
+            RB_AudioManager.Instance.PlaySFX("musicBoxManivelle", RB_PlayerController.Instance.transform.position, .15f, 1f);
         }
+        
 
     }
 
@@ -84,6 +88,14 @@ public class RB_MusicBox : RB_Items
         base.StopChargingAttack();
         StopChargeZone();
         Destroy(_instantiatedZone, _stayTime);
+        if (_charging)
+        {
+            _charging = false;
+            _playerAnimator.SetBool("ChargingAttack", false);
+            _playerAction.StopAttack();
+            _playerAction.StopChargedAttack();
+            _playerAction.StopSpecialAttack();
+        }
     }
 
     private void Update()
@@ -91,5 +103,13 @@ public class RB_MusicBox : RB_Items
         ChargeZone();
     }
 
-
+    private void EndOfAttack() 
+    {
+        RB_AudioManager.Instance.StopSFX();
+    }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("sheating_music_box", RB_PlayerController.Instance.transform.position, 0,1f);
+    }
 }

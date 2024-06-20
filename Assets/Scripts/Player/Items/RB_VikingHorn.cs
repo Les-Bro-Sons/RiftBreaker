@@ -1,4 +1,6 @@
+using MANAGERS;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class RB_VikingHorn : RB_Items
 {
@@ -22,6 +24,9 @@ public class RB_VikingHorn : RB_Items
     [SerializeField] private string _specialAttackParticle;
     private string _currentParticle;
 
+    //Position
+    Vector3 _startPosition = new();
+
 
 
     public override void Bind()
@@ -36,6 +41,19 @@ public class RB_VikingHorn : RB_Items
     public override void Attack()
     {
         base.Attack();
+        switch (CurrentAttackCombo)
+        {
+            case 0: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0, 1);
+                break;
+            case 1: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh2", RB_PlayerController.Instance.transform.position, 0, 1);
+                break;
+            case 2: 
+                RB_AudioManager.Instance.PlaySFX("BigSwoosh", RB_PlayerController.Instance.transform.position, 0, 1);
+                break;
+        }
+        
         //Start the timer
         _attackUseTime = Time.time;
         //Increase the combo
@@ -45,6 +63,16 @@ public class RB_VikingHorn : RB_Items
             StartJumpAttack(_landingOnDirt);
         }
         
+    }
+
+    public override void StartChargingAttack() {
+        base.StartChargingAttack();
+        RB_AudioManager.Instance.PlaySFX("growl", RB_PlayerController.Instance.transform.position, 0.15f, 1f);
+    }
+
+    public override void ChargedAttack() {
+        base.ChargedAttack();
+        RB_AudioManager.Instance.PlaySFX("huh1", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void SpecialAttack()
@@ -73,6 +101,7 @@ public class RB_VikingHorn : RB_Items
     {
         if (!_isJumping)
         {
+            _startPosition = _transform.position;
             _currentParticle = particle;
             //Start the jump attack
             _shouldJump = true;
@@ -87,7 +116,7 @@ public class RB_VikingHorn : RB_Items
             //Get the horizontal and vertical next position
             Vector3 horizontalPosition = _rb.position + RB_PlayerAction.Instance.transform.forward * _jumpDistance * Time.fixedDeltaTime;
             horizontalPosition.y = 0;
-            Vector3 verticalPosition = new Vector3(0, _jumpCurve.Evaluate(_heightIndex) * _jumpHeight);
+            Vector3 verticalPosition = new Vector3(0, _startPosition.y + _jumpCurve.Evaluate(_heightIndex) * _jumpHeight);
             _heightIndex += Time.fixedDeltaTime;
             //Set the position to the player
             Vector3 position = new Vector3(_rb.position.x, verticalPosition.y, _rb.position.z);
@@ -105,6 +134,7 @@ public class RB_VikingHorn : RB_Items
                 _shouldJump = false;
                 _isJumping = false;
                 CurrentAttackCombo = 0;
+                RB_AudioManager.Instance.PlaySFX("medium-explosion", RB_PlayerController.Instance.transform.position, 0, 1f);
             }
         }
     }
@@ -118,5 +148,10 @@ public class RB_VikingHorn : RB_Items
     {
         ComboTimer();
         UpdateAnim();
+    }
+    
+    public override void ChooseSfx() {
+        base.ChooseSfx();
+        RB_AudioManager.Instance.PlaySFX("sheating_Horn", RB_PlayerController.Instance.transform.position, 0,1f);
     }
 }

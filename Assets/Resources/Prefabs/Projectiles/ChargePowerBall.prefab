@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &8124303266802909437
 Animator:
   serializedVersion: 5
@@ -291,7 +292,32 @@ MonoBehaviour:
   _totalLifeTime: 2
   Team: 1
   _destroyOnWall: 1
-  _wallDetectionLength: 1
+  _wallDetectionLength: 0.5
+  _spriteRenderer: {fileID: 3910664724030478307}
+  _alphaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.009117482
+      outSlope: -0.009117482
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.27941176
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.2355483
+      outSlope: -2.2355483
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06498194
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _followParticles: {fileID: 2451604520403008917, guid: a32b8235e98f64d4087e5fa9d84c1489,
     type: 3}
   _destroyParticles: {fileID: 2451604520403008917, guid: ade4b292e4342e841a74c79067e1e6fa,
@@ -308,8 +334,11 @@ MonoBehaviour:
   _isDestroyingOnDamage: 0
   _damageOnExplosion: 0
   _explosionRadius: 7.94
+  _isBouncing: 0
+  _maxBounces: 3
+  _explosionSounds: gory-explosion
   _projectileAnimator: {fileID: 8124303266802909437}
-  SpawnDistanceFromPlayer: 2
+  SpawnDistanceFromPlayer: 0.1
 --- !u!54 &3608295380498534000
 Rigidbody:
   m_ObjectHideFlags: 0

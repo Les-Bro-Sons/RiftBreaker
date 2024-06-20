@@ -5,6 +5,7 @@ using UnityEngine;
 public class RB_AI_PlayerInFov : RB_BTNode
 {
     private RB_AI_BTTree _btParent;
+    private Rigidbody _rb;
 
     private Transform _transform;
     private static int _layerMaskPlayer = 1 << 7;
@@ -19,10 +20,14 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private bool _isLoadingSpotBar = false;
     private bool _isUnloadingSpotBar = false;
 
-    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range)
+    private bool _lookAtSuspicious;
+
+    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range, bool lookAtSuspicious = true)
     {
         _btParent = BtParent;
+        _rb = _btParent.AiRigidbody;
         _transform = _btParent.transform;
+        _lookAtSuspicious = lookAtSuspicious;
         // _animator = transform.GetComponent<Animator>();
     }
 
@@ -96,7 +101,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         }
         else
         {
-            object t = GetData("target");
+            object t = _btParent.Root.GetData("target");
             if (t == null)
             {
                 //Debug.Log("Recherche de la cible...");
@@ -156,9 +161,15 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                     //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
                     //_btParent.CanvasUi.alpha = 0.0f;
+
                     if (!_btParent.GetBool("HasACorrectView"))
                     {
                         LoadSpotBar();
+                        //look at player
+                        if (_lookAtSuspicious)
+                        {
+                            _rb.MoveRotation(Quaternion.LookRotation(target.position - _transform.position));
+                        }
                     }
 
                     if (_btParent.ImageSpotBar.fillAmount >= 1)
@@ -174,7 +185,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     }
                     else
                     {
-                        _btParent.transform.forward = (target.transform.position - _btParent.transform.position).normalized;
                         _state = BTNodeState.RUNNING;
                         return _state;
                     }
@@ -200,6 +210,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     bool SeesPlayer(Transform target)
     {
+        _btParent.IsPlayerInSight = false;
         Vector3 targetDir = target.position - _transform.position;
         float angle = Vector3.Angle(targetDir, _transform.forward);
         if (angle >= -_btParent.FovAngle / 2 && angle <= _btParent.FovAngle / 2)
@@ -207,8 +218,9 @@ public class RB_AI_PlayerInFov : RB_BTNode
             RaycastHit hit;
 
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
             {
+                _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);
                 if (hitHealth && hitHealth.Team != _btParent.AiHealth.Team)
                 {

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RB_UxHourglass : MonoBehaviour
+public class RB_UxHourglassManager : MonoBehaviour
 {
-    public static RB_UxHourglass Instance;
+    public static RB_UxHourglassManager Instance;
 
     public GameObject _prefabHourglass;
     public GameObject _hourglassHolster;
@@ -26,55 +26,69 @@ public class RB_UxHourglass : MonoBehaviour
         }
     }
 
-    public void CreateMaxNumberOfHourglass()
+    private void Update()
     {
-        if (RB_TimeManager.Instance.HourglassList.Count > 0)
+        // RB_TimeManager.Instance.RewindLeft
+        // si RewindLeft est superieur a la liste, on ajoute 
+        // si RewindLeft est inferieur a la liste, on efface
+        // si RewindLeft est egale a la liste, on ne fait rien
+
+        if (RB_PlayerAction.Instance.RewindLeft <= 0)
+            RB_PlayerAction.Instance.RewindLeft = 0;
+
+        if (RB_PlayerAction.Instance.RewindLeft != RB_TimeManager.Instance.HourglassList.Count)
         {
-            for (int i = 0; i < RB_TimeManager.Instance.HourglassList.Count; i++)
+            if (RB_PlayerAction.Instance.RewindLeft > RB_TimeManager.Instance.HourglassList.Count)
             {
-                Destroy(RB_TimeManager.Instance.HourglassList[i].gameObject);
+                AddHourglasses(RB_PlayerAction.Instance.RewindLeft - RB_TimeManager.Instance.HourglassList.Count);
             }
-            RB_TimeManager.Instance.HourglassList.Clear();
+            else if (RB_PlayerAction.Instance.RewindLeft < RB_TimeManager.Instance.HourglassList.Count)
+            {
+                RemoveHourglasses(RB_TimeManager.Instance.HourglassList.Count - RB_PlayerAction.Instance.RewindLeft);
+            }
         }
-
-        StartCoroutine(EventStartCreateHourglass(intervalTime: 0.5f));
     }
 
-    public void CreateOneHourglass()
+    public void NumberOfHourglass(int count)
     {
-        GameObject obj = Instantiate(_prefabHourglass, _hourglassHolster.transform);
-        RB_TimeManager.Instance.HourglassList.Add(obj);
+        RB_PlayerAction.Instance.RewindLeft = count;
     }
 
-    public void StartUseHourglassUx()
+    private void AddHourglasses(int count)
     {
-        GameObject lastHourglass = RB_TimeManager.Instance.HourglassList[RB_TimeManager.Instance.NumberOfRewind - 1];
-
-        CanvasGroup canvasGroup = lastHourglass.GetComponent<CanvasGroup>();
-        if (canvasGroup != null && canvasGroup.alpha != 0f)
+        for (int i = 0; i < count; i++)
         {
-            StartCoroutine(StartHourglassUx(lastHourglass, canvasGroup));
+            GameObject newHourglass = Instantiate(_prefabHourglass, _hourglassHolster.transform);
+            newHourglass.name = $"Hourglass {RB_TimeManager.Instance.HourglassList.Count}";
+
+            StartCoroutine(StartCreateHourglass(newHourglass));
+
+            RB_TimeManager.Instance.HourglassList.Add(newHourglass);
         }
-        else
+    }
+
+    private void RemoveHourglasses(int count)
+    {
+        for (int i = 0; i < count; i++)
         {
-            Debug.LogWarning("Le dernier sablier a une valeur d'alpha égale à 0 !");
+            GameObject hourglassToRemove = RB_TimeManager.Instance.HourglassList[RB_TimeManager.Instance.HourglassList.Count - 1];
+            StartCoroutine(StartUseHourglassUx(hourglassToRemove));
+
+            RB_TimeManager.Instance.HourglassList.RemoveAt(RB_TimeManager.Instance.HourglassList.Count - 1);
+            //Destroy(hourglassToRemove);
         }
     }
 
-    public void StopUseHourglassUx()
+    private IEnumerator StartUseHourglassUx(GameObject hourglass)
     {
-        StopAllCoroutines();
-        StartCoroutine(StopHourglassUx());
-    }
+        CanvasGroup canvasHourglassToRemove = hourglass.GetComponent<CanvasGroup>();
 
-    private IEnumerator StartHourglassUx(GameObject hourglass, CanvasGroup canvasGroup)
-    {
         float currentRotation = 0f;
         float elapsedTime = 0f;
 
         while (currentRotation < _targetUsedRotation)
         {
-            float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.deltaTime;
+            float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.unscaledDeltaTime;
             hourglass.transform.localRotation *= Quaternion.Euler(0f, 0f, rotationThisFrame); // rotation delta
             currentRotation += rotationThisFrame;
             yield return null;
@@ -84,29 +98,19 @@ public class RB_UxHourglass : MonoBehaviour
 
         while (elapsedTime < _alphaDuration)
         {
-            canvasGroup.alpha -= Time.deltaTime / _alphaDuration;
-            elapsedTime += Time.deltaTime;
+            canvasHourglassToRemove.alpha -= Time.unscaledDeltaTime / _alphaDuration;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
-        //if (RB_TimeManager.Instance.NumberOfRewind <= 0)
-            //joue animation de fin
+        Destroy(hourglass);
+        //if (RB_TimeManager.Instance.RewindLeft <= 0)
+        //joue animation de fin
     }
 
-    private IEnumerator EventStartCreateHourglass(float intervalTime)
+    private IEnumerator StartCreateHourglass(GameObject obj)
     {
-        for (int i = 0; i < RB_TimeManager.Instance.NumberOfRewind; i++)
-        {
-            StartCoroutine(StartCreateHourglass(i));
-            yield return new WaitForSeconds(intervalTime);
-        }
-    }
-
-    private IEnumerator StartCreateHourglass(int indexHourglass)
-    {
-        GameObject obj = Instantiate(_prefabHourglass, _hourglassHolster.transform);
         CanvasGroup canvasGroup = obj.GetComponent<CanvasGroup>();
-        obj.name = $"Hourglass {indexHourglass}";
         obj.transform.localRotation = Quaternion.Euler(0f, 0f, _targetUsedRotation);
 
         float currentRotation = _targetUsedRotation;
@@ -120,27 +124,21 @@ public class RB_UxHourglass : MonoBehaviour
         {
             if (canvasGroup.alpha < 1f)
             {
-                canvasGroup.alpha += Time.deltaTime / _alphaDuration;
+                canvasGroup.alpha += Time.unscaledDeltaTime / _alphaDuration;
             }
 
             if (currentRotation > _targetNotUsedRotation)
             {
-                float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.deltaTime;
+                float rotationThisFrame = (_targetUsedRotation / _rotationDuration) * Time.unscaledDeltaTime;
                 obj.transform.localRotation *= Quaternion.Euler(0f, 0f, -rotationThisFrame);
                 currentRotation -= rotationThisFrame;
             }
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
         canvasGroup.alpha = 1f;
         obj.transform.localRotation = Quaternion.Euler(0f, 0f, _targetNotUsedRotation);
-        RB_TimeManager.Instance.HourglassList.Add(obj);
-    }
-
-    private IEnumerator StopHourglassUx()
-    {
-        yield return null;
     }
 }

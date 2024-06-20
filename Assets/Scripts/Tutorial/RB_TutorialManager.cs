@@ -66,10 +66,10 @@ public class RB_TutorialManager : MonoBehaviour
     public float ChangeSpeed;
     public float RobertMoveHeight;
     public float RobertMoveSpeed;
-    public float MinimumRewindTime;
     public RB_Room TutorialRoom;
     public RB_Room RewindTutoRoom;
-    public RB_CollisionDetection LevelExit;
+    public RB_Room StartTutoRoom;
+    public RB_CollisionDetection RoomExit;
     private List<FadeEffect> _fadeEffects = new List<FadeEffect>();
     private List<ButtonEffect> _buttonEffects = new List<ButtonEffect>();
     private bool _rewindTutoSuccess = false;
@@ -89,9 +89,6 @@ public class RB_TutorialManager : MonoBehaviour
     [SerializeField] private List<CanvasGroup> _attackButtons;
     [SerializeField] private RB_Katana _tutoKatana;
     private Transform _robertTransform;
-
-    //Rewind
-    private float _startRewindTime;
 
     //movements
     private List<Movements> _movementsPerformed = new();
@@ -173,7 +170,9 @@ public class RB_TutorialManager : MonoBehaviour
         RB_PlayerAction.Instance.EventBasicAttack.RemoveAllListeners();
         RB_PlayerAction.Instance.EventChargedAttack.RemoveAllListeners();
         RB_PlayerAction.Instance.EventSpecialAttack.RemoveAllListeners();
-        Invoke(nameof(AchieveTuto), 3);
+        RewindTutoRoom.OpenRoom();
+        TutorialRoom.OpenRoom();
+        //Invoke(nameof(AchieveTuto), 3);
     }
 
     #endregion
@@ -239,6 +238,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         RB_InputManager.Instance.EventMovePerformed.RemoveListener(OnMovementPerformed);
         RB_InputManager.Instance.EventDashStarted.RemoveListener(OnDashPerformed);
+        print("acchieve");
         TutorialRoom.OpenRoom();
         foreach(CanvasGroup _movementButton in _movementButtons)
         {
@@ -252,20 +252,20 @@ public class RB_TutorialManager : MonoBehaviour
     #region Rewind tuto
     private void InitializeRewindTuto() //Initialize the rewind tutorial
     {
-        _enemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(InitializeTuto); //When the enemy spot the player
+        _enemyToSlowDownTimeByDistance.EventOnSpotted.AddListener(delegate { TutorialRoom.CloseRoom(); InitializeTuto(); }); //When the enemy spot the player
         RB_TimeManager.Instance.EventStartNormalRewind.AddListener(OnRewindStarted); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopNormalRewind.AddListener(OnRewindStopped); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopFullRewind.AddListener(OnDeathRewindFinished); //When the death rewind is finished
-        LevelExit.EventOnObjectEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
+        RoomExit.EventOnObjectEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
     }
 
     private void OnPlayerExitRewindRoom() //When the player exit the rewind room
     {
-        if (LevelExit.GetDetectedObjects().Contains(RB_PlayerMovement.Instance.gameObject))
+        if (RoomExit.GetDetectedObjects().Contains(RB_PlayerMovement.Instance.gameObject))
         {
             print("level exit");
             RewindTutoRoom.CloseRoom(); //Close the room
-            LevelExit.EventOnObjectEntered.RemoveListener(OnPlayerExitRewindRoom); //Remove listener
+            RoomExit.EventOnObjectEntered.RemoveListener(OnPlayerExitRewindRoom); //Remove listener
             InitializeAttackTuto();
         }
     }
@@ -278,6 +278,16 @@ public class RB_TutorialManager : MonoBehaviour
         StartFadeOut(_rewindTutoImage, ChangeSpeed);
         StopAnimateRobert();
         _robertLeNecRewindDialogue.StopDialogue();
+
+    }
+
+    private void OnRewindStoppedAfterTuto()
+    {
+        if (RewindTutoRoom.IsPlayerInRoom)
+        {
+            RewindTutoRoom.OpenRoom();
+            RoomExit.EventOnObjectEntered.AddListener(delegate { RewindTutoRoom.CloseRoom(); RoomExit.EventOnObjectEntered.RemoveAllListeners(); });
+        }
     }
 
     private void OnDeathRewindFinished() //When the rewind when the player dies is finished
@@ -303,6 +313,8 @@ public class RB_TutorialManager : MonoBehaviour
             RewindTutoRoom.OpenRoom();
             _rewindTutoSuccess = true;
             _enemyToSlowDownTimeByDistance.IsStatic = false;
+            RB_TimeManager.Instance.EventStopNormalRewind.AddListener(OnRewindStoppedAfterTuto);
+            TutorialRoom.OpenRoom();
         }
         
     }
@@ -311,13 +323,12 @@ public class RB_TutorialManager : MonoBehaviour
     {
         StopSlowTimeByEnemyDistance();
         StopSlowtime();
-        _startRewindTime = Time.unscaledTime; //Set the time when the rewind started
         SetNormalTime();
     }
 
     public void OnRewindStopped() //When the player release the rewind button
     {
-        if (_startRewindTime + MinimumRewindTime < Time.unscaledTime) //If the player pressed it long enough
+        if (StartTutoRoom.IsPlayerInRoom) //If the player pressed it long enough
         {
             OnRewindTutoSuccess();
         }

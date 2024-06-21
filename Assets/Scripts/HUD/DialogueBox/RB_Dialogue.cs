@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Dialogue : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class RB_Dialogue : MonoBehaviour
     private float _currentWritingDelay;
     [SerializeField] private float _writingDelay;
     [SerializeField] private float _writingSpeedingDelay;
+    public bool DialogueOpened = false;
+
+    //Events
+    public UnityEvent EventOnDialogueStarted;
+    public UnityEvent EventOnDialogueStopped;
 
     private void Start()
     {
@@ -41,8 +47,10 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StartDialogue() //Start the dialogue system
     {
+        DialogueOpened = true;
         PlayOpenAnim();
         StartCoroutine(StartDialogueAfterOpenAnim());
+        EventOnDialogueStarted?.Invoke();
     }
 
     public IEnumerator StartDialogueAfterOpenAnim() //Initialize the dialogue system just after the animation started
@@ -156,5 +164,7 @@ public class RB_Dialogue : MonoBehaviour
         _currentDialogueFinished = true;
         _dialogueStarted = false;
         PlayCloseAnim();
+        EventOnDialogueStopped?.Invoke();
+        DialogueOpened = false;
     }
 }

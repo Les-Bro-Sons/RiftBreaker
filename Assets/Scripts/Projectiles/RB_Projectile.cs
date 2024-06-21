@@ -137,7 +137,7 @@ public class RB_Projectile : MonoBehaviour
         }
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, 1);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,false, 0, 1);
         DestroyProjectile();
     }
 
@@ -256,7 +256,7 @@ public class RB_Projectile : MonoBehaviour
 
     private void DestroyProjectile() 
     {
-        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, .1f);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,false, 0, .1f);
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
         Destroy(gameObject);

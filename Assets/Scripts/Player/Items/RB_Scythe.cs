@@ -19,7 +19,7 @@ public class RB_Scythe : RB_Items
 
     public override void Attack() {
         base.Attack();
-        RB_AudioManager.Instance.PlaySFX("Scythe_basic_attack", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Scythe_basic_attack", RB_PlayerController.Instance.transform.position, false, 0, 1);
     }
 
     public override void Bind()
@@ -37,7 +37,7 @@ public class RB_Scythe : RB_Items
         if(_instantiatedZone == null)
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
-            RB_AudioManager.Instance.PlaySFXOnLoop("darkMagic", RB_PlayerController.Instance.transform.position, 0, 1f);
+            RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, true, 0, 1f);
             StartChargeZone();
         }
     }
@@ -99,11 +99,11 @@ public class RB_Scythe : RB_Items
         }
         
 
-        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 1f);
+        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, false, 0, 1f);
     }
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, 0,1f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, false, 0,1f);
     }
 }

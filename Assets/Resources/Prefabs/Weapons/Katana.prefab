@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
-  _specialAttackChargeTime: 20
+  SpecialAttackChargeTime: 2
   _chargeZoom: 0.85
   _attackCooldown: 0.1
   _attackDamage: 30
@@ -96,8 +96,10 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 8480078606098514397}
   HudSprite: {fileID: 0}
+  CurrentSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
+  CanAttackDuringAttack: 0
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -316,3 +318,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0

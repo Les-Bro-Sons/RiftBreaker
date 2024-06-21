@@ -9,7 +9,6 @@ public class RB_Cinematique : MonoBehaviour
 	public GameObject Portal;
 	public GameObject PNJ;
 	public GameObject Player;
-	public Rigidbody2D _rb;
 	public Animator _anim;
 	public GameObject Dial;
 	public Transform Wp;

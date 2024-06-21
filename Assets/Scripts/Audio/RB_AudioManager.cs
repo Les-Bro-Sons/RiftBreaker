@@ -28,6 +28,8 @@ namespace MANAGERS
 		public List<AudioSource> AudioSources = new List<AudioSource>();
 		public AudioSource SfxSource;
 
+		private Coroutine _musicSwitchCoroutines;
+
 		private void Awake()
 		{
 			if (Instance == null)
@@ -48,23 +50,59 @@ namespace MANAGERS
 
 		public void PlayMusic(string nameClip)
 		{
-			if (_musicSource.isPlaying)
-			{
-				_musicSource.Stop();
-			}
-			AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
+            AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
+			if (_musicSource.clip == _musicClip) return;
+			
+
+
 			if (_musicClip != null)
 			{
-				_musicSource.clip = _musicClip;
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 
-				_musicSource.Play();
+				if (_musicSource.isPlaying)
+				{
+					StopCoroutine(_musicSwitchCoroutines);
+					_musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip));
+				}
+				else
+				{
+					_musicSource.clip = _musicClip;
+					_musicSource.volume = 1;
+				}
 			}
 			else
 			{
 				Debug.LogWarning("Music clip not found: " + nameClip);
 			}
+		}
+
+		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1)
+		{
+			float timer = 0;
+			float fadeOutDuration = (duration / 2);
+			float fadeInDuration = (duration / 2);
+
+            while (timer < fadeOutDuration)
+			{
+				_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
+				timer += Time.unscaledDeltaTime;
+				yield return null;
+			}
+
+			_musicSource.volume = 0;
+			timer = 0;
+		    _musicSource.clip = clip;
+
+            while (timer < fadeInDuration)
+            {
+                _musicSource.volume = Mathf.Lerp(1, 0, timer / fadeInDuration);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+			_musicSource.volume = 1;
+
+            yield return null;
 		}
 
 

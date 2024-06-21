@@ -98,7 +98,14 @@ namespace MANAGERS
             }
 		}
 
-		public void StopSFX() 
+		public AudioSource PlaySFX(string nameClip, Transform desiredParent, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
+		{
+			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, pitchVariation, volume, mixer);
+			audioSource.transform.parent = desiredParent;
+			return audioSource;
+		}
+
+        public void StopSFX() 
 		{
 			Debug.LogWarning("doesn't work");
 		}

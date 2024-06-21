@@ -42,7 +42,7 @@ public class RB_ChessQueen : RB_Items
             //spawnedChessPawn.Boost();
         }
         SpawnedChessPawns.Add(spawnedChessPawn);
-        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position,0, 1);
+        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position,false, 0, 1);
 
     }
 
@@ -52,7 +52,7 @@ public class RB_ChessQueen : RB_Items
         _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection();
         _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
         GameObject spawnedChessPawn = Instantiate(_towerPrefab, _spawnPos, Quaternion.identity);
-        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position, false, 0, 1);
         if (_shouldBoost)
         {
             //spawnedChessPawn.Boost();
@@ -63,7 +63,7 @@ public class RB_ChessQueen : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
-        RB_AudioManager.Instance.PlaySFX("attack_Spe_Chess", _transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("attack_Spe_Chess", _transform.position, false, 0, 1);
         foreach(GameObject spawnedChessPawn in SpawnedChessPawns)
         {
             //spawnedChessPawn.Boost();
@@ -72,6 +72,6 @@ public class RB_ChessQueen : RB_Items
 
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Chess", RB_PlayerController.Instance.transform.position, 0,1f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Chess", RB_PlayerController.Instance.transform.position, false, 0,1f);
     }
 }

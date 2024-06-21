@@ -33,6 +33,7 @@ public class RB_PlayerAction : MonoBehaviour
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
     private RB_TimeBodyRecorder _timeRecorder;
+    [SerializeField] private RB_Dialogue _pickupGathered;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -65,9 +66,6 @@ public class RB_PlayerAction : MonoBehaviour
     //Debug
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
-
-
-    
 
     //Awake
     private void Awake()
@@ -196,6 +194,8 @@ public class RB_PlayerAction : MonoBehaviour
                 RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, false, 0, 1);
                 RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
 
+                _pickupGathered.StartDialogue();
+                Invoke(nameof(StopPickupDialogue), 5);
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
@@ -213,6 +213,11 @@ public class RB_PlayerAction : MonoBehaviour
             //if there's no item around then attack
             _playerController.OnChargeAttackStart();
         }
+    }
+
+    private void StopPickupDialogue()
+    {
+        _pickupGathered.StopDialogue();
     }
 
     public void ChargedAttack()

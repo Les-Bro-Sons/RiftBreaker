@@ -25,8 +25,8 @@ namespace MANAGERS
 		public const string MUSIC_KEY = "musicVolume";
 		public const string SFX_KEY = "sfxVolume";
 
-		public AudioSource SfxSource;
 		public List<AudioSource> AudioSources = new List<AudioSource>();
+		public AudioSource SfxSource;
 
 		private void Awake()
 		{
@@ -72,22 +72,20 @@ namespace MANAGERS
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
             GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-            SfxSource = _audioSource.GetComponent<AudioSource>();
-			RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
-
-            SfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-            SfxSource.volume = volume;
-            SfxSource.spatialBlend = 1;
-            SfxSource.loop = false;
-            SfxSource.enabled = true;
-
-            // Assignez le groupe à l'AudioSource
-            SfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
+			
+			SfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			SfxSource.volume = volume;
+			SfxSource.spatialBlend = 1;
+			SfxSource.loop = false;
+			SfxSource.enabled = true;
+			
+			// Assignez le groupe à l'AudioSource
+			SfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
 			
 			if (_sfxClip != null)
 			{
-                SfxSource.clip = _sfxClip;
-                SfxSource.Play();
+				SfxSource.clip = _sfxClip;
+				SfxSource.Play();
 				//Destroy(_audioSource,_sfxClip.length);
 				return SfxSource;
 			}
@@ -99,13 +97,14 @@ namespace MANAGERS
             }
 		}
 
+
     public AudioSource PlaySFXOnLoop(string nameClip, Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
         {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
             GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
             SfxSource = _audioSource.GetComponent<AudioSource>();
-            RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
+            
 
             SfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
             SfxSource.volume = volume;
@@ -137,9 +136,12 @@ namespace MANAGERS
 			audioSource.transform.parent = desiredParent;
 			return audioSource;
 		}
+
+
         public void StopSFX() 
 		{
 			SfxSource?.Stop();
+			Debug.LogWarning("doesn't work");
 		}
 	}
 }

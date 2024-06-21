@@ -71,7 +71,8 @@ public class RB_InputManager : MonoBehaviour
         if (!MoveEnabled) return;
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
-        if (context.started){
+        if (context.started)
+        {
             EventMoveStarted?.Invoke();
         }
         else if (context.performed)

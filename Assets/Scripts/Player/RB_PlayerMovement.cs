@@ -116,7 +116,10 @@ public class RB_PlayerMovement : MonoBehaviour
     private void UpdateForward()
     {
         //Constantly set the direction of the player to the right direction
-        _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        if (ForwardDirection != Vector3.zero)
+        {
+            _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        }
     }
 
     private void SetDirectionToAttack()

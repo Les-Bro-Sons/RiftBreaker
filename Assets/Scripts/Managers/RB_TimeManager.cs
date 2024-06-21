@@ -142,8 +142,8 @@ public class RB_TimeManager : MonoBehaviour
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
             Time.timeScale = 1;
-            EventStopRewinding?.Invoke();
             IsRewinding = false;
+            EventStopRewinding?.Invoke();
             UxStopRewind();
             if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
             if (stopFullRewind && _fullRewind)

@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class RB_Door : MonoBehaviour
 {
     private Animator _doorAnimator;
+    public bool IsControledByRoom = true;
 
     public UnityEvent EventOpenDoor;
     public UnityEvent EventCloseDoor;
@@ -18,6 +19,7 @@ public class RB_Door : MonoBehaviour
 
     public void Open()
     {
+        print(Time.time);
         _doorAnimator.SetTrigger("Down");
         EventOpenDoor?.Invoke();
 

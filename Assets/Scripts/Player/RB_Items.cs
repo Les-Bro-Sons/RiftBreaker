@@ -61,6 +61,7 @@ public class RB_Items : MonoBehaviour
 
     //Events
     public UnityEvent EventOnEndOfAttack;
+    public UnityEvent EventOnItemGathered;
 
     protected virtual void Awake()
     {
@@ -113,7 +114,9 @@ public class RB_Items : MonoBehaviour
 
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
-        
+        EventOnItemGathered?.Invoke();
+
+
     }
 
     public virtual void Drop()

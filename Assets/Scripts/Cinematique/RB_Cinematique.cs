@@ -8,7 +8,8 @@ public class RB_Cinematique : MonoBehaviour
 {
 	public GameObject Portal;
 	public GameObject PNJ;
-	public GameObject Player;
+	public Transform Player;
+	public Rigidbody PlayerRigidBody;
 	public Animator _anim;
 	public GameObject Dial;
 	public Transform Wp;
@@ -16,6 +17,7 @@ public class RB_Cinematique : MonoBehaviour
 	private float _openGateSpeed = 0f;
 	private bool _cinematiqueStart = false;
 	[SerializeField] private RB_Dialogue _dialogue;
+	public float WalkSpeed = 5;
 
 
 	private void Awake()
@@ -39,10 +41,13 @@ public class RB_Cinematique : MonoBehaviour
 
 	void StartCinematique()
 	{
-		Player.transform.position = Vector3.MoveTowards(Player.transform.position, Wp.position,.05f);
-		if(Player.transform.position != Wp.position)
-		_anim.Play("Walk_Cinematique");
-		if (Player.transform.position == Wp.position)
+		Vector3 walkDirection = Wp.position - Player.position;
+		float walkDistance = walkDirection.magnitude;
+		walkDirection = walkDirection.normalized;
+        PlayerRigidBody.MovePosition(Player.position + (walkDirection * WalkSpeed * Time.deltaTime));
+		
+		if(walkDistance > 3) _anim.Play("Walk_Cinematique");
+		else
 		{
 			_anim.Play("Player_Idle_Down");
 
@@ -75,7 +80,7 @@ public class RB_Cinematique : MonoBehaviour
 
 	public void QuitCinematique()
 	{
-		SceneManager.LoadScene("RB_DevRoomZakLevelDesignLvlTutorial");
+		RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1);
 	}
 }
 

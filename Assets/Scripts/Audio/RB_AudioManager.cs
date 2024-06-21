@@ -62,7 +62,7 @@ namespace MANAGERS
 
 				if (_musicSource.isPlaying)
 				{
-					StopCoroutine(_musicSwitchCoroutines);
+					if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
 					_musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip));
 				}
 				else

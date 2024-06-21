@@ -50,7 +50,7 @@ public class RB_TimeManager : MonoBehaviour
     {
         StartRecording();
 
-        RB_UxHourglassManager.Instance.NumberOfHourglass(3);
+        RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
     }
     private void FixedUpdate()
     {

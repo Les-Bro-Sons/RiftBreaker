@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,8 +24,14 @@ public class RB_MenuSelectable : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private void Awake(){
         _renderer = GetComponent<Image>();
         _renderer.sprite = _default;
+        if(gameObject.TryGetComponent( out Button button)) {
+            button.onClick.AddListener(OnClick);
+        }
     }
 
+    public void OnClick() {
+        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0.3f, 10f);
+    }
 
     public void OnPointerEnter(PointerEventData eventData) {
         _isHoovered = true;
@@ -36,6 +43,7 @@ public class RB_MenuSelectable : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnSelect(BaseEventData eventData){
         _isSelectedByNavigation = true;
+        RB_AudioManager.Instance.PlaySFX("select" ,transform, false, 0.3f, 10f);
     }
 
     public void OnDeselect(BaseEventData eventData){

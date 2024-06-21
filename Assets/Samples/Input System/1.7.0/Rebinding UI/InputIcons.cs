@@ -16,6 +16,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         public GamepadIcons xbox;
         public GamepadIcons ps4;
         public MouseIcons mouse;
+        public KeyboardIcons keyboard;
 
         protected void OnEnable()
         {
@@ -40,6 +41,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 icon = xbox.GetSprite(controlPath);
             else if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse"))
                 icon = mouse.GetSprite(controlPath);
+            else if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Keyboard")) {
+                icon = keyboard.GetSprite(controlPath);
+            }
 
 
             var textComponent = component.bindingText;
@@ -51,6 +55,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (icon != null) {
                 textComponent.gameObject.SetActive(false);
                 imageComponent.sprite = icon;
+                imageComponent.preserveAspect = true;
                 imageComponent.gameObject.SetActive(true);
             }
             else {
@@ -142,6 +147,100 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     case "middleButton":return MMB;
                 }
             
+                return null;
+            }
+        }
+
+        [Serializable]
+        public struct KeyboardIcons
+        {
+            //letter
+            public Sprite A;
+            public Sprite B;
+            public Sprite C;
+            public Sprite D;
+            public Sprite E;
+            public Sprite F;
+            public Sprite G;
+            public Sprite H;
+            public Sprite I;
+            public Sprite J;
+            public Sprite K;
+            public Sprite L;
+            public Sprite M;
+            public Sprite N;
+            public Sprite O;
+            public Sprite P;
+            public Sprite Q;
+            public Sprite R;
+            public Sprite S;
+            public Sprite T;
+            public Sprite U;
+            public Sprite V;
+            public Sprite W;
+            public Sprite X;
+            public Sprite Y;
+            public Sprite Z;
+
+            //Numbers
+            public Sprite Zero;
+            public Sprite One;
+            public Sprite Two;
+            public Sprite Three;
+            public Sprite Four;
+            public Sprite Five;
+            public Sprite Six;
+            public Sprite Seven;
+            public Sprite Eight;
+            public Sprite Nine;
+
+            //Other
+            public Sprite Space;
+
+            public Sprite GetSprite(string controlPath)
+            {
+                switch (controlPath)
+                {
+                    case "q": return A;
+                    case "b": return B;
+                    case "c": return C;
+                    case "d": return D;
+                    case "e": return E;
+                    case "f": return F;
+                    case "g": return G;
+                    case "h": return H;
+                    case "i": return I;
+                    case "j": return J;
+                    case "k": return K;
+                    case "l": return L;
+                    case "semicolon": return M;
+                    case "n": return N;
+                    case "o": return O;
+                    case "p": return P;
+                    case "a": return Q;
+                    case "r": return R;
+                    case "s": return S;
+                    case "t": return T;
+                    case "u": return U;
+                    case "v": return V;
+                    case "w": return Z;
+                    case "x": return X;
+                    case "y": return Y;
+                    case "z": return W;
+                    case "0": return Zero;
+                    case "1": return One;
+                    case "2": return Two;
+                    case "3": return Three;
+                    case "4": return Four;
+                    case "5": return Five;
+                    case "6": return Six;
+                    case "7": return Seven;
+                    case "8": return Eight;
+                    case "9": return Nine;
+                    case "numpad0": return Zero;
+                    case "space": return Space;
+                }
+
                 return null;
             }
         }

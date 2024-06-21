@@ -13,6 +13,7 @@ public class RB_WhiteSpriteUpdate : MonoBehaviour
 
     private bool _isBlinking = false;
     private float _startBlinkingTime;
+    private Color _baseColor;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class RB_WhiteSpriteUpdate : MonoBehaviour
         sprites = GetComponentsInParent<SpriteRenderer>();
         _parentSpriteRenderer = sprites[1];
         _selfSpriteRenderer = GetComponent<SpriteRenderer>();
+        _baseColor = _selfSpriteRenderer.color;
         if (RB_Tools.TryGetComponentInParent<RB_Health>(gameObject, out RB_Health health))
         {
             health.EventTakeDamage.AddListener(Blink);
@@ -40,7 +42,7 @@ public class RB_WhiteSpriteUpdate : MonoBehaviour
                 _isBlinking = false;
             }
             float alpha = _blinkCurve.Evaluate(progression) * _blinkMaxAlpha;
-            _selfSpriteRenderer.color = new Color(1, 1, 1, alpha);
+            _selfSpriteRenderer.color = new Color(_baseColor.r, _baseColor.g, _baseColor.b, alpha);
         }
     }
 

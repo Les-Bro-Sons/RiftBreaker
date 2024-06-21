@@ -56,13 +56,13 @@ public class RB_PlayerWeaponDetecter : MonoBehaviour
     {
         RB_FadeEffect fadeEffect = new RB_FadeEffect(_pressToGather, 5, FadeType.In);
         _fadeEffects.Add(fadeEffect); //Start fade in effect
-        _currentItem.EventOnItemGathered.AddListener(OnWeaponExit); //Add listener to the gathering item
+        RB_PlayerAction.Instance.EventItemGathered.AddListener(OnWeaponExit); //Add listener to the gathering item
     }
 
     private void OnWeaponExit() //When a weapon exit the trigger
     {
         RB_FadeEffect fadeEffect = new RB_FadeEffect(_pressToGather, 5, FadeType.Out);
         _fadeEffects.Add(fadeEffect); //Start the fade out effect
-        _currentItem.EventOnItemGathered.RemoveListener(OnWeaponEnter); //Remove the listener from the gathering item
+        RB_PlayerAction.Instance.EventItemGathered.RemoveListener(OnWeaponExit); //Remove the listener from the gathering item
     }
 }

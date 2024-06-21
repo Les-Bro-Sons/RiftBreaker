@@ -99,7 +99,7 @@ namespace MANAGERS
             }
 		}
 
-        public AudioSource PlaySFXOnLoop(string nameClip, Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
+    public AudioSource PlaySFXOnLoop(string nameClip, Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
         {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
@@ -130,6 +130,13 @@ namespace MANAGERS
                 return null;
             }
         }
+        
+		public AudioSource PlaySFX(string nameClip, Transform desiredParent, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
+		{
+			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, pitchVariation, volume, mixer);
+			audioSource.transform.parent = desiredParent;
+			return audioSource;
+		}
         public void StopSFX() 
 		{
 			SfxSource?.Stop();

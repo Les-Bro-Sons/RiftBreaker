@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -32,6 +33,22 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         _buttonImage = GetComponent<Image>();
     }
 
+    private void Start()
+    {
+        StartCoroutine(LateStartCoroutine());
+    }
+
+    public IEnumerator LateStartCoroutine() {
+        yield return new WaitForEndOfFrame();
+        LateStart();
+    }
+
+    private void LateStart()
+    {
+        FixNavigation();
+    }
+
+
     public void OnPointerEnter(PointerEventData eventData){
         if (_button.enabled) {
             RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
@@ -46,15 +63,17 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     public void OnSelect(BaseEventData eventData){
         RB_MainMenuButtonManager.Instance.CurrentButton = currentButton;
         _isSelected = true;
+    }
 
+    public void FixNavigation() {
         Navigation buttonNavigation = _button.navigation;
 
 
-        if (!_oldUp.enabled) {
+        if (!_oldUp.enabled){
             buttonNavigation.selectOnUp = _oldUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
-        else {
+        else{
             buttonNavigation.selectOnUp = _oldUp;
             _button.navigation = buttonNavigation;
         }

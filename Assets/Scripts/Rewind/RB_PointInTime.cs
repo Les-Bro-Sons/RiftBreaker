@@ -67,4 +67,6 @@ public struct EventInTime
 public enum TYPETIMEEVENT
 {
     TookWeapon,
+    CloseDoor,
+    OpenDoor,
 }

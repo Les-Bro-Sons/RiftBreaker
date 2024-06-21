@@ -47,6 +47,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float DurationToLoadSpotBar = 0.5f;
     public float DurationToUnloadSpotBar = 1f;
     [HideInInspector] public Vector3 LastTargetPos;
+    public bool IsPlayerInSight = false; //used only by other scripts
 
     [Header("Spot UI")]
     public CanvasGroup CanvasUi;

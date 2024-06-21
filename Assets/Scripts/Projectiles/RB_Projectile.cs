@@ -1,6 +1,6 @@
 using Cinemachine;
-using System.Collections.Generic;
 using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_Projectile : MonoBehaviour
@@ -21,6 +21,10 @@ public class RB_Projectile : MonoBehaviour
     [SerializeField] public TEAMS Team;
     [SerializeField] private bool _destroyOnWall;
     [SerializeField] private float _wallDetectionLength = 1;
+
+    [Header("Visual")]
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private AnimationCurve _alphaCurve;
 
     [Header("Particles")]
     [SerializeField] private GameObject _followParticles;
@@ -64,6 +68,7 @@ public class RB_Projectile : MonoBehaviour
     private float _traveledDistance;
     private Vector3 _firstPos;
     private float _creationTime;
+    private float _lifeTime = 0;
 
     //Spawn prefab
     public float SpawnDistanceFromPlayer;
@@ -216,6 +221,7 @@ public class RB_Projectile : MonoBehaviour
 
     private void Update()
     {
+        _lifeTime += Time.deltaTime;
         if (_continuousForceScreenshake != 0) //continuous screenshake
         {
             if (_currentContinousDelayScreenshake >= _continuousDelayScreenshake + _impulseSource.m_ImpulseDefinition.m_ImpulseDuration) //apply screenshake if the delay is met
@@ -228,6 +234,15 @@ public class RB_Projectile : MonoBehaviour
         }
 
         UpdateAnim();
+        UpdateAlpha();
+    }
+
+    private void UpdateAlpha()
+    {
+        if (_spriteRenderer)
+        {
+            _spriteRenderer.color = new Color(1, 1, 1, _alphaCurve.Evaluate(_lifeTime / _totalLifeTime));
+        }
     }
 
     private void UpdateAnim()

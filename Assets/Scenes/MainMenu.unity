@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9e7572c14d8f743926efe592db66fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentButton: 3
+  _currentButton: 3
   _textTrasform: {fileID: 475164342}
   _offsetHover: 150
   _offsetSpeed: 10
@@ -1044,7 +1044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9e7572c14d8f743926efe592db66fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentButton: 4
+  _currentButton: 4
   _textTrasform: {fileID: 1406570309}
   _offsetHover: 150
   _offsetSpeed: 10
@@ -1601,7 +1601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9e7572c14d8f743926efe592db66fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentButton: 2
+  _currentButton: 2
   _textTrasform: {fileID: 1706269702}
   _offsetHover: 150
   _offsetSpeed: 10
@@ -2511,7 +2511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9e7572c14d8f743926efe592db66fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentButton: 0
+  _currentButton: 0
   _textTrasform: {fileID: 902583239}
   _offsetHover: 150
   _offsetSpeed: 10
@@ -3318,7 +3318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9e7572c14d8f743926efe592db66fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentButton: 1
+  _currentButton: 1
   _textTrasform: {fileID: 654837860}
   _offsetHover: 150
   _offsetSpeed: 10
@@ -5137,7 +5137,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS Up
+  m_text: LS/Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -7135,7 +7135,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad Left
+  m_text: D-Pad/Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -15406,7 +15406,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS Down
+  m_text: LS/Down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -16239,7 +16239,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS Left
+  m_text: LS/Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -21286,7 +21286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad Up
+  m_text: D-Pad/Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -22604,6 +22604,7 @@ GameObject:
   - component: {fileID: 4633656871485061879}
   - component: {fileID: 3986967492636613038}
   - component: {fileID: 4223414859566354935}
+  - component: {fileID: 6099959251390480756}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -22611,6 +22612,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6099959251390480756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6099959251390480755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f937b70344ac9942bbfedfbd850c513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentButton: 0
+  ButtonHooveredCount: 0
 --- !u!114 &6108474224189306629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24240,6 +24255,7 @@ GameObject:
   - component: {fileID: 6162171505284901195}
   - component: {fileID: 4360736523926931983}
   - component: {fileID: 6777487154199707314}
+  - component: {fileID: 8554770110657621180}
   m_Layer: 5
   m_Name: Video
   m_TagString: Untagged
@@ -24439,6 +24455,7 @@ GameObject:
   - component: {fileID: 4482182289230128723}
   - component: {fileID: 8333602845746666903}
   - component: {fileID: 2702740949950300079}
+  - component: {fileID: 8333602845746666904}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -24920,7 +24937,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad Right
+  m_text: D-Pad/Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -26271,7 +26288,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS Right
+  m_text: LS/Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -27953,6 +27970,7 @@ GameObject:
   - component: {fileID: 9196520213338608924}
   - component: {fileID: 7614605943248907429}
   - component: {fileID: 1681970943263179595}
+  - component: {fileID: 9196520213338608925}
   m_Layer: 5
   m_Name: Control
   m_TagString: Untagged
@@ -29390,6 +29408,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &8333602845746666904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6716836470635271240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0cb968225d3e142b4562e12c6dd842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentButton: 3
 --- !u!114 &8338597763721079791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29589,6 +29620,7 @@ GameObject:
   - component: {fileID: 252737151166142597}
   - component: {fileID: 8892750468816644302}
   - component: {fileID: 974600490074848543}
+  - component: {fileID: 8892750468816644303}
   m_Layer: 5
   m_Name: Sound
   m_TagString: Untagged
@@ -29918,6 +29950,19 @@ RectTransform:
   m_AnchoredPosition: {x: 110, y: -40}
   m_SizeDelta: {x: 231, y: 200}
   m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &8554770110657621180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6599383365881528433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0cb968225d3e142b4562e12c6dd842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentButton: 1
 --- !u!222 &8582799800626481311
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -30757,6 +30802,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8892750468816644303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409448435799858311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0cb968225d3e142b4562e12c6dd842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentButton: 0
 --- !u!224 &8893431568565301440
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31969,6 +32027,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9196520213338608925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7775218067690233987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0cb968225d3e142b4562e12c6dd842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentButton: 2
 --- !u!114 &9196650747940672793
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -26,6 +26,7 @@ namespace MANAGERS
 		public const string SFX_KEY = "sfxVolume";
 
 		public List<AudioSource> AudioSources = new List<AudioSource>();
+		public AudioSource SfxSource;
 
 		private void Awake()
 		{
@@ -67,28 +68,27 @@ namespace MANAGERS
 		}
 
 
-		public AudioSource PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX) {
+        public AudioSource PlaySFX(string nameClip, Vector3 desiredPosition, bool loop, float pitchVariation = 0, float volume = 1,MIXERNAME mixer = MIXERNAME.SFX)
+        {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
             GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-			AudioSource sfxSource = _audioSource.GetComponent<AudioSource>();
-			RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
 			
-			sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-			sfxSource.volume = volume;
-			sfxSource.spatialBlend = 1;
-			sfxSource.loop = false;
-			sfxSource.enabled = true;
+			SfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			SfxSource.volume = volume;
+			SfxSource.spatialBlend = 1;
+			SfxSource.loop = loop;
+			SfxSource.enabled = true;
 			
 			// Assignez le groupe à l'AudioSource
-			sfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
+			SfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
 			
 			if (_sfxClip != null)
 			{
-				sfxSource.clip = _sfxClip;
-				sfxSource.Play();
+				SfxSource.clip = _sfxClip;
+				SfxSource.Play();
 				//Destroy(_audioSource,_sfxClip.length);
-				return sfxSource;
+				return SfxSource;
 			}
 			else
 			{
@@ -98,15 +98,19 @@ namespace MANAGERS
             }
 		}
 
-		public AudioSource PlaySFX(string nameClip, Transform desiredParent, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
+        
+		public AudioSource PlaySFX(string nameClip, Transform desiredParent, bool loop, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
 		{
-			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, pitchVariation, volume, mixer);
+			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, loop, pitchVariation, volume, mixer);
 			audioSource.transform.parent = desiredParent;
 			return audioSource;
 		}
+		
+
 
         public void StopSFX() 
 		{
+			SfxSource?.Stop();
 			Debug.LogWarning("doesn't work");
 		}
 	}

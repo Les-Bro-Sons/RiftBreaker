@@ -78,6 +78,7 @@ public class RB_VikingHorn : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
+        RB_AudioManager.Instance.PlaySFX("Viking_Horn_Special_Attack", RB_PlayerController.Instance.transform.position, false, 0, 1);
         StartJumpAttack(_specialAttackParticle);
     }
 

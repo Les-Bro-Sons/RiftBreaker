@@ -11,6 +11,7 @@ public class RB_ChessQueen : RB_Items
     [Header("Properties")]
     [SerializeField] private float _pawnSpawnDistance;
     [SerializeField] private float _towerSpawnDistance;
+    [SerializeField] private float _towerBoostValue = 2;
     public List<GameObject> SpawnedChessPawns = new();
     private Vector3 _spawnPos = new();
 
@@ -63,10 +64,10 @@ public class RB_ChessQueen : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
-        RB_AudioManager.Instance.PlaySFX("attack_Spe_Chess", _transform.position, false, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Chess_Special_Attack", _transform.position, false, 0, 1);
         foreach(GameObject spawnedChessPawn in SpawnedChessPawns)
         {
-            //spawnedChessPawn.Boost();
+            spawnedChessPawn.GetComponent<RB_AI_BTTree>().Boost(2);
         }
     }
 

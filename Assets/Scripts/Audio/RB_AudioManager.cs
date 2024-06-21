@@ -72,28 +72,29 @@ namespace MANAGERS
         {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
-            GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-			
-			SfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-			SfxSource.volume = volume;
-			SfxSource.spatialBlend = 1;
-			SfxSource.loop = loop;
-			SfxSource.enabled = true;
-			
-			// Assignez le groupe à l'AudioSource
-			SfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
+            GameObject _audioSourceObject = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
+			AudioSource _audioSource = _audioSourceObject.GetComponent<AudioSource>();
+
+            _audioSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+            _audioSource.volume = volume;
+            _audioSource.spatialBlend = 1;
+            _audioSource.loop = loop;
+            _audioSource.enabled = true;
+
+            // Assignez le groupe à l'AudioSource
+            _audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
 			
 			if (_sfxClip != null)
 			{
-				SfxSource.clip = _sfxClip;
-				SfxSource.Play();
+                _audioSource.clip = _sfxClip;
+                _audioSource.Play();
 				//Destroy(_audioSource,_sfxClip.length);
-				return SfxSource;
+				return _audioSource;
 			}
 			else
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
-				Destroy(_audioSource);
+				Destroy(_audioSourceObject);
 				return null;
             }
 		}

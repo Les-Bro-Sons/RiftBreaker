@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &7495783596179589365
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6393642258446423330}
   - component: {fileID: 6007033649412452863}
+  - component: {fileID: 3774943303432835847}
   m_Layer: 0
   m_Name: MusicBox
   m_TagString: Untagged
@@ -262,7 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
-  _specialAttackChargeTime: 20
+  SpecialAttackChargeTime: 0
   _chargeZoom: 0.85
   _attackCooldown: 0
   _attackDamage: 0
@@ -286,10 +288,14 @@ MonoBehaviour:
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
+  EventOnItemGathered:
+    m_PersistentCalls:
+      m_Calls: []
   _zonePrefab: {fileID: 6379153291856199861, guid: cfa322bc17e5e6f4c9e51aa1d6d29480,
     type: 3}
   _zoneGrowthSpeed: 5
   _maxZoneSize: 5
+  _cooldownBeforeNextAttack: 1
   NoteSprites:
   - {fileID: 21300000, guid: 524f3370ab6e1e5409d1e10cd3c6bb38, type: 3}
   - {fileID: 21300000, guid: 4332913de8ac78a40a18b33c33c599aa, type: 3}
@@ -299,6 +305,33 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 70b1c158299dba94c96f295d1b7cd822, type: 3}
   - {fileID: 21300000, guid: f0ce89f9c515e1741bf24c6b5a2aff56, type: 3}
   - {fileID: 21300000, guid: 089e27426bee91841b77d52d4aa56f67, type: 3}
+--- !u!54 &3774943303432835847
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7495783596179589365}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8067806801707449436
 GameObject:
   m_ObjectHideFlags: 0

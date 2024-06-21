@@ -196,7 +196,7 @@ MonoBehaviour:
   m_fontSize: 32
   m_fontSizeBase: 32
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -439,5 +439,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1ee6b120a0d6fd9478d75128ae35a585, type: 2}
   - {fileID: 11400000, guid: be4103667b40cb64b89f8363efbf6e80, type: 2}
   _dialogueAnimator: {fileID: 8507424863525421987}
+  _clickable: 1
   _writingDelay: 0.02
   _writingSpeedingDelay: 0
+  DialogueOpened: 0
+  EventOnDialogueStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnDialogueStopped:
+    m_PersistentCalls:
+      m_Calls: []

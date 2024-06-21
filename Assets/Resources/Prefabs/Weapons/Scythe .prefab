@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &3705260918366286530
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1773818697331473477}
   - component: {fileID: 1753119662367154574}
+  - component: {fileID: -4520951782960010582}
   m_Layer: 0
   m_Name: 'Scythe '
   m_TagString: Untagged
@@ -294,6 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
+  SpecialAttackChargeTime: 0
   _chargeZoom: 0.85
   _attackCooldown: 0
   _attackDamage: 0
@@ -310,9 +313,44 @@ MonoBehaviour:
   _specialHitScreenshakeForce: 0
   _objectToRemove: {fileID: 1349870191599121551}
   HudSprite: {fileID: 0}
+  CurrentSprite: {fileID: 0}
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
+  CanAttackDuringAttack: 0
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnItemGathered:
+    m_PersistentCalls:
+      m_Calls: []
   _zonePrefab: {fileID: 6379153291856199861, guid: cfa322bc17e5e6f4c9e51aa1d6d29480,
     type: 3}
   _zoneGrowthSpeed: 5
   _maxZoneSize: 5
+--- !u!54 &-4520951782960010582
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8551509420370973301}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

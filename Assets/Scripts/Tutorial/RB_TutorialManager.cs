@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,7 +69,7 @@ public class RB_TutorialManager : MonoBehaviour
     public RB_Room RewindTutoRoom;
     public RB_Room StartTutoRoom;
     public RB_CollisionDetection RoomExit;
-    private List<FadeEffect> _fadeEffects = new List<FadeEffect>();
+    private List<RB_FadeEffect> _fadeEffects = new List<RB_FadeEffect>();
     private List<ButtonEffect> _buttonEffects = new List<ButtonEffect>();
     private bool _rewindTutoSuccess = false;
     private bool _shouldFadeOutButton = false;
@@ -564,17 +562,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
-            FadeEffect fadeEffect = new FadeEffect(objectToFade, changeSpeed, FadeType.Out);
-            _fadeEffects.Add(fadeEffect);
-        }
-    }
-
-    public void StartFadeIn(CanvasGroup objectToFade, float changeSpeed) //Start the fading in
-    {
-        if (IsTuto)
-        {
-            print("fade started");
-            FadeEffect fadeEffect = new FadeEffect(objectToFade, changeSpeed, FadeType.In);
+            RB_FadeEffect fadeEffect = new RB_FadeEffect(objectToFade, changeSpeed, FadeType.Out);
             _fadeEffects.Add(fadeEffect);
         }
     }
@@ -584,11 +572,20 @@ public class RB_TutorialManager : MonoBehaviour
         for (int i = _fadeEffects.Count - 1; i >= 0; i--)
         {
             _fadeEffects[i].UpdateFade();
-            print("fade effect");
             if (_fadeEffects[i].IsComplete)
             {
                 _fadeEffects.RemoveAt(i);
             }
+        }
+    }
+
+    public void StartFadeIn(CanvasGroup objectToFade, float changeSpeed) //Start the fading in
+    {
+        if (IsTuto)
+        {
+            print("fade started");
+            RB_FadeEffect fadeEffect = new RB_FadeEffect(objectToFade, changeSpeed, FadeType.In);
+            _fadeEffects.Add(fadeEffect);
         }
     }
 
@@ -669,56 +666,7 @@ public enum FadeType
 }
 
 
-public class FadeEffect
-{
-    private CanvasGroup _objectToFade;
-    private float _changeSpeed;
-    private FadeType _fadeType;
-    public bool IsComplete { get; private set; }
 
-    public FadeEffect(CanvasGroup objectToFade, float changeSpeed, FadeType fadeType) //Create the fading effect for the object
-    {
-        this._objectToFade = objectToFade;
-        this._changeSpeed = changeSpeed;
-        this._fadeType = fadeType;
-        IsComplete = false;
-
-        if (fadeType == FadeType.Out)
-        {
-            this._objectToFade.alpha = 1;
-        }
-        else if (fadeType == FadeType.In)
-        {
-            this._objectToFade.alpha = 0;
-        }
-    }
-
-    public void UpdateFade() //Updating constantly the fade effect
-    {
-        if (RB_TutorialManager.Instance.IsTuto && !IsComplete)
-        {
-            Debug.Log("Update fade");
-            if (_fadeType == FadeType.Out)
-            {
-                _objectToFade.alpha -= Time.unscaledDeltaTime * _changeSpeed;
-                if (_objectToFade.alpha <= 0)
-                {
-                    _objectToFade.alpha = 0;
-                    IsComplete = true;
-                }
-            }
-            else if (_fadeType == FadeType.In)
-            {
-                _objectToFade.alpha += Time.unscaledDeltaTime * _changeSpeed;
-                if (_objectToFade.alpha >= 1)
-                {
-                    _objectToFade.alpha = 1;
-                    IsComplete = true;
-                }
-            }
-        }
-    }
-}
 
 public class ButtonEffect
 {

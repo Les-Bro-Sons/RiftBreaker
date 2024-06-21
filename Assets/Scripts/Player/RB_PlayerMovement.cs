@@ -236,7 +236,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
-        RB_AudioManager.Instance.PlaySFX("dash2", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Dash", RB_PlayerController.Instance.transform.position, 0, 1);
         EventDash.Invoke();
     }
 

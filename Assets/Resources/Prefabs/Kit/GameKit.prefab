@@ -812,16 +812,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}
-      propertyPath: m_Pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
-        type: 3}
-      propertyPath: Priority
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
-        type: 3}
       propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
@@ -837,8 +827,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}
-      propertyPath: DopplerLevel
-      value: 1
+      propertyPath: rolloffMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4644970487092527044, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}

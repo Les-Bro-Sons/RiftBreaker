@@ -1,4 +1,5 @@
 using MANAGERS;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ public class RB_MusicBox : RB_Items
     //Properties
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
+    [SerializeField] private float _cooldownBeforeNextAttack = 1f;
+    private int _nbOfWaves = 1;
+    private float _currentCooldownBetweenSpecialAttack;
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
@@ -37,26 +41,26 @@ public class RB_MusicBox : RB_Items
     {
         base.Attack();
         ShootProjectile("MusicNote");
-        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform.position, 0.15f, 1);
+        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform .position, 0.15f, 1);
     }
 
     public override void ChargedAttack()
     {
         base.ChargedAttack();
-
+        RB_AudioManager.Instance.StopSFX();
         _charging = false;
-        RB_AudioManager.Instance.PlaySFX("musicbox_Loop", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void StartChargingAttack()
     {
         base.StartChargingAttack();
-        _charging = true;
-        if (_instantiatedZone == null)
+        
+        if (_instantiatedZone == null || _charging == false)
         {
+            _charging = true;
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
-            RB_AudioManager.Instance.PlaySFX("musicBoxManivelle", RB_PlayerController.Instance.transform.position, .15f, 1f);
+            RB_AudioManager.Instance.PlaySFXOnLoop("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, .15f, 1f);
         }
         
 
@@ -101,6 +105,7 @@ public class RB_MusicBox : RB_Items
     private void Update()
     {
         ChargeZone();
+        _currentCooldownBetweenSpecialAttack -= Time.deltaTime;
     }
 
     private void EndOfAttack() 
@@ -112,4 +117,12 @@ public class RB_MusicBox : RB_Items
         base.ChooseSfx();
         RB_AudioManager.Instance.PlaySFX("sheating_music_box", RB_PlayerController.Instance.transform.position, 0,1f);
     }
+
+    public override void SpecialAttack()
+    {
+        base.SpecialAttack();
+        RB_AudioManager.Instance.PlaySFX("Music_Box_Special_Attack", RB_PlayerController.Instance.transform.position, 0, 1f);
+    }
+    
+
 }

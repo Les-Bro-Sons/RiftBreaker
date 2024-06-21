@@ -19,7 +19,7 @@ public class RB_Scythe : RB_Items
 
     public override void Attack() {
         base.Attack();
-        RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Scythe_basic_attack", RB_PlayerController.Instance.transform.position, 0, 1);
     }
 
     public override void Bind()
@@ -37,7 +37,7 @@ public class RB_Scythe : RB_Items
         if(_instantiatedZone == null)
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
-            LoopSound();
+            RB_AudioManager.Instance.PlaySFXOnLoop("darkMagic", RB_PlayerController.Instance.transform.position, 0, 1f);
             StartChargeZone();
         }
     }
@@ -79,20 +79,6 @@ public class RB_Scythe : RB_Items
     private void Update()
     {
         ChargeZone();
-        if (_stopSound)
-        {
-            LoopSound();
-        }
-    }
-    private void LoopSound() {
-        _timer -= Time.deltaTime;
-        if (_timer<=0)
-        {
-            _timer = RB_AudioManager.Instance.PlaySFX("darkMagic",
-                RB_PlayerController.Instance.transform.position,
-                0,
-                1f).clip.length;
-        }
     }
 
     public override void SpecialAttack() {

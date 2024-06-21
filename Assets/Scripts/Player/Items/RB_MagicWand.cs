@@ -20,7 +20,7 @@ public class RB_MagicWand : RB_Items
 
     public override void StartChargingAttack() {
         base.StartChargingAttack();
-        RB_AudioManager.Instance.PlaySFX("magicshield_down", RB_PlayerController.Instance.transform.position,0, 1);
+        RB_AudioManager.Instance.PlaySFX("Charge_Charged_Attack_Magic_Wand", RB_PlayerController.Instance.transform.position,0, 1);
     }
 
     public override void ChargedAttack() {

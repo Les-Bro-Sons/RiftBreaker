@@ -32,6 +32,8 @@ public class RB_MenuInputManager : MonoBehaviour {
     public UnityEvent EventMouseMovingCanceled;
     public bool IsLastInputMouse;
 
+    public bool IsKeyBoard = true;
+
 
     private void Awake() {
         if (Instance == null){
@@ -66,6 +68,7 @@ public class RB_MenuInputManager : MonoBehaviour {
     }
 
     public void OnAny(InputAction.CallbackContext context) {
+        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
         if (context.started) { EventAnyStarted?.Invoke();
             if (context.action.activeControl.device.name != "Mouse") 
             IsLastInputMouse = false;

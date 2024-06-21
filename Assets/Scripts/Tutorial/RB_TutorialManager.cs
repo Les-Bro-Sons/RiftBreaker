@@ -125,7 +125,6 @@ public class RB_TutorialManager : MonoBehaviour
         AnimateRobert();
         FadeEffect();
         ButtonEffect();
-        print("caca");
     }
 
     #region Attack tuto

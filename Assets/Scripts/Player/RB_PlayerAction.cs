@@ -42,6 +42,7 @@ public class RB_PlayerAction : MonoBehaviour
     //Events
     public UnityEvent EventBasicAttack;
     public UnityEvent EventChargedAttack;
+    public UnityEvent EventSpecialAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
@@ -82,12 +83,23 @@ public class RB_PlayerAction : MonoBehaviour
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
 
+    private void Start()
+    {
+        GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
+    }
     //Update
     private void Update()
     {
         //count the time the player press the attack button
         TimerChargeAttack();
         RechargeSpecialAttack();
+    }
+
+    private void OnDeath()
+    {
+        StopChargeAttack();
+        StopAttack();
+        StopSpecialAttack();
     }
 
 
@@ -293,6 +305,7 @@ public class RB_PlayerAction : MonoBehaviour
             IsSpecialAttacking = true;
             SpecialAttackCharge = 0;
             Item.SpecialAttack();
+            EventSpecialAttack?.Invoke();
         }
     }
 

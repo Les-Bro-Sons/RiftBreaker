@@ -22,8 +22,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI {
             
             if (string.IsNullOrEmpty(deviceLayoutName) || string.IsNullOrEmpty(controlPath))
                 return;
-
-            //Debug.Log(deviceLayoutName);
             
             var icon = default(Sprite);
             if (InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "DualShockGamepad"))

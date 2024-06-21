@@ -77,6 +77,7 @@ public class RB_UxHourglassManager : MonoBehaviour
             RB_TimeManager.Instance.HourglassList.RemoveAt(RB_TimeManager.Instance.HourglassList.Count - 1);
             //Destroy(hourglassToRemove);
         }
+        
     }
 
     private IEnumerator StartUseHourglassUx(GameObject hourglass)
@@ -94,7 +95,7 @@ public class RB_UxHourglassManager : MonoBehaviour
             yield return null;
         }
 
-        //yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
+        //yield return new WaitForSecondsRealtime(_animator.GetCurrentAnimatorStateInfo(0).length);
 
         while (elapsedTime < _alphaDuration)
         {

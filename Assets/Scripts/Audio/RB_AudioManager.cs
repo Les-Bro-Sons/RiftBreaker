@@ -83,7 +83,6 @@ namespace MANAGERS
 
             // Assignez le groupe à l'AudioSource
             _audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
-			
 			if (_sfxClip != null)
 			{
                 _audioSource.clip = _sfxClip;

@@ -68,7 +68,10 @@ public class RB_MenuInputManager : MonoBehaviour {
     }
 
     public void OnAny(InputAction.CallbackContext context) {
-        IsKeyBoard = (context.action.activeControl.device.name == "Keyboard");
+        if (context.action.activeControl.device.name == "Mouse" || context.action.activeControl.device.name == "Keyboard")
+            IsKeyBoard = true;
+        else IsKeyBoard = false;
+
         if (context.started) { EventAnyStarted?.Invoke();
             if (context.action.activeControl.device.name != "Mouse") 
             IsLastInputMouse = false;

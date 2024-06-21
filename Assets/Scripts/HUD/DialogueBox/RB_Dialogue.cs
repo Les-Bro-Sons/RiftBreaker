@@ -55,14 +55,23 @@ public class RB_Dialogue : MonoBehaviour
 
     public IEnumerator StartDialogueAfterOpenAnim() //Initialize the dialogue system just after the animation started
     {
-        _dialogueBox.text = "";
+        _dialogueBox.enableAutoSizing = true;
+        _currentParagraph = _scriptableDialogues[0].Paragraph;
+        _dialogueBox.text = _currentParagraph;
+
         yield return new WaitForEndOfFrame();
+
+        float currentSize = _dialogueBox.fontSize;
+        _dialogueBox.enableAutoSizing = false;
+        _dialogueBox.fontSize = currentSize;
+        _dialogueBox.text = "";
+
         yield return new WaitForSecondsRealtime(_dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
+
         _currentDialogueIndex = 0;
         _currentDialogueFinished = false;
         _clickIndex = 0;
         _dialogueStarted = true;
-        _currentParagraph = _scriptableDialogues[0].Paragraph;
         StartDrawText(0);
         _currentWritingDelay = _writingDelay; //Set the current delay to the normal one
     }

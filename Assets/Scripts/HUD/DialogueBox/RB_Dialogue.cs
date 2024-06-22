@@ -77,6 +77,7 @@ public class RB_Dialogue : MonoBehaviour
         _dialogueStarted = true;
         StartDrawText(0);
         _currentWritingDelay = _writingDelay; //Set the current delay to the normal one
+        _dialogueBox.text = "";
     }
 
     private void StopDrawText()
@@ -89,6 +90,7 @@ public class RB_Dialogue : MonoBehaviour
     private void StartDrawText(int DialogueIndex)
     {
         print("robert talk");
+        _dialogueBox.text = "";
         _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
         _shouldWriteText = true; //Start the drawing of the text
         _writingLetterTime = Time.unscaledTime; //Delay of the drawing
@@ -189,6 +191,7 @@ public class RB_Dialogue : MonoBehaviour
         _shouldWriteText = false; //Stop the writing of the text
         _dialogueBox.text = _scriptableDialogues[_currentDialogueIndex].Paragraph; //Set all of the dialogue to the dialogue box
         _currentDialogueFinished = true; //Finish the current dialogue
+        _robertAnim.StopTalk();
     }
 
     public void NextDialogue()

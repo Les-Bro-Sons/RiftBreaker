@@ -157,7 +157,6 @@ public class RB_TutorialManager : MonoBehaviour
         RB_LevelManager.Instance.EventPlayerLost.AddListener(OnPlayerDeathAfterAttack);
         RewindTutoRoom.CloseRoom(); //Close the room
         DisplayAttackTuto();
-        _robertLeNecAttackDialogue.StartDialogue();
         _robertLeNecDeathAfterAttack.StopDialogue();
     }
 

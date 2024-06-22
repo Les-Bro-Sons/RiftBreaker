@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -77,6 +78,7 @@ public class RB_Dialogue : MonoBehaviour
         _dialogueStarted = true;
         StartDrawText(0);
         _currentWritingDelay = _writingDelay; //Set the current delay to the normal one
+        _dialogueBox.text = "";
     }
 
     private void StopDrawText()
@@ -89,6 +91,7 @@ public class RB_Dialogue : MonoBehaviour
     private void StartDrawText(int DialogueIndex)
     {
         print("robert talk");
+        _dialogueBox.text = "";
         _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
         _shouldWriteText = true; //Start the drawing of the text
         _writingLetterTime = Time.unscaledTime; //Delay of the drawing
@@ -111,6 +114,37 @@ public class RB_Dialogue : MonoBehaviour
                 }
                 _dialogueBox.text += _currentLetter; //Drawing of the text
                 _currentLetterIndex++;
+                {
+                    switch (_currentAnimation)
+                    {
+                        case RB_RobertAnim.CurrentAnimation.AngryNeutral:
+                        case RB_RobertAnim.CurrentAnimation.EvilSmile:
+                        case RB_RobertAnim.CurrentAnimation.Angry:
+                            if (RB_AudioManager.Instance.ClipPlayingCount("miAngry") == 0) RB_AudioManager.Instance.PlaySFX("miAngry", false, false, 0.25f, 1.5f, MIXERNAME.SFX);
+                            break;
+                        case RB_RobertAnim.CurrentAnimation.CloseEyesSad:
+                        case RB_RobertAnim.CurrentAnimation.SadNeutral:
+                        case RB_RobertAnim.CurrentAnimation.SadSmile:
+                        case RB_RobertAnim.CurrentAnimation.Sad:
+                            if (RB_AudioManager.Instance.ClipPlayingCount("miSad") == 0) RB_AudioManager.Instance.PlaySFX("miSad", false, false, 0.25f, 1.5f, MIXERNAME.SFX);
+                            break;
+                        case RB_RobertAnim.CurrentAnimation.Bruh:
+                        case RB_RobertAnim.CurrentAnimation.BruhAnnoyed:
+                        case RB_RobertAnim.CurrentAnimation.CloseEyes:
+                            if (RB_AudioManager.Instance.ClipPlayingCount("miAnnoyed") == 0) RB_AudioManager.Instance.PlaySFX("miAnnoyed", false, false, 0.25f, 1.5f, MIXERNAME.SFX);
+                            break;
+                        case RB_RobertAnim.CurrentAnimation.CloseEyesSmile:
+                        case RB_RobertAnim.CurrentAnimation.Smile:
+                        case RB_RobertAnim.CurrentAnimation.Happy:
+                            if (RB_AudioManager.Instance.ClipPlayingCount("miHappy") == 0) RB_AudioManager.Instance.PlaySFX("miHappy", false, false, 0.25f, 1.5f, MIXERNAME.SFX);
+                            break;
+                        default:
+                            if (RB_AudioManager.Instance.ClipPlayingCount("mi") == 0) RB_AudioManager.Instance.PlaySFX("mi", false, false, 0.25f, 1.5f, MIXERNAME.SFX);
+                            break;
+                    }
+                    
+                }
+                
             }
             else
             {
@@ -189,6 +223,7 @@ public class RB_Dialogue : MonoBehaviour
         _shouldWriteText = false; //Stop the writing of the text
         _dialogueBox.text = _scriptableDialogues[_currentDialogueIndex].Paragraph; //Set all of the dialogue to the dialogue box
         _currentDialogueFinished = true; //Finish the current dialogue
+        _robertAnim.StopTalk();
     }
 
     public void NextDialogue()

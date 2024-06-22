@@ -635,6 +635,7 @@ MonoBehaviour:
   RewindLeft: 3
   MaxRewind: 3
   _debugCurrentWeaponFeedback: {fileID: 0}
+  _robertShouldTalk: 1
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2986,6 +2987,16 @@ PrefabInstance:
       propertyPath: _robertAnim
       value: 
       objectReference: {fileID: 3878570935106685399}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: CloseAfterTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: TimeAfterClose
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: _currentAnimation

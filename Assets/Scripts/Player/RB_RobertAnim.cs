@@ -12,7 +12,6 @@ public class RB_RobertAnim : MonoBehaviour
 
     public void StartTalk(CurrentAnimation animation)
     {
-        print("robert start animation talk");
         _robertAnimator.SetFloat("CurrentAnimation", (int)animation);
         _robertAnimator.SetBool("Talking", true);
     }

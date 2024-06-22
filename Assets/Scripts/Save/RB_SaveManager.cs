@@ -5,7 +5,7 @@ using System.IO;
 public class RB_SaveManager : MonoBehaviour
 {
     //Save
-    public RB_SaveObject SaveObject = new();
+    [HideInInspector] public RB_SaveObject SaveObject = new();
 
     //Instance
     public static RB_SaveManager Instance;

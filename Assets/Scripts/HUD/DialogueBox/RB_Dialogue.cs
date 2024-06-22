@@ -44,7 +44,7 @@ public class RB_Dialogue : MonoBehaviour
 
     private void Start()
     {
-        RB_InputManager.Instance..AddListener(Click);
+        RB_InputManager.Instance.EventAttackStartedEvenIfDisabled.AddListener(Click);
         _currentDialogueIndex = 0;
     }
 
@@ -135,7 +135,7 @@ public class RB_Dialogue : MonoBehaviour
                 _dialogueBox.text += _currentLetter; //Drawing of the text
                 _currentLetterIndex++;
                 {
-                    switch (_currentAnimation)
+                    switch (_scriptableDialogues[_currentDialogueIndex].CurrentAnimation)
                     {
                         case RB_RobertAnim.CurrentAnimation.AngryNeutral:
                         case RB_RobertAnim.CurrentAnimation.EvilSmile:

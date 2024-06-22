@@ -73,7 +73,7 @@ public class RB_TimeManager : MonoBehaviour
             }
             else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
             {
-                if (_fullRewind) RB_UxHourglassManager.Instance.NumberOfHourglass(3);
+                if (_fullRewind) RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
                 StopRewinding(true);
                 return;
             }

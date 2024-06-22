@@ -199,7 +199,6 @@ public class RB_PlayerAction : MonoBehaviour
                 if (_robertShouldTalk)
                 {
                     _pickupGathered.StartDialogue();
-                    Invoke(nameof(StopPickupDialogue), 5);
                 }
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
@@ -218,11 +217,6 @@ public class RB_PlayerAction : MonoBehaviour
             //if there's no item around then attack
             _playerController.OnChargeAttackStart();
         }
-    }
-
-    private void StopPickupDialogue()
-    {
-        _pickupGathered.StopDialogue();
     }
 
     public void ChargedAttack()

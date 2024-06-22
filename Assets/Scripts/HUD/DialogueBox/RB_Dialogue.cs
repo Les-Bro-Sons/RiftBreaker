@@ -2,8 +2,11 @@ using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+
+
 
 public class RB_Dialogue : MonoBehaviour
 {
@@ -13,10 +16,10 @@ public class RB_Dialogue : MonoBehaviour
     [SerializeField] private List<RB_Dialogue_Scriptable> _scriptableDialogues = new List<RB_Dialogue_Scriptable>();
     [SerializeField] private Animator _dialogueAnimator;
     [SerializeField] private RB_RobertAnim _robertAnim;
+    [SerializeField] private TMP_InputField _playerNameInputField;
 
     //Click
     private int _clickIndex = 0;
-    [SerializeField] private bool _clickable = true;
 
     //Text properties
     private int _currentDialogueIndex;
@@ -30,16 +33,18 @@ public class RB_Dialogue : MonoBehaviour
     private float _currentWritingDelay;
     [SerializeField] private float _writingDelay;
     [SerializeField] private float _writingSpeedingDelay;
-    [SerializeField] private RB_RobertAnim.CurrentAnimation _currentAnimation;
-    public bool DialogueOpened = false;
+    [HideInInspector] public bool DialogueOpened = false;
 
     //Events
-    public UnityEvent EventOnDialogueStarted;
-    public UnityEvent EventOnDialogueStopped;
+    [HideInInspector] public UnityEvent EventOnDialogueStarted;
+    [HideInInspector] public UnityEvent EventOnDialogueStopped;
+
+    //Action
+    private UnityAction ActionEventOnPlayerEnterLetterName;
 
     private void Start()
     {
-        RB_MenuInputManager.Instance.EventAnyStarted.AddListener(Click);
+        RB_InputManager.Instance.EventAttackStartedEvenIfDisabled.AddListener(Click);
         _currentDialogueIndex = 0;
     }
 
@@ -54,13 +59,25 @@ public class RB_Dialogue : MonoBehaviour
         PlayOpenAnim();
         StartCoroutine(StartDialogueAfterOpenAnim());
         EventOnDialogueStarted?.Invoke();
+        if (_scriptableDialogues[_currentDialogueIndex].IsNameInput)
+        {
+            _playerNameInputField.Select();
+            _playerNameInputField.onValueChanged.AddListener(OnPlayerEnterLetterName);
+            _playerNameInputField.onEndEdit.AddListener(OnPlayerFinishedEnterName);
+            RB_InputManager.Instance.MoveEnabled = false;
+            RB_InputManager.Instance.DashEnabled = false;
+        }
+        if (_scriptableDialogues[_currentDialogueIndex].Clickable)
+        {
+            RB_InputManager.Instance.AttackEnabled = false;
+        }
     }
 
     public IEnumerator StartDialogueAfterOpenAnim() //Initialize the dialogue system just after the animation started
     {
-        _robertAnim.StartIdle(_currentAnimation);
-        _dialogueBox.enableAutoSizing = true;
         _currentParagraph = _scriptableDialogues[0].Paragraph;
+        _robertAnim.StartIdle(_scriptableDialogues[0].CurrentAnimation);
+        _dialogueBox.enableAutoSizing = true;
         _dialogueBox.text = _currentParagraph;
 
         yield return new WaitForEndOfFrame();
@@ -86,13 +103,16 @@ public class RB_Dialogue : MonoBehaviour
         _shouldWriteText = false; //Stop the drawing of the text
         _currentDialogueFinished = true; //The current dialogue is finished
         _robertAnim.StopTalk(); //Stop the talking of robert
+        if (_scriptableDialogues[_currentDialogueIndex].CloseAfterTime)
+        {
+            Invoke(nameof(StopDialogue), _scriptableDialogues[_currentDialogueIndex].TimeAfterClose);
+        }
     }
 
     private void StartDrawText(int DialogueIndex)
     {
-        print("robert talk");
         _dialogueBox.text = "";
-        _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
+        _robertAnim.StartTalk(_scriptableDialogues[DialogueIndex].CurrentAnimation); //Start the talking of robert
         _shouldWriteText = true; //Start the drawing of the text
         _writingLetterTime = Time.unscaledTime; //Delay of the drawing
         _currentParagraph = _scriptableDialogues[DialogueIndex].Paragraph; //Current paragraph
@@ -115,7 +135,7 @@ public class RB_Dialogue : MonoBehaviour
                 _dialogueBox.text += _currentLetter; //Drawing of the text
                 _currentLetterIndex++;
                 {
-                    switch (_currentAnimation)
+                    switch (_scriptableDialogues[_currentDialogueIndex].CurrentAnimation)
                     {
                         case RB_RobertAnim.CurrentAnimation.AngryNeutral:
                         case RB_RobertAnim.CurrentAnimation.EvilSmile:
@@ -154,6 +174,20 @@ public class RB_Dialogue : MonoBehaviour
         
     }
 
+    private void OnPlayerEnterLetterName(string playerName)
+    {
+        RB_SaveManager.Instance.SaveObject.PlayerName = _playerNameInputField.text;
+    }
+
+    private void OnPlayerFinishedEnterName(string playerName)
+    {
+        print("player finished");
+        if (_playerNameInputField.text != "")
+        {
+            NextDialogue();
+        }
+    }
+
     private void ReadTextAction()
     {
         string textAction = "";
@@ -176,13 +210,28 @@ public class RB_Dialogue : MonoBehaviour
 
     private void DoTextAction(string textAction, int startIndex, int endIndex)
     {
+        string remplacement = string.Empty;
+        
         switch (textAction)
         {
-            case "PLAYERNAME":
-                _currentParagraph = _currentParagraph.Remove(startIndex, (endIndex - startIndex) + 1);
-                _currentParagraph = _currentParagraph.Insert(startIndex, RB_SaveManager.Instance.SaveObject.PlayerName);
+            case "Entrez votre nom":
+                if (!string.IsNullOrEmpty(RB_SaveManager.Instance.SaveObject.PlayerName))
+                {
+                    remplacement = RB_SaveManager.Instance.SaveObject.PlayerName;
+                }
                 break;
+            case "PLAYERNAME":
+                remplacement = RB_SaveManager.Instance.SaveObject.PlayerName;
+                break;
+            
         }
+
+        if (!string.IsNullOrEmpty(remplacement))
+        {
+            _currentParagraph = _currentParagraph.Remove(startIndex, (endIndex - startIndex) + 1);
+            _currentParagraph = _currentParagraph.Insert(startIndex, remplacement);
+        }
+        
     }
 
     private void PlayOpenAnim() //Play the open animation of the dialogue box
@@ -197,7 +246,7 @@ public class RB_Dialogue : MonoBehaviour
 
     private void Click()
     {
-        if (_dialogueStarted)
+        if (_dialogueStarted && _scriptableDialogues[_currentDialogueIndex].Clickable)
         {
             if (!_currentDialogueFinished)
             {
@@ -207,11 +256,16 @@ public class RB_Dialogue : MonoBehaviour
                 }
                 else if (_clickIndex == 1) //If it's the second click, show all the dialogue
                 {
-                    ShowAllCurrentDialogue();
+                    bool shouldShowDialogue = !_scriptableDialogues[_currentDialogueIndex].IsNameInput || !string.IsNullOrEmpty(_playerNameInputField.text);
+
+                    if (shouldShowDialogue)
+                    {
+                        ShowAllCurrentDialogue();
+                    }
                 }
                 _clickIndex++;
             }
-            else if(_clickable)//If the current dialogue is finished show the next dialogue
+            else//If the current dialogue is finished show the next dialogue
             {
                 NextDialogue();
             }
@@ -228,14 +282,22 @@ public class RB_Dialogue : MonoBehaviour
 
     public void NextDialogue()
     {
+        if (_scriptableDialogues[_currentDialogueIndex].IsNameInput)
+        {
+            _playerNameInputField.onValueChanged.RemoveListener(OnPlayerEnterLetterName);
+            RB_InputManager.Instance.MoveEnabled = true;
+            RB_InputManager.Instance.DashEnabled = true;
+        }
+        if (_scriptableDialogues[_currentDialogueIndex].Clickable)
+        {
+            RB_InputManager.Instance.AttackEnabled = true;
+        }
         _currentDialogueIndex++; //Set to the next dialogue
-        print("next dialogue 1");
         if(_currentDialogueIndex >= _scriptableDialogues.Count) //If there's no more dialogues stop the dialogue
         {
             StopDialogue();
             return;
         }
-        print("next dialogue 2");
         //Otherwise show the next dialogue
         _currentDialogueFinished = false;
         _currentWritingDelay = _writingDelay;
@@ -252,5 +314,7 @@ public class RB_Dialogue : MonoBehaviour
         PlayCloseAnim();
         EventOnDialogueStopped?.Invoke();
         DialogueOpened = false;
+        
+        
     }
 }

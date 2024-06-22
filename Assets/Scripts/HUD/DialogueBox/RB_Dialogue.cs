@@ -11,6 +11,7 @@ public class RB_Dialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _dialogueBox;
     [SerializeField] private List<RB_Dialogue_Scriptable> _scriptableDialogues = new List<RB_Dialogue_Scriptable>();
     [SerializeField] private Animator _dialogueAnimator;
+    [SerializeField] private RB_RobertAnim _robertAnim;
 
     //Click
     private int _clickIndex = 0;
@@ -28,6 +29,7 @@ public class RB_Dialogue : MonoBehaviour
     private float _currentWritingDelay;
     [SerializeField] private float _writingDelay;
     [SerializeField] private float _writingSpeedingDelay;
+    [SerializeField] private RB_RobertAnim.CurrentAnimation _currentAnimation;
     public bool DialogueOpened = false;
 
     //Events
@@ -55,6 +57,7 @@ public class RB_Dialogue : MonoBehaviour
 
     public IEnumerator StartDialogueAfterOpenAnim() //Initialize the dialogue system just after the animation started
     {
+        _robertAnim.StartIdle(_currentAnimation);
         _dialogueBox.enableAutoSizing = true;
         _currentParagraph = _scriptableDialogues[0].Paragraph;
         _dialogueBox.text = _currentParagraph;
@@ -68,6 +71,7 @@ public class RB_Dialogue : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(_dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
 
+        _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
         _currentDialogueIndex = 0;
         _currentDialogueFinished = false;
         _clickIndex = 0;
@@ -80,6 +84,7 @@ public class RB_Dialogue : MonoBehaviour
     {
         _shouldWriteText = false; //Stop the drawing of the text
         _currentDialogueFinished = true; //The current dialogue is finished
+        _robertAnim.StopTalk(); //Stop the talking of robert
     }
 
     private void StartDrawText(int DialogueIndex)

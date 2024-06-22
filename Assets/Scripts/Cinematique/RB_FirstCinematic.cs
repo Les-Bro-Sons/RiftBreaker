@@ -18,25 +18,35 @@ public class RB_FirstCinematic : MonoBehaviour
         _dialogue.EventOnDialogueStopped.AddListener(RobertStoppedTalking);
     }
 
-    public void PlayerSpotMark()
+    private void Start()
+    {
+        StartCinematic();
+    }
+
+    public void StartCinematic() //after player has chosen their name
+    {
+        _animator.Play("1-FirstPart");
+    }
+
+    public void PlayerSpotMark() //for portal oppening
     {
         Transform mark = Instantiate(_exclamationMark, RB_PlayerController.Instance.transform).transform;
         mark.rotation = Quaternion.identity;
     }
 
-    public void FirstRobertDialogue()
+    public void FirstRobertDialogue() //robert talk
     {
         _dialogue.StartDialogue();
     }
 
-    public void RobertStoppedTalking()
+    public void RobertStoppedTalking() //for walk animation after dialogue
     {
         _animator.Play("1-AfterRobbertTalk");
         _2ndDialogue.StartDialogue();
         Invoke("NextScene", 5);
     }
 
-    public void NextScene()
+    public void NextScene() //go to tutorial
     {
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1);
     }

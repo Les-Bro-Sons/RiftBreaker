@@ -154,6 +154,22 @@ namespace MANAGERS
             return audioSource;
         }
 
+		public void StopSFXByClip(string nameClip)
+		{
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+            if (_sfxClip == null)
+                return;
+
+            foreach (AudioSource audioSource in AudioSources)
+            {
+                if (audioSource.clip == _sfxClip)
+                {
+                    audioSource.Stop();
+                }
+            }
+        }
+
 		public int ClipPlayingCount(string nameClip)
 		{
 			int clipPlaying = 0;

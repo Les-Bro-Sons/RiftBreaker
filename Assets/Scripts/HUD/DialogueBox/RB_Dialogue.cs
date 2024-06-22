@@ -71,7 +71,6 @@ public class RB_Dialogue : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(_dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
 
-        _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
         _currentDialogueIndex = 0;
         _currentDialogueFinished = false;
         _clickIndex = 0;
@@ -89,6 +88,8 @@ public class RB_Dialogue : MonoBehaviour
 
     private void StartDrawText(int DialogueIndex)
     {
+        print("robert talk");
+        _robertAnim.StartTalk(_currentAnimation); //Start the talking of robert
         _shouldWriteText = true; //Start the drawing of the text
         _writingLetterTime = Time.unscaledTime; //Delay of the drawing
         _currentParagraph = _scriptableDialogues[DialogueIndex].Paragraph; //Current paragraph

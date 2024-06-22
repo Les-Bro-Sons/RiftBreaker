@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class RB_FirstCinematic : MonoBehaviour
 {
     [SerializeField] private RB_Dialogue _dialogue;
+    [SerializeField] private RB_Dialogue _2ndDialogue;
 
     [SerializeField] private GameObject _exclamationMark;
 
@@ -14,7 +15,7 @@ public class RB_FirstCinematic : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _dialogue.EventOnDialogueStopped.AddListener(NextScene);
+        _dialogue.EventOnDialogueStopped.AddListener(RobertStoppedTalking);
     }
 
     public void PlayerSpotMark()
@@ -26,6 +27,13 @@ public class RB_FirstCinematic : MonoBehaviour
     public void FirstRobertDialogue()
     {
         _dialogue.StartDialogue();
+    }
+
+    public void RobertStoppedTalking()
+    {
+        _animator.Play("1-AfterRobbertTalk");
+        _2ndDialogue.StartDialogue();
+        Invoke("NextScene", 5);
     }
 
     public void NextScene()

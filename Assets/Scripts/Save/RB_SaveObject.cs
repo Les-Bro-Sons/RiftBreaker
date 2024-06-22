@@ -6,4 +6,3 @@ public class RB_SaveObject
 
     public string PlayerName = "Roberto";
 }
-    

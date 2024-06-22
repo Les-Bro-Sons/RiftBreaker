@@ -15,6 +15,7 @@ public class RB_InputManager : MonoBehaviour
 
     [Header("Attack")]
     public bool AttackEnabled = true;
+    [HideInInspector] public UnityEvent EventAttackStartedEvenIfDisabled;
     [HideInInspector] public UnityEvent EventAttackStarted;
     [HideInInspector] public UnityEvent EventAttackCanceled;
 
@@ -81,6 +82,9 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (context.started) 
+            EventAttackStartedEvenIfDisabled?.Invoke();
+
         IsMouse = (context.action.activeControl.device.name == "Mouse");
         if (!AttackEnabled) return;
 

@@ -26,4 +26,9 @@ public class RB_SpriteFloating : MonoBehaviour
             _transform.localPosition = (Vector3.up * Mathf.Sin(Time.time * _floatSpeed) * _floatHeight) + (Vector3.up * _baseY);
         }
     }
+
+    private void OnDisable()
+    {
+        _transform.localPosition = new Vector3(_transform.localPosition.x, _baseY, _transform.localPosition.z);
+    }
 }

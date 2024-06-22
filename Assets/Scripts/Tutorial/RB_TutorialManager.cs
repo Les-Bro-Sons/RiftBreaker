@@ -276,6 +276,7 @@ public class RB_TutorialManager : MonoBehaviour
         RB_TimeManager.Instance.EventStopNormalRewind.AddListener(OnRewindStopped); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopFullRewind.AddListener(OnDeathRewindFinished); //When the death rewind is finished
         RoomExit.EventOnObjectEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
+        RB_InputManager.Instance.RewindEnabled = false;
     }
 
     private void OnPlayerExitRewindRoom() //When the player exit the rewind room
@@ -493,6 +494,7 @@ public class RB_TutorialManager : MonoBehaviour
         StartAnimateRobert();
         _robertLeNecRewindDialogue.StartDialogue();
         StartFadeIn(_rewindTutoImage, ChangeSpeed);
+        RB_InputManager.Instance.RewindEnabled = true;
     }
 
     private void StartValidateButton(CanvasGroup button) //Start the animation of the validation of the buttons

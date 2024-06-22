@@ -106,7 +106,7 @@ namespace MANAGERS
 		}
 
 
-        public AudioSource PlaySFX(string nameClip, Vector3 desiredPosition, bool loop, float pitchVariation = 0, float volume = 1,MIXERNAME mixer = MIXERNAME.SFX)
+        public AudioSource PlaySFX(string nameClip, Vector3 desiredPosition, bool loop = false, float pitchVariation = 0, float volume = 1,MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
         {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
@@ -114,6 +114,7 @@ namespace MANAGERS
 			AudioSource _audioSource = _audioSourceObject.GetComponent<AudioSource>();
 
             _audioSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			_audioSource.pitch = Mathf.Clamp(_audioSource.pitch + pitchOffset, 0, int.MaxValue);
             _audioSource.volume = volume;
             _audioSource.spatialBlend = 1;
             _audioSource.loop = loop;
@@ -125,8 +126,9 @@ namespace MANAGERS
 			{
                 _audioSource.clip = _sfxClip;
                 _audioSource.Play();
-				//Destroy(_audioSource,_sfxClip.length);
-				return _audioSource;
+                //Destroy(_audioSource,_sfxClip.length);
+                AudioSources.Add(_audioSource);
+                return _audioSource;
 			}
 			else
 			{
@@ -137,14 +139,39 @@ namespace MANAGERS
 		}
 
         
-		public AudioSource PlaySFX(string nameClip, Transform desiredParent, bool loop, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX)
+		public AudioSource PlaySFX(string nameClip, Transform desiredParent, bool loop = false, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
 		{
-			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, loop, pitchVariation, volume, mixer);
+			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, loop, pitchVariation, volume, mixer, pitchOffset);
 			audioSource.transform.parent = desiredParent;
 			return audioSource;
 		}
-		
 
+        public AudioSource PlaySFX(string nameClip, bool localised = false, bool loop = false, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
+        {
+            AudioSource audioSource = PlaySFX(nameClip, Vector3.zero, loop, pitchVariation, volume, mixer, pitchOffset);
+			audioSource.spatialize = false;
+			audioSource.spatialBlend = 0;
+            return audioSource;
+        }
+
+		public int ClipPlayingCount(string nameClip)
+		{
+			int clipPlaying = 0;
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+			if (_sfxClip == null)
+				return 0;
+
+            foreach (AudioSource audioSource in AudioSources)
+			{
+				if (audioSource.clip == _sfxClip)
+				{
+					clipPlaying += 1;
+				}
+			}
+
+			return clipPlaying;
+		}
 
         public void StopSFX() 
 		{

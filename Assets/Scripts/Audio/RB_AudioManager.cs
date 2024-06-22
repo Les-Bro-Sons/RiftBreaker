@@ -145,6 +145,48 @@ namespace MANAGERS
 		}
 		
 
+        public AudioSource PlaySFX(string nameClip, bool localised = false, bool loop = false, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
+        {
+            AudioSource audioSource = PlaySFX(nameClip, Vector3.zero, loop, pitchVariation, volume, mixer, pitchOffset);
+			audioSource.spatialize = false;
+			audioSource.spatialBlend = 0;
+            return audioSource;
+        }
+
+		public void StopSFXByClip(string nameClip)
+		{
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+            if (_sfxClip == null)
+                return;
+
+            foreach (AudioSource audioSource in AudioSources)
+            {
+                if (audioSource.clip == _sfxClip)
+                {
+                    audioSource.Stop();
+                }
+            }
+        }
+
+		public int ClipPlayingCount(string nameClip)
+		{
+			int clipPlaying = 0;
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+			if (_sfxClip == null)
+				return 0;
+
+            foreach (AudioSource audioSource in AudioSources)
+			{
+				if (audioSource.clip == _sfxClip)
+				{
+					clipPlaying += 1;
+				}
+			}
+
+			return clipPlaying;
+		}
 
         public void StopSFX() 
 		{

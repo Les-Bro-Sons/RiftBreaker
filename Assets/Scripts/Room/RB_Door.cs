@@ -19,7 +19,6 @@ public class RB_Door : MonoBehaviour
 
     public void Open()
     {
-        print(Time.time);
         _doorAnimator.SetTrigger("Down");
         EventOpenDoor?.Invoke();
 

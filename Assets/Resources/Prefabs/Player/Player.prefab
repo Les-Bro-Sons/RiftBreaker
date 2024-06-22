@@ -2983,6 +2983,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
+      propertyPath: _robertAnim
+      value: 
+      objectReference: {fileID: 3878570935106685399}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _currentAnimation
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
       propertyPath: _scriptableDialogues.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3129,5 +3139,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbaa699059812fc4b8e20b23430dd1b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3878570935106685399 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9177478536690165271, guid: 9e7d692eff87be949b5658455aa963ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 5372662060091977664}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f763e652391ae5f41aef45e3b7b80098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

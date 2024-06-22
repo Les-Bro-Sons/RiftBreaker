@@ -52,7 +52,6 @@ public class RB_SaveManager : MonoBehaviour
             SaveObject.CurrentLevel = 1; //If the level is set to the menu, set it to the first level
         string saveObjectData = System.IO.File.ReadAllText(filePath);
         SaveObject = JsonUtility.FromJson<RB_SaveObject>(saveObjectData);
-        print("Chargement effectué");
     }
 
     public void ResetSave()

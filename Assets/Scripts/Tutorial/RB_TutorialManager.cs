@@ -88,7 +88,6 @@ public class RB_TutorialManager : MonoBehaviour
     [SerializeField] private List<CanvasGroup> _movementButtons;
     [SerializeField] private List<CanvasGroup> _attackButtons;
     [SerializeField] private RB_Katana _tutoKatana;
-    private Transform _robertTransform;
 
     //movements
     private List<Movements> _movementsPerformed = new();
@@ -100,7 +99,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if(Instance == null)
             Instance = this;
-        _robertTransform = _roberLeNec.GetComponent<RectTransform>();
     }
 
     private void Start()
@@ -108,7 +106,6 @@ public class RB_TutorialManager : MonoBehaviour
         IsTuto = !RB_SaveManager.Instance.SaveObject.TutoDone;
         InitializeRewindTuto();
         InitializeMovementTuto();
-        _startRobertPos = _robertTransform.localPosition;
         InititializeImages();
         RewindTutoRoom.CloseRoom();
     }
@@ -120,7 +117,6 @@ public class RB_TutorialManager : MonoBehaviour
         SlowTimeByEnemyDistance();
         DarkenBackground();
         BrightenBackground();
-        AnimateRobert();
         FadeEffect();
         ButtonEffect();
     }
@@ -263,7 +259,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         RB_InputManager.Instance.EventMovePerformed.RemoveListener(OnMovementPerformed);
         RB_InputManager.Instance.EventDashStarted.RemoveListener(OnDashPerformed);
-        print("acchieve");
         TutorialRoom.OpenRoom();
         foreach(CanvasGroup _movementButton in _movementButtons)
         {
@@ -483,15 +478,6 @@ public class RB_TutorialManager : MonoBehaviour
             _shouldAnimateRobertLeNec = false;
         }
     }
-
-    public void AnimateRobert() //Make robert go up then down with a sin
-    {
-        if (IsTuto && _shouldAnimateRobertLeNec)
-        {
-            print("animate robert");
-            _robertTransform.localPosition = new Vector3(_robertTransform.localPosition.x, _startRobertPos.y + RobertMoveHeight * Mathf.Sin(Time.unscaledTime * RobertMoveSpeed), _robertTransform.localPosition.z);
-        }
-    }
     #endregion
 
     #region general tuto
@@ -583,7 +569,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
-            print("fade started");
             RB_FadeEffect fadeEffect = new RB_FadeEffect(objectToFade, changeSpeed, FadeType.In);
             _fadeEffects.Add(fadeEffect);
         }

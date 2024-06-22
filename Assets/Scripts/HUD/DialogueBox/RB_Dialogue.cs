@@ -103,6 +103,11 @@ public class RB_Dialogue : MonoBehaviour
             {
                 _writingLetterTime = Time.unscaledTime; //Delay of the drawing 
                 _currentLetter = _currentParagraph[_currentLetterIndex];
+                if (_currentLetter == '[')
+                {
+                    ReadTextAction();
+                    _currentLetter = _currentParagraph[_currentLetterIndex];
+                }
                 _dialogueBox.text += _currentLetter; //Drawing of the text
                 _currentLetterIndex++;
             }
@@ -112,6 +117,37 @@ public class RB_Dialogue : MonoBehaviour
             }
         }
         
+    }
+
+    private void ReadTextAction()
+    {
+        string textAction = "";
+        char currentLetterCheck;
+        int startIndex = _currentLetterIndex;
+        for (int i = _currentLetterIndex + 1; i < _currentParagraph.Length; i++)
+        {
+            currentLetterCheck = _currentParagraph[i];
+            if (currentLetterCheck == ']')
+            {
+                DoTextAction(textAction, startIndex, i);
+                break;
+            }
+            else
+            {
+                textAction += currentLetterCheck;
+            }
+        }
+    }
+
+    private void DoTextAction(string textAction, int startIndex, int endIndex)
+    {
+        switch (textAction)
+        {
+            case "PLAYERNAME":
+                _currentParagraph = _currentParagraph.Remove(startIndex, (endIndex - startIndex) + 1);
+                _currentParagraph = _currentParagraph.Insert(startIndex, RB_SaveManager.Instance.SaveObject.PlayerName);
+                break;
+        }
     }
 
     private void PlayOpenAnim() //Play the open animation of the dialogue box

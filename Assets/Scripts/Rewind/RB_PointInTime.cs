@@ -31,6 +31,8 @@ public struct PointInTime
 
     //RB_AI_BTTree//
     public Dictionary<string, bool> BoolDictionnary;
+    public float SpotValue;
+    public int CurrentWaypointIndex;
     /////////////
 
     public List<EventInTime> TimeEvents;
@@ -42,6 +44,9 @@ public struct PointInTime
         float T1 = Time;
         float T2 = nextP.Time;
 
+        float spot1 = SpotValue;
+        float spot2 = nextP.SpotValue;
+        interpolatedP.SpotValue = spot1 + (spot2 - spot1) * (currentTime - T1) / (T2 - T1);
 
         Vector3 Pos1 = Position;
         Vector3 Pos2 = nextP.Position;

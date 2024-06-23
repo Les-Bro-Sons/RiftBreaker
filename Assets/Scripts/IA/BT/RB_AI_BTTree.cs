@@ -38,6 +38,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public int PatrolSplineIndex = 0;
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
+    [HideInInspector] public int CurrentWaypointIndex = 0;
     [HideInInspector] public SplineContainer SplineContainer;
 
     [Header("Spot Parameters")]

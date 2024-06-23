@@ -8,7 +8,6 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
     private RB_AI_BTTree _btParent;
 
     //private Transform[] _waypoints;
-    private int _currentWaypointIndex = 0;
     private int _patrolDirection = 1; // used if patrol spline not closed
 
     private int _currentInterval = 0;
@@ -84,7 +83,7 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
             }*/
             
             
-            float t = _currentWaypointIndex / (float)(_splinePointsPos.Count - 1);
+            float t = _btParent.CurrentWaypointIndex / (float)(_splinePointsPos.Count - 1);
             Vector3 targetPosition = _splineContainer.Splines[_btParent.PatrolSplineIndex].EvaluatePosition(t);
 
             //int t = (_currentWaypointIndex + 1) / _splinePointsPos.Count; // t => periode
@@ -102,19 +101,19 @@ public class RB_AI_Task_DefaultPatrol : RB_BTNode
 
                 if (_splineContainer.Splines[_btParent.PatrolSplineIndex].Closed)
                 {
-                    _currentWaypointIndex = (_currentWaypointIndex + 1) % _splinePointsPos.Count;
-                    if (_currentWaypointIndex == 0) // at the end of spline
+                    _btParent.CurrentWaypointIndex = (_btParent.CurrentWaypointIndex + 1) % _splinePointsPos.Count;
+                    if (_btParent.CurrentWaypointIndex == 0) // at the end of spline
                     {
                         StartWaiting();
                     }
                 }
                 else
                 {
-                    _currentWaypointIndex += _patrolDirection;
-                    if (_currentWaypointIndex >= _splinePointsPos.Count || _currentWaypointIndex < 0) // at the end of spline
+                    _btParent.CurrentWaypointIndex += _patrolDirection;
+                    if (_btParent.CurrentWaypointIndex >= _splinePointsPos.Count || _btParent.CurrentWaypointIndex < 0) // at the end of spline
                     {
                         _patrolDirection *= -1;
-                        _currentWaypointIndex += _patrolDirection;
+                        _btParent.CurrentWaypointIndex += _patrolDirection;
                         StartWaiting();
                     }
 

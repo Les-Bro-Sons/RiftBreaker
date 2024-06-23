@@ -107,7 +107,12 @@ public class RB_Dialogue : MonoBehaviour
 
     private void StopDrawText()
     {
-        if (!_isListening && _scriptableDialogues[_currentDialogueIndex].IsNameInput)
+        int dialogueToTest = _currentDialogueIndex;
+        if(dialogueToTest >= _scriptableDialogues.Count)
+        {
+            dialogueToTest--;
+        }
+        if (!_isListening && _scriptableDialogues[dialogueToTest].IsNameInput)
         {
             _isListening = true;
             _playerNameInputField.Select();
@@ -118,14 +123,13 @@ public class RB_Dialogue : MonoBehaviour
         _shouldWriteText = false; //Stop the drawing of the text
         _currentDialogueFinished = true; //The current dialogue is finished
         _robertAnim.StopTalk(); //Stop the talking of robert
-        if (!_alreadyClosedAfterTime)
         {
-            _alreadyClosedAfterTime = true;
-            if (_scriptableDialogues[_currentDialogueIndex].CloseAfterTime)
+            if (!_alreadyClosedAfterTime && _scriptableDialogues[dialogueToTest].CloseAfterTime)
             {
-                Invoke(nameof(StopDialogue), _scriptableDialogues[_currentDialogueIndex].TimeAfterClose);
+                _alreadyClosedAfterTime = true;
+                Invoke(nameof(StopDialogue), _scriptableDialogues[dialogueToTest].TimeAfterClose);
             }
-            else if ((!_scriptableDialogues[_currentDialogueIndex].IsNameInput && _scriptableDialogues[_currentDialogueIndex].Clickable) || (_scriptableDialogues[_currentDialogueIndex].IsNameInput && !string.IsNullOrEmpty(_playerNameInputField.text) && _scriptableDialogues[_currentDialogueIndex].Clickable))
+            else if ((!_scriptableDialogues[dialogueToTest].IsNameInput && _scriptableDialogues[dialogueToTest].Clickable) || (_scriptableDialogues[dialogueToTest].IsNameInput && !string.IsNullOrEmpty(_playerNameInputField.text) && _scriptableDialogues[dialogueToTest].Clickable))
             {
                 _nextDialogueArrow.SetBool("Open", true);
             }
@@ -293,7 +297,8 @@ public class RB_Dialogue : MonoBehaviour
 
     private void PlayCloseAnim() //Play the close animation of the dialogue box
     {
-        _dialogueAnimator.SetBool("open", false);
+        _dialogueAnimator.SetBool("open", false); 
+        _nextDialogueArrow.SetBool("Open", false);
         Invoke(nameof(ReinitializeAfterCloseAnim), _dialogueAnimator.GetCurrentAnimatorClipInfo(0).Length);
     }
 
@@ -320,7 +325,10 @@ public class RB_Dialogue : MonoBehaviour
             }
             else//If the current dialogue is finished show the next dialogue
             {
-                NextDialogue();
+                if (_scriptableDialogues[_currentDialogueIndex].CloseByClick)
+                    StopDialogue();
+                else
+                    NextDialogue();
             }
         }
     }

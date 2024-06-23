@@ -40,12 +40,12 @@ public class RB_LevelExit : MonoBehaviour
         {
             Instance = this;
         }
-
-        ClosePortal();
     }
 
     private void Start()
     {
+        ClosePortal();
+
         _collisionDetection.EventOnObjectEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedObjects()); });
 
         if (_availableOnKill)

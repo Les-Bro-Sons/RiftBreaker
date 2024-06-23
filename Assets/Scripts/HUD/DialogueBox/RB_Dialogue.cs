@@ -334,6 +334,7 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StopDialogue() //Stop the dialogue system
     {
+        StopDrawText();
         _currentDialogueFinished = true;
         _dialogueStarted = false;
         PlayCloseAnim();

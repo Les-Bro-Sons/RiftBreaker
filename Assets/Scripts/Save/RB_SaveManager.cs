@@ -57,6 +57,8 @@ public class RB_SaveManager : MonoBehaviour
     public void ResetSave()
     {
         string filePath = Application.persistentDataPath + "/SaveObjectData.json";
+        SaveToJson();
+        LoadFromJson();
         File.Delete(filePath);
     }
 }

@@ -17,6 +17,7 @@ public class RB_Dialogue : MonoBehaviour
     [SerializeField] private Animator _dialogueAnimator;
     [SerializeField] private RB_RobertAnim _robertAnim;
     [SerializeField] private TMP_InputField _playerNameInputField;
+    [SerializeField] private Animator _nextDialogueArrow;
 
     //Click
     private int _clickIndex = 0;
@@ -100,6 +101,10 @@ public class RB_Dialogue : MonoBehaviour
         {
             Invoke(nameof(StopDialogue), _scriptableDialogues[_currentDialogueIndex].TimeAfterClose);
         }
+        else if((!_scriptableDialogues[_currentDialogueIndex].IsNameInput && _scriptableDialogues[_currentDialogueIndex].Clickable) || (_scriptableDialogues[_currentDialogueIndex].IsNameInput && !string.IsNullOrEmpty(_playerNameInputField.text) && _scriptableDialogues[_currentDialogueIndex].Clickable))
+        {
+            _nextDialogueArrow.SetBool("Open", true);
+        }
     }
 
     private void StartDrawText(int DialogueIndex)
@@ -157,6 +162,7 @@ public class RB_Dialogue : MonoBehaviour
         }
         _dialogueBox.text += _currentLetter; //Drawing of the text
         _currentLetterIndex++;
+        if(_currentDialogueIndex <= _scriptableDialogues.Count)
         {
             switch (_scriptableDialogues[_currentDialogueIndex].CurrentAnimation)
             {
@@ -300,6 +306,7 @@ public class RB_Dialogue : MonoBehaviour
 
     public void NextDialogue()
     {
+        _nextDialogueArrow.SetBool("Open", false);
         if (_isListening &&  !(_scriptableDialogues.Count-1 < _currentDialogueIndex && _scriptableDialogues[_currentDialogueIndex + 1].IsNameInput))
         {
             _playerNameInputField.onValueChanged.RemoveListener(OnPlayerEnterLetterName);

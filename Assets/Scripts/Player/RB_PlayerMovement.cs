@@ -84,6 +84,11 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
+    public bool IsDashing()
+    {
+        return _isDashing;
+    }
+
     private void UpdateDirection()
     {
         if (_playerAction.IsDoingAnyAttack() || _playerAction.IsChargingAttack)

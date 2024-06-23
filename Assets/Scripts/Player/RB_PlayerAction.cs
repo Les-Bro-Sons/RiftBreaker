@@ -33,7 +33,7 @@ public class RB_PlayerAction : MonoBehaviour
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
     private RB_TimeBodyRecorder _timeRecorder;
-    [SerializeField] private RB_Dialogue _pickupGathered;
+    public RB_Dialogue PickupGathered;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -66,9 +66,6 @@ public class RB_PlayerAction : MonoBehaviour
     //Debug
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
-
-    [Header("Robert Talking")] //Everything about the robert dialogue
-    [SerializeField] private bool _robertShouldTalk = true;
 
     //Awake
     private void Awake()
@@ -161,8 +158,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void AddItemToList(RB_Items itemToAdd)
     {
+
         itemToAdd.transform.position = itemToAdd.transform.parent.position;
-        itemToAdd.Bind();
         int currentItemId = Items.IndexOf(Item);
         //Add the item gathered to the items
         if (Items.Count >= 3)
@@ -196,10 +193,7 @@ public class RB_PlayerAction : MonoBehaviour
                 
                 RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, false, 0, 1);
                 RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
-                if (_robertShouldTalk)
-                {
-                    _pickupGathered.StartDialogue();
-                }
+                
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

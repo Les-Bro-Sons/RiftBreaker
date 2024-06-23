@@ -62,6 +62,7 @@ public class RB_PlayerController : MonoBehaviour
 
     public void OnChargeAttackStart()
     {
+
         //Start charging attack
         if (CanDoInput())
             _playerAction.StartChargeAttack();

@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,7 +69,7 @@ public class RB_TutorialManager : MonoBehaviour
     public RB_Room RewindTutoRoom;
     public RB_Room StartTutoRoom;
     public RB_CollisionDetection RoomExit;
-    private List<FadeEffect> _fadeEffects = new List<FadeEffect>();
+    private List<RB_FadeEffect> _fadeEffects = new List<RB_FadeEffect>();
     private List<ButtonEffect> _buttonEffects = new List<ButtonEffect>();
     private bool _rewindTutoSuccess = false;
     private bool _shouldFadeOutButton = false;
@@ -90,7 +88,6 @@ public class RB_TutorialManager : MonoBehaviour
     [SerializeField] private List<CanvasGroup> _movementButtons;
     [SerializeField] private List<CanvasGroup> _attackButtons;
     [SerializeField] private RB_Katana _tutoKatana;
-    private Transform _robertTransform;
 
     //movements
     private List<Movements> _movementsPerformed = new();
@@ -102,7 +99,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if(Instance == null)
             Instance = this;
-        _robertTransform = _roberLeNec.GetComponent<RectTransform>();
     }
 
     private void Start()
@@ -110,7 +106,6 @@ public class RB_TutorialManager : MonoBehaviour
         IsTuto = !RB_SaveManager.Instance.SaveObject.TutoDone;
         InitializeRewindTuto();
         InitializeMovementTuto();
-        _startRobertPos = _robertTransform.localPosition;
         InititializeImages();
         RewindTutoRoom.CloseRoom();
     }
@@ -122,7 +117,6 @@ public class RB_TutorialManager : MonoBehaviour
         SlowTimeByEnemyDistance();
         DarkenBackground();
         BrightenBackground();
-        AnimateRobert();
         FadeEffect();
         ButtonEffect();
     }
@@ -163,7 +157,6 @@ public class RB_TutorialManager : MonoBehaviour
         RB_LevelManager.Instance.EventPlayerLost.AddListener(OnPlayerDeathAfterAttack);
         RewindTutoRoom.CloseRoom(); //Close the room
         DisplayAttackTuto();
-        _robertLeNecAttackDialogue.StartDialogue();
         _robertLeNecDeathAfterAttack.StopDialogue();
     }
 
@@ -265,7 +258,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         RB_InputManager.Instance.EventMovePerformed.RemoveListener(OnMovementPerformed);
         RB_InputManager.Instance.EventDashStarted.RemoveListener(OnDashPerformed);
-        print("acchieve");
         TutorialRoom.OpenRoom();
         foreach(CanvasGroup _movementButton in _movementButtons)
         {
@@ -284,6 +276,7 @@ public class RB_TutorialManager : MonoBehaviour
         RB_TimeManager.Instance.EventStopNormalRewind.AddListener(OnRewindStopped); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopFullRewind.AddListener(OnDeathRewindFinished); //When the death rewind is finished
         RoomExit.EventOnObjectEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
+        RB_InputManager.Instance.RewindEnabled = false;
     }
 
     private void OnPlayerExitRewindRoom() //When the player exit the rewind room
@@ -485,15 +478,6 @@ public class RB_TutorialManager : MonoBehaviour
             _shouldAnimateRobertLeNec = false;
         }
     }
-
-    public void AnimateRobert() //Make robert go up then down with a sin
-    {
-        if (IsTuto && _shouldAnimateRobertLeNec)
-        {
-            print("animate robert");
-            _robertTransform.localPosition = new Vector3(_robertTransform.localPosition.x, _startRobertPos.y + RobertMoveHeight * Mathf.Sin(Time.unscaledTime * RobertMoveSpeed), _robertTransform.localPosition.z);
-        }
-    }
     #endregion
 
     #region general tuto
@@ -510,6 +494,7 @@ public class RB_TutorialManager : MonoBehaviour
         StartAnimateRobert();
         _robertLeNecRewindDialogue.StartDialogue();
         StartFadeIn(_rewindTutoImage, ChangeSpeed);
+        RB_InputManager.Instance.RewindEnabled = true;
     }
 
     private void StartValidateButton(CanvasGroup button) //Start the animation of the validation of the buttons
@@ -564,17 +549,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
-            FadeEffect fadeEffect = new FadeEffect(objectToFade, changeSpeed, FadeType.Out);
-            _fadeEffects.Add(fadeEffect);
-        }
-    }
-
-    public void StartFadeIn(CanvasGroup objectToFade, float changeSpeed) //Start the fading in
-    {
-        if (IsTuto)
-        {
-            print("fade started");
-            FadeEffect fadeEffect = new FadeEffect(objectToFade, changeSpeed, FadeType.In);
+            RB_FadeEffect fadeEffect = new RB_FadeEffect(objectToFade, changeSpeed, FadeType.Out);
             _fadeEffects.Add(fadeEffect);
         }
     }
@@ -584,11 +559,19 @@ public class RB_TutorialManager : MonoBehaviour
         for (int i = _fadeEffects.Count - 1; i >= 0; i--)
         {
             _fadeEffects[i].UpdateFade();
-            print("fade effect");
             if (_fadeEffects[i].IsComplete)
             {
                 _fadeEffects.RemoveAt(i);
             }
+        }
+    }
+
+    public void StartFadeIn(CanvasGroup objectToFade, float changeSpeed) //Start the fading in
+    {
+        if (IsTuto)
+        {
+            RB_FadeEffect fadeEffect = new RB_FadeEffect(objectToFade, changeSpeed, FadeType.In);
+            _fadeEffects.Add(fadeEffect);
         }
     }
 
@@ -669,56 +652,7 @@ public enum FadeType
 }
 
 
-public class FadeEffect
-{
-    private CanvasGroup _objectToFade;
-    private float _changeSpeed;
-    private FadeType _fadeType;
-    public bool IsComplete { get; private set; }
 
-    public FadeEffect(CanvasGroup objectToFade, float changeSpeed, FadeType fadeType) //Create the fading effect for the object
-    {
-        this._objectToFade = objectToFade;
-        this._changeSpeed = changeSpeed;
-        this._fadeType = fadeType;
-        IsComplete = false;
-
-        if (fadeType == FadeType.Out)
-        {
-            this._objectToFade.alpha = 1;
-        }
-        else if (fadeType == FadeType.In)
-        {
-            this._objectToFade.alpha = 0;
-        }
-    }
-
-    public void UpdateFade() //Updating constantly the fade effect
-    {
-        if (RB_TutorialManager.Instance.IsTuto && !IsComplete)
-        {
-            Debug.Log("Update fade");
-            if (_fadeType == FadeType.Out)
-            {
-                _objectToFade.alpha -= Time.unscaledDeltaTime * _changeSpeed;
-                if (_objectToFade.alpha <= 0)
-                {
-                    _objectToFade.alpha = 0;
-                    IsComplete = true;
-                }
-            }
-            else if (_fadeType == FadeType.In)
-            {
-                _objectToFade.alpha += Time.unscaledDeltaTime * _changeSpeed;
-                if (_objectToFade.alpha >= 1)
-                {
-                    _objectToFade.alpha = 1;
-                    IsComplete = true;
-                }
-            }
-        }
-    }
-}
 
 public class ButtonEffect
 {

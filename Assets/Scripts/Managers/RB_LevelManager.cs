@@ -16,6 +16,8 @@ public class RB_LevelManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventPlayerLost;
     [HideInInspector] public UnityEvent EventPlayerWon;
 
+    [HideInInspector] public UnityEvent EventSwitchPhase;
+
     public Dictionary<PHASES, List<GameObject>> _savedEnemiesInPhase = new();
 
     [Header("HUD SKILLS")]
@@ -84,10 +86,10 @@ public class RB_LevelManager : MonoBehaviour
                 break;
         }
 
-
-
         SpawnEnemiesInPhase(CurrentPhase);
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
+
+        EventSwitchPhase?.Invoke();
     }
 
     public void SwitchPhase(PHASES phaseToSwitch)
@@ -100,6 +102,8 @@ public class RB_LevelManager : MonoBehaviour
         SpawnEnemiesInPhase(CurrentPhase);
 
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
+
+        EventSwitchPhase?.Invoke();
     }
 
     public void SaveEnemyToPhase(PHASES phase, GameObject enemy)

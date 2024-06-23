@@ -24,6 +24,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
     public ParticleSystem BoostParticle;
+    public bool IsDecorative = false;
 
     [Header("Static Mode Parameters")]
     public bool IsStatic = false;
@@ -206,9 +207,17 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
         RB_BTNode root = new RB_BTSelector(new List<RB_BTNode>
         {
+            new RB_BTSequence(new List<RB_BTNode> // sequence decoration Infiltration
+            {
+                new RB_AICheck_Phase(_infiltrationPhases),
+                new RB_AICheck_Bool(this, IsDecorative),
+                new RB_AI_BecomeDecoration(this),
+            }),
+
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
             {
                 new RB_AICheck_Phase(_infiltrationPhases),
+                new RB_AICheck_Bool(this, !IsDecorative),
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
                     new RB_BTSequence(new List<RB_BTNode>

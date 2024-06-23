@@ -176,7 +176,7 @@ public class RB_PlayerMovement : MonoBehaviour
         //Clamping to max speed in the x and z axes
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
-        _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+        if (!_rb.isKinematic) _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
     }
 
     private void FrictionForce()

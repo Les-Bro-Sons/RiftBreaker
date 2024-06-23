@@ -386,6 +386,7 @@ MonoBehaviour:
   AttackSpeed: 0.3
   BoostMultiplier: 1
   BoostParticle: {fileID: 762171231365305212}
+  IsDecorative: 0
   IsStatic: 0
   StaticLookDirection: {x: 0, y: 0, z: 1}
   StaticPositionOnStart: 1
@@ -395,12 +396,13 @@ MonoBehaviour:
   PatrolSplineIndex: 0
   HasAnInterval: 0
   StartWaitingWaypointInterval: 0
+  CurrentWaypointIndex: 0
   SplineContainer: {fileID: 0}
   InRange: 0
   FovRange: 10
-  SpottedFovRange: 10
-  FovAngle: 180
-  DurationToLoadSpotBar: 0.5
+  SpottedFovRange: 14
+  FovAngle: 140
+  DurationToLoadSpotBar: 1
   DurationToUnloadSpotBar: 1
   LastTargetPos: {x: 0, y: 0, z: 0}
   IsPlayerInSight: 0
@@ -498,7 +500,7 @@ MonoBehaviour:
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
-  _animPlayer: {fileID: 8929304503503186960}
+  _animPlayer: {fileID: 0}
   _animUX: {fileID: 0}
   _animUIPlayer: {fileID: 0}
 --- !u!114 &3512577705081871335
@@ -1130,12 +1132,6 @@ PrefabInstance:
 --- !u!4 &4018589692066889848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3555326768263188982, guid: 1c82ff5cb542d1e428b083e7da65a097,
-    type: 3}
-  m_PrefabInstance: {fileID: 473978380072669582}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &8929304503503186960 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 9041165306238090654, guid: 1c82ff5cb542d1e428b083e7da65a097,
     type: 3}
   m_PrefabInstance: {fileID: 473978380072669582}
   m_PrefabAsset: {fileID: 0}

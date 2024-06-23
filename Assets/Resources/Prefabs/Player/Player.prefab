@@ -603,7 +603,7 @@ MonoBehaviour:
   CollisionDetection: {fileID: 1560718448460901250}
   _chargedAttackReadyMark: {fileID: 2153901776240351120, guid: 169cc00ad32ba9a4583b9d37aac39158,
     type: 3}
-  _pickupGathered: {fileID: 2945818860029341378}
+  PickupGathered: {fileID: 2945818860029341378}
   _startChargingDelay: 0.5
   EventBasicAttack:
     m_PersistentCalls:
@@ -635,7 +635,6 @@ MonoBehaviour:
   RewindLeft: 3
   MaxRewind: 3
   _debugCurrentWeaponFeedback: {fileID: 0}
-  _robertShouldTalk: 1
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2987,6 +2986,11 @@ PrefabInstance:
       propertyPath: _robertAnim
       value: 
       objectReference: {fileID: 3878570935106685399}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _writingDelay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: CloseAfterTime

@@ -375,6 +375,16 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StopDialogue() //Stop the dialogue system
     {
+        if (_isListening && !(_scriptableDialogues.Count - 1 < _currentDialogueIndex && _scriptableDialogues[_currentDialogueIndex + 1].IsNameInput))
+        {
+            _playerNameInputField.onValueChanged.RemoveListener(OnPlayerEnterLetterName);
+            RB_InputManager.Instance.MoveEnabled = true;
+            RB_InputManager.Instance.DashEnabled = true;
+        }
+        if (_scriptableDialogues[_currentDialogueIndex].Clickable || !(_scriptableDialogues.Count - 1 < _currentDialogueIndex && _scriptableDialogues[_currentDialogueIndex + 1].Clickable))
+        {
+            RB_InputManager.Instance.AttackEnabled = true;
+        }
         StopDrawText();
         _currentDialogueFinished = true;
         _dialogueStarted = false;

@@ -58,6 +58,7 @@ public class RB_Items : MonoBehaviour
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
     public bool CanAttackDuringAttack;
+    public bool RobertShouldTalk = true;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
@@ -116,7 +117,6 @@ public class RB_Items : MonoBehaviour
         _objectToRemove.SetActive(false);
         EventOnItemGathered?.Invoke();
 
-
     }
 
     public virtual void Drop()
@@ -130,7 +130,8 @@ public class RB_Items : MonoBehaviour
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
-        
+        RobertShouldTalk = true;
+
     }
 
     public virtual void ResetAttack()

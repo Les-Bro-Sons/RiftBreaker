@@ -1597,6 +1597,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51fd2ae82528e2642868b3cbe99454d8, type: 3}
+--- !u!114 &1066514981 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1841303693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbaa699059812fc4b8e20b23430dd1b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1131579364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2787,6 +2799,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3045335369512570001, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: PickupGathered
+      value: 
+      objectReference: {fileID: 1066514981}
     - target: {fileID: 3606458658511871148, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3032,6 +3049,52 @@ PrefabInstance:
       propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _writingDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d60df651d8e3f84d91afec0d6c5c60f,
+        type: 2}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8c09192ecb90d0b45aaab8d67f759812,
+        type: 2}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0bf6aef600ccebf468a54ee971930fd6,
+        type: 2}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: f6ae6ed6ac2cc344bbac97a1c3493c72,
+        type: 2}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 38aaab48d4919654882508d41acafa41,
+        type: 2}
+    - target: {fileID: 7379959491936091032, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0715fba75af81754284f11672dbaea62,
+        type: 2}
     - target: {fileID: 7494887055163537901, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.y

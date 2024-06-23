@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &7520405 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1841303693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &14405702
 Mesh:
   m_ObjectHideFlags: 0
@@ -2445,6 +2451,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2840c7841893eb54b96e1443ea19f621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1704219663 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+    type: 3}
+  m_PrefabInstance: {fileID: 1725788829}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1725788829
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7520405}
+    m_Modifications:
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367912828370266609, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782994434126254191, guid: 781f55821f82ba241a0c10ee54bc76da,
+        type: 3}
+      propertyPath: m_Name
+      value: VikingHorn
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 781f55821f82ba241a0c10ee54bc76da, type: 3}
 --- !u!1 &1779693962
 GameObject:
   m_ObjectHideFlags: 0
@@ -2712,6 +2792,11 @@ PrefabInstance:
     - target: {fileID: 1012389010914683403, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045335369512570001, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3606458658511871148, guid: 24ec74371e597bc41bec89689e31652b,
@@ -3023,6 +3108,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2134801235}
+    - targetCorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1704219663}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ec74371e597bc41bec89689e31652b, type: 3}
 --- !u!43 &1844889536

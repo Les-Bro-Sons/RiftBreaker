@@ -8,6 +8,9 @@ public class RB_YogBetrayal : MonoBehaviour
     [SerializeField] private RB_Dialogue _3rdDialogue;
 
     [SerializeField] private GameObject _exclamationMark;
+    [SerializeField] private GameObject _transformationParticle;
+
+    [SerializeField] private Transform _robertLeNec;
 
     private Animator _animator;
 
@@ -15,10 +18,12 @@ public class RB_YogBetrayal : MonoBehaviour
     private bool _2ndDialogueDone = false;
     private bool _3rdDialogueDone = false;
 
+    [SerializeField] private int _cinematicIndex = 0;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _animator.SetInteger("CinematicIndex", _cinematicIndex);
     }
 
     private void Start()
@@ -30,6 +35,11 @@ public class RB_YogBetrayal : MonoBehaviour
     {
         Transform mark = Instantiate(_exclamationMark, RB_PlayerController.Instance.transform).transform;
         mark.rotation = Quaternion.identity;
+    }
+
+    public void RobertTransformation()
+    {
+        Instantiate(_transformationParticle, _robertLeNec.position, Quaternion.identity);
     }
 
     public void StartFirstDialogue()

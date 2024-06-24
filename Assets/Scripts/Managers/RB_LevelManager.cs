@@ -63,12 +63,15 @@ public class RB_LevelManager : MonoBehaviour
             {
                 case SCENENAMES.Boss1:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Mega_knight.Instance.GetComponent<RB_Health>();
+                    RB_AudioManager.Instance.PlayMusic("MK_Boss_Music");
                     break;
                 case SCENENAMES.Boss2:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
+                    RB_AudioManager.Instance.PlayMusic("Robert_Boss_Music");
                     break;
                 case SCENENAMES.Boss3:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Yog.Instance.GetComponent<RB_Health>();
+                    RB_AudioManager.Instance.PlayMusic("Yog_Boss_Music");
                     break;
             }
             RB_HUDManager.Instance.PlayAnimation(_phaseBoss);

@@ -210,7 +210,7 @@ public class RB_Mega_knight : RB_Boss
 
             if (_landingParticles)
             {
-                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,false, 0, 1f);
+                RB_AudioManager.Instance.PlaySFX("Jump_Attack_Viking_Horn", transform.position,false, 0, 1f);
                 Instantiate(_landingParticles, transform.position, transform.rotation);
             }
 

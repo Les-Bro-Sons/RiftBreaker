@@ -41,7 +41,7 @@ public class RB_MusicBox : RB_Items
     {
         base.Attack();
         ShootProjectile("MusicNote");
-        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
+        RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
     }
 
     public override void ChargedAttack()

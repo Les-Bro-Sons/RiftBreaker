@@ -126,7 +126,7 @@ public class RB_LevelManager : MonoBehaviour
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
-        RB_AudioManager.Instance.PlaySFX("scream-no", RB_PlayerController.Instance.transform.position, false, 0, 1);
+       
     }
 
     public IEnumerator PlayerLostUX()

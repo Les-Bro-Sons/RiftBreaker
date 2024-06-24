@@ -236,7 +236,6 @@ public class RB_Items : MonoBehaviour
         _colliderAnimator.SetTrigger("SpecialAttack");
         //Reset attack
         Invoke(nameof(ResetSpecialAttack), _specialAttackCooldown);
-        print(_specialAttackCooldown);
 
         /////UX/////
         if (_impulseSource)

@@ -31,7 +31,7 @@ public class RB_MusicBox : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(2);
             RobertShouldTalk = false;

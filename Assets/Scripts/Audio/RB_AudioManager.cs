@@ -98,6 +98,7 @@ namespace MANAGERS
 			_musicSource.volume = 0;
 			timer = 0;
 		    _musicSource.clip = clip;
+            if (!_musicSource.isPlaying) _musicSource.Play();
 
             while (timer < fadeInDuration)
             {

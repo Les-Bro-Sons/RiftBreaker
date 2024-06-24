@@ -291,6 +291,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
@@ -330,6 +331,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
@@ -371,6 +373,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),

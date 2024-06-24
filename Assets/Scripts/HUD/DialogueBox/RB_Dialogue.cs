@@ -78,7 +78,8 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StartDialogue(int dialogueIndex)
     {
-        if (!_scriptableDialogues[dialogueIndex] || _scriptableDialogues[dialogueIndex].Paragraph == "") return;
+        if (_scriptableDialogues.Count < dialogueIndex || _scriptableDialogues[dialogueIndex].Paragraph == "") return;
+
         _currentDialogueIndex = dialogueIndex;
         DialogueOpened = true;
         PlayOpenAnim();

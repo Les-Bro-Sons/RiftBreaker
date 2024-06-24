@@ -12,13 +12,13 @@ public class RB_OptionSelectable : MonoBehaviour, IPointerEnterHandler,IPointerE
 
     public void OnPointerEnter(PointerEventData eventData) {
         if (_selectable.enabled) {
-            RB_OptionsSelectableManager.Instance.ButtonHooveredCount++;
+            RB_OptionsSelectableManager.Instance.SelectableHooveredCount++;
             _selectable.Select();
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        RB_OptionsSelectableManager.Instance.ButtonHooveredCount--;
+        RB_OptionsSelectableManager.Instance.SelectableHooveredCount--;
     }
 
     public void OnSelect(BaseEventData eventData) {
@@ -33,7 +33,7 @@ public class RB_OptionSelectable : MonoBehaviour, IPointerEnterHandler,IPointerE
     }
 
     private void Update()  {
-        if (!(_isSelected || (RB_OptionsSelectableManager.Instance.IsButtonsHoovered && _selectable == RB_OptionsSelectableManager.Instance.CurrentSelectable))) {
+        if (!(_isSelected || (RB_OptionsSelectableManager.Instance.IsSelectableHoovered && _selectable == RB_OptionsSelectableManager.Instance.CurrentSelectable))) {
             _selectable.interactable = false;
             _selectable.interactable = true;
         }

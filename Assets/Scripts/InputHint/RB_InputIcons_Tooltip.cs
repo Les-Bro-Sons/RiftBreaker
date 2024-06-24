@@ -35,8 +35,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI {
             }
                 
 
-                //Debug.Log(icon == null);
-                var textComponent = component.bindingText;
+            var textComponent = component.bindingText;
 
 
             // Grab Image component.

@@ -7,9 +7,9 @@ public class RB_OptionsSelectableManager : MonoBehaviour {
     public Selectable CurrentSelectable;
     [SerializeField] Selectable _audioButton;
 
-    public int ButtonHooveredCount;
+    public int SelectableHooveredCount;
 
-    public bool IsButtonsHoovered => ButtonHooveredCount > 0 ? true : false;
+    public bool IsSelectableHoovered => SelectableHooveredCount > 0 ? true : false;
 
     private void Awake() {
         if (Instance == null) { Instance = this; }

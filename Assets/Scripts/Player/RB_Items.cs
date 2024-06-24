@@ -137,10 +137,19 @@ public class RB_Items : MonoBehaviour
     public virtual void ResetAttack()
     {
         //Turning off all attack animations
-        _playerAnimator.SetBool("ChargeAttack", false);
-        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopAttack();
+    }
+
+    public virtual void ResetChargeAttack()
+    {
+        _playerAnimator.SetBool("ChargeAttack", false);
         _playerAction.StopChargedAttack();
+    }
+
+    public virtual void ResetSpecialAttack()
+    {
+
+        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopSpecialAttack();
     }
 
@@ -205,7 +214,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
         //Reset attack
-        Invoke(nameof(ResetAttack), _attackCooldown);
+        Invoke(nameof(ResetChargeAttack), _playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
 
         /////UX/////
         if (_impulseSource)
@@ -224,7 +233,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
         //Reset attack
-        Invoke(nameof(ResetAttack), _attackCooldown);
+        Invoke(nameof(ResetSpecialAttack), _playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
 
         /////UX/////
         if (_impulseSource)

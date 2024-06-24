@@ -52,7 +52,7 @@ namespace MANAGERS
 		{
             AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
 			if (_musicSource.clip == _musicClip) return;
-            _audioSource.spatialBlend = 0;
+            _musicSource.spatialBlend = 0;
 
 
 

@@ -59,6 +59,7 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StartDialogue() //Start the dialogue system
     {
+        _currentDialogueIndex = 0;
         DialogueOpened = true;
         PlayOpenAnim();
         StartCoroutine(StartDialogueAfterOpenAnim(0));

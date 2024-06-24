@@ -20,6 +20,8 @@ public class RB_MusicBox : RB_Items
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
+    [SerializeField] private GameObject _musicZonePrefab;
+    private GameObject _currentZone;
 
 
     protected override void Start()
@@ -73,6 +75,7 @@ public class RB_MusicBox : RB_Items
     public void StartChargeZone()
     {
         _instantiatedZone.transform.localScale = Vector3.zero;
+        _currentZone = Instantiate(_musicZonePrefab);
         _stayTime = 0;
         _shouldGrow = true;
     }
@@ -80,6 +83,7 @@ public class RB_MusicBox : RB_Items
     public void StopChargeZone()
     {
         _shouldGrow = false;
+        Destroy(_currentZone, _stayTime);
     }
 
     public void ChargeZone()

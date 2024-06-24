@@ -267,6 +267,8 @@ MonoBehaviour:
   SpecialAttackChargeTime: 0
   _chargeZoom: 0.85
   _attackCooldown: 0.4
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 0
   _attackDamage: 0
   _chargedAttackDamage: 0
   _specialAttackDamage: 0
@@ -306,6 +308,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 70b1c158299dba94c96f295d1b7cd822, type: 3}
   - {fileID: 21300000, guid: f0ce89f9c515e1741bf24c6b5a2aff56, type: 3}
   - {fileID: 21300000, guid: 089e27426bee91841b77d52d4aa56f67, type: 3}
+  _musicZonePrefab: {fileID: 5657851559045660891, guid: 83d1238314cf4af40bdcb51644277896,
+    type: 3}
 --- !u!54 &3774943303432835847
 Rigidbody:
   m_ObjectHideFlags: 0

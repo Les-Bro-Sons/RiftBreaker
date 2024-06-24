@@ -46,7 +46,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Range(1f, 50f)] public float FovRange = 10f;
     [Range(1f, 50f)] public float SpottedFovRange = 10f;
     public float FovAngle = 75f;
-    public float DurationToLoadSpotBar = 0.5f;
+    public float MinDistDurationToLoadSpotBar = 0.25f;
+    public float MaxDistDurationToLoadSpotBar = 1f;
     public float DurationToUnloadSpotBar = 1f;
     [HideInInspector] public Vector3 LastTargetPos;
     public bool IsPlayerInSight = false; //used only by other scripts

@@ -84,7 +84,6 @@ public class RB_PlayerAction : MonoBehaviour
     private void Start()
     {
         GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
-        GetComponent<RB_Health>().EventTakeDamage.AddListener(OnPlayerDamaged);
     }
     //Update
     private void Update()
@@ -99,13 +98,9 @@ public class RB_PlayerAction : MonoBehaviour
         StopChargeAttack();
         StopAttack();
         StopSpecialAttack();
-        RB_AudioManager.Instance.PlaySFX("Player_Death", RB_PlayerController.Instance.transform.position, false, 0, 1);
     }
 
-    private void OnPlayerDamaged() 
-    {
-        RB_AudioManager.Instance.PlaySFX("Player_Damaged", RB_PlayerController.Instance.transform.position, false, 0, 1);
-    }
+
 
     public virtual void AddToSpecialChargeAttack(float amountToAdd)
     {
@@ -195,7 +190,14 @@ public class RB_PlayerAction : MonoBehaviour
                 IsItemNearby = true;
                 AddItemToList(itemGathered);
                 
+<<<<<<< Updated upstream
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
+=======
+                
+                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, false, 0, 1);
+                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
+                
+>>>>>>> Stashed changes
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
@@ -205,7 +207,6 @@ public class RB_PlayerAction : MonoBehaviour
                 if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
                 {
                     RB_LevelManager.Instance.SwitchPhase();
-                    RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
                 }
             }
         }

@@ -191,7 +191,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
         spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        RB_AudioManager.Instance.PlaySFX("hey", transform.position, false, 0,1);
+        RB_AudioManager.Instance.PlaySFX("Detection", transform.position, false, 0,1);
         EventOnSpotted?.Invoke();
     }
 

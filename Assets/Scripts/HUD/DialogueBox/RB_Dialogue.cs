@@ -13,7 +13,7 @@ public class RB_Dialogue : MonoBehaviour
 
     //Component
     [SerializeField] private TextMeshProUGUI _dialogueBox;
-    [SerializeField] private List<RB_Dialogue_Scriptable> _scriptableDialogues = new List<RB_Dialogue_Scriptable>();
+    [SerializeField] private List<RB_Dialogue_Scriptable> _scriptableDialogues = new List<RB_Dialogue_Scriptable>(); public List<RB_Dialogue_Scriptable> ScriptableDialogues {  get { return _scriptableDialogues; } }
     [SerializeField] private Animator _dialogueAnimator;
     [SerializeField] private RB_RobertAnim _robertAnim;
     [SerializeField] private TMP_InputField _playerNameInputField;
@@ -78,6 +78,8 @@ public class RB_Dialogue : MonoBehaviour
 
     public void StartDialogue(int dialogueIndex)
     {
+        if (_scriptableDialogues.Count < dialogueIndex || _scriptableDialogues[dialogueIndex].Paragraph == "") return;
+
         _currentDialogueIndex = dialogueIndex;
         DialogueOpened = true;
         PlayOpenAnim();

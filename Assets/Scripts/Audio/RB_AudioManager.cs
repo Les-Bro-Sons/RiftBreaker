@@ -67,27 +67,32 @@ namespace MANAGERS
 				}
 				else
 				{
-					_musicSource.clip = _musicClip;
-					_musicSource.volume = 1;
-				}
+                    if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                    _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                }
 			}
 			else
 			{
-				Debug.LogWarning("Music clip not found: " + nameClip);
+                if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                Debug.LogWarning("Music clip not found: " + nameClip);
 			}
 		}
 
-		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1)
+		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1, bool fadeOut = true)
 		{
 			float timer = 0;
 			float fadeOutDuration = (duration / 2);
 			float fadeInDuration = (duration / 2);
-
-            while (timer < fadeOutDuration)
+			
+			if (fadeOut)
 			{
-				_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
-				timer += Time.unscaledDeltaTime;
-				yield return null;
+				while (timer < fadeOutDuration)
+				{
+					_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
+					timer += Time.unscaledDeltaTime;
+					yield return null;
+				}
 			}
 
 			_musicSource.volume = 0;

@@ -54,7 +54,7 @@ public class RB_Dialogue : MonoBehaviour
     private void Update()
     {
         DrawText();
-        _writingLetterTimer += Time.deltaTime;
+        _writingLetterTimer += Time.unscaledDeltaTime;
     }
 
     public void StartDialogue() //Start the dialogue system

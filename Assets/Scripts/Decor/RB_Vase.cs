@@ -15,15 +15,20 @@ public class RB_Vase : MonoBehaviour
     [SerializeField] private NavMeshObstacle _navMeshObstacle;
     private RB_Health _health;
     private Transform _transform;
+    private Rigidbody _rb;
 
     //Prefabs
     [Header("Prefabs")]
     [SerializeField] private GameObject _vaseParticlesPrefab;
 
+    private LayerMask _originalExcludeLayer;
+
     private void Awake()
     {
         _transform = transform;
         _health = GetComponent<RB_Health>();
+        _rb = GetComponent<Rigidbody>();
+        _originalExcludeLayer = _rb.excludeLayers;
     }
 
     private void Start()
@@ -53,7 +58,8 @@ public class RB_Vase : MonoBehaviour
     {
         for(int i = 0; i < _particleAmount; i++)
             Instantiate(_vaseParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles
-        _vaseCollider.isTrigger = true; //Desactivate colliders of the vase
+        _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
+        //_vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
         _health.TakeDamage(1); //"Kill" the vase
         _navMeshObstacle.carving = false;
@@ -63,7 +69,8 @@ public class RB_Vase : MonoBehaviour
 
     public void UnBreak()
     {
-        _vaseCollider.isTrigger = false; //For the rewind, reactive the collision of the vase
+        _rb.excludeLayers = _originalExcludeLayer;
+        //_vaseCollider.isTrigger = false; //For the rewind, reactive the collision of the vase
         _navMeshObstacle.carving = true;
     }
 }

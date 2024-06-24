@@ -150,11 +150,11 @@ public class RB_Items : MonoBehaviour
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetAttack), _attackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -184,14 +184,6 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    protected IEnumerator WaitToResetAttacks()
-    {
-        //Wait for the end of the frame 
-        yield return new WaitForEndOfFrame();
-        //Reset attack
-        Invoke("ResetAttack", _playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length );
-    } 
-
     public virtual bool CanAttack()
     {
         //Cooldown dash
@@ -212,7 +204,8 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _chargeAttackKnockbackForce;
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetAttack), _attackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -230,7 +223,8 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _specialAttackKnockbackForce;
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetAttack), _attackCooldown);
 
         /////UX/////
         if (_impulseSource)

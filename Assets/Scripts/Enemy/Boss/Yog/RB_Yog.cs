@@ -20,6 +20,8 @@ public class RB_Yog : RB_Boss
     private float _timeUntilNextState;
     protected float _currentCooldownBetweenMovement;
 
+    private float _activationTimer = 0;
+
     [Header("Tentacle Hit (attack1)")]
     [SerializeField] private RB_Tentacles _tentacle;
     [SerializeField] private RB_CollisionDetection _tentacleCollision;
@@ -111,7 +113,16 @@ public class RB_Yog : RB_Boss
     {
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            _activationTimer += Time.deltaTime;
+            return;
+        }
 
         switch (CurrentState)
         {

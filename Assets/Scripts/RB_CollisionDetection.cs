@@ -20,9 +20,8 @@ public class RB_CollisionDetection : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.isTrigger) return;
-
         //When an object is entering the trigger and has a life script add it to the list
-        if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
+        if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth) && enemyHealth.Team == TEAMS.Ai)
         {
             _detectedEnemies.Add(enemyHealth.gameObject);
             EventOnEnemyEntered?.Invoke();
@@ -50,12 +49,18 @@ public class RB_CollisionDetection : MonoBehaviour
 
     }
 
-    public List<GameObject> GetDetectedObjects()
+    public List<GameObject> GetDetectedEnnemies()
     {
         //Getter to have the detected objects
         //Destroy all empty objects before getting the list
         DestroyDeletedObject();
         return _detectedEnemies;
+    }
+
+    public List<GameObject> GetDetectedObjects()
+    {
+        DestroyDeletedObject();
+        return _detectedObjects;
     }
 
     public void DestroyDeletedObject()

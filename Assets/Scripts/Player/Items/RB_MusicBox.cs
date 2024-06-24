@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class RB_MusicBox : RB_Items
 {
+    //Enums
+    
+
     //Zone
-    [SerializeField] private GameObject _zonePrefab;
-    private GameObject _instantiatedZone;
     bool _shouldGrow = false;
     private float _stayTime = 0;
     private bool _charging = false;
@@ -20,14 +21,22 @@ public class RB_MusicBox : RB_Items
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
-    [SerializeField] private GameObject _musicZonePrefab;
     private GameObject _currentZone;
+
+    //Prefabs
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _musicZonePrefab;
+
+    //Music zone
+    [Header("Music Zone Properties")]
+    public ZonePropertiesClass ZoneProperties = new();
 
 
     protected override void Start()
     {
         base.Start();
         EventOnEndOfAttack.AddListener(EndOfAttack);
+        ZoneProperties.Damages = _chargedAttackDamage;
     }
    
     public override void Bind()
@@ -61,21 +70,24 @@ public class RB_MusicBox : RB_Items
     {
         base.StartChargingAttack();
         
-        if (_instantiatedZone == null || _charging == false)
+        if (_currentZone == null || _charging == false)
         {
             _charging = true;
-            _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
+            _currentZone = Instantiate(_musicZonePrefab);
             StartChargeZone();
             RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
         }
-        
+    }
 
+    public override void FinishChargingAttack()
+    {
+        base.FinishChargingAttack();
+        _shouldGrow = false;
+        print(_stayTime);
     }
 
     public void StartChargeZone()
     {
-        _instantiatedZone.transform.localScale = Vector3.zero;
-        _currentZone = Instantiate(_musicZonePrefab);
         _stayTime = 0;
         _shouldGrow = true;
     }
@@ -83,15 +95,14 @@ public class RB_MusicBox : RB_Items
     public void StopChargeZone()
     {
         _shouldGrow = false;
-        Destroy(_currentZone, _stayTime);
+        _currentZone.GetComponent<RB_MusicZone>().StopTakeAway();
     }
 
     public void ChargeZone()
     {
-        if (_shouldGrow && _instantiatedZone.transform.localScale.magnitude < _maxZoneSize)
+        if (_shouldGrow)
         {
-            _instantiatedZone.transform.localScale += (Vector3.one * _zoneGrowthSpeed) * Time.deltaTime;
-            _stayTime += (Time.deltaTime / (_maxZoneSize / _zoneGrowthSpeed)) * 3;
+            _stayTime += (Time.deltaTime / (ZoneProperties.MaxMusicNoteDistance / ZoneProperties.TakeAwaySpeed)) * 3;
         }
     }
 
@@ -99,7 +110,7 @@ public class RB_MusicBox : RB_Items
     {
         base.StopChargingAttack();
         StopChargeZone();
-        Destroy(_instantiatedZone, _stayTime);
+        Destroy(_currentZone, _stayTime);
         if (_charging)
         {
             _charging = false;

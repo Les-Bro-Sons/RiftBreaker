@@ -1,22 +1,17 @@
+using UnityEditor;
 using UnityEngine;
 
 public class RB_MusicNoteZone : MonoBehaviour
 {
     //Properties
-    [Header("Properties")]
-    [SerializeField] private float _height;
-    [SerializeField] private float _upDownSpeed;
-    [SerializeField] private float _leftRightDistance;
-    [SerializeField] private float _leftRightSpeed;
-    [SerializeField] private float _rotationSpeed;
-    [SerializeField] private float _takeAwaySpeed;
-    [SerializeField] private float _maxMusicNoteDistance;
+    private ZonePropertiesClass _zoneProperties = new();
     private Vector3 _takeAwayDirection;
     private Vector3 _defaultPos;
 
     //Conditions
     [SerializeField] private bool _shouldAnimate = false;
     [SerializeField] private bool _shouldTakeAway = false;
+    private bool _isInit = false;
 
     //Components
     [Header("Components")]
@@ -24,23 +19,44 @@ public class RB_MusicNoteZone : MonoBehaviour
     private Transform _musicNote;
     private Transform _musicNoteSprite;
     private Transform _playerTransform;
+    private RB_CollisionDetection _collisionDetection;
 
     private void Awake()
     {
         _musicNote = transform;
         _musicNoteSprite = _musicNote.GetComponentInChildren<SpriteRenderer>().transform;
+        _collisionDetection = GetComponentInChildren<RB_CollisionDetection>();
     }
 
-    private void Start()
+    public void IntializeProperties(ZonePropertiesClass zoneProperties)
     {
-        _playerTransform = RB_PlayerMovement.Instance.transform;
-        _height = Random.Range(.1f, _height);
-        _upDownSpeed = Random.Range(.1f, _upDownSpeed);
-        _leftRightDistance = Random.Range(.1f, _leftRightDistance);
-        _leftRightSpeed = Random.Range(.1f, _leftRightSpeed);
-        _rotationSpeed = Random.Range(-_rotationSpeed, _rotationSpeed);
-        _defaultPos = _musicNote.position;
-        _takeAwayDirection = new Vector3(Random.Range(.1f, 1f), 0, Random.Range(.1f, 1f)).normalized;
+        if (!_isInit)
+        {
+            _zoneProperties = zoneProperties;
+
+            _playerTransform = RB_PlayerMovement.Instance.transform;
+            _zoneProperties.Height = Random.Range(.1f, _zoneProperties.Height);
+            _zoneProperties.UpDownSpeed = Random.Range(.1f, _zoneProperties.UpDownSpeed);
+            _zoneProperties.RotationSpeed = Random.Range(-_zoneProperties.RotationSpeed, _zoneProperties.RotationSpeed);
+            _zoneProperties.MaxMusicNoteDistance = Random.Range(.1f, _zoneProperties.MaxMusicNoteDistance);
+            _defaultPos = _musicNote.position;
+            _takeAwayDirection = new Vector3(Random.Range(-1, 1f), 0, Random.Range(-1, 1f)).normalized;
+            _collisionDetection.EventOnEnemyEntered.AddListener(OnEnemyEntered);
+        }
+        
+    }
+
+    private void OnEnemyEntered()
+    {
+        foreach(GameObject detectedEnemy in _collisionDetection.GetDetectedEnnemies())
+        {
+            if (RB_Tools.TryGetComponentInParent(detectedEnemy, out RB_Health enemyHeath))
+            {
+                print(_zoneProperties.Damages);
+                enemyHeath.TakeDamage(_zoneProperties.Damages);
+            }
+        }
+        
     }
 
     private void Update()
@@ -68,16 +84,46 @@ public class RB_MusicNoteZone : MonoBehaviour
     {
         if (_shouldTakeAway)
         {
-            _musicNoteSpriteParent.localPosition += _takeAwayDirection * Time.deltaTime * _takeAwaySpeed;
-            if(Mathf.Abs(_musicNoteSpriteParent.localPosition.x) >= _maxMusicNoteDistance)
+            _musicNoteSpriteParent.localPosition += _takeAwayDirection * Time.deltaTime * _zoneProperties.TakeAwaySpeed;
+            if(Mathf.Abs(_musicNoteSpriteParent.localPosition.magnitude) >= _zoneProperties.MaxMusicNoteDistance)
                 _shouldTakeAway = false;
         }
     }
 
+    public void StopTakeAway()
+    {
+        _shouldTakeAway = false;
+    }
+
     private void AnimateUpDownLeftRight()
     {
-        _musicNoteSprite.localPosition = _defaultPos + Vector3.up * Mathf.Sin(Time.time * _upDownSpeed) * _height + _defaultPos + Vector3.right * Mathf.Sin(Time.time * _leftRightSpeed) * _leftRightDistance;
-        _musicNote.Rotate(Vector3.up * Time.deltaTime * _rotationSpeed);
+        _musicNoteSprite.localPosition = _defaultPos + Vector3.up * Mathf.Sin(Time.time * _zoneProperties.UpDownSpeed) * _zoneProperties.Height;
+        _musicNote.Rotate(Vector3.up * Time.deltaTime * _zoneProperties.RotationSpeed);
         _musicNote.position = _playerTransform.position;
+    }
+}
+
+[System.Serializable]
+public class ZonePropertiesClass
+{
+    public float Height;
+    public float UpDownSpeed;
+    public float RotationSpeed;
+    public float TakeAwaySpeed;
+    public float MaxMusicNoteDistance;
+    public int NoteAmount;
+    [HideInInspector] public float Damages;
+
+    public ZonePropertiesClass Copy()
+    {
+        return new ZonePropertiesClass()
+        {
+            Height = this.Height,
+            UpDownSpeed = this.UpDownSpeed,
+            RotationSpeed = this.RotationSpeed,
+            TakeAwaySpeed = this.TakeAwaySpeed,
+            MaxMusicNoteDistance = this.MaxMusicNoteDistance,
+            Damages = this.Damages
+        };
     }
 }

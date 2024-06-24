@@ -281,7 +281,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void OnPlayerExitRewindRoom() //When the player exit the rewind room
     {
-        if (RoomExit.GetDetectedObjects().Contains(RB_PlayerMovement.Instance.gameObject))
+        if (RoomExit.GetDetectedEnnemies().Contains(RB_PlayerMovement.Instance.gameObject))
         {
             print("level exit");
             RoomExit.EventOnObjectEntered.RemoveListener(OnPlayerExitRewindRoom); //Remove listener

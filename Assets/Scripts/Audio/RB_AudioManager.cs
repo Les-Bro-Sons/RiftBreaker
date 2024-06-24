@@ -170,7 +170,7 @@ namespace MANAGERS
 
             foreach (AudioSource audioSource in AudioSources)
             {
-                if (audioSource.clip == _sfxClip)
+                if (audioSource.clip.name == _sfxClip.name)
                 {
                     audioSource.Stop();
                 }

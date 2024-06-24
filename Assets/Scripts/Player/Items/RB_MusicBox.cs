@@ -64,7 +64,7 @@ public class RB_MusicBox : RB_Items
             _charging = true;
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
-            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, .15f, 1f);
+            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
         }
         
 
@@ -114,7 +114,7 @@ public class RB_MusicBox : RB_Items
 
     private void EndOfAttack() 
     {
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("Music_Box_Charged_Attack");
     }
     
     public override void ChooseSfx() {

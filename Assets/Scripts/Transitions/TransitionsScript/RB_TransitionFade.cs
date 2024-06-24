@@ -32,6 +32,7 @@ public class RB_TransitionFade : RB_Transition
 
         yield return new WaitForEndOfFrame(); // Wait for one frame.
         yield return new WaitForEndOfFrame(); // Wait for one frame.
+        Time.timeScale = 1;
 
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
         //RZ_AudioSettings.Instance.InitAudio();

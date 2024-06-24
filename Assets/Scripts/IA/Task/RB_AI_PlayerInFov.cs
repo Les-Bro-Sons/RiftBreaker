@@ -267,8 +267,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
             _isUnloadingSpotBar = false;
 
         }
-
-        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / _btParent.DurationToLoadSpotBar;
+        Transform target = (Transform)_btParent.Root.GetData("target");
+        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / Mathf.Lerp(_btParent.MinDistDurationToLoadSpotBar, _btParent.MaxDistDurationToLoadSpotBar, Vector3.Distance(target.position, _transform.position) / _btParent.FovRange);
 
         if (_btParent.ImageSpotBar.fillAmount >= 1.0f)
         {

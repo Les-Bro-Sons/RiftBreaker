@@ -59,7 +59,7 @@ public class RB_Health : MonoBehaviour {
 
     //Fonction de prise de dégâts
     public void TakeDamage(float amount, bool ignoreParticle = false) {
-        if (amount == 0) return;
+        if (amount == 0 && Dead) return;
 
         _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
         LerpTimer = 0.0f;

@@ -82,7 +82,9 @@ MonoBehaviour:
   ChargeTime: 1
   SpecialAttackChargeTime: 2
   _chargeZoom: 0.85
-  _attackCooldown: 0.1
+  _attackCooldown: 0.4
+  _chargeAttackCooldown: 0.5
+  _specialAttackCooldown: 1
   _attackDamage: 30
   _chargedAttackDamage: 45
   _specialAttackDamage: 90
@@ -101,6 +103,7 @@ MonoBehaviour:
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
   CanAttackDuringAttack: 0
+  RobertShouldTalk: 1
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []

@@ -603,7 +603,7 @@ MonoBehaviour:
   CollisionDetection: {fileID: 1560718448460901250}
   _chargedAttackReadyMark: {fileID: 2153901776240351120, guid: 169cc00ad32ba9a4583b9d37aac39158,
     type: 3}
-  _pickupGathered: {fileID: 2945818860029341378}
+  PickupGathered: {fileID: 2945818860029341378}
   _startChargingDelay: 0.5
   EventBasicAttack:
     m_PersistentCalls:
@@ -635,7 +635,6 @@ MonoBehaviour:
   RewindLeft: 3
   MaxRewind: 3
   _debugCurrentWeaponFeedback: {fileID: 0}
-  _robertShouldTalk: 1
 --- !u!114 &3669966155072335375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3005,13 +3004,43 @@ PrefabInstance:
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: _scriptableDialogues.Array.size
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: _scriptableDialogues.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 8d60df651d8e3f84d91afec0d6c5c60f,
+        type: 2}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8c09192ecb90d0b45aaab8d67f759812,
+        type: 2}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0bf6aef600ccebf468a54ee971930fd6,
+        type: 2}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: f6ae6ed6ac2cc344bbac97a1c3493c72,
+        type: 2}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 38aaab48d4919654882508d41acafa41,
+        type: 2}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0715fba75af81754284f11672dbaea62,
         type: 2}
     - target: {fileID: 7933119062418324273, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}

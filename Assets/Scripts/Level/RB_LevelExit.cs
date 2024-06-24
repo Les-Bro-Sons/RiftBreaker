@@ -26,10 +26,12 @@ public class RB_LevelExit : MonoBehaviour
     [SerializeField] private Vector3 _closedSize;
     [SerializeField] private float _openedLightIntensity;
     [SerializeField] private float _closedLightIntensity;
+    [SerializeField] private bool _showRobert = true;
 
     [Header("Component")]
     [SerializeField] private RB_CollisionDetection _collisionDetection;
     [SerializeField] private Transform _portalTransform;
+    [SerializeField] private GameObject _robert;
     [SerializeField] private Light _portalLight;
 
     private bool _isOpened = false; //for entering the portal
@@ -40,13 +42,15 @@ public class RB_LevelExit : MonoBehaviour
         {
             Instance = this;
         }
-
-        ClosePortal();
     }
 
     private void Start()
     {
+        ClosePortal();
+
         _collisionDetection.EventOnObjectEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedObjects()); });
+
+        _robert.SetActive(_showRobert);
 
         if (_availableOnKill)
         {

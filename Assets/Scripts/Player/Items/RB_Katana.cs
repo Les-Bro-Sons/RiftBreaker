@@ -12,6 +12,12 @@ public class RB_Katana : RB_Items
     public override void Bind()
     {
         base.Bind();
+        if (RobertShouldTalk && RB_PlayerAction.Instance.PickupGathered != null)
+        {
+            RB_PlayerAction.Instance.PickupGathered.StartDialogue(0);
+            RobertShouldTalk = false;
+            
+        }
         //Set the current weapon on the animators
         _playerAnimator.SetFloat("WeaponID", 0);
         _colliderAnimator.SetFloat("WeaponID", 0);

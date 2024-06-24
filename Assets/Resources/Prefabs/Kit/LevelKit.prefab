@@ -1037,6 +1037,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6987414079591780448}
     m_Modifications:
+    - target: {fileID: 546095685850756499, guid: d8d3f6396061ec54e9ffe34ee0967344,
+        type: 3}
+      propertyPath: _robertTalkLevelBeginning
+      value: 
+      objectReference: {fileID: 3903453070090523756}
     - target: {fileID: 1972350077837005602, guid: d8d3f6396061ec54e9ffe34ee0967344,
         type: 3}
       propertyPath: m_Name
@@ -1410,3 +1415,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5938008805197000899}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3903453070090523756 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7224849601060136111, guid: 8d7618397cb70de478a03ad26229ca78,
+    type: 3}
+  m_PrefabInstance: {fileID: 5938008805197000899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbaa699059812fc4b8e20b23430dd1b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

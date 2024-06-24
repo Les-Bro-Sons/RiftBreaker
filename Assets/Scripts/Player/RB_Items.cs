@@ -19,6 +19,8 @@ public class RB_Items : MonoBehaviour
 
     [Header("Cooldowns")]
     [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
+    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown {  get { return _chargeAttackCooldown; } }
+    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown {  get { return _specialAttackCooldown; } }
 
     [Header("Damages")]
     [SerializeField] private float _attackDamage;
@@ -58,6 +60,7 @@ public class RB_Items : MonoBehaviour
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
     public bool CanAttackDuringAttack;
+    public bool RobertShouldTalk = true;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
@@ -116,7 +119,6 @@ public class RB_Items : MonoBehaviour
         _objectToRemove.SetActive(false);
         EventOnItemGathered?.Invoke();
 
-
     }
 
     public virtual void Drop()
@@ -130,16 +132,26 @@ public class RB_Items : MonoBehaviour
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
-        
+        RobertShouldTalk = true;
+
     }
 
     public virtual void ResetAttack()
     {
         //Turning off all attack animations
-        _playerAnimator.SetBool("ChargeAttack", false);
-        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopAttack();
+    }
+
+    public virtual void ResetChargeAttack()
+    {
+        _playerAnimator.SetBool("ChargeAttack", false);
         _playerAction.StopChargedAttack();
+    }
+
+    public virtual void ResetSpecialAttack()
+    {
+
+        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopSpecialAttack();
     }
 
@@ -149,11 +161,11 @@ public class RB_Items : MonoBehaviour
         _currentDamage = _attackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetAttack), _attackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -183,14 +195,6 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    protected IEnumerator WaitToResetAttacks()
-    {
-        //Wait for the end of the frame 
-        yield return new WaitForEndOfFrame();
-        //Reset attack
-        Invoke("ResetAttack", _playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length );
-    } 
-
     public virtual bool CanAttack()
     {
         //Cooldown dash
@@ -211,7 +215,8 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _chargeAttackKnockbackForce;
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetChargeAttack), _chargeAttackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -229,7 +234,9 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _specialAttackKnockbackForce;
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetSpecialAttack), _specialAttackCooldown);
+        print(_specialAttackCooldown);
 
         /////UX/////
         if (_impulseSource)

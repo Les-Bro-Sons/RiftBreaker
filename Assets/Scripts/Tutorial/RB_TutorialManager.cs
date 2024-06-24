@@ -293,7 +293,6 @@ public class RB_TutorialManager : MonoBehaviour
     {
         RB_InputManager.Instance.EventMovePerformed.RemoveListener(AchieveRewindTuto);
         SetNormalTime();
-        StartBrightenBackground();
         StartFadeOut(_rewindTutoImage, ChangeSpeed);
         StopAnimateRobert();
         _robertLeNecRewindDialogue.StopDialogue();
@@ -317,7 +316,7 @@ public class RB_TutorialManager : MonoBehaviour
     private void OnRewindTutoFailed() //If the player doesn't do the rewind tutorial properly
     {
         RB_PlayerAction.Instance.RewindLeft = 3;
-        _robertLeNecRewindDialogue.NextDialogue();
+        _robertLeNecRewindDialogue.StartDialogue(1);
         TutorialRoom.OpenRoom();
     }
 
@@ -341,6 +340,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     public void OnRewindStarted() //When the rewind is started
     {
+        StartBrightenBackground();
         StopSlowTimeByEnemyDistance();
         StopSlowtime();
         SetNormalTime();

@@ -6,10 +6,12 @@ using UnityEngine;
 public class RB_CustomEditorDialogue : Editor
 {
     SerializedProperty _clickableProperty;
+    SerializedProperty _closeByClickProperty;
     SerializedProperty _timeAfterCloseProperty;
     private void OnEnable()
     {
         _clickableProperty = serializedObject.FindProperty("Clickable");
+        _closeByClickProperty = serializedObject.FindProperty("CloseByClick");
         _timeAfterCloseProperty = serializedObject.FindProperty("TimeAfterClose");
     }
 
@@ -27,9 +29,12 @@ public class RB_CustomEditorDialogue : Editor
             EditorGUILayout.PropertyField(_timeAfterCloseProperty);
         }
         else
-        {
             EditorGUILayout.PropertyField(_clickableProperty);
-        }
+
+        if (dialogue.Clickable)
+            EditorGUILayout.PropertyField(_closeByClickProperty);
+        else
+            dialogue.CloseByClick = false;
         serializedObject.ApplyModifiedProperties();
     }
 }
@@ -43,6 +48,7 @@ public class RB_Dialogue_Scriptable : ScriptableObject
     public RB_RobertAnim.CurrentAnimation CurrentAnimation;
     public bool IsNameInput = false;
     public bool CloseAfterTime;
+    [HideInInspector] public bool CloseByClick = false;
     [HideInInspector] public float TimeAfterClose = 0;
     [HideInInspector] public bool Clickable = true;
 }

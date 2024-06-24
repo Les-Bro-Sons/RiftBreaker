@@ -1,7 +1,6 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +30,10 @@ public class RB_LevelManager : MonoBehaviour
 
     public GameObject ChargeSpecialAttackParticlePrefab;
 
+    //Dialogues
+    [Header("Dialogues")]
+    [SerializeField] private RB_Dialogue _robertTalkLevelBeginning;
+
 
     private void Awake()
     {
@@ -52,7 +55,9 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
-        if(CurrentPhase == PHASES.Boss)
+        if(_robertTalkLevelBeginning != null)
+            _robertTalkLevelBeginning.StartDialogue((int)CurrentScene);
+        if (CurrentPhase == PHASES.Boss)
         {
             switch (CurrentScene)
             {

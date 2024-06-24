@@ -190,14 +190,12 @@ public class RB_PlayerAction : MonoBehaviour
                 IsItemNearby = true;
                 AddItemToList(itemGathered);
                 
-<<<<<<< Updated upstream
+
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
-=======
+
+               
                 
-                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, false, 0, 1);
-                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
-                
->>>>>>> Stashed changes
+
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

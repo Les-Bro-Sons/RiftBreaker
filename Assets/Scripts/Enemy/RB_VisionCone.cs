@@ -15,8 +15,9 @@ public class RB_VisionCone : MonoBehaviour
 
     private Transform _transform;
     private Transform _playerTransform;
-    [SerializeField] private float _distanceRequiredToDraw = 30;
+    [SerializeField] private float _distanceRequiredToDraw = 25;
     private bool _isInReach = false;
+    private float _baseAlpha;
     void Start()
     {
         _transform = transform;
@@ -24,6 +25,8 @@ public class RB_VisionCone : MonoBehaviour
         {
             VisionAngle = btTree.FovAngle;
             VisionRange = btTree.FovRange;
+            VisionConeMaterial = new Material(VisionConeMaterial);
+            _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
 
             _transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
             MeshFilter_ = _transform.AddComponent<MeshFilter>();
@@ -52,43 +55,52 @@ public class RB_VisionCone : MonoBehaviour
 
     void DrawVisionCone()//this method creates the vision cone mesh
     {
+        if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
+        {
+            VisionConeMaterial.SetFloat("_BaseAlpha", Mathf.Lerp(VisionConeMaterial.GetFloat("_BaseAlpha"), _baseAlpha, 4 * Time.deltaTime));
+            int[] triangles = new int[(VisionConeResolution - 1) * 3];
+            Vector3[] Vertices = new Vector3[VisionConeResolution + 1];
+            Vertices[0] = Vector3.zero;
+            float Currentangle = -VisionAngle / 2;
+            float angleIcrement = VisionAngle / (VisionConeResolution - 1);
+            float Sine;
+            float Cosine;
+
+            for (int i = 0; i < VisionConeResolution; i++)
+            {
+                Sine = Mathf.Sin(Currentangle);
+                Cosine = Mathf.Cos(Currentangle);
+                Vector3 RaycastDirection = (transform.forward * Cosine) + (transform.right * Sine);
+                Vector3 VertForward = (Vector3.forward * Cosine) + (Vector3.right * Sine);
+                if (Physics.Raycast(transform.position, RaycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
+                {
+                    Vertices[i + 1] = VertForward * hit.distance;
+                }
+                else
+                {
+                    Vertices[i + 1] = VertForward * VisionRange;
+                }
+
+
+                Currentangle += angleIcrement;
+            }
+            for (int i = 0, j = 0; i < triangles.Length; i += 3, j++)
+            {
+                triangles[i] = 0;
+                triangles[i + 1] = j + 1;
+                triangles[i + 2] = j + 2;
+            }
+            VisionConeMesh.Clear();
+            VisionConeMesh.vertices = Vertices;
+            VisionConeMesh.triangles = triangles;
+            MeshFilter_.mesh = VisionConeMesh;
+        }
+        else
+        {
+            VisionConeMaterial.SetFloat("_BaseAlpha", Mathf.Lerp(VisionConeMaterial.GetFloat("_BaseAlpha"), 0, 4 * Time.deltaTime));
+        }
         
-        int[] triangles = new int[(VisionConeResolution - 1) * 3];
-        Vector3[] Vertices = new Vector3[VisionConeResolution + 1];
-        Vertices[0] = Vector3.zero;
-        float Currentangle = -VisionAngle / 2;
-        float angleIcrement = VisionAngle / (VisionConeResolution - 1);
-        float Sine;
-        float Cosine;
-
-        for (int i = 0; i < VisionConeResolution; i++)
-        {
-            Sine = Mathf.Sin(Currentangle);
-            Cosine = Mathf.Cos(Currentangle);
-            Vector3 RaycastDirection = (transform.forward * Cosine) + (transform.right * Sine);
-            Vector3 VertForward = (Vector3.forward * Cosine) + (Vector3.right * Sine);
-            if (Physics.Raycast(transform.position, RaycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
-            {
-                Vertices[i + 1] = VertForward * hit.distance;
-            }
-            else
-            {
-                Vertices[i + 1] = VertForward * VisionRange;
-            }
-
-
-            Currentangle += angleIcrement;
-        }
-        for (int i = 0, j = 0; i < triangles.Length; i += 3, j++)
-        {
-            triangles[i] = 0;
-            triangles[i + 1] = j + 1;
-            triangles[i + 2] = j + 2;
-        }
-        VisionConeMesh.Clear();
-        VisionConeMesh.vertices = Vertices;
-        VisionConeMesh.triangles = triangles;
-        MeshFilter_.mesh = VisionConeMesh;
+        
     }
 
 

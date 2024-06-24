@@ -30,7 +30,7 @@ public class RB_Dialogue : MonoBehaviour
     private string _currentParagraph;
     private char _currentLetter;
     private int _currentLetterIndex;
-    private float _writingLetterTime;
+    private float _writingLetterTimer;
     private float _currentWritingDelay;
     [SerializeField] private float _writingDelay;
     [SerializeField] private float _writingSpeedingDelay;
@@ -54,6 +54,7 @@ public class RB_Dialogue : MonoBehaviour
     private void Update()
     {
         DrawText();
+        _writingLetterTimer += Time.deltaTime;
     }
 
     public void StartDialogue() //Start the dialogue system
@@ -161,18 +162,18 @@ public class RB_Dialogue : MonoBehaviour
         _dialogueBox.text = "";
         _dialogueBox.color = defaultColor;
         _shouldWriteText = true; //Start the drawing of the text
-        _writingLetterTime = Time.unscaledTime; //Delay of the drawing
+        _writingLetterTimer = 0; //Delay of the drawing
         _currentLetterIndex = 0;
         _robertAnim.StartTalk(_scriptableDialogues[DialogueIndex].CurrentAnimation); //Start the talking of robert
     }
 
     private void DrawText()
     {
-        if (_shouldWriteText && Time.unscaledTime > _writingLetterTime + _currentWritingDelay)
+        if (_shouldWriteText && _writingLetterTimer >= _currentWritingDelay)
         {
             if (_currentLetterIndex < _currentParagraph.Length)
             {
-                DrawChar();
+                DrawChar(true);
             }
             else
             {
@@ -182,9 +183,9 @@ public class RB_Dialogue : MonoBehaviour
         
     }
 
-    private void DrawChar()
+    private void DrawChar(bool checkTimerAgain = false)
     {
-        _writingLetterTime = Time.unscaledTime; //Delay of the drawing 
+        _writingLetterTimer = Mathf.Clamp((_writingLetterTimer - _currentWritingDelay), 0, int.MaxValue); //Delay of the drawing 
         _currentLetter = _currentParagraph[_currentLetterIndex];
         if (_currentLetter == '[')
         {
@@ -225,6 +226,8 @@ public class RB_Dialogue : MonoBehaviour
             }
 
         }
+
+        if (checkTimerAgain) DrawText();
     }
 
     private void OnPlayerEnterLetterName(string playerName)

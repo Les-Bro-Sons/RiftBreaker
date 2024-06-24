@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
@@ -64,7 +65,7 @@ public class RB_ParticleCollision : MonoBehaviour
             {
                 RB_PlayerAction.Instance.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
             }
-            
+            //RB_AudioManager.Instance.PlaySFX("XpSound", _particles[nearestParticle].position, false, 0.15f, 0.65f);
         }
         
 

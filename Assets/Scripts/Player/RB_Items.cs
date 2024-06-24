@@ -19,6 +19,8 @@ public class RB_Items : MonoBehaviour
 
     [Header("Cooldowns")]
     [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
+    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown {  get { return _chargeAttackCooldown; } }
+    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown {  get { return _specialAttackCooldown; } }
 
     [Header("Damages")]
     [SerializeField] private float _attackDamage;
@@ -214,7 +216,7 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
         //Reset attack
-        Invoke(nameof(ResetChargeAttack), _playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        Invoke(nameof(ResetChargeAttack), _chargeAttackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -233,7 +235,8 @@ public class RB_Items : MonoBehaviour
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
         //Reset attack
-        Invoke(nameof(ResetSpecialAttack), _playerAnimator.GetCurrentAnimatorClipInfo(0).Length);
+        Invoke(nameof(ResetSpecialAttack), _specialAttackCooldown);
+        print(_specialAttackCooldown);
 
         /////UX/////
         if (_impulseSource)

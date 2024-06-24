@@ -142,6 +142,7 @@ public class RB_Dialogue : MonoBehaviour
     private void StartDrawText(int DialogueIndex)
     {
         _currentParagraph = _scriptableDialogues[DialogueIndex].Paragraph; //Current paragraph
+        _writingLetterTimer = 0;
         StartCoroutine(StartDrawTextCoroutine(DialogueIndex));
     }
 

@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using Unity.AI.Navigation;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.AI;
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(RB_GroundManager))]

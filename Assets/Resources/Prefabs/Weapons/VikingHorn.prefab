@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &8782994434126254191
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5367912828370266609}
   - component: {fileID: 4432048569124779529}
+  - component: {fileID: 967231979561443464}
   m_Layer: 0
   m_Name: VikingHorn
   m_TagString: Untagged
@@ -294,9 +296,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
-  _specialAttackChargeTime: 0
+  SpecialAttackChargeTime: 0
   _chargeZoom: 0.85
-  _attackCooldown: 0.2
+  _attackCooldown: 0.3
   _attackDamage: 35
   _chargedAttackDamage: 50
   _specialAttackDamage: 90
@@ -315,7 +317,11 @@ MonoBehaviour:
   FollowMouseOnChargeAttack: 1
   CanMoveDuringSpecialAttack: 1
   CanAttackDuringAttack: 1
+  RobertShouldTalk: 1
   EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
   _jumpCurve:
@@ -356,3 +362,30 @@ MonoBehaviour:
   _comboDelay: 2
   _landingOnDirt: LandingDirt
   _specialAttackParticle: LandingDirt
+--- !u!54 &967231979561443464
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8782994434126254191}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

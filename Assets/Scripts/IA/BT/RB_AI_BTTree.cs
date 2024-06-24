@@ -24,6 +24,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
     public ParticleSystem BoostParticle;
+    public bool IsDecorative = false;
 
     [Header("Static Mode Parameters")]
     public bool IsStatic = false;
@@ -37,6 +38,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public int PatrolSplineIndex = 0;
     public bool HasAnInterval = false;
     public int StartWaitingWaypointInterval = 0;
+    [HideInInspector] public int CurrentWaypointIndex = 0;
     [HideInInspector] public SplineContainer SplineContainer;
 
     [Header("Spot Parameters")]
@@ -44,7 +46,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [Range(1f, 50f)] public float FovRange = 10f;
     [Range(1f, 50f)] public float SpottedFovRange = 10f;
     public float FovAngle = 75f;
-    public float DurationToLoadSpotBar = 0.5f;
+    public float MinDistDurationToLoadSpotBar = 0.25f;
+    public float MaxDistDurationToLoadSpotBar = 1f;
     public float DurationToUnloadSpotBar = 1f;
     [HideInInspector] public Vector3 LastTargetPos;
     public bool IsPlayerInSight = false; //used only by other scripts
@@ -206,9 +209,17 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
         RB_BTNode root = new RB_BTSelector(new List<RB_BTNode>
         {
+            new RB_BTSequence(new List<RB_BTNode> // sequence decoration Infiltration
+            {
+                new RB_AICheck_Phase(_infiltrationPhases),
+                new RB_AICheck_Bool(this, IsDecorative),
+                new RB_AI_BecomeDecoration(this),
+            }),
+
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
             {
                 new RB_AICheck_Phase(_infiltrationPhases),
+                new RB_AICheck_Bool(this, !IsDecorative),
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
                     new RB_BTSequence(new List<RB_BTNode>
@@ -280,6 +291,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
@@ -319,6 +331,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
@@ -360,6 +373,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AICheck_Bool(this, !IsDecorative),
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),

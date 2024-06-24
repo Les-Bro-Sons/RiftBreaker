@@ -216,6 +216,7 @@ public class RB_RobertLenec : RB_Boss
     public void ShootAttack() //ATTACK 1
     {
         //Dash Into a Random Direction
+        AiAnimator.SetTrigger("BasicZone");
         Vector3 randomDirection = Random.insideUnitSphere;
         randomDirection.y = 0;
         randomDirection.Normalize();
@@ -238,6 +239,7 @@ public class RB_RobertLenec : RB_Boss
     public void WoodenPieceRainZoneAttack() //ATTACK 2
     {
         //Spawn of the zone attack (attack n°2)
+        AiAnimator.SetTrigger("BasicZone");
         float offset = 0.99f;
         Vector3 areaDamageSpawn = new Vector3(_currentTarget.position.x, _currentTarget.position.y - offset, _currentTarget.position.z);
         RB_RainZone rainZone = Instantiate(WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>();
@@ -263,6 +265,7 @@ public class RB_RobertLenec : RB_Boss
     public void CloneAttack()
     {
         //Instantiation of clones
+        AiAnimator.SetTrigger("Clonage");
         for (int i = 0; i < 4; i++)
         {
             GameObject clone = Instantiate(Clone, transform.position, Quaternion.identity);

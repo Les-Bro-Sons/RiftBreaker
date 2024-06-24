@@ -34,7 +34,12 @@ public class RB_VikingHorn : RB_Items
     public override void Bind()
     {
         base.Bind();
-        _rb = GetComponentInParent<Rigidbody>();
+        if (RobertShouldTalk)
+        {
+            RB_PlayerAction.Instance.PickupGathered.StartDialogue(3);
+            RobertShouldTalk = false;
+        }
+        _rb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 3);
         _colliderAnimator.SetFloat("WeaponID", 3);

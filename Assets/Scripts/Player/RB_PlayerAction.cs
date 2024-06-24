@@ -33,6 +33,7 @@ public class RB_PlayerAction : MonoBehaviour
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
     private RB_TimeBodyRecorder _timeRecorder;
+    public RB_Dialogue PickupGathered;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -65,9 +66,6 @@ public class RB_PlayerAction : MonoBehaviour
     //Debug
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
-
-
-    
 
     //Awake
     private void Awake()
@@ -165,8 +163,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void AddItemToList(RB_Items itemToAdd)
     {
+
         itemToAdd.transform.position = itemToAdd.transform.parent.position;
-        itemToAdd.Bind();
         int currentItemId = Items.IndexOf(Item);
         //Add the item gathered to the items
         if (Items.Count >= 3)
@@ -197,9 +195,7 @@ public class RB_PlayerAction : MonoBehaviour
                 IsItemNearby = true;
                 AddItemToList(itemGathered);
                 
-                
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
-
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;

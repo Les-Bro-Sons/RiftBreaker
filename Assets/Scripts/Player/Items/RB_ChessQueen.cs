@@ -27,6 +27,11 @@ public class RB_ChessQueen : RB_Items
     public override void Bind()
     {
         base.Bind();
+        if (RobertShouldTalk)
+        {
+            RB_PlayerAction.Instance.PickupGathered.StartDialogue(4);
+            RobertShouldTalk = false;
+        }
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 4);
         _colliderAnimator.SetFloat("WeaponID", 4);

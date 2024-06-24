@@ -72,13 +72,21 @@ public class RB_PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //Set the direction
-        UpdateDirection();
-        UpdateForward();
+        if (!_rb.isKinematic)
+        {
+            //Set the direction
+            UpdateDirection();
+            UpdateForward();
 
-        //Get the direction to move
-        GetDirection(RB_InputManager.Instance.MoveValue);
-        SetDirectionToAttack();
+            //Get the direction to move
+            GetDirection(RB_InputManager.Instance.MoveValue);
+            SetDirectionToAttack();
+        }
+    }
+
+    public bool IsDashing()
+    {
+        return _isDashing;
     }
 
     private void UpdateDirection()
@@ -113,7 +121,10 @@ public class RB_PlayerMovement : MonoBehaviour
     private void UpdateForward()
     {
         //Constantly set the direction of the player to the right direction
-        _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        if (ForwardDirection != Vector3.zero)
+        {
+            _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        }
     }
 
     private void SetDirectionToAttack()
@@ -170,7 +181,7 @@ public class RB_PlayerMovement : MonoBehaviour
         //Clamping to max speed in the x and z axes
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
-        _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+        if (!_rb.isKinematic) _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
     }
 
     private void FrictionForce()
@@ -230,7 +241,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
-        RB_AudioManager.Instance.PlaySFX("dash2", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Dash", RB_PlayerController.Instance.transform.position, false, 0, 1);
         EventDash.Invoke();
     }
 

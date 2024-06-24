@@ -210,6 +210,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     bool SeesPlayer(Transform target)
     {
+        _btParent.IsPlayerInSight = false;
         Vector3 targetDir = target.position - _transform.position;
         float angle = Vector3.Angle(targetDir, _transform.forward);
         if (angle >= -_btParent.FovAngle / 2 && angle <= _btParent.FovAngle / 2)
@@ -219,6 +220,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
             if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
             {
+                _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);
                 if (hitHealth && hitHealth.Team != _btParent.AiHealth.Team)
                 {
@@ -265,8 +267,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
             _isUnloadingSpotBar = false;
 
         }
-
-        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / _btParent.DurationToLoadSpotBar;
+        Transform target = (Transform)_btParent.Root.GetData("target");
+        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / Mathf.Lerp(_btParent.MinDistDurationToLoadSpotBar, _btParent.MaxDistDurationToLoadSpotBar, Vector3.Distance(target.position, _transform.position) / _btParent.FovRange);
 
         if (_btParent.ImageSpotBar.fillAmount >= 1.0f)
         {

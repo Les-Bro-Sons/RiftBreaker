@@ -50,7 +50,7 @@ public class RB_TimeManager : MonoBehaviour
     {
         StartRecording();
 
-        RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
+        RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
     }
     private void FixedUpdate()
     {
@@ -73,7 +73,7 @@ public class RB_TimeManager : MonoBehaviour
             }
             else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
             {
-                if (_fullRewind) RB_UxHourglass.Instance.CreateMaxNumberOfHourglass();
+                if (_fullRewind) RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
                 StopRewinding(true);
                 return;
             }
@@ -142,8 +142,8 @@ public class RB_TimeManager : MonoBehaviour
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
             Time.timeScale = 1;
-            EventStopRewinding?.Invoke();
             IsRewinding = false;
+            EventStopRewinding?.Invoke();
             UxStopRewind();
             if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
             if (stopFullRewind && _fullRewind)

@@ -242,6 +242,7 @@ public class RB_Yog : RB_Boss
 
     public void TentacleHit()
     {
+        AiAnimator.SetTrigger("BasicAttack");
         _numberOfAttackDone += 1;
         StartCoroutine(TentacleHitCoroutine());
     }
@@ -342,6 +343,7 @@ public class RB_Yog : RB_Boss
     public void AreaBeforeExplosionAttack() //ATTACK 2
     {
         //Spawn of the zone attack (attack n°2)
+        AiAnimator.SetTrigger("ZoneAttack");
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         GameObject Bomb = Instantiate(ExplosionZone, transform.position, Quaternion.identity);
         RB_ExplosionZone explosionZone = Bomb.GetComponent<RB_ExplosionZone>();

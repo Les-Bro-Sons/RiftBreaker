@@ -1,7 +1,6 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,6 +15,8 @@ public class RB_LevelManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventPlayerLost;
     [HideInInspector] public UnityEvent EventPlayerWon;
 
+    [HideInInspector] public UnityEvent EventSwitchPhase;
+
     public Dictionary<PHASES, List<GameObject>> _savedEnemiesInPhase = new();
 
     [Header("HUD SKILLS")]
@@ -28,6 +29,10 @@ public class RB_LevelManager : MonoBehaviour
 
 
     public GameObject ChargeSpecialAttackParticlePrefab;
+
+    //Dialogues
+    [Header("Dialogues")]
+    [SerializeField] private RB_Dialogue _robertTalkLevelBeginning;
 
 
     private void Awake()
@@ -50,7 +55,9 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
-        if(CurrentPhase == PHASES.Boss)
+        if(_robertTalkLevelBeginning != null)
+            _robertTalkLevelBeginning.StartDialogue((int)CurrentScene);
+        if (CurrentPhase == PHASES.Boss)
         {
             switch (CurrentScene)
             {
@@ -84,10 +91,10 @@ public class RB_LevelManager : MonoBehaviour
                 break;
         }
 
-
-
         SpawnEnemiesInPhase(CurrentPhase);
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
+
+        EventSwitchPhase?.Invoke();
     }
 
     public void SwitchPhase(PHASES phaseToSwitch)
@@ -100,6 +107,8 @@ public class RB_LevelManager : MonoBehaviour
         SpawnEnemiesInPhase(CurrentPhase);
 
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
+
+        EventSwitchPhase?.Invoke();
     }
 
     public void SaveEnemyToPhase(PHASES phase, GameObject enemy)
@@ -126,7 +135,7 @@ public class RB_LevelManager : MonoBehaviour
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
-        RB_AudioManager.Instance.PlaySFX("scream-no", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("scream-no", RB_PlayerController.Instance.transform.position, false, 0, 1);
     }
 
     public IEnumerator PlayerLostUX()

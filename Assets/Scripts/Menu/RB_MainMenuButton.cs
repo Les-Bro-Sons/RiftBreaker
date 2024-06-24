@@ -1,10 +1,12 @@
+using MANAGERS;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerExitHandler, ISelectHandler, IDeselectHandler{
-    [SerializeField] RB_MainMenuButtonManager.BUTTONS currentButton;
+    [SerializeField] RB_MainMenuButtonManager.BUTTONS _currentButton;
     Button _button;
     bool _isSelected;
     float _originalXPos;
@@ -30,7 +32,28 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         _oldDown = _button.navigation.selectOnDown.gameObject.GetComponent<Selectable>();
         _text = GetComponentInChildren<TextMeshProUGUI>();
         _buttonImage = GetComponent<Image>();
+        _button.onClick.AddListener(OnClick);
     }
+
+    public void OnClick() {
+        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0.3f, 10f);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(LateStartCoroutine());
+    }
+
+    public IEnumerator LateStartCoroutine() {
+        yield return new WaitForEndOfFrame();
+        LateStart();
+    }
+
+    private void LateStart()
+    {
+        FixNavigation();
+    }
+
 
     public void OnPointerEnter(PointerEventData eventData){
         if (_button.enabled) {
@@ -44,17 +67,20 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     public void OnSelect(BaseEventData eventData){
-        RB_MainMenuButtonManager.Instance.CurrentButton = currentButton;
+        RB_AudioManager.Instance.PlaySFX("select", transform, false, 0.3f, 10f);
+        RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton;
         _isSelected = true;
+    }
 
+    public void FixNavigation() {
         Navigation buttonNavigation = _button.navigation;
 
 
-        if (!_oldUp.enabled) {
+        if (!_oldUp.enabled){
             buttonNavigation.selectOnUp = _oldUp.navigation.selectOnUp.gameObject.GetComponent<Button>();
             _button.navigation = buttonNavigation;
         }
-        else {
+        else{
             buttonNavigation.selectOnUp = _oldUp;
             _button.navigation = buttonNavigation;
         }
@@ -76,7 +102,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     private void Update() {
         if (!RB_MenuManager.Instance.IsOptionOpen){
             //move the text when selected or hoovered
-            if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
+            if ( _isSelected || (RB_MainMenuButtonManager.Instance.IsButtonsHoovered && _currentButton == RB_MainMenuButtonManager.Instance.CurrentButton)) {
                 float xPos = _textTrasform.localPosition.x;
                 xPos = Mathf.Lerp(xPos, _originalXPos - _offsetHover, _offsetSpeed * Time.deltaTime);
                 _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
@@ -89,7 +115,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
                 _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
             }
 
-            if ( !RB_SaveManager.Instance.IsSaveExist && RB_MainMenuButtonManager.BUTTONS.Continue == currentButton) {
+            if ( !RB_SaveManager.Instance.IsSaveExist && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton) {
                 _button.enabled = false;
                 _text.color = _UnEnabledColor;
                 _buttonImage.raycastTarget = false;

@@ -15,6 +15,7 @@ public class RB_InputManager : MonoBehaviour
 
     [Header("Attack")]
     public bool AttackEnabled = true;
+    [HideInInspector] public UnityEvent EventAttackStartedEvenIfDisabled;
     [HideInInspector] public UnityEvent EventAttackStarted;
     [HideInInspector] public UnityEvent EventAttackCanceled;
 
@@ -65,12 +66,12 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        
         if (!MoveEnabled) return;
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
         {
-            Debug.Log("working1");
             EventMoveStarted?.Invoke();
         }
         else if (context.performed)
@@ -81,6 +82,9 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (context.started) 
+            EventAttackStartedEvenIfDisabled?.Invoke();
+
         IsMouse = (context.action.activeControl.device.name == "Mouse");
         if (!AttackEnabled) return;
 
@@ -104,7 +108,6 @@ public class RB_InputManager : MonoBehaviour
     {
         if (!DashEnabled) return;
         if (context.started) {
-            Debug.Log("working2");
             EventDashStarted?.Invoke();
         }
         else if (context.canceled)
@@ -131,8 +134,7 @@ public class RB_InputManager : MonoBehaviour
             EventItem1Canceled?.Invoke();
     }
 
-    public void OnItem2(InputAction.CallbackContext context)
-    {
+    public void OnItem2(InputAction.CallbackContext context) {
         if (!ItemsEnabled) return;
 
         if (context.started)
@@ -141,8 +143,7 @@ public class RB_InputManager : MonoBehaviour
             EventItem2Canceled?.Invoke();
     }
 
-    public void OnItem3(InputAction.CallbackContext context)
-    {
+    public void OnItem3(InputAction.CallbackContext context) {
         if (!ItemsEnabled) return;
 
         if (context.started)

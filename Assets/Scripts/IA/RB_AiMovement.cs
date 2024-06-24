@@ -41,14 +41,17 @@ public class RB_AiMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Clamping the speed to the max speed
-        ClampingSpeed();
+        if (_rb && !_rb.isKinematic)
+        {
+            //Clamping the speed to the max speed
+            ClampingSpeed();
 
-        //Adding friction force
-        FrictionForce();
+            //Adding friction force
+            FrictionForce();
 
-        //add force to overlaping bodies
-        PushOverlapingBodies();
+            //add force to overlaping bodies
+            PushOverlapingBodies();
+        }
     }
 
     public void MoveIntoDirection(Vector3 direction, float? speed = null, float? acceleration = null, float? deltaTime = null) // deprecated
@@ -59,6 +62,7 @@ public class RB_AiMovement : MonoBehaviour
         if (deltaTime == null) deltaTime = Time.deltaTime;
 
         direction = direction.normalized;
+        direction = RB_Tools.GetHorizontalDirection(direction);
         WalkDirection = direction.normalized;
 
         if (_rb.velocity.magnitude < _movementMaxSpeed)
@@ -70,7 +74,7 @@ public class RB_AiMovement : MonoBehaviour
         LastDirection = direction;
     }
 
-    public void MoveToPosition(Vector3 targetPos, float? speed = null, float? acceleration = null, float? deltaTime = null)
+    public void MoveToPosition(Vector3 targetPos, float? speed = null, float? acceleration = null, float rotationSpeed = 4, float? deltaTime = null)
     {
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
@@ -83,11 +87,12 @@ public class RB_AiMovement : MonoBehaviour
             
             Vector3 nextPos = _navPath.corners[1];
             nextPos = new Vector3(nextPos.x, _transform.position.y, nextPos.z); //remove y change
-            Vector3 direction = (nextPos - _transform.position).normalized;
+            Vector3 direction = (nextPos - _transform.position).normalized; 
+            direction = RB_Tools.GetHorizontalDirection(direction);
             WalkDirection = direction;
 
             _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value); //move
-            _rb.MoveRotation(Quaternion.LookRotation(direction));
+            _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime.Value));
 
             LastDirection = direction;
         }
@@ -111,7 +116,8 @@ public class RB_AiMovement : MonoBehaviour
     {
         foreach (Rigidbody body in _overlapBodies)
         {
-            body.AddForce((body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
+            if (!body) _overlapBodies.Remove(body);
+            body.AddForce(RB_Tools.GetHorizontalDirection(body.transform.position - transform.position) * _pushForce * Time.fixedDeltaTime);
         }
     }
 

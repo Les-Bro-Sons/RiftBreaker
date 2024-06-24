@@ -40,8 +40,6 @@ public class RB_PlayerController : MonoBehaviour
         RB_InputManager.Instance.EventMoveCanceled.AddListener(OnMoveStop);
         RB_InputManager.Instance.EventDashStarted.AddListener(OnStartDash);
         RB_InputManager.Instance.EventSpecialAttackStarted.AddListener(OnSpecialAttack);
-        RB_InputManager.Instance.EventRewindStarted.AddListener(OnStartRewind);
-        RB_InputManager.Instance.EventRewindCanceled.AddListener(OnStopRewind);
 
         RB_InputManager.Instance.EventItem1Started.AddListener(delegate { ChoseItem(0); });
         RB_InputManager.Instance.EventItem2Started.AddListener(delegate { ChoseItem(1); });
@@ -64,6 +62,7 @@ public class RB_PlayerController : MonoBehaviour
 
     public void OnChargeAttackStart()
     {
+
         //Start charging attack
         if (CanDoInput())
             _playerAction.StartChargeAttack();

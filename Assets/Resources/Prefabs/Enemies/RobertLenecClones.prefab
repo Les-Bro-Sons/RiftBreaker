@@ -138,6 +138,7 @@ MonoBehaviour:
   _animator: {fileID: 7214748225881584283}
   _health: {fileID: 263053956299020696}
   _enemy: {fileID: -7003628297246129058}
+  _door: {fileID: 0}
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +191,7 @@ MonoBehaviour:
   _movementAcceleration: 150
   _movementMaxSpeed: 5
   _movementFrictionForce: 75
+  MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!114 &-7003628297246129058
 MonoBehaviour:
@@ -5093,6 +5095,7 @@ GameObject:
   - component: {fileID: 9101173564990518349}
   - component: {fileID: 5698534233441271866}
   - component: {fileID: 7214748225881584283}
+  - component: {fileID: 4370339024158442237}
   m_Layer: 0
   m_Name: SpriteRenderer
   m_TagString: Untagged
@@ -5109,8 +5112,8 @@ Transform:
   m_GameObject: {fileID: 6261708983540323961}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8807292251387617910}
@@ -5156,8 +5159,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7f631363fad43df48ba12f6bfcf18950, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0762528c2c7a60f4194406ceff4eaf2c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5190,7 +5193,7 @@ Animator:
   m_GameObject: {fileID: 6261708983540323961}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: db10472cbf2f9ae43969450b1dbb9e5c, type: 2}
+  m_Controller: {fileID: 9100000, guid: e99e11a92559a494db72b05c3818d14e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5201,3 +5204,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4370339024158442237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261708983540323961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581feb76181cc9a49906f1b28e44edba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

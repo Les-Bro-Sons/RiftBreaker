@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &1386703135798494826
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +301,31 @@ MonoBehaviour:
   Team: 1
   _destroyOnWall: 0
   _wallDetectionLength: 1
+  _spriteRenderer: {fileID: 7471767154871852418}
+  _alphaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.009117482
+      outSlope: -0.009117482
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.27941176
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.2355483
+      outSlope: -2.2355483
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06498194
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _followParticles: {fileID: 0}
   _destroyParticles: {fileID: 0}
   _continuousForceScreenshake: 0
@@ -314,6 +340,9 @@ MonoBehaviour:
   _isDestroyingOnDamage: 0
   _damageOnExplosion: 0
   _explosionRadius: 1
+  _isBouncing: 0
+  _maxBounces: 3
+  _explosionSounds: 
   _projectileAnimator: {fileID: 0}
   SpawnDistanceFromPlayer: 0
 --- !u!114 &188580326419638471

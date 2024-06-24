@@ -33,6 +33,7 @@ public class RB_PlayerAction : MonoBehaviour
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
     private RB_TimeBodyRecorder _timeRecorder;
+    public RB_Dialogue PickupGathered;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -42,6 +43,7 @@ public class RB_PlayerAction : MonoBehaviour
     //Events
     public UnityEvent EventBasicAttack;
     public UnityEvent EventChargedAttack;
+    public UnityEvent EventSpecialAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
@@ -65,9 +67,6 @@ public class RB_PlayerAction : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
 
-
-    
-
     //Awake
     private void Awake()
     {
@@ -82,12 +81,23 @@ public class RB_PlayerAction : MonoBehaviour
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
 
+    private void Start()
+    {
+        GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
+    }
     //Update
     private void Update()
     {
         //count the time the player press the attack button
         TimerChargeAttack();
         RechargeSpecialAttack();
+    }
+
+    private void OnDeath()
+    {
+        StopChargeAttack();
+        StopAttack();
+        StopSpecialAttack();
     }
 
 
@@ -148,8 +158,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void AddItemToList(RB_Items itemToAdd)
     {
+
         itemToAdd.transform.position = itemToAdd.transform.parent.position;
-        itemToAdd.Bind();
         int currentItemId = Items.IndexOf(Item);
         //Add the item gathered to the items
         if (Items.Count >= 3)
@@ -181,9 +191,9 @@ public class RB_PlayerAction : MonoBehaviour
                 AddItemToList(itemGathered);
                 
                 
-                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
-                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, 0, 1);
-
+                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, false, 0, 1);
+                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, false, 0, 1);
+                
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
@@ -293,6 +303,7 @@ public class RB_PlayerAction : MonoBehaviour
             IsSpecialAttacking = true;
             SpecialAttackCharge = 0;
             Item.SpecialAttack();
+            EventSpecialAttack?.Invoke();
         }
     }
 
@@ -317,7 +328,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //If can rewind
         RB_TimeManager timeManager = RB_TimeManager.Instance;
-        return (!timeManager.IsRewinding && RewindLeft > 0);
+        return (!timeManager.IsRewinding && RewindLeft > 0 && RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration);
     }
 
     public void Rewind()

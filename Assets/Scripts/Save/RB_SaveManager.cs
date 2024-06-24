@@ -5,7 +5,7 @@ using System.IO;
 public class RB_SaveManager : MonoBehaviour
 {
     //Save
-    public RB_SaveObject SaveObject = new();
+    [HideInInspector] public RB_SaveObject SaveObject = new();
 
     //Instance
     public static RB_SaveManager Instance;
@@ -51,14 +51,12 @@ public class RB_SaveManager : MonoBehaviour
         if (SaveObject.CurrentLevel == 0)
             SaveObject.CurrentLevel = 1; //If the level is set to the menu, set it to the first level
         string saveObjectData = System.IO.File.ReadAllText(filePath);
-        Debug.Log(filePath);
         SaveObject = JsonUtility.FromJson<RB_SaveObject>(saveObjectData);
-        print("Chargement effectué");
     }
 
     public void ResetSave()
     {
-        string filePath = Application.persistentDataPath + "/SaveObjectData.json";
-        File.Delete(filePath);
+        SaveObject = new();
+        SaveToJson();
     }
 }

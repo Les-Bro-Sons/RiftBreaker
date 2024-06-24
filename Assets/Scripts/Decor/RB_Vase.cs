@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RB_Vase : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class RB_Vase : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Collider _vaseCollider;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private NavMeshObstacle _navMeshObstacle;
     private RB_Health _health;
     private Transform _transform;
 
@@ -54,11 +56,14 @@ public class RB_Vase : MonoBehaviour
         _vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
         _health.TakeDamage(1); //"Kill" the vase
-        
+        _navMeshObstacle.carving = false;
+
+
     }
 
     public void UnBreak()
     {
         _vaseCollider.isTrigger = false; //For the rewind, reactive the collision of the vase
+        _navMeshObstacle.carving = true;
     }
 }

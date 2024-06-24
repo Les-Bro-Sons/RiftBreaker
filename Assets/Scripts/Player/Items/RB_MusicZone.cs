@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_MusicZone : MonoBehaviour
@@ -34,6 +35,30 @@ public class RB_MusicZone : MonoBehaviour
         }
     }
 
+    private void OnNoteDestroyed()
+    {
+        foreach(var note in _musicNotes.ToList())
+        {
+            if(note == null)
+            {
+                _musicNotes.Remove(note);
+            }
+        }
+        print(_musicNotes.Count);
+        if( _musicNotes.Count <= 1 )
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void StartDisapear()
+    {
+        foreach(var note in _musicNotes)
+        {
+            note.StartDisapear();
+        }
+    }
+
 
 
     public void StopTakeAway()
@@ -48,9 +73,11 @@ public class RB_MusicZone : MonoBehaviour
     {
         yield return waitForPointOneSec;
         var musicNote = Instantiate(_MusicNotePrefab, _transform);
-        _musicNotes.Add(musicNote.GetComponent<RB_MusicNoteZone>());
+        RB_MusicNoteZone musicNoteZone = musicNote.GetComponent<RB_MusicNoteZone>();
+        _musicNotes.Add(musicNoteZone);
         musicNote.GetComponent<RB_MusicNoteZone>().IntializeProperties(_currentMusicBox.ZoneProperties.Copy());
         _spriteRenderer.sprite = _currentMusicBox.NoteSprites[Random.Range(0, _currentMusicBox.NoteSprites.Count)];
         _spriteRenderer.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+        musicNoteZone.EventOnDestroy.AddListener(OnNoteDestroyed);
     }
 }

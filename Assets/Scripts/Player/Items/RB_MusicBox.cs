@@ -94,8 +94,11 @@ public class RB_MusicBox : RB_Items
 
     public void StopChargeZone()
     {
-        _shouldGrow = false;
-        _currentZone.GetComponent<RB_MusicZone>().StopTakeAway();
+        if( _currentZone != null )
+        {
+            _shouldGrow = false;
+            _currentZone.GetComponent<RB_MusicZone>().StopTakeAway();
+        }
     }
 
     public void ChargeZone()
@@ -110,7 +113,7 @@ public class RB_MusicBox : RB_Items
     {
         base.StopChargingAttack();
         StopChargeZone();
-        Destroy(_currentZone, _stayTime);
+        Invoke(nameof(DestroyZone), _stayTime);
         if (_charging)
         {
             _charging = false;
@@ -119,6 +122,12 @@ public class RB_MusicBox : RB_Items
             _playerAction.StopChargedAttack();
             _playerAction.StopSpecialAttack();
         }
+    }
+
+    private void DestroyZone()
+    {
+        if(_currentZone != null)
+            _currentZone.GetComponent<RB_MusicZone>().StartDisapear();
     }
 
     private void Update()

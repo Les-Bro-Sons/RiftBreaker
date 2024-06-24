@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_MusicNoteZone : MonoBehaviour
 {
@@ -12,20 +13,32 @@ public class RB_MusicNoteZone : MonoBehaviour
     [SerializeField] private bool _shouldAnimate = false;
     [SerializeField] private bool _shouldTakeAway = false;
     private bool _isInit = false;
+    private bool _shouldDisapear = false;
 
     //Components
     [Header("Components")]
     [SerializeField] private Transform _musicNoteSpriteParent;
-    private Transform _musicNote;
-    private Transform _musicNoteSprite;
+    private Transform _musicNoteTransform;
+    private Transform _musicNoteSpriteTransform;
     private Transform _playerTransform;
     private RB_CollisionDetection _collisionDetection;
+    private SpriteRenderer _spriteRenderer;
+    private Color _defaultColor;
+
+    //Events
+    [HideInInspector] public UnityEvent EventOnDestroy;
 
     private void Awake()
     {
-        _musicNote = transform;
-        _musicNoteSprite = _musicNote.GetComponentInChildren<SpriteRenderer>().transform;
+        _musicNoteTransform = transform;
+        _musicNoteSpriteTransform = _musicNoteTransform.GetComponentInChildren<SpriteRenderer>().transform;
         _collisionDetection = GetComponentInChildren<RB_CollisionDetection>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
+        _defaultColor = _spriteRenderer.color;
     }
 
     public void IntializeProperties(ZonePropertiesClass zoneProperties)
@@ -39,7 +52,8 @@ public class RB_MusicNoteZone : MonoBehaviour
             _zoneProperties.UpDownSpeed = Random.Range(.1f, _zoneProperties.UpDownSpeed);
             _zoneProperties.RotationSpeed = Random.Range(-_zoneProperties.RotationSpeed, _zoneProperties.RotationSpeed);
             _zoneProperties.MaxMusicNoteDistance = Random.Range(.1f, _zoneProperties.MaxMusicNoteDistance);
-            _defaultPos = _musicNote.position;
+            _zoneProperties.DisapearSpeed = Random.Range(1f, _zoneProperties.DisapearSpeed);
+            _defaultPos = _musicNoteTransform.position;
             _takeAwayDirection = new Vector3(Random.Range(-1, 1f), 0, Random.Range(-1, 1f)).normalized;
             _collisionDetection.EventOnEnemyEntered.AddListener(OnEnemyEntered);
         }
@@ -63,6 +77,7 @@ public class RB_MusicNoteZone : MonoBehaviour
     {
         Animate();
         TakeAway();
+        Disapear();
     }
 
     private void Animate()
@@ -76,7 +91,7 @@ public class RB_MusicNoteZone : MonoBehaviour
 
     private void StartAnimate()
     {
-        _defaultPos = _musicNote.position;
+        _defaultPos = _musicNoteTransform.position;
         _shouldAnimate = true;
     }
 
@@ -97,10 +112,29 @@ public class RB_MusicNoteZone : MonoBehaviour
 
     private void AnimateUpDownLeftRight()
     {
-        _musicNoteSprite.localPosition = _defaultPos + Vector3.up * Mathf.Sin(Time.time * _zoneProperties.UpDownSpeed) * _zoneProperties.Height;
-        _musicNote.Rotate(Vector3.up * Time.deltaTime * _zoneProperties.RotationSpeed);
-        _musicNote.position = _playerTransform.position;
+        _musicNoteSpriteTransform.localPosition = _defaultPos + Vector3.up * Mathf.Sin(Time.time * _zoneProperties.UpDownSpeed) * _zoneProperties.Height;
+        _musicNoteTransform.Rotate(Vector3.up * Time.deltaTime * _zoneProperties.RotationSpeed);
+        _musicNoteTransform.position = _playerTransform.position;
     }
+
+    public void StartDisapear()
+    {
+        _shouldDisapear = true;
+    }
+
+    private void Disapear()
+    {
+        if (_shouldDisapear)
+        {
+            _spriteRenderer.color -= new Color(0, 0, 0, Time.deltaTime * _zoneProperties.DisapearSpeed);
+            if (_spriteRenderer.color.a <= 0)
+            {
+                EventOnDestroy?.Invoke();
+                Destroy(gameObject);
+            }
+        }
+    }
+        
 }
 
 [System.Serializable]
@@ -112,6 +146,7 @@ public class ZonePropertiesClass
     public float TakeAwaySpeed;
     public float MaxMusicNoteDistance;
     public int NoteAmount;
+    public float DisapearSpeed;
     [HideInInspector] public float Damages;
 
     public ZonePropertiesClass Copy()
@@ -123,7 +158,8 @@ public class ZonePropertiesClass
             RotationSpeed = this.RotationSpeed,
             TakeAwaySpeed = this.TakeAwaySpeed,
             MaxMusicNoteDistance = this.MaxMusicNoteDistance,
-            Damages = this.Damages
+            Damages = this.Damages,
+            DisapearSpeed = this.DisapearSpeed
         };
     }
 }

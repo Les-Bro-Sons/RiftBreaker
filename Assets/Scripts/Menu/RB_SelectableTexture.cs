@@ -1,11 +1,9 @@
 using MANAGERS;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RB_MenuSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,ISelectHandler, IDeselectHandler{
+public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,ISelectHandler, IDeselectHandler{
     Image _renderer;
 
     [SerializeField] Sprite _default;

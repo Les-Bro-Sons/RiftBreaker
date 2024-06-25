@@ -23,9 +23,9 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown {  get { return _specialAttackCooldown; } }
 
     [Header("Damages")]
-    [SerializeField] private float _attackDamage;
-    [SerializeField] private float _chargedAttackDamage;
-    [SerializeField] private float _specialAttackDamage;
+    [SerializeField] protected float _attackDamage;
+    [SerializeField] protected float _chargedAttackDamage;
+    [SerializeField] protected float _specialAttackDamage;
 
     [Header("Knockback")]
     [SerializeField] private float _normalKnockbackForce;
@@ -179,7 +179,7 @@ public class RB_Items : MonoBehaviour
     public virtual void DealDamage()
     {
         List<RB_Health> alreadyDamaged = new();
-        foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
+        foreach (GameObject detectedObject in _collisionDetection.GetDetectedEnnemies())
         {
             //If on the detected object, there's life script, it deals damage
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && _enemyHealth.Team != TEAMS.Player && !alreadyDamaged.Contains(_enemyHealth))
@@ -236,7 +236,6 @@ public class RB_Items : MonoBehaviour
         _colliderAnimator.SetTrigger("SpecialAttack");
         //Reset attack
         Invoke(nameof(ResetSpecialAttack), _specialAttackCooldown);
-        print(_specialAttackCooldown);
 
         /////UX/////
         if (_impulseSource)

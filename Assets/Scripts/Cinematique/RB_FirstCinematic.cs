@@ -22,6 +22,7 @@ public class RB_FirstCinematic : MonoBehaviour
     private void Start()
     {
         StartCinematic();
+        RB_SaveManager.Instance.ResetSave();
     }
 
     public void StartCinematic() //after player has chosen their name

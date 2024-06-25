@@ -562,7 +562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LastDirection: {x: 0, y: 0, z: 0}
   _movementAcceleration: 250
-  _movementMaxSpeed: 12
+  MovementMaxSpeed: 12
   _movementFrictionForce: 200
   ForwardDirection: {x: 0, y: 0, z: 0}
   DirectionToMove: {x: 0, y: 0, z: 0}
@@ -1221,7 +1221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 0
-  _hpMax: 100
+  HpMax: 100
   Armor: 0
   Team: 1
   Dead: 0
@@ -1232,6 +1232,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  EventResurect:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 2

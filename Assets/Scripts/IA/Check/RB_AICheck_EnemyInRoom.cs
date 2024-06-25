@@ -16,7 +16,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
     private bool _setTarget;
 
     private float _checkNearbyTimer = 0;
-    private float _checkNearbyTime = 0.35f;
+    private float _checkNearbyTime = 0f;
 
     public RB_AICheck_EnemyInRoom(RB_AI_BTTree btParent, TARGETMODE targetMode, bool setTarget = true)
     {
@@ -38,9 +38,9 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
             ? RB_RoomManager.Instance.GetDetectedAllies(room.Value).ToList()
             : RB_RoomManager.Instance.GetDetectedEnemies(room.Value).ToList();
 
+        float nearbyDetectionRange = _btParent.FovRange;
         if (_enemies.Count == 0)
         {
-            float nearbyDetectionRange = _btParent.FovRange;
             if (_checkNearbyTimer >= _checkNearbyTime)
             {
                 _checkNearbyTimer = 0;
@@ -66,7 +66,19 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
 
         _enemies.RemoveAll(enemy => enemy.Dead);
 
-        if (_enemies.Count == 0) return BTNodeState.FAILURE;
+        if (_enemies.Count == 0)
+        {
+            if (_btParent.Root.GetData("target") != null)
+            {
+                Transform target = (Transform)_btParent.Root.GetData("target");
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(_transform.position, target.position) < nearbyDetectionRange / 3f)
+                {
+                    return _state = BTNodeState.SUCCESS;
+                }
+            }
+
+            return _state = BTNodeState.FAILURE;
+        }
 
         RB_Health targetEnemy = null;
         float targetDistance = Mathf.Infinity;

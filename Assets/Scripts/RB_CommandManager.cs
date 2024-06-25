@@ -1,6 +1,5 @@
-using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,16 +8,24 @@ public class RB_CommandManager : MonoBehaviour
 {
     public TMP_InputField CommandInput; // Assure-toi que tu as attaché le champ de saisie dans l'inspecteur Unity.
     private bool _opened = false;
-    [SerializeField] private RB_Items _item;
+    [SerializeField] private List<RB_Items> _items = new();
 
     private float _defaultHpMax;
     private float _defaultHp;
-    private float _defaultAttackDamage;
-    private float _defaultChargedAttackDamage;
-    private float _defaultSpecialAttackDamage;
-    private float? _defaultAttackCooldown;
-    private float _defaultChargeAttackCooldown;
-    private float _defaultSpecialAttackChargeTime;
+
+    private struct DefaultItemProperties
+    {
+        public float DefaultAttackDamage;
+        public float DefaultChargedAttackDamage;
+        public float DefaultSpecialAttackDamage;
+        public float? DefaultAttackCooldown;
+        public float DefaultChargeAttackCooldown;
+        public float DefaultSpecialAttackChargeTime;
+    }
+
+    private List<DefaultItemProperties> _defaultItemProperties = new();
+
+    
 
 
     //Player
@@ -27,14 +34,21 @@ public class RB_CommandManager : MonoBehaviour
     private void Start()
     {
         _playerRb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
-        if (_item)
+        _items.AddRange(FindObjectsOfType<RB_Items>());
+
+        
+        foreach (RB_Items item in _items)
         {
-            _defaultAttackDamage = _item.AttackDamage;
-            _defaultChargedAttackDamage = _item.ChargedAttackDamage;
-            _defaultSpecialAttackDamage = _item.SpecialAttackDamage;
-            _defaultAttackCooldown = _item.AttackCooldown();
-            _defaultChargeAttackCooldown = _item.ChargeAttackCooldown();
-            _defaultSpecialAttackChargeTime = _item.SpecialAttackChargeTime;
+            DefaultItemProperties properties = new DefaultItemProperties
+            {
+                DefaultAttackDamage = item.AttackDamage,
+                DefaultChargedAttackDamage = item.ChargedAttackDamage,
+                DefaultSpecialAttackDamage = item.SpecialAttackDamage,
+                DefaultAttackCooldown = item.AttackCooldown(),
+                DefaultChargeAttackCooldown = item.ChargeAttackCooldown(),
+                DefaultSpecialAttackChargeTime = item.SpecialAttackChargeTime,
+            };
+            _defaultItemProperties.Add(properties);
         }
         
     }
@@ -54,9 +68,7 @@ public class RB_CommandManager : MonoBehaviour
                 CommandInput.ActivateInputField();
                 StartCoroutine(DelayStartEnd());
                 ExecuteCommand();
-                RB_InputManager.Instance.MoveEnabled = false;
-                RB_InputManager.Instance.AttackEnabled = false;
-                RB_InputManager.Instance.DashEnabled = false;
+                RB_InputManager.Instance.InputEnabled = false;
             }
         }
         
@@ -82,9 +94,7 @@ public class RB_CommandManager : MonoBehaviour
         print("close");
         _opened = false;
         ProcessCommand(command);
-        RB_InputManager.Instance.AttackEnabled = true;
-        RB_InputManager.Instance.MoveEnabled = true;
-        RB_InputManager.Instance.DashEnabled = true;
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void ProcessCommand(string input)
@@ -184,14 +194,14 @@ public class RB_CommandManager : MonoBehaviour
     {
         RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = float.MaxValue;
         RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = float.MaxValue;
-        if (_item)
+        foreach (RB_Items item in _items)
         {
-            _item.AttackDamage = float.MaxValue;
-            _item.ChargedAttackDamage *= float.MaxValue;
-            _item.SpecialAttackDamage *= float.MaxValue;
-            _item.AttackCooldown(0);
-            _item.ChargeAttackCooldown(0);
-            _item.SpecialAttackChargeTime = .1f;
+            item.AttackDamage = float.MaxValue;
+            item.ChargedAttackDamage *= float.MaxValue;
+            item.SpecialAttackDamage *= float.MaxValue;
+            item.AttackCooldown(0);
+            item.ChargeAttackCooldown(0);
+            item.SpecialAttackChargeTime = .1f;
         }
         
     }
@@ -224,16 +234,16 @@ public class RB_CommandManager : MonoBehaviour
 
     private void Normal()
     {
-        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = _defaultHpMax;
+        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax =  _defaultHpMax;
         RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = _defaultHp;
-        if (_item)
+        for(int i = 0; i < _items.Count; i++)
         {
-            _item.AttackDamage = _defaultAttackDamage;
-            _item.ChargedAttackDamage = _defaultChargedAttackDamage;
-            _item.SpecialAttackDamage = _defaultSpecialAttackDamage;
-            _item.AttackCooldown(_defaultAttackCooldown);
-            _item.ChargeAttackCooldown(_defaultAttackCooldown);
-            _item.SpecialAttackChargeTime = _defaultSpecialAttackChargeTime;
+            _items[i].AttackDamage = _defaultItemProperties[i].DefaultAttackDamage;
+            _items[i].ChargedAttackDamage = _defaultItemProperties[i].DefaultChargedAttackDamage;
+            _items[i].SpecialAttackDamage = _defaultItemProperties[i].DefaultSpecialAttackDamage;
+            _items[i].AttackCooldown(_defaultItemProperties[i].DefaultAttackCooldown);
+            _items[i].ChargeAttackCooldown(_defaultItemProperties[i].DefaultAttackCooldown);
+            _items[i].SpecialAttackChargeTime = _defaultItemProperties[i].DefaultSpecialAttackChargeTime;
         }
     }
 }

@@ -84,7 +84,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (InputEnabled) return;
+        if (!InputEnabled) return;
         if (context.started) 
             EventAttackStartedEvenIfDisabled?.Invoke();
 

@@ -45,7 +45,7 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			PlayMusic("zik_hugoval_final");
+			
 		}
 
 		public void PlayMusic(string nameClip)
@@ -196,6 +196,11 @@ namespace MANAGERS
 			return clipPlaying;
 		}
 
+        public void StopMusic()
+        {
+            _musicSource.Stop();
+            Debug.LogWarning("doesn't work");
+        }
         public void StopSFX() 
 		{
 			//SfxSource?.Stop();

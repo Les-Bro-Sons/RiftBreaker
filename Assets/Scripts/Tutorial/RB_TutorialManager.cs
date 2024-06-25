@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -108,6 +109,7 @@ public class RB_TutorialManager : MonoBehaviour
         InitializeMovementTuto();
         InititializeImages();
         RewindTutoRoom.CloseRoom();
+        RB_AudioManager.Instance.PlayMusic("Tuto_Music");
     }
 
     private void Update()

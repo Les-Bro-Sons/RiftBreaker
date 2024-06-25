@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,6 +30,7 @@ public class RB_YogBetrayal : MonoBehaviour
     private void Start()
     {
         _animator.Play("2-RobertTalking");
+        RB_AudioManager.Instance.PlayMusic("Theme_Robert");
     }
 
     public void PlayerSpotMark() //for yog transformation
@@ -58,6 +60,7 @@ public class RB_YogBetrayal : MonoBehaviour
         {
             _2ndDialogue.StartDialogue();
             _2ndDialogue.EventOnDialogueStopped.AddListener(FinishedSecondDialogue);
+            RB_AudioManager.Instance.StopMusic();
             _2ndDialogueDone = true;
         }
     }

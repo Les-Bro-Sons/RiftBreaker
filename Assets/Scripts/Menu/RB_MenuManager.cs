@@ -38,16 +38,19 @@ public class RB_MenuManager : MonoBehaviour {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SaveManager.Instance.ResetSave();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void MainMenu() {
         Time.timeScale = 1f;
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void Options() {

@@ -132,7 +132,7 @@ public class RB_Items : MonoBehaviour
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
-        RobertShouldTalk = true;
+        //RobertShouldTalk = true;
 
     }
 

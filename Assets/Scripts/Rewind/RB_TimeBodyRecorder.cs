@@ -82,7 +82,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_btTree)
         {
             newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
-            newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount;
+            if (_btTree.ImageSpotBar) newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount;
             newPoint.CurrentWaypointIndex = _btTree.CurrentWaypointIndex;
         }
         newPoint.TimeEvents = _timeEventForNextPoint.ToList();
@@ -179,7 +179,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_btTree)
         {
             _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
-            _btTree.ImageSpotBar.fillAmount = currentP.SpotValue;
+            if (_btTree.ImageSpotBar) _btTree.ImageSpotBar.fillAmount = currentP.SpotValue;
             _btTree.CurrentWaypointIndex = currentP.CurrentWaypointIndex;
         }
         foreach (EventInTime timeEvent in currentP.TimeEvents)

@@ -98,7 +98,7 @@ public class RB_RainZone : MonoBehaviour
     private void CheckForEnemies()
     {
         List<RB_Health> enemies = new();
-        foreach (GameObject enemy in _collisionDetection.GetDetectedEnnemies())
+        foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth) && enemyHealth.Team != Team)
             {

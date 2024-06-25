@@ -315,7 +315,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(0, rangeForward, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedEnnemies())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEntity())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
@@ -340,7 +340,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(rangeForward, 0, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedEnnemies())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEntity())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {

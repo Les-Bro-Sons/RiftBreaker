@@ -39,7 +39,7 @@ public class RB_MusicBox : RB_Items
     {
         base.Start();
         EventOnEndOfAttack.AddListener(EndOfAttack);
-        ZoneProperties.Damages = _chargedAttackDamage;
+        ZoneProperties.Damages = ChargedAttackDamage;
     }
    
     public override void Bind() //Override the bind of the item

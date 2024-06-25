@@ -12,6 +12,7 @@ public class RB_LevelExit : MonoBehaviour
     [SerializeField] private bool _goToNextSceneID = true;
     [SerializeField] private string _nextSceneName = "";
     [SerializeField] private int _nextSceneID = -1;
+    [SerializeField] private bool _isSwitchingOnPortalOpening = false;
 
     [Header("Phase")]
     [SerializeField] private bool _availableOnPhase = false;
@@ -48,7 +49,7 @@ public class RB_LevelExit : MonoBehaviour
     {
         ClosePortal();
 
-        _collisionDetection.EventOnObjectEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedEnnemies()); });
+        _collisionDetection.EventOnEntityEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedEntity()); });
 
         _robert.SetActive(_showRobert);
 
@@ -70,6 +71,7 @@ public class RB_LevelExit : MonoBehaviour
         if (CheckIfOpened() && _isOpened == false)
         {
             OpenPortal();
+            if (_isSwitchingOnPortalOpening) EnterPortal();
         }
         else if (_isOpened == true)
         {
@@ -111,25 +113,30 @@ public class RB_LevelExit : MonoBehaviour
             {
                 if (_isOpened)
                 {
-                    if (_goToNextSceneID) //switch scene to next build index
-                    {
-                        RB_SaveManager.Instance.SaveToJson();
-                        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
-                    }
-                    else
-                    {
-                        if (_nextSceneName != "")
-                        {
-                            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneName); //switch scene by name
-                        }
-                        else
-                        {
-                            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneID); //switch scene by ID
-                        }
-                    }
+                    EnterPortal();
                 }
 
                 return;
+            }
+        }
+    }
+
+    private void EnterPortal()
+    {
+        if (_goToNextSceneID) //switch scene to next build index
+        {
+            RB_SaveManager.Instance.SaveToJson();
+            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
+        }
+        else
+        {
+            if (_nextSceneName != "")
+            {
+                RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneName); //switch scene by name
+            }
+            else
+            {
+                RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneID); //switch scene by ID
             }
         }
     }

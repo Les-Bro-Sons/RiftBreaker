@@ -71,6 +71,7 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         Invoke("DebugSpeed", 0);
         RB_PlayerAction.Instance.EventBasicAttack.AddListener(OnAttack);
+        RB_PlayerAction.Instance.EventSpecialAttack.AddListener(OnSpecialAttack);
         RB_PlayerAction.Instance.EventStartChargingAttack.AddListener(OnStartChargeAttack);
         RB_PlayerAction.Instance.EventStopChargingAttack.AddListener(OnStopChargeAttack);
     }
@@ -125,6 +126,27 @@ public class RB_PlayerMovement : MonoBehaviour
             //If the direction of the attack is got set the direction to the attack direction
             ForwardDirection = DirectionToAttack;
             StartCoroutine(StopAttack());
+        }
+    }
+
+    private void OnSpecialAttack()
+    {
+        if (!_resetingRotation && !_isAttacking)
+        {
+            _isAttacking = true;
+            if (RB_InputManager.Instance.IsMouse)
+            {
+                //If the player is playing with the mouse the attack direction is set to the mouse direction
+                DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
+            }
+            else
+            {
+                //Otherwise, the attack direction is set to the move direction
+                DirectionToAttack = DirectionToMove;
+            }
+            //If the direction of the attack is got set the direction to the attack direction
+            ForwardDirection = DirectionToAttack;
+            Invoke(nameof(DelayStopAttack), .1f);
         }
     }
 

@@ -20,6 +20,8 @@ public class RB_Yog : RB_Boss
     private float _timeUntilNextState;
     protected float _currentCooldownBetweenMovement;
 
+    private float _activationTimer = 0;
+
     [Header("Tentacle Hit (attack1)")]
     [SerializeField] private RB_Tentacles _tentacle;
     [SerializeField] private RB_CollisionDetection _tentacleCollision;
@@ -111,7 +113,16 @@ public class RB_Yog : RB_Boss
     {
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            _activationTimer += Time.deltaTime;
+            return;
+        }
 
         switch (CurrentState)
         {
@@ -280,7 +291,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(0, rangeForward, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEnnemies())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
@@ -305,7 +316,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(rangeForward, 0, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEnnemies())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {

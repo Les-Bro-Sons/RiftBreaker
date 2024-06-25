@@ -1,12 +1,15 @@
 using MANAGERS;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_MusicBox : RB_Items
 {
+    //Enums
+    
+
     //Zone
-    [SerializeField] private GameObject _zonePrefab;
-    private GameObject _instantiatedZone;
     bool _shouldGrow = false;
     private float _stayTime = 0;
     private bool _charging = false;
@@ -20,18 +23,29 @@ public class RB_MusicBox : RB_Items
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
+    private List<GameObject> _currentZones = new();
+    private List<GameObject> _currentSpecialZones = new();
+
+    //Prefabs
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _musicZonePrefab;
+
+    //Music zone
+    [Header("Music Zone Properties")]
+    public ZonePropertiesClass ZoneProperties = new();
 
 
     protected override void Start()
     {
         base.Start();
         EventOnEndOfAttack.AddListener(EndOfAttack);
+        ZoneProperties.Damages = _chargedAttackDamage;
     }
    
-    public override void Bind()
+    public override void Bind() //Override the bind of the item
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(2);
             RobertShouldTalk = false;
@@ -41,61 +55,77 @@ public class RB_MusicBox : RB_Items
         _colliderAnimator.SetFloat("WeaponID", 2);
     }
 
-    public override void Attack()
+    public override void Attack() //Attack
     {
         base.Attack();
-        ShootProjectile("MusicNote");
-        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
+        ShootProjectile("MusicNote"); //Instantiate the music note
+        RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
     }
 
-    public override void ChargedAttack()
+    public override void ChargedAttack() //Charged attack
     {
         base.ChargedAttack();
         RB_AudioManager.Instance.StopSFX();
         _charging = false;
     }
 
-    public override void StartChargingAttack()
+    public override void StartChargingAttack() //Start the charging attack animation
     {
         base.StartChargingAttack();
         
-        if (_instantiatedZone == null || _charging == false)
+        if (_currentZones == null || _charging == false)
         {
             _charging = true;
-            _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
-            StartChargeZone();
-            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, .15f, 1f);
+            _currentZones.Add(Instantiate(_musicZonePrefab)); //Instantiate the music zone
+            StartChargeZone(); //Start the charge zone
+            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
         }
-        
-
     }
 
-    public void StartChargeZone()
+    public override void FinishChargingAttack() //Stop the charging animation attack
     {
-        _instantiatedZone.transform.localScale = Vector3.zero;
+        base.FinishChargingAttack();
+        foreach(var zone in _currentZones.ToList())
+        {
+            if(zone != null) 
+                zone.GetComponent<RB_MusicZone>().StopTakeAway();
+        }
+        _shouldGrow = false;
+    }
+
+    public void StartChargeZone() //Start the animation of the zone
+    {
         _stayTime = 0;
         _shouldGrow = true;
     }
 
-    public void StopChargeZone()
+    public void StopChargeZone() //Stop the animation of the zone
     {
-        _shouldGrow = false;
-    }
-
-    public void ChargeZone()
-    {
-        if (_shouldGrow && _instantiatedZone.transform.localScale.magnitude < _maxZoneSize)
+        if( _currentZones != null )
         {
-            _instantiatedZone.transform.localScale += (Vector3.one * _zoneGrowthSpeed) * Time.deltaTime;
-            _stayTime += (Time.deltaTime / (_maxZoneSize / _zoneGrowthSpeed)) * 3;
+            _shouldGrow = false;
+            foreach (var zone in _currentZones.ToList())
+            {
+                if(zone != null)
+                    zone.GetComponent<RB_MusicZone>().StopTakeAway();
+            }
         }
     }
 
-    public override void StopChargingAttack()
+    public void ChargeZone() //Get bigger charge zone
+    {
+        if (_shouldGrow)
+        {
+            _stayTime += (Time.deltaTime / (ZoneProperties.MaxMusicNoteDistance / ZoneProperties.TakeAwaySpeed)) * 3;
+        }
+    }
+
+    public override void StopChargingAttack() //Stop the charging animations
     {
         base.StopChargingAttack();
         StopChargeZone();
-        Destroy(_instantiatedZone, _stayTime);
+        if(_currentZones.Count > 0)
+            StartCoroutine(DestroyZone(_currentZones[_currentZones.Count - 1]));
         if (_charging)
         {
             _charging = false;
@@ -106,6 +136,14 @@ public class RB_MusicBox : RB_Items
         }
     }
 
+    private IEnumerator DestroyZone(GameObject zone) //Destroy the zone
+    {
+        yield return new WaitForSeconds(_stayTime);
+        if (zone != null)
+            zone.GetComponent<RB_MusicZone>().StartDisapear();
+        
+    }
+
     private void Update()
     {
         ChargeZone();
@@ -114,7 +152,7 @@ public class RB_MusicBox : RB_Items
 
     private void EndOfAttack() 
     {
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("Music_Box_Charged_Attack");
     }
     
     public override void ChooseSfx() {
@@ -125,7 +163,17 @@ public class RB_MusicBox : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
+        var currentZone = Instantiate(_musicZonePrefab);
+        _currentSpecialZones.Add(currentZone);
+        StartCoroutine(DestroySpecialZone(currentZone));
         RB_AudioManager.Instance.PlaySFX("Music_Box_Special_Attack", RB_PlayerController.Instance.transform.position, false, 0, 1f);
+    }
+
+    private IEnumerator DestroySpecialZone(GameObject zone)
+    {
+        yield return new WaitForSeconds(8);
+        if(zone != null)
+            zone.GetComponent<RB_MusicZone>().StartDisapear();
     }
     
 

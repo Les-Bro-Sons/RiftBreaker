@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_Mega_knight : RB_Boss
@@ -7,6 +7,8 @@ public class RB_Mega_knight : RB_Boss
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
     private new Transform transform;
+
+    private float _activationTimer = 0;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -71,7 +73,16 @@ public class RB_Mega_knight : RB_Boss
     {
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            _activationTimer += Time.deltaTime;
+            return;
+        }
 
         switch (CurrentState)
         {
@@ -210,7 +221,7 @@ public class RB_Mega_knight : RB_Boss
 
             if (_landingParticles)
             {
-                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,false, 0, 1f);
+                RB_AudioManager.Instance.PlaySFX("Jump_Attack_Viking_Horn", transform.position,false, 0, 1f);
                 Instantiate(_landingParticles, transform.position, transform.rotation);
             }
 

@@ -9,23 +9,34 @@ public class RB_CollisionDetection : MonoBehaviour
     //Detection
     private List<GameObject> _detectedObjects = new();
     private List<GameObject> _detectedEnemies = new();
+    private bool _isPlayerIn = false;
 
     //Events
     [HideInInspector] public UnityEvent EventOnObjectEntered;
     [HideInInspector] public UnityEvent EventOnObjectExit;
+    [HideInInspector] public UnityEvent EventOnPlayerEntered;
         //Enemy
     [HideInInspector] public UnityEvent EventOnEnemyEntered;
     [HideInInspector] public UnityEvent EventOnEnemyExit;
+    [HideInInspector] public UnityEvent EventOnPlayerExit;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.isTrigger) return;
-
         //When an object is entering the trigger and has a life script add it to the list
         if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
-            _detectedEnemies.Add(enemyHealth.gameObject);
-            EventOnEnemyEntered?.Invoke();
+            if(enemyHealth.Team == TEAMS.Ai)
+            {
+                _detectedEnemies.Add(enemyHealth.gameObject);
+                EventOnEnemyEntered?.Invoke();
+            }
+            else //When the player enter
+            {
+                _isPlayerIn = true;
+                EventOnPlayerEntered?.Invoke();
+            }
+            
         }
         _detectedObjects.Add(other.gameObject);
         EventOnObjectEntered?.Invoke();
@@ -38,6 +49,11 @@ public class RB_CollisionDetection : MonoBehaviour
         //When an object is exiting the trigger, if it's in the DetectedObjects list then remove it
         if (RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health enemyHealth))
         {
+            if(RB_Tools.TryGetComponentInParent(other.gameObject, out RB_PlayerAction playerAction)) //When the player exit
+            {
+                _isPlayerIn = false;
+                EventOnPlayerExit?.Invoke();
+            }
             if (_detectedEnemies.Contains(enemyHealth.gameObject))
             {
                 _detectedEnemies.Remove(enemyHealth.gameObject);
@@ -50,12 +66,24 @@ public class RB_CollisionDetection : MonoBehaviour
 
     }
 
+    public List<GameObject> GetDetectedEnnemies()
+    {
+        //Getter to have the detected enemies
+        DestroyDeletedObject();
+        return _detectedEnemies;
+    }
+
     public List<GameObject> GetDetectedObjects()
     {
         //Getter to have the detected objects
-        //Destroy all empty objects before getting the list
         DestroyDeletedObject();
-        return _detectedEnemies;
+        return _detectedObjects;
+    }
+
+    public bool IsPlayerIn()
+    {
+        //Getter to have if the player is in
+        return _isPlayerIn;
     }
 
     public void DestroyDeletedObject()

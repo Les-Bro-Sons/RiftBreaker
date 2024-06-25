@@ -52,10 +52,11 @@ namespace MANAGERS
 		{
             AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
 			if (_musicSource.clip == _musicClip) return;
-			
+            _musicSource.spatialBlend = 0;
 
 
-			if (_musicClip != null)
+
+            if (_musicClip != null)
 			{
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
@@ -67,32 +68,38 @@ namespace MANAGERS
 				}
 				else
 				{
-					_musicSource.clip = _musicClip;
-					_musicSource.volume = 1;
-				}
+                    if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                    _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                }
 			}
 			else
 			{
-				Debug.LogWarning("Music clip not found: " + nameClip);
+                if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                Debug.LogWarning("Music clip not found: " + nameClip);
 			}
 		}
 
-		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1)
+		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1, bool fadeOut = true)
 		{
 			float timer = 0;
 			float fadeOutDuration = (duration / 2);
 			float fadeInDuration = (duration / 2);
-
-            while (timer < fadeOutDuration)
+			
+			if (fadeOut)
 			{
-				_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
-				timer += Time.unscaledDeltaTime;
-				yield return null;
+				while (timer < fadeOutDuration)
+				{
+					_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
+					timer += Time.unscaledDeltaTime;
+					yield return null;
+				}
 			}
 
 			_musicSource.volume = 0;
 			timer = 0;
 		    _musicSource.clip = clip;
+            if (!_musicSource.isPlaying) _musicSource.Play();
 
             while (timer < fadeInDuration)
             {
@@ -163,7 +170,7 @@ namespace MANAGERS
 
             foreach (AudioSource audioSource in AudioSources)
             {
-                if (audioSource.clip == _sfxClip)
+                if (audioSource.clip.name == _sfxClip.name)
                 {
                     audioSource.Stop();
                 }

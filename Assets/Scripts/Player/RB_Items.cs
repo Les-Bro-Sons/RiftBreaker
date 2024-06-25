@@ -18,9 +18,9 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _chargeZoom = 0.85f;
 
     [Header("Cooldowns")]
-    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(int? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
-    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(int? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
-    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(int? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
+    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(float? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
+    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(float? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
+    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(float? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
 
     [Header("Damages")]
     public float AttackDamage = 10;

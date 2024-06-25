@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,17 @@ public class RB_CommandManager : MonoBehaviour
 {
     public TMP_InputField CommandInput; // Assure-toi que tu as attaché le champ de saisie dans l'inspecteur Unity.
     private bool _opened = false;
+    [SerializeField] private RB_Items _item;
+
+    private float _defaultHpMax;
+    private float _defaultHp;
+    private float _defaultAttackDamage;
+    private float _defaultChargedAttackDamage;
+    private float _defaultSpecialAttackDamage;
+    private float? _defaultAttackCooldown;
+    private float _defaultChargeAttackCooldown;
+    private float _defaultSpecialAttackChargeTime;
+
 
     //Player
     private Rigidbody _playerRb;
@@ -13,6 +25,13 @@ public class RB_CommandManager : MonoBehaviour
     private void Start()
     {
         _playerRb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
+        _defaultAttackDamage = _item.AttackDamage;
+        _defaultChargedAttackDamage = _item.ChargedAttackDamage;
+        _defaultSpecialAttackDamage = _item.SpecialAttackDamage;
+        _defaultAttackCooldown = _item.AttackCooldown();
+        _defaultChargeAttackCooldown = _item.ChargeAttackCooldown();
+        _defaultSpecialAttackChargeTime = _item.SpecialAttackChargeTime;
+        
     }
     private void Update()
     {
@@ -89,6 +108,17 @@ public class RB_CommandManager : MonoBehaviour
                 ResetLevel(); break;
             case "/previouslevel":
                 PreviousLevel(); break;
+            case "/speed":
+                if (parts.Length >= 2)
+                    Speed(parts[1]);
+                break;
+            case "/rewind":
+                if(parts.Length >= 2)
+                    Rewind(parts[1]);
+                break;
+            case "/normal":
+                Normal();
+                break;
             // Ajouter d'autres cas selon les besoins
             default:
                 Debug.Log("Commande non reconnue");
@@ -144,15 +174,12 @@ public class RB_CommandManager : MonoBehaviour
     {
         RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = float.MaxValue;
         RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = float.MaxValue;
-        if (RB_PlayerAction.Instance.Item)
-        {
-            RB_PlayerAction.Instance.Item.AttackDamage = float.MaxValue;
-            RB_PlayerAction.Instance.Item.ChargedAttackDamage *= float.MaxValue;
-            RB_PlayerAction.Instance.Item.SpecialAttackDamage *= float.MaxValue;
-            RB_PlayerAction.Instance.Item.AttackCooldown(0);
-            RB_PlayerAction.Instance.Item.ChargeAttackCooldown(0);
-            RB_PlayerAction.Instance.Item.SpecialAttackChargeTime = .1f;
-        }
+        _item.AttackDamage = float.MaxValue;
+        _item.ChargedAttackDamage *= float.MaxValue;
+        _item.SpecialAttackDamage *= float.MaxValue;
+        _item.AttackCooldown(0);
+        _item.ChargeAttackCooldown(0);
+        _item.SpecialAttackChargeTime = .1f;
         
     }
 
@@ -164,5 +191,31 @@ public class RB_CommandManager : MonoBehaviour
     private void Weapon()
     {
         _playerRb.position = FindAnyObjectByType<RB_Items>().transform.position;
+    }
+
+    private void Speed(string speed)
+    {
+        if(int.TryParse(speed, out int speedInt))
+            RB_PlayerMovement.Instance.MovementMaxSpeed = speedInt;
+    }
+
+    private void Rewind(string rewindAmount)
+    {
+        if(int.TryParse(rewindAmount, out int rewindAmountInt))
+        {
+            RB_PlayerAction.Instance.RewindLeft = rewindAmountInt;
+        }
+    }
+
+    private void Normal()
+    {
+        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = _defaultHpMax;
+        RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = _defaultHp;
+        _item.AttackDamage = _defaultAttackDamage;
+        _item.ChargedAttackDamage = _defaultChargedAttackDamage;
+        _item.SpecialAttackDamage = _defaultSpecialAttackDamage;
+        _item.AttackCooldown(_defaultAttackCooldown);
+        _item.ChargeAttackCooldown(_defaultAttackCooldown);
+        _item.SpecialAttackChargeTime = _defaultSpecialAttackChargeTime;
     }
 }

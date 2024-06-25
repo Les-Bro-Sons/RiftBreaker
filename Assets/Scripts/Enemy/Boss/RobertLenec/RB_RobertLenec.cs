@@ -108,6 +108,7 @@ public class RB_RobertLenec : RB_Boss
         }
         else if (_activationTimer < 0.5f)
         {
+            CurrentState = BOSSSTATES.Idle;
             _activationTimer += Time.deltaTime;
             return;
         }

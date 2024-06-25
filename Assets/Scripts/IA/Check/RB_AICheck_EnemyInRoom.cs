@@ -48,6 +48,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
                 foreach (Collider collider in Physics.OverlapSphere(_transform.position, nearbyDetectionRange, ~((1 << 3) | (1 << allyLayer) | (1 << 10))))
                 {
                     if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth)
+                        && !enemyHealth.Dead
                         && enemyHealth.Team != _btParent.AiHealth.Team
                         && Physics.Raycast(_transform.position, (enemyHealth.transform.position - _transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << allyLayer) | (1 << 10)))
                         && RB_Tools.TryGetComponentInParent<RB_Health>(hit.collider.gameObject, out RB_Health enemyCheck)

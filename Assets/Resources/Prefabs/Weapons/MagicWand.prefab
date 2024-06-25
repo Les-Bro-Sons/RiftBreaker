@@ -80,13 +80,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 1
-  SpecialAttackChargeTime: 0
+  ChargeTime: 0.45
+  SpecialAttackChargeTime: 30
   _chargeZoom: 0.85
   _attackCooldown: 0.4
-  _attackDamage: 0
-  _chargedAttackDamage: 0
-  _specialAttackDamage: 0
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 1
+  AttackDamage: 10
+  ChargedAttackDamage: 25
+  SpecialAttackDamage: 45
   _normalKnockbackForce: 0
   _chargeAttackKnockbackForce: 0
   _specialAttackKnockbackForce: 0

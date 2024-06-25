@@ -130,6 +130,7 @@ public class RB_Yog : RB_Boss
         }
         else if (_activationTimer < 0.5f)
         {
+            CurrentState = BOSSSTATES.Idle;
             _activationTimer += Time.deltaTime;
             return;
         }

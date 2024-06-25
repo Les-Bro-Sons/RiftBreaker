@@ -13,6 +13,7 @@ public class RB_ParticleCollision : MonoBehaviour
     //Properties
     private float _startTime;
     private bool _isGravitating = false;
+    [SerializeField] bool isLife = false;
 
     void Awake()
     {
@@ -41,6 +42,7 @@ public class RB_ParticleCollision : MonoBehaviour
         //Is attracted by the player
         _isGravitating = true;
         _externalForce.enabled = true;
+
     }
 
     void OnParticleCollision(GameObject other)
@@ -60,11 +62,17 @@ public class RB_ParticleCollision : MonoBehaviour
             _particles[nearestParticle].remainingLifetime = 0; //Destroy that particle
             _ps.SetParticles(_particles, amount);
             RB_PlayerAction.Instance.EventOnChargeSpecialAttackGathered?.Invoke();
-            if(RB_Tools.TryGetComponentInParent<RB_Enemy>(gameObject, out RB_Enemy enemy))
+            if (isLife)
             {
-                RB_PlayerAction.Instance.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
+                playerMovement.gameObject.GetComponent<RB_Health>().Heal(2);
             }
-            
+            else
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Enemy>(gameObject, out RB_Enemy enemy))
+                {
+                    RB_PlayerAction.Instance.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
+                }
+            }
         }
         
 

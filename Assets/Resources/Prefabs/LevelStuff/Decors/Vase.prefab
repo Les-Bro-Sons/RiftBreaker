@@ -51,10 +51,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _brokenSprite: {fileID: 21300000, guid: a315dea0ce2665b45a84f377aac2bc7d, type: 3}
   _particleAmount: 3
+  _probLife: 0
   _vaseCollider: {fileID: 5087401743691979299}
   _spriteRenderer: {fileID: 8240376607770445137}
   _navMeshObstacle: {fileID: 5085036297257246490}
   _vaseParticlesPrefab: {fileID: 2694136921075578125, guid: ccbb108c68b8dc04498c12659eb1770e,
+    type: 3}
+  _lifeParticlesPrefab: {fileID: 2399308156020313816, guid: a744d5576d18edf4581faa54210d8a9e,
     type: 3}
 --- !u!54 &7636775617753460045
 Rigidbody:

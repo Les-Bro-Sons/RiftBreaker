@@ -7,7 +7,6 @@ public enum PHASES
 
 public enum SCENENAMES
 {
-    FirstCinematic,
     Tuto,
     Level1,
     Level2,
@@ -22,6 +21,8 @@ public enum SCENENAMES
     Boss1,
     Boss2,
     Boss3,
+
+    FirstCinematic,
 }
 
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~

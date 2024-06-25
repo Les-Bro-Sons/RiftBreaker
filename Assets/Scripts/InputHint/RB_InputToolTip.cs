@@ -90,9 +90,9 @@ public class RB_InputToolTip : MonoBehaviour {
         _updateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
     }
 
-    public void Update() {
+/*    public void Update() {
         UpdateBindingDisplay();
-    }
+    } */
 
 #if UNITY_EDITOR
     protected void OnValidate() {

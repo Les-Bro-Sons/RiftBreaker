@@ -72,16 +72,24 @@ public class RB_MenuInputManager : MonoBehaviour {
             IsKeyBoard = true;
         else IsKeyBoard = false;
 
-        if (context.started) { EventAnyStarted?.Invoke();
-            if (context.action.activeControl.device.name != "Mouse") 
+        if (context.action.activeControl.device.name != "Mouse")
+        {
             IsLastInputMouse = false;
+        }
+            
+
+        if (context.started) { 
+            EventAnyStarted?.Invoke();
         }
         else if (context.canceled) { EventAnyCanceled?.Invoke(); }
     }
 
     public void OnMouseMoving(InputAction.CallbackContext context){
-        if (context.action.activeControl.device.name == "Mouse")
+        if (context.action.activeControl.device.name == "Mouse") {
             IsLastInputMouse = true;
+        }
+            
+
         if (context.started) {
             EventMouseMovingStarted?.Invoke(); 
         }

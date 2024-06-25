@@ -53,6 +53,7 @@ public class RB_MusicNoteZone : MonoBehaviour
             _zoneProperties.UpDownSpeed = Random.Range(.1f, _zoneProperties.UpDownSpeed);
             _zoneProperties.RotationSpeed = Random.Range(-_zoneProperties.RotationSpeed, _zoneProperties.RotationSpeed);
             _zoneProperties.MaxMusicNoteDistance = Random.Range(.1f, _zoneProperties.MaxMusicNoteDistance);
+            _zoneProperties.DisapearSpeed = Mathf.Clamp(_zoneProperties.DisapearSpeed, 1, float.MaxValue);
             _zoneProperties.DisapearSpeed = Random.Range(1f, _zoneProperties.DisapearSpeed);
             _defaultPos = _musicNoteTransform.position;
             _takeAwayDirection = new Vector3(Random.Range(-1, 1f), 0, Random.Range(-1, 1f)).normalized;

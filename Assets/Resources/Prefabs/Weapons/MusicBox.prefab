@@ -294,6 +294,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _zoneGrowthSpeed: 5
   _maxZoneSize: 5
   _cooldownBeforeNextAttack: 1
@@ -315,7 +316,7 @@ MonoBehaviour:
     TakeAwaySpeed: 3
     MaxMusicNoteDistance: 5
     NoteAmount: 50
-    DisapearSpeed: 0
+    DisapearSpeed: 2
     Damages: 0
 --- !u!54 &3774943303432835847
 Rigidbody:

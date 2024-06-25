@@ -94,7 +94,6 @@ public class RB_Items : MonoBehaviour
     public void RechargeSpecialAttack()
     {
         //Recharge over time the special attack
-        print(SpecialAttackCharge);
         if (SpecialAttackCharge <= 100)
         {
             SpecialAttackCharge += (Time.deltaTime / SpecialAttackChargeTime) * 100;

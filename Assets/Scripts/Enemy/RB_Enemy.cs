@@ -1,8 +1,13 @@
+using BehaviorTree;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class RB_Enemy : MonoBehaviour
 {
+    protected new Transform transform;
+
     public UnityEvent EventDead;
     [Header("Spawn")]
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
@@ -24,6 +29,7 @@ public class RB_Enemy : MonoBehaviour
     public float ChargeSpecialAttackAmount;
     protected virtual void Awake()
     {
+        transform = GetComponent<Transform>();
         GetComponent<RB_Health>().EventDeath.AddListener(Death);
         GetComponent<RB_Health>().EventTakeDamage.AddListener(TakeDamage);
         _rb = GetComponent<Rigidbody>();
@@ -41,6 +47,7 @@ public class RB_Enemy : MonoBehaviour
             return;
         }
         Spawned();
+        GetTarget();
     }
 
     private void SetLayerToTeam()
@@ -118,11 +125,91 @@ public class RB_Enemy : MonoBehaviour
 
     protected float GetTargetDistance() // made so it's easier to modify it for the pawn item (multiple character in the player team)
     {
+        if (_currentTarget == null) GetTarget();
         return Vector3.Distance(_currentTarget.transform.position, transform.position);
     }
 
-    protected Transform GetTarget() // made so it's easier to modify it for the pawn item (multiple character in the player team)
+    protected Transform GetTarget(TARGETMODE targetMode = TARGETMODE.Closest) // made so it's easier to modify it for the pawn item (multiple character in the player team)
     {
-        return _currentTarget = RB_PlayerController.Instance.transform;
+        List<RB_Health> _enemies = new();
+        RB_Health bossHealth = GetComponent<RB_Health>();
+
+        int? room = RB_RoomManager.Instance.GetEntityRoom(bossHealth.Team, gameObject);
+        if (room == null) return _currentTarget = RB_PlayerController.Instance.transform;
+
+        _enemies = (bossHealth.Team == TEAMS.Ai)
+            ? RB_RoomManager.Instance.GetDetectedAllies(room.Value).ToList()
+            : RB_RoomManager.Instance.GetDetectedEnemies(room.Value).ToList();
+
+        float nearbyDetectionRange = 5;
+        if (_enemies.Count == 0)
+        {
+            int allyLayer = (bossHealth.Team == TEAMS.Ai) ? 6 : 9;
+            foreach (Collider collider in Physics.OverlapSphere(transform.position, nearbyDetectionRange, ~((1 << 3) | (1 << allyLayer) | (1 << 10))))
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth)
+                    && !enemyHealth.Dead
+                    && enemyHealth.Team != bossHealth.Team
+                    && Physics.Raycast(transform.position, (enemyHealth.transform.position - transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << allyLayer) | (1 << 10)))
+                    && RB_Tools.TryGetComponentInParent<RB_Health>(hit.collider.gameObject, out RB_Health enemyCheck)
+                    && enemyCheck == enemyHealth
+                    && !_enemies.Contains(enemyHealth))
+                {
+                    _enemies.Add(enemyHealth);
+                }
+            }
+        }
+
+        _enemies.RemoveAll(enemy => enemy.Dead);
+
+        if (_enemies.Count == 0)
+        {
+            if (_currentTarget != null)
+            {
+                Transform target = _currentTarget;
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(transform.position, target.position) < nearbyDetectionRange / 1.5f)
+                {
+                    return _currentTarget;
+                }
+            }
+
+            return _currentTarget = RB_PlayerController.Instance.transform;
+        }
+
+        RB_Health targetEnemy = null;
+        float targetDistance = Mathf.Infinity;
+
+        switch (targetMode)
+        {
+            case TARGETMODE.Closest:
+                foreach (RB_Health enemy in _enemies)
+                {
+                    float enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
+                    if (enemyDistance < targetDistance)
+                    {
+                        targetDistance = enemyDistance;
+                        targetEnemy = enemy;
+                    }
+                }
+                break;
+            case TARGETMODE.Furthest:
+                targetDistance = 0;
+                foreach (RB_Health enemy in _enemies)
+                {
+                    targetDistance = 0;
+                    float enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
+                    if (enemyDistance > targetDistance)
+                    {
+                        targetDistance = enemyDistance;
+                        targetEnemy = enemy;
+                    }
+                }
+                break;
+            case TARGETMODE.Random:
+                targetEnemy = _enemies[Random.Range(0, _enemies.Count)];
+                break;
+        }
+
+        return _currentTarget = targetEnemy.transform;
     }
 }

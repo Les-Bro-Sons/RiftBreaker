@@ -75,7 +75,7 @@ public class RB_LevelManager : MonoBehaviour
             }
             RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
         }
-        if (CurrentPhase == PHASES.Infiltration)
+        if (CurrentPhase == PHASES.Infiltration && CurrentScene != SCENENAMES.FirstCinematic)
         {
             RB_AudioManager.Instance.PlayMusic("Infiltration_Music");
         }
@@ -90,7 +90,10 @@ public class RB_LevelManager : MonoBehaviour
         {
             case PHASES.Infiltration:
                 RB_HUDManager.Instance.PlayAnimation(_phaseCombat);
-                RB_AudioManager.Instance.PlayMusic("Combat_Music");
+                if (CurrentScene != SCENENAMES.Tuto)
+                {
+                    RB_AudioManager.Instance.PlayMusic("Combat_Music");
+                }
                 CurrentPhase = PHASES.Combat;
                 break;
             case PHASES.Boss:

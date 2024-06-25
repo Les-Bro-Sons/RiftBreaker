@@ -61,6 +61,7 @@ public class RB_MenuManager : MonoBehaviour {
 
     public void CloseOption() {
         if (IsOptionOpen) {
+            Animator.SetBool("IsOptionOpen", false);
             RB_ButtonSelectioner.Instance.SelectMainButton(2);  
             IsOptionOpen = false;
         }

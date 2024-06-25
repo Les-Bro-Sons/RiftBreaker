@@ -1,32 +1,45 @@
+using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class RB_CommandManager : MonoBehaviour
 {
     public TMP_InputField CommandInput; // Assure-toi que tu as attaché le champ de saisie dans l'inspecteur Unity.
-
+    private bool _opened = false;
 
     private void Start()
     {
         CommandInput.gameObject.SetActive(false);
-        CommandInput.onDeselect.AddListener(CloseCommand);
-        CommandInput.onEndEdit.AddListener(CloseCommand);
     }
     private void Update()
     {
-        // Vérifie si la touche "Return" (ou "Enter") est pressée pour exécuter la commande.
+        // Vérifie si la touche "Return" (ou "Enter") est pressée pour exécuter la commande
         if (UnityEngine.Input.GetKeyDown(KeyCode.Return))
         {
-            ExecuteCommand();
-            RB_InputManager.Instance.MoveEnabled = false;
-            RB_InputManager.Instance.AttackEnabled = false;
+            if (!_opened)
+            {
+                print(_opened);
+                _opened = true;
+                ExecuteCommand();
+                RB_InputManager.Instance.MoveEnabled = false;
+                RB_InputManager.Instance.AttackEnabled = false;
+                RB_InputManager.Instance.DashEnabled = false;
+            }
+            else
+            {
+                _opened = false;
+                CloseCommand(CommandInput.text);
+            }
         }
+        
     }
 
     void ExecuteCommand()
     {
-        CommandInput.gameObject.SetActive(true);
+        CommandInput.gameObject.SetActive(!CommandInput.gameObject.activeSelf);
         string inputText = CommandInput.text;
         CommandInput.Select();
 
@@ -36,10 +49,13 @@ public class RB_CommandManager : MonoBehaviour
 
     private void CloseCommand(string command)
     {
+        print("close");
+        _opened = false;
+        CommandInput.gameObject.SetActive(!CommandInput.gameObject.activeSelf);
         ProcessCommand(command);
-        CommandInput.gameObject.SetActive(false);
         RB_InputManager.Instance.AttackEnabled = true;
         RB_InputManager.Instance.MoveEnabled = true;
+        RB_InputManager.Instance.DashEnabled = true;
     }
 
     public void ProcessCommand(string input)
@@ -51,9 +67,19 @@ public class RB_CommandManager : MonoBehaviour
         // Interpréter la commande
         switch (command)
         {
-
-            case "/teleport":
-                TeleportPlayer(parts[1], parts[2]); // Méthode à implémenter
+            case "/life":
+                if (parts.Length >= 2)
+                    Life(parts[1]);
+                break;
+            case "/nextlevel":
+                Level();
+                break;
+            case "/damage":
+                if(parts.Length >= 2)
+                    Damage(parts[1]);
+                break;
+            case "/godmode":
+                GodMode();
                 break;
             // Ajouter d'autres cas selon les besoins
             default:
@@ -70,5 +96,31 @@ public class RB_CommandManager : MonoBehaviour
         float newY = float.Parse(y);
         // Implémenter la téléportation du joueur
         Debug.Log("Teleported to (" + newX + ", " + newY + ")");
+    }
+
+    private void Life(string lifeAmount)
+    {
+        if(int.TryParse(lifeAmount, out int lifeAmoutInt))
+            RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = lifeAmoutInt;
+    }
+
+    private void Level()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    private void Damage(string damageMultiplier)
+    {
+        if(int.TryParse(damageMultiplier, out int damageMultiplierInt))
+        {
+            RB_PlayerAction.Instance.Item.AttackDamage *= damageMultiplierInt;
+            RB_PlayerAction.Instance.Item.ChargedAttackDamage *= damageMultiplierInt;
+            RB_PlayerAction.Instance.Item.SpecialAttackDamage *= damageMultiplierInt;
+        }
+    }
+
+    private void GodMode()
+    {
+        RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = float.MaxValue;
     }
 }

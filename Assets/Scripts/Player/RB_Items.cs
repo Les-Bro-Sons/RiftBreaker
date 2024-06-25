@@ -23,9 +23,9 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown {  get { return _specialAttackCooldown; } }
 
     [Header("Damages")]
-    [SerializeField] protected float _attackDamage;
-    [SerializeField] protected float _chargedAttackDamage;
-    [SerializeField] protected float _specialAttackDamage;
+    public float AttackDamage = 10;
+    public float ChargedAttackDamage = 10;
+    public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
     [SerializeField] private float _normalKnockbackForce;
@@ -158,7 +158,7 @@ public class RB_Items : MonoBehaviour
     public virtual void Attack()
     {
         _lastUsedAttackTime = Time.time;
-        _currentDamage = _attackDamage;
+        _currentDamage = AttackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
         //Starting and resetting the attack animation
@@ -211,7 +211,7 @@ public class RB_Items : MonoBehaviour
     {
         print("charged attack");
         //Starting charge attack animations
-        _currentDamage = _chargedAttackDamage;
+        _currentDamage = ChargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
@@ -230,7 +230,7 @@ public class RB_Items : MonoBehaviour
     public virtual void SpecialAttack()
     {
         //Starting special attack
-        _currentDamage = _specialAttackDamage;
+        _currentDamage = SpecialAttackDamage;
         _currentKnockbackForce = _specialAttackKnockbackForce;
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");

@@ -8634,6 +8634,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3930432267133154855, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930432267133154855, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930432267133154855, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930432267133154855, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.8
       objectReference: {fileID: 0}
@@ -11272,6 +11287,11 @@ PrefabInstance:
       propertyPath: _enemyToKill.Array.data[0]
       value: 
       objectReference: {fileID: 88995364}
+    - target: {fileID: 8972661955593790511, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: _isSwitchingOnPortalOpening
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4501474514854545794, guid: 24ec74371e597bc41bec89689e31652b, type: 3}
     m_RemovedGameObjects: []

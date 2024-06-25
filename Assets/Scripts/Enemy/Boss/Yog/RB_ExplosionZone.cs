@@ -18,7 +18,7 @@ public class RB_ExplosionZone : MonoBehaviour
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
-        _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEnnemies()[_collisionDetection.GetDetectedEnnemies().Count - 1]); });
+        _collisionDetection.EventOnEntityEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEntity()[_collisionDetection.GetDetectedEntity().Count - 1]); });
         _baseScale = transform.localScale;
     }
 
@@ -35,7 +35,7 @@ public class RB_ExplosionZone : MonoBehaviour
 
     private void CheckForEnemies()
     {
-        foreach (GameObject enemy in _collisionDetection.GetDetectedEnnemies())
+        foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
             {
@@ -67,7 +67,7 @@ public class RB_ExplosionZone : MonoBehaviour
     {
         yield return new WaitForSeconds(AreaExpandingTime);
         List<RB_Health> enemyList = new List<RB_Health>();
-        foreach (GameObject enemy in _collisionDetection.GetDetectedEnnemies())
+        foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
             {

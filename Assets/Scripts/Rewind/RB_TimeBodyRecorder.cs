@@ -199,6 +199,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
     }
 
+    public void GoToFirstPointInTime()
+    {
+        if (_pointsInTime.Count > 0) Rewind(false, _pointsInTime[0]);
+    }
+
     private void StartRewinding()
     {
         _oldPointsInTime = _pointsInTime.ToList();

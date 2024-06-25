@@ -107,6 +107,7 @@ public class RB_LevelManager : MonoBehaviour
         }
 
         SpawnEnemiesInPhase(CurrentPhase);
+        DespawnEnemiesIfNotInPhase(CurrentPhase);
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
 
         EventSwitchPhase?.Invoke();
@@ -120,6 +121,7 @@ public class RB_LevelManager : MonoBehaviour
 
         CurrentPhase = phaseToSwitch;
         SpawnEnemiesInPhase(CurrentPhase);
+        DespawnEnemiesIfNotInPhase(CurrentPhase);
 
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
 
@@ -144,7 +146,7 @@ public class RB_LevelManager : MonoBehaviour
     
     public void SpawnEnemiesInPhase(PHASES phase)
     {
-        if (!_savedEnemiesInPhase.ContainsKey(phase)) return;
+        //if (!_savedEnemiesInPhase.ContainsKey(phase)) return;
         foreach (GameObject enemy in _savedEnemiesInPhase[phase])
         {
             if (enemy && enemy.TryGetComponent<RB_Enemy>(out RB_Enemy rbEnemy))
@@ -153,10 +155,41 @@ public class RB_LevelManager : MonoBehaviour
                 rbEnemy.Spawned();
             }
         }
-        _savedEnemiesInPhase[phase].Clear();
+        //_savedEnemiesInPhase[phase].Clear();
     }
 
-    public void PlayerLost() 
+    public void DespawnEnemiesIfNotInPhase(PHASES phase)
+    {
+        switch(phase)
+        {
+            case PHASES.Infiltration:
+                DespawnEnemiesInPhase(PHASES.Combat);
+                DespawnEnemiesInPhase(PHASES.Boss);
+                break;
+            case PHASES.Combat:
+                DespawnEnemiesInPhase(PHASES.Infiltration);
+                DespawnEnemiesInPhase(PHASES.Boss);
+                break;
+            case PHASES.Boss:
+                DespawnEnemiesInPhase(PHASES.Infiltration);
+                DespawnEnemiesInPhase(PHASES.Combat);
+                break;
+        }
+    }
+
+    public void DespawnEnemiesInPhase(PHASES phase)
+    {
+        foreach (GameObject enemy in _savedEnemiesInPhase[phase])
+        {
+            if (enemy && enemy.TryGetComponent<RB_Enemy>(out RB_Enemy rbEnemy))
+            {
+                if (enemy.TryGetComponent<RB_TimeBodyRecorder>(out RB_TimeBodyRecorder timeBody)) timeBody.GoToFirstPointInTime();
+                enemy.SetActive(false);
+            }
+        }
+    }
+
+        public void PlayerLost() 
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();

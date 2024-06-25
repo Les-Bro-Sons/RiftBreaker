@@ -146,7 +146,7 @@ public class RB_PlayerMovement : MonoBehaviour
             }
             //If the direction of the attack is got set the direction to the attack direction
             ForwardDirection = DirectionToAttack;
-            Invoke(nameof(DelayStopAttack), .1f);
+            Invoke(nameof(DelayStopAttack), 1);
         }
     }
 

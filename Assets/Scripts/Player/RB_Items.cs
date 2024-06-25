@@ -188,6 +188,7 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
         //Starting and resetting the attack animation
+        print("1");
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
         //Reset attack

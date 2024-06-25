@@ -1,4 +1,5 @@
 using MANAGERS;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +17,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private Vector3 _currentVelocity;
     private bool _isMoving = false;
     private bool _canMove = true;
+    private bool _resetingRotation = false;
 
     //Dash properties
     [Header("Dash properties")]
@@ -32,6 +34,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private bool _canDash = true;
     private bool _isDashing = false;
     private float _lastUsedDashTime = 0;
+    private bool _isAttacking = false;
     [HideInInspector] public UnityEvent EventDash;
 
     //Components
@@ -52,7 +55,6 @@ public class RB_PlayerMovement : MonoBehaviour
 
     //Attack
     public Vector3 DirectionToAttack = new();
-    private bool _directionGot = false;
 
     public static RB_PlayerMovement Instance;
     private void Awake()
@@ -68,6 +70,9 @@ public class RB_PlayerMovement : MonoBehaviour
     private void Start()
     {
         Invoke("DebugSpeed", 0);
+        RB_PlayerAction.Instance.EventBasicAttack.AddListener(OnAttack);
+        RB_PlayerAction.Instance.EventStartChargingAttack.AddListener(OnStartChargeAttack);
+        RB_PlayerAction.Instance.EventStopChargingAttack.AddListener(OnStopChargeAttack);
     }
 
     private void Update()
@@ -75,47 +80,83 @@ public class RB_PlayerMovement : MonoBehaviour
         if (!_rb.isKinematic)
         {
             //Set the direction
-            UpdateDirection();
             UpdateForward();
 
             //Get the direction to move
             GetDirection(RB_InputManager.Instance.MoveValue);
-            SetDirectionToAttack();
+            SetDirection();
         }
     }
+    #region resetrotation
+
+    private void StartResetRotation()
+    {
+        _resetingRotation = true;
+        //Set all the directions to front
+        ForwardDirection = Vector3.back;
+        DirectionToAttack = Vector3.back;
+        DirectionToMove = Vector3.back;
+    }
+
+    private void StopResetRotation()
+    {
+        _resetingRotation = false;
+    }
+
+    #endregion
+
+    #region attacks
+
+    private void OnAttack()
+    {
+        if (!_resetingRotation && !_isAttacking)
+        {
+            _isAttacking = true;
+            if (RB_InputManager.Instance.IsMouse)
+            {
+                //If the player is playing with the mouse the attack direction is set to the mouse direction
+                DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
+            }
+            else
+            {
+                //Otherwise, the attack direction is set to the move direction
+                DirectionToAttack = DirectionToMove;
+            }
+            //If the direction of the attack is got set the direction to the attack direction
+            ForwardDirection = DirectionToAttack;
+            StartCoroutine(StopAttack());
+        }
+    }
+
+    private void DelayStopAttack()
+    {
+        _isAttacking = false;
+    }
+
+    private IEnumerator StopAttack()
+    {
+        yield return 0;
+        Invoke(nameof(DelayStopAttack), _playerAction.Item.AttackCooldown());
+    }
+
+    #endregion
+    #region charge attack
+
+    private void OnStartChargeAttack()
+    {
+        StartResetRotation();
+    }
+
+    private void OnStopChargeAttack()
+    {
+        StopResetRotation();
+    }
+
+    #endregion
 
     public bool IsDashing()
     {
         return _isDashing;
-    }
-
-    private void UpdateDirection()
-    {
-        if (_playerAction.IsDoingAnyAttack() || _playerAction.IsChargingAttack)
-        {
-            //If the player is currently atatcking or charging the attack
-            if((_playerAction.IsChargedAttacking || _playerAction.IsChargingAttack) && _playerAction.CurrentItem && !_playerAction.CurrentItem.FollowMouseOnChargeAttack)
-            {
-                //If the player has to reset the attack while the charge attack
-                ResetRotation();
-            }
-            else if (!_directionGot)
-            {
-                //If the direction of the attack is got set the direction to the attack direction
-                ForwardDirection = DirectionToAttack;
-                _directionGot = true;
-            }
-        }
-        else
-        {
-            //If the player is not doing any attack
-            if (_directionGot) //Reable the possiblity to get the attack of the direction
-                _directionGot = false;
-
-            //If the player is moving
-            if (_isMoving)
-                ForwardDirection = DirectionToMove; //Set the direction to the move direction
-        }
     }
 
     private void UpdateForward()
@@ -127,32 +168,19 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
-    private void SetDirectionToAttack()
-    {
-        if (RB_InputManager.Instance.IsMouse)
-        {
-            //If the player is playing with the mouse the attack direction is set to the mouse direction
-            DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
-        }
-        else
-        {
-            //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = ForwardDirection;
-        }
-    }
-
-    private void ResetRotation()
-    {
-        //Set all the directions to front
-        ForwardDirection = Vector3.back;
-        DirectionToAttack = Vector3.back;
-        DirectionToMove = Vector3.back;
-    }
-
     //Starting movement
     public void StartMove()
     {
+        print(DirectionToMove);
         _isMoving = true;
+        
+    }
+
+    private void SetDirection()
+    {
+        //If the player is moving
+        if (!_resetingRotation && !_isAttacking && _isMoving)
+            ForwardDirection = DirectionToMove; //Set the direction to the move direction
     }
 
     //Stopping movement
@@ -163,7 +191,9 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public void GetDirection(Vector3 direction)
     {
-        DirectionToMove = new Vector3(direction.x, 0, direction.y);
+        
+        if(!_resetingRotation)
+            DirectionToMove = new Vector3(direction.x, 0, direction.y);
     }
 
     public Vector3 GetDirectionToMove()

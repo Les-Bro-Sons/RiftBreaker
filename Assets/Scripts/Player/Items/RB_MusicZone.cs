@@ -35,23 +35,23 @@ public class RB_MusicZone : MonoBehaviour
         }
     }
 
-    private void OnNoteDestroyed()
+    private void OnNoteDestroyed() //When a note is destroyed
     {
         foreach(var note in _musicNotes.ToList())
         {
-            if(note == null)
+            if(note == null) //If the note is destroyed
             {
-                _musicNotes.Remove(note);
+                _musicNotes.Remove(note); //Remove it from the list
             }
         }
-        print(_musicNotes.Count);
         if( _musicNotes.Count <= 1 )
         {
-            Destroy(gameObject);
+            print(_musicNotes[0]);
+            Destroy(gameObject); //If the list is empty, destroy the zone
         }
     }
 
-    public void StartDisapear()
+    public void StartDisapear() //Destroy one by one notes
     {
         foreach(var note in _musicNotes)
         {
@@ -60,8 +60,7 @@ public class RB_MusicZone : MonoBehaviour
     }
 
 
-
-    public void StopTakeAway()
+    public void StopTakeAway() //Stop the take away
     {
         foreach(RB_MusicNoteZone note in _musicNotes)
         {
@@ -69,15 +68,15 @@ public class RB_MusicZone : MonoBehaviour
         }
     }
 
-    private IEnumerator DelaySpawnMusicNote()
+    private IEnumerator DelaySpawnMusicNote() //Spawn all the music note with a delay
     {
         yield return waitForPointOneSec;
         var musicNote = Instantiate(_MusicNotePrefab, _transform);
-        RB_MusicNoteZone musicNoteZone = musicNote.GetComponent<RB_MusicNoteZone>();
-        _musicNotes.Add(musicNoteZone);
-        musicNote.GetComponent<RB_MusicNoteZone>().IntializeProperties(_currentMusicBox.ZoneProperties.Copy());
-        _spriteRenderer.sprite = _currentMusicBox.NoteSprites[Random.Range(0, _currentMusicBox.NoteSprites.Count)];
-        _spriteRenderer.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
-        musicNoteZone.EventOnDestroy.AddListener(OnNoteDestroyed);
+        RB_MusicNoteZone musicNoteZone = musicNote.GetComponent<RB_MusicNoteZone>(); //Spawn the note
+        _musicNotes.Add(musicNoteZone); //Add it to the list
+        musicNote.GetComponent<RB_MusicNoteZone>().IntializeProperties(_currentMusicBox.ZoneProperties.Copy()); //Initialize the properties
+        _spriteRenderer.sprite = _currentMusicBox.NoteSprites[Random.Range(0, _currentMusicBox.NoteSprites.Count)]; //Set the sprite randomly
+        _spriteRenderer.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f)); //Set the color randomly
+        musicNoteZone.EventOnDestroy.AddListener(OnNoteDestroyed); //Add listener when the note is destroyed
     }
 }

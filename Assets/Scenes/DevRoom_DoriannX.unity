@@ -3571,6 +3571,26 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6007033649412452863, guid: f94fb2fc0ce0e0e47a174e38fe002c46,
         type: 3}
+      propertyPath: _attackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007033649412452863, guid: f94fb2fc0ce0e0e47a174e38fe002c46,
+        type: 3}
+      propertyPath: _attackCooldown
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007033649412452863, guid: f94fb2fc0ce0e0e47a174e38fe002c46,
+        type: 3}
+      propertyPath: _chargedAttackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007033649412452863, guid: f94fb2fc0ce0e0e47a174e38fe002c46,
+        type: 3}
+      propertyPath: _specialAttackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007033649412452863, guid: f94fb2fc0ce0e0e47a174e38fe002c46,
+        type: 3}
       propertyPath: ZoneProperties.Height
       value: 1
       objectReference: {fileID: 0}

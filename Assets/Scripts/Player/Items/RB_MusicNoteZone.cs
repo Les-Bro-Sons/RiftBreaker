@@ -39,35 +39,35 @@ public class RB_MusicNoteZone : MonoBehaviour
     private void Start()
     {
         _defaultColor = _spriteRenderer.color;
+        _playerTransform = RB_PlayerMovement.Instance.transform; //Get the player transform
     }
 
-    public void IntializeProperties(ZonePropertiesClass zoneProperties)
+    public void IntializeProperties(ZonePropertiesClass zoneProperties) //Init properties
     {
         if (!_isInit)
         {
-            _zoneProperties = zoneProperties;
+            _zoneProperties = zoneProperties; //Set the properties to the note
 
-            _playerTransform = RB_PlayerMovement.Instance.transform;
-            _zoneProperties.Height = Random.Range(.1f, _zoneProperties.Height);
+            //Random the properties with a the default value being the max
+            _zoneProperties.Height = Random.Range(.1f, _zoneProperties.Height); 
             _zoneProperties.UpDownSpeed = Random.Range(.1f, _zoneProperties.UpDownSpeed);
             _zoneProperties.RotationSpeed = Random.Range(-_zoneProperties.RotationSpeed, _zoneProperties.RotationSpeed);
             _zoneProperties.MaxMusicNoteDistance = Random.Range(.1f, _zoneProperties.MaxMusicNoteDistance);
             _zoneProperties.DisapearSpeed = Random.Range(1f, _zoneProperties.DisapearSpeed);
             _defaultPos = _musicNoteTransform.position;
             _takeAwayDirection = new Vector3(Random.Range(-1, 1f), 0, Random.Range(-1, 1f)).normalized;
-            _collisionDetection.EventOnEnemyEntered.AddListener(OnEnemyEntered);
+            _collisionDetection.EventOnEnemyEntered.AddListener(OnEnemyEntered); //Add listener for damages
         }
         
     }
 
-    private void OnEnemyEntered()
+    private void OnEnemyEntered() //When an enemy enter the trigger
     {
         foreach(GameObject detectedEnemy in _collisionDetection.GetDetectedEnnemies())
         {
             if (RB_Tools.TryGetComponentInParent(detectedEnemy, out RB_Health enemyHeath))
             {
-                print(_zoneProperties.Damages);
-                enemyHeath.TakeDamage(_zoneProperties.Damages);
+                enemyHeath.TakeDamage(_zoneProperties.Damages); //Deal damages to enemy
             }
         }
         
@@ -75,6 +75,7 @@ public class RB_MusicNoteZone : MonoBehaviour
 
     private void Update()
     {
+        //Constantly animate
         Animate();
         TakeAway();
         Disapear();
@@ -84,45 +85,44 @@ public class RB_MusicNoteZone : MonoBehaviour
     {
         if (_shouldAnimate)
         {
-            AnimateUpDownLeftRight();
-            //AnimateLeftRight();
+            AnimateUpDown();
         }
     }
 
-    private void StartAnimate()
+    private void StartAnimate() //Start the animations
     {
         _defaultPos = _musicNoteTransform.position;
         _shouldAnimate = true;
     }
 
-    private void TakeAway()
+    private void TakeAway() //take away the notes from the player
     {
         if (_shouldTakeAway)
         {
             _musicNoteSpriteParent.localPosition += _takeAwayDirection * Time.deltaTime * _zoneProperties.TakeAwaySpeed;
-            if(Mathf.Abs(_musicNoteSpriteParent.localPosition.magnitude) >= _zoneProperties.MaxMusicNoteDistance)
+            if(Mathf.Abs(_musicNoteSpriteParent.localPosition.magnitude) >= _zoneProperties.MaxMusicNoteDistance) //If the distance is enough, stop the take away
                 _shouldTakeAway = false;
         }
     }
 
-    public void StopTakeAway()
+    public void StopTakeAway() //Stop the take away
     {
         _shouldTakeAway = false;
     }
 
-    private void AnimateUpDownLeftRight()
+    private void AnimateUpDown() //Animate the up down animation
     {
         _musicNoteSpriteTransform.localPosition = _defaultPos + Vector3.up * Mathf.Sin(Time.time * _zoneProperties.UpDownSpeed) * _zoneProperties.Height;
         _musicNoteTransform.Rotate(Vector3.up * Time.deltaTime * _zoneProperties.RotationSpeed);
         _musicNoteTransform.position = _playerTransform.position;
     }
 
-    public void StartDisapear()
+    public void StartDisapear() //Start to disapear the note
     {
         _shouldDisapear = true;
     }
 
-    private void Disapear()
+    private void Disapear() //Disapear the notes
     {
         if (_shouldDisapear)
         {
@@ -138,7 +138,7 @@ public class RB_MusicNoteZone : MonoBehaviour
 }
 
 [System.Serializable]
-public class ZonePropertiesClass
+public class ZonePropertiesClass //Properties of the zones
 {
     public float Height;
     public float UpDownSpeed;

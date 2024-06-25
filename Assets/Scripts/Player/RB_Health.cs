@@ -36,6 +36,7 @@ public class RB_Health : MonoBehaviour {
     [HideInInspector] public UnityEvent EventDeath;
     [HideInInspector] public UnityEvent EventTakeDamage;
     [HideInInspector] public UnityEvent EventHeal;
+    [HideInInspector] public UnityEvent EventResurect;
 
     
     // ~~~~~~~~~~ UX ~~~~~~~~~~
@@ -113,6 +114,7 @@ public class RB_Health : MonoBehaviour {
             if (TryGetComponent<RB_Enemy>(out RB_Enemy enemy))
             {
                 enemy.UnTombstone();
+                EventResurect?.Invoke();
             }
         }
     }

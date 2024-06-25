@@ -112,7 +112,7 @@ public class RB_Enemy : MonoBehaviour
             if (AiAnimator && !RB_TimeManager.Instance.IsRewinding) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;
-            
+            SetLayerToTeam();
         }
     }
 

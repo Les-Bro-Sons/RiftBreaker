@@ -33,6 +33,8 @@ public class RB_LevelManager : MonoBehaviour
     [Header("Dialogues")]
     [SerializeField] private RB_Dialogue _robertTalkLevelBeginning;
 
+    public Vector3 BeginningPos = new();
+
 
     private void Awake()
     {
@@ -79,6 +81,8 @@ public class RB_LevelManager : MonoBehaviour
         {
             RB_AudioManager.Instance.PlayMusic("Infiltration_Music");
         }
+
+        BeginningPos = RB_PlayerAction.Instance.transform.position;
 
     }
 

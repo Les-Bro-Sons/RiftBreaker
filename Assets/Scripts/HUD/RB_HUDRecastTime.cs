@@ -36,7 +36,7 @@ public class RB_HUDRecastTime : MonoBehaviour {
                 RB_PlayerMovement.Instance.EventDash.AddListener(delegate { RecastTimerStart(RB_PlayerMovement.Instance.DashCooldown); });
                 break;
             case RECASTTYPE.AttackBase:
-                RB_PlayerAction.Instance.EventBasicAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.AttackCooldown); });
+                RB_PlayerAction.Instance.EventBasicAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.AttackCooldown()); });
                 break;
             case RECASTTYPE.AttackCharged:
                 RB_PlayerAction.Instance.EventStartChargingAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.ChargeTime - RB_PlayerAction.Instance.StartChargingDelay); });

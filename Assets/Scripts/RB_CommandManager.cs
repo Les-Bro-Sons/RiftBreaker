@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -36,24 +37,21 @@ public class RB_CommandManager : MonoBehaviour
     private void Update()
     {
         // Vérifie si la touche "Return" (ou "Enter") est pressée pour exécuter la commande
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Return))
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Period))
         {
             if (!_opened)
             {
-                print(_opened);
+
                 _opened = true;
                 CommandInput.GetComponent<CanvasGroup>().alpha = 1;
                 CommandInput.Select();
+                CommandInput.onEndEdit.AddListener(CloseCommand);
+                CommandInput.ActivateInputField();
                 ExecuteCommand();
                 RB_InputManager.Instance.MoveEnabled = false;
                 RB_InputManager.Instance.AttackEnabled = false;
                 RB_InputManager.Instance.DashEnabled = false;
-            }
-            else
-            {
-                CommandInput.GetComponent<CanvasGroup>().alpha = 0;
-                _opened = false;
-                CloseCommand(CommandInput.text);
             }
         }
         
@@ -64,11 +62,12 @@ public class RB_CommandManager : MonoBehaviour
         string inputText = CommandInput.text;
 
         // Efface le champ de saisie après avoir traité la commande, si nécessaire.
-        CommandInput.text = "";
+        CommandInput.text = "/";
     }
 
     private void CloseCommand(string command)
     {
+        CommandInput.GetComponent<CanvasGroup>().alpha = 0;
         print("close");
         _opened = false;
         ProcessCommand(command);

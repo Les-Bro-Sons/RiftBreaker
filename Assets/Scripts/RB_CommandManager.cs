@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -51,6 +52,7 @@ public class RB_CommandManager : MonoBehaviour
                 CommandInput.Select();
                 CommandInput.onEndEdit.AddListener(CloseCommand);
                 CommandInput.ActivateInputField();
+                StartCoroutine(DelayStartEnd());
                 ExecuteCommand();
                 RB_InputManager.Instance.MoveEnabled = false;
                 RB_InputManager.Instance.AttackEnabled = false;
@@ -58,6 +60,12 @@ public class RB_CommandManager : MonoBehaviour
             }
         }
         
+    }
+
+    private IEnumerator DelayStartEnd()
+    {
+        yield return 0;
+        CommandInput.MoveTextEnd(false);
     }
 
     void ExecuteCommand()
@@ -195,7 +203,9 @@ public class RB_CommandManager : MonoBehaviour
 
     private void Weapon()
     {
-        _playerRb.position = FindAnyObjectByType<RB_Items>().transform.position;
+        RB_Items foundItem = FindAnyObjectByType<RB_Items>();
+        print(foundItem.name);
+        _playerRb.position = foundItem.transform.position;
     }
 
     private void Speed(string speed)

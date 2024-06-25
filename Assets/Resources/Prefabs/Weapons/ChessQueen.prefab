@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 1
+  ChargeTime: 3
   SpecialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 1
@@ -142,15 +142,15 @@ MonoBehaviour:
   AttackDamage: 10
   ChargedAttackDamage: 10
   SpecialAttackDamage: 10
-  _normalKnockbackForce: 0
-  _chargeAttackKnockbackForce: 0
-  _specialAttackKnockbackForce: 0
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _normalKnockbackForce: 15
+  _chargeAttackKnockbackForce: 70
+  _specialAttackKnockbackForce: 50
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 297102425777051744}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}

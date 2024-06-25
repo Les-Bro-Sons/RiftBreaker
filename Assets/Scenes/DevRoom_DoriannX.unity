@@ -2151,7 +2151,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1841303694}
     m_Modifications:
     - target: {fileID: 4244062485352682178, guid: e518f35ff9cbaf645b0638ada8414e59,
         type: 3}
@@ -2213,6 +2213,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e518f35ff9cbaf645b0638ada8414e59, type: 3}
+--- !u!4 &1601319138 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+    type: 3}
+  m_PrefabInstance: {fileID: 1601319137}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1624855984
 Mesh:
   m_ObjectHideFlags: 0
@@ -2674,6 +2680,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
+    - target: {fileID: 510754635741991097, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -258.5
+      objectReference: {fileID: 0}
     - target: {fileID: 972639614009032283, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2738,6 +2749,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _robertTalkLevelBeginning
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2468656269297866455, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_text
+      value: "\u200B"
       objectReference: {fileID: 0}
     - target: {fileID: 2526089585590906918, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -3186,8 +3202,18 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2134801235}
+    - targetCorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1601319138}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ec74371e597bc41bec89689e31652b, type: 3}
+--- !u!4 &1841303694 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724653323020817537, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1841303693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1844889536
 Mesh:
   m_ObjectHideFlags: 0
@@ -3999,4 +4025,3 @@ SceneRoots:
   - {fileID: 9185043714917789480}
   - {fileID: 5166654971526652494}
   - {fileID: 560023213}
-  - {fileID: 1601319137}

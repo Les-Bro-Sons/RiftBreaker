@@ -305,14 +305,14 @@ MonoBehaviour:
   ChargedAttackDamage: 110
   SpecialAttackDamage: 200
   _normalKnockbackForce: 5
-  _chargeAttackKnockbackForce: 5
-  _specialAttackKnockbackForce: 5
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _chargeAttackKnockbackForce: 8
+  _specialAttackKnockbackForce: 10
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 6577973786371852535}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}

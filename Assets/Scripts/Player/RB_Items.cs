@@ -28,17 +28,17 @@ public class RB_Items : MonoBehaviour
     public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
-    [SerializeField] private float _normalKnockbackForce;
-    [SerializeField] private float _chargeAttackKnockbackForce;
-    [SerializeField] private float _specialAttackKnockbackForce;
+    [SerializeField] private float _normalKnockbackForce = 5;
+    [SerializeField] private float _chargeAttackKnockbackForce = 8;
+    [SerializeField] private float _specialAttackKnockbackForce = 10;
 
     [Header("Screenshake")]
-    [SerializeField] protected float _normalAttackScreenshakeForce;
-    [SerializeField] protected float _normalHitScreenshakeForce;
-    [SerializeField] protected float _chargedAttackScreenshakeForce;
-    [SerializeField] protected float _chargedHitScreenshakeForce;
-    [SerializeField] protected float _specialAttackScreenshakeForce;
-    [SerializeField] protected float _specialHitScreenshakeForce;
+    [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f;
+    [SerializeField] protected float _normalHitScreenshakeForce = .1f;
+    [SerializeField] protected float _chargedAttackScreenshakeForce = .3f;
+    [SerializeField] protected float _chargedHitScreenshakeForce = .75f;
+    [SerializeField] protected float _specialAttackScreenshakeForce = .5f;
+    [SerializeField] protected float _specialHitScreenshakeForce = 1;
     
 
     //Components
@@ -76,7 +76,7 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    public virtual void ShootProjectile(string projectileToShoot)
+    public virtual RB_Projectile ShootProjectile(string projectileToShoot)
     {
         GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + projectileToShoot), _playerTransform.position, Quaternion.LookRotation(RB_PlayerMovement.Instance.DirectionToAttack)) as GameObject;
         if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
@@ -84,6 +84,7 @@ public class RB_Items : MonoBehaviour
             newObject.transform.position += RB_PlayerMovement.Instance.DirectionToAttack * projectile.SpawnDistanceFromPlayer;
             projectile.Team = TEAMS.Player;
         }
+        return projectile;
     }
 
     protected virtual void Start()

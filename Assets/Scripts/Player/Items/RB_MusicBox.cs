@@ -58,7 +58,7 @@ public class RB_MusicBox : RB_Items
     public override void Attack() //Attack
     {
         base.Attack();
-        ShootProjectile("MusicNote"); //Instantiate the music note
+        ShootProjectile("MusicNote").Damage = AttackDamage; //Instantiate the music note
         RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
     }
 

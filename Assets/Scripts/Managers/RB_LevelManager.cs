@@ -14,7 +14,6 @@ public class RB_LevelManager : MonoBehaviour
 
     [HideInInspector] public UnityEvent EventPlayerLost;
     [HideInInspector] public UnityEvent EventPlayerWon;
-
     [HideInInspector] public UnityEvent EventSwitchPhase;
 
     public Dictionary<PHASES, List<GameObject>> _savedEnemiesInPhase = new();
@@ -26,7 +25,7 @@ public class RB_LevelManager : MonoBehaviour
     [SerializeField] private string _phaseBoss = $"SkillsPhase{PHASES.Boss}";
 
 
-
+    private RB_Health _health;
 
     public GameObject ChargeSpecialAttackParticlePrefab;
 
@@ -63,19 +62,24 @@ public class RB_LevelManager : MonoBehaviour
             {
                 case SCENENAMES.Boss1:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Mega_knight.Instance.GetComponent<RB_Health>();
-                    RB_AudioManager.Instance.PlayMusic("MK_Boss_Music");
+                    RB_Mega_knight.Instance.EventPlayMKMusic.AddListener(PlayMKBossMusic);
                     break;
                 case SCENENAMES.Boss2:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_RobertLenec.Instance.GetComponent<RB_Health>();
-                    RB_AudioManager.Instance.PlayMusic("Robert_Boss_Music");
+                    RB_RobertLenec.Instance.EventPlayRobertMusic.AddListener(PlayRobertBossMusic);
                     break;
                 case SCENENAMES.Boss3:
                     RB_HUDManager.Instance.BossHealthBar.Rb_health = RB_Yog.Instance.GetComponent<RB_Health>();
-                    RB_AudioManager.Instance.PlayMusic("Yog_Boss_Music");
+                    RB_Yog.Instance.EventPlayYogMusic.AddListener(PlayYogBossMusic);
                     break;
             }
             RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
         }
+        if (CurrentPhase == PHASES.Infiltration)
+        {
+            RB_AudioManager.Instance.PlayMusic("Infiltration_Music");
+        }
+
     }
 
     public void SwitchPhase()
@@ -86,6 +90,7 @@ public class RB_LevelManager : MonoBehaviour
         {
             case PHASES.Infiltration:
                 RB_HUDManager.Instance.PlayAnimation(_phaseCombat);
+                RB_AudioManager.Instance.PlayMusic("Combat_Music");
                 CurrentPhase = PHASES.Combat;
                 break;
             case PHASES.Boss:
@@ -112,6 +117,16 @@ public class RB_LevelManager : MonoBehaviour
         RB_UxVolumePhase.Instance.ActionUxSwitchPhase();
 
         EventSwitchPhase?.Invoke();
+
+        if (CurrentPhase == PHASES.Infiltration) 
+        {
+            RB_AudioManager.Instance.PlayMusic("Infiltration_Music");
+        }
+        
+        if (CurrentPhase == PHASES.Combat) 
+        {
+            RB_AudioManager.Instance.PlayMusic("Combat_Music");
+        }
     }
 
     public void SaveEnemyToPhase(PHASES phase, GameObject enemy)
@@ -159,4 +174,22 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_TimeManager.Instance.StartRewinding(true, true);
     }
+
+    public void PlayMKBossMusic()
+    {
+        RB_AudioManager.Instance.PlayMusic("MK_Boss_Music");
+
+    }
+
+    public void PlayRobertBossMusic()
+    {
+        RB_AudioManager.Instance.PlayMusic("Robert_Boss_Music");
+
+    }
+
+    public void PlayYogBossMusic()
+    {
+        RB_AudioManager.Instance.PlayMusic("Yog_Boss_Music");
+    }
+
 }

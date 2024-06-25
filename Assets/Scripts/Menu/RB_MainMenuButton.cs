@@ -36,7 +36,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     public void OnClick() {
-        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0.3f, 10f);
+        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0, 100f);
     }
 
     private void Start()
@@ -52,11 +52,13 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     private void LateStart()
     {
         FixNavigation();
+        RB_AudioManager.Instance.PlayMusic("Main_Menu_Music");
     }
 
 
     public void OnPointerEnter(PointerEventData eventData){
         if (_button.enabled) {
+            RB_AudioManager.Instance.PlaySFX("select", transform, false, 0, 100f);
             RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
             _button.Select();
         }
@@ -67,7 +69,6 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     public void OnSelect(BaseEventData eventData){
-        RB_AudioManager.Instance.PlaySFX("select", transform, false, 0.3f, 10f);
         RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton;
         _isSelected = true;
     }

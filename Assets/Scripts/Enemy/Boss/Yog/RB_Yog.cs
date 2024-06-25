@@ -1,15 +1,21 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Yog : RB_Boss
 {
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     public static RB_Yog Instance;
+    [HideInInspector] public UnityEvent EventPlayYogMusic;
+    private int? _bossRoom;
+    private int? _playerRoom;
+    private bool _inRoom = false;
 
     [Header("Movement")]
     [SerializeField] private float _minMovementDistance = 3f;
@@ -109,10 +115,12 @@ public class RB_Yog : RB_Boss
 
     private void FixedUpdate()
     {
-        int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
-        int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
-
+        _bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        _playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        if (_bossRoom == null || _playerRoom == null || (_bossRoom.Value != _playerRoom.Value)) return;
+        Room();
+        
+        
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:
@@ -186,6 +194,19 @@ public class RB_Yog : RB_Boss
         EnemyGestion();
     }
     
+    private void Room()
+    {
+        
+        if (_inRoom == false)
+        {
+            EventPlayYogMusic.Invoke();
+            _inRoom = true;
+        }
+        if (_inRoom == true) 
+        {
+            return;
+        }  
+    }
     private void ResetTentacleHitTimer()
     {
         _tentacleHitDelayTimer = _tentacleHitDelay + _tentacleHitDuration + _tentacleRemoveDuration + _delayBeforeHit;
@@ -243,6 +264,7 @@ public class RB_Yog : RB_Boss
     public void TentacleHit()
     {
         AiAnimator.SetTrigger("BasicAttack");
+        RB_AudioManager.Instance.PlaySFX("Tentacle_Hit_Sound", transform.position, false, 0, 1f);
         _numberOfAttackDone += 1;
         StartCoroutine(TentacleHitCoroutine());
     }

@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Threading;
 using UnityEngine;
 
@@ -44,6 +45,10 @@ public class RB_Spikes : MonoBehaviour
         //Destroy(gameObject, _lifetime);
     }
 
+    private void Start()
+    {
+        //RB_AudioManager.Instance.PlaySFX("Spike_Sound", transform.position, false, 0, 1f);
+    }
     private void Update()
     {
         if (_isGoingUp)

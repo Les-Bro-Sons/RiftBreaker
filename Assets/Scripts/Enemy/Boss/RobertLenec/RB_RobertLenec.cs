@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_RobertLenec : RB_Boss
 {
     public static RB_RobertLenec Instance;
     private new Transform transform;
-
+    [HideInInspector] public UnityEvent EventPlayRobertMusic;
+    private bool _inRoom = false;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     [Header("Movement")]
@@ -97,7 +99,7 @@ public class RB_RobertLenec : RB_Boss
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
-
+        Room();
         Repositionning();
         switch (CurrentState)
         {
@@ -174,6 +176,19 @@ public class RB_RobertLenec : RB_Boss
         return CurrentState = BOSSSTATES.Moving;
     }
 
+    private void Room()
+    {
+
+        if (_inRoom == false)
+        {
+            EventPlayRobertMusic.Invoke();
+            _inRoom = true;
+        }
+        if (_inRoom == true)
+        {
+            return;
+        }
+    }
     public void Movement()
     {
         //Boss goes to the player if he's too far away

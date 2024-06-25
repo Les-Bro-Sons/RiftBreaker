@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -71,7 +72,8 @@ public class RB_Cinematique : MonoBehaviour
 			if (PNJ.active == true && alphaPnj > 1)
 			{
 				PNJ.GetComponent<SpriteRenderer>().color = new Vector4(1, 1, 1, 1);
-				_dialogue.StartDialogue();
+                RB_AudioManager.Instance.PlayMusic("Theme_Robert");
+                _dialogue.StartDialogue();
 				_cinematiqueStart = true;
 			}
 

@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,6 +38,7 @@ public class RB_FirstCinematic : MonoBehaviour
     public void FirstRobertDialogue() //robert talk
     {
         _dialogue.StartDialogue();
+        RB_AudioManager.Instance.PlayMusic("Theme_Robert");
     }
 
     public void RobertStoppedTalking() //for walk animation after dialogue

@@ -144,8 +144,9 @@ public class RB_MusicBox : RB_Items
         
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ChargeZone();
         _currentCooldownBetweenSpecialAttack -= Time.deltaTime;
     }

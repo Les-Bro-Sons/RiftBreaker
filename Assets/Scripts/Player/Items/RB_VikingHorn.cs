@@ -149,8 +149,9 @@ public class RB_VikingHorn : RB_Items
         JumpAttack();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ComboTimer();
         UpdateAnim();
     }

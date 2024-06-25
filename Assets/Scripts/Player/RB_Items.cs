@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEditor.Progress;
 
 public class RB_Items : MonoBehaviour
 {
@@ -66,6 +67,9 @@ public class RB_Items : MonoBehaviour
     public UnityEvent EventOnEndOfAttack;
     public UnityEvent EventOnItemGathered;
 
+    //Special attack
+    [HideInInspector] public float SpecialAttackCharge = 100;
+
     protected virtual void Awake()
     {
         _transform = transform;
@@ -75,6 +79,28 @@ public class RB_Items : MonoBehaviour
             Bind();
         }
     }
+
+    protected virtual void Update()
+    {
+        RechargeSpecialAttack();
+    }
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        print(SpecialAttackCharge);
+        if (SpecialAttackCharge <= 100)
+        {
+            SpecialAttackCharge += (Time.deltaTime / SpecialAttackChargeTime) * 100;
+        }
+    }
+
 
     public virtual RB_Projectile ShootProjectile(string projectileToShoot)
     {
@@ -89,6 +115,7 @@ public class RB_Items : MonoBehaviour
 
     protected virtual void Start()
     {
+        SpecialAttackCharge = 100;
         _playerTransform = RB_PlayerAction.Instance.transform;
         _playerAction = RB_PlayerAction.Instance;
         _playerAnimator = _playerAction.PlayerAnimator;

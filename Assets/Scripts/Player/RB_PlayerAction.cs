@@ -17,8 +17,6 @@ public class RB_PlayerAction : MonoBehaviour
     [HideInInspector] public bool IsAttacking;
     [HideInInspector] public bool IsOnCooldown; //Cannot attack
 
-
-    [Range(0, 100)] public float SpecialAttackCharge; //from 0 to 100
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
     private bool _shouldStartCharging = false;
@@ -90,7 +88,6 @@ public class RB_PlayerAction : MonoBehaviour
     {
         //count the time the player press the attack button
         TimerChargeAttack();
-        RechargeSpecialAttack();
     }
 
     private void OnDeath()
@@ -102,21 +99,9 @@ public class RB_PlayerAction : MonoBehaviour
 
 
 
-    public virtual void AddToSpecialChargeAttack(float amountToAdd)
-    {
-        //Add the specialAttackChargeAmount
-        SpecialAttackCharge += amountToAdd;
-    }
+    
 
-    public virtual void RechargeSpecialAttack()
-    {
-        //Recharge over time the special attack
-        if (Item != null && SpecialAttackCharge <= 100 && Item.SpecialAttackChargeTime > 0)
-        {
-            SpecialAttackCharge += (Time.deltaTime / Item.SpecialAttackChargeTime) * 100;
-        }
-
-    }
+    
 
     public void SetCurrentWeapon(string currentWeapon)
     {
@@ -299,11 +284,11 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void SpecialAttack()
     {
-        if(Item != null && CanAttack() && SpecialAttackCharge >= 100)
+        if(Item != null && CanAttack() && Item.SpecialAttackCharge >= 100)
         {
             //Special Attack
             IsSpecialAttacking = true;
-            SpecialAttackCharge = 0;
+            Item.SpecialAttackCharge = 0;
             Item.SpecialAttack();
             EventSpecialAttack?.Invoke();
         }

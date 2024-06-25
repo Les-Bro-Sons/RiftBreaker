@@ -20,6 +20,8 @@ public class RB_MusicBox : RB_Items
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
+    [SerializeField] private GameObject _musicZonePrefab;
+    private GameObject _currentZone;
 
 
     protected override void Start()
@@ -31,7 +33,7 @@ public class RB_MusicBox : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(2);
             RobertShouldTalk = false;
@@ -45,7 +47,7 @@ public class RB_MusicBox : RB_Items
     {
         base.Attack();
         ShootProjectile("MusicNote");
-        RB_AudioManager.Instance.PlaySFX("musicbox", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
+        RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
     }
 
     public override void ChargedAttack()
@@ -64,7 +66,7 @@ public class RB_MusicBox : RB_Items
             _charging = true;
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
             StartChargeZone();
-            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, .15f, 1f);
+            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
         }
         
 
@@ -73,6 +75,7 @@ public class RB_MusicBox : RB_Items
     public void StartChargeZone()
     {
         _instantiatedZone.transform.localScale = Vector3.zero;
+        _currentZone = Instantiate(_musicZonePrefab);
         _stayTime = 0;
         _shouldGrow = true;
     }
@@ -80,6 +83,7 @@ public class RB_MusicBox : RB_Items
     public void StopChargeZone()
     {
         _shouldGrow = false;
+        Destroy(_currentZone, _stayTime);
     }
 
     public void ChargeZone()
@@ -114,7 +118,7 @@ public class RB_MusicBox : RB_Items
 
     private void EndOfAttack() 
     {
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("Music_Box_Charged_Attack");
     }
     
     public override void ChooseSfx() {

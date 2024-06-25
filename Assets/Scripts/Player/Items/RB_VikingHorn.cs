@@ -1,6 +1,5 @@
 using MANAGERS;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 
 public class RB_VikingHorn : RB_Items
 {
@@ -18,6 +17,7 @@ public class RB_VikingHorn : RB_Items
 
     //Components
     private Rigidbody _rb;
+    private RB_CollisionDetection _collisionDetection;
 
     //Particles
     [SerializeField] private string _landingOnDirt;

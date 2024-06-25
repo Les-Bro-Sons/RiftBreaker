@@ -85,6 +85,10 @@ public class RB_CommandManager : MonoBehaviour
                 Beginning(); break;
             case "/weapon":
                 Weapon(); break;
+            case "/resetlevel":
+                ResetLevel(); break;
+            case "/previouslevel":
+                PreviousLevel(); break;
             // Ajouter d'autres cas selon les besoins
             default:
                 Debug.Log("Commande non reconnue");
@@ -102,10 +106,23 @@ public class RB_CommandManager : MonoBehaviour
         Debug.Log("Teleported to (" + newX + ", " + newY + ")");
     }
 
+    private void ResetLevel()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void PreviousLevel()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
     private void Life(string lifeAmount)
     {
         if(int.TryParse(lifeAmount, out int lifeAmoutInt))
+        {
+            RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = lifeAmoutInt;
             RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = lifeAmoutInt;
+        }
     }
 
     private void Level()
@@ -125,6 +142,7 @@ public class RB_CommandManager : MonoBehaviour
 
     private void GodMode()
     {
+        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = float.MaxValue;
         RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = float.MaxValue;
         if (RB_PlayerAction.Instance.Item)
         {

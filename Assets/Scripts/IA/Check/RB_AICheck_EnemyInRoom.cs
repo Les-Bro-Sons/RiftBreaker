@@ -16,7 +16,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
     private bool _setTarget;
 
     private float _checkNearbyTimer = 0;
-    private float _checkNearbyTime = 1;
+    private float _checkNearbyTime = 0.35f;
 
     public RB_AICheck_EnemyInRoom(RB_AI_BTTree btParent, TARGETMODE targetMode, bool setTarget = true)
     {
@@ -44,11 +44,12 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
             if (_checkNearbyTimer >= _checkNearbyTime)
             {
                 _checkNearbyTimer = 0;
-                foreach (Collider collider in Physics.OverlapSphere(_transform.position, nearbyDetectionRange))
+                int allyLayer = (_btParent.AiHealth.Team == TEAMS.Ai) ? 6 : 9;
+                foreach (Collider collider in Physics.OverlapSphere(_transform.position, nearbyDetectionRange, ~((1 << 3) | (1 << allyLayer) | (1 << 10))))
                 {
                     if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth)
                         && enemyHealth.Team != _btParent.AiHealth.Team
-                        && Physics.Raycast(_transform.position, (enemyHealth.transform.position - _transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << 6) | (1 << 10)))
+                        && Physics.Raycast(_transform.position, (enemyHealth.transform.position - _transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << allyLayer) | (1 << 10)))
                         && RB_Tools.TryGetComponentInParent<RB_Health>(hit.collider.gameObject, out RB_Health enemyCheck)
                         && enemyCheck == enemyHealth
                         && !_enemies.Contains(enemyHealth))

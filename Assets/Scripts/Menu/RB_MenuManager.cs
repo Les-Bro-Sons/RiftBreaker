@@ -10,11 +10,11 @@ public class RB_MenuManager : MonoBehaviour {
 
     public Animator Animator;
 
-    enum MENUSTATE { 
+    public enum MENUSTATE { 
         Audio, Video, Control
     }
 
-    MENUSTATE _menuState;
+    public MENUSTATE MenuState;
 
     [Header("Sliders")]
     [SerializeField] Slider _sliderGeneral;
@@ -52,7 +52,7 @@ public class RB_MenuManager : MonoBehaviour {
     public void Options() {
         Animator.SetBool("IsOptionOpen", true);
         IsOptionOpen = true;
-        _menuState = MENUSTATE.Audio;
+        MenuState = MENUSTATE.Audio;
     }
 
     public void CloseOption() {
@@ -63,22 +63,22 @@ public class RB_MenuManager : MonoBehaviour {
     }
 
     public void OptionAudio() {
-        if(_menuState != MENUSTATE.Audio) { 
+        if(MenuState != MENUSTATE.Audio) { 
             Animator.SetTrigger("Audio");
-            _menuState = MENUSTATE.Audio;
+            MenuState = MENUSTATE.Audio;
         }
     }
     public void OptionVideo() {
-        if (_menuState != MENUSTATE.Video) { 
+        if (MenuState != MENUSTATE.Video) { 
             Animator.SetTrigger("Video");
-            _menuState= MENUSTATE.Video;
+            MenuState= MENUSTATE.Video;
         }
 
     }
     public void OptionControl() {
-        if (_menuState != MENUSTATE.Control) { 
+        if (MenuState != MENUSTATE.Control) { 
             Animator.SetTrigger("Control");
-            _menuState = MENUSTATE.Control;
+            MenuState = MENUSTATE.Control;
         }
     }
 

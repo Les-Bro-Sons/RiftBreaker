@@ -78,7 +78,7 @@ public class RB_Scythe : RB_Items
 
     private void StopSound() {
         _stopSound = false;
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("darkMagic");
     }
 
     protected override void Update()

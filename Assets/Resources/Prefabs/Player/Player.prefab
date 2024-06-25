@@ -1825,13 +1825,19 @@ MonoBehaviour:
   EventOnPlayerEntered:
     m_PersistentCalls:
       m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
+    m_PersistentCalls:
+      m_Calls: []
   EventOnEnemyEntered:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyExit:
-    m_PersistentCalls:
-      m_Calls: []
-  EventOnPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &3650759193627221759
@@ -2367,7 +2373,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1.35, y: 0.52}
-  m_SizeDelta: {x: 2, y: 1.3081}
+  m_SizeDelta: {x: 5.98, y: 1.3081}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5081958738642252257
 CanvasRenderer:

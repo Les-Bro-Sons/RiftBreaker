@@ -9,16 +9,21 @@ public class RB_CollisionDetection : MonoBehaviour
     //Detection
     private List<GameObject> _detectedObjects = new();
     private List<GameObject> _detectedEnemies = new();
+    private List<GameObject> _detectedEntity = new();
     private bool _isPlayerIn = false;
 
     //Events
     [HideInInspector] public UnityEvent EventOnObjectEntered;
     [HideInInspector] public UnityEvent EventOnObjectExit;
     [HideInInspector] public UnityEvent EventOnPlayerEntered;
+    [HideInInspector] public UnityEvent EventOnPlayerExit;
+
+    [HideInInspector] public UnityEvent EventOnEntityEntered;
+    [HideInInspector] public UnityEvent EventOnEntityExit;
         //Enemy
     [HideInInspector] public UnityEvent EventOnEnemyEntered;
     [HideInInspector] public UnityEvent EventOnEnemyExit;
-    [HideInInspector] public UnityEvent EventOnPlayerExit;
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,12 +36,13 @@ public class RB_CollisionDetection : MonoBehaviour
                 _detectedEnemies.Add(enemyHealth.gameObject);
                 EventOnEnemyEntered?.Invoke();
             }
-            else //When the player enter
+            else if (RB_Tools.TryGetComponentInParent(other.gameObject, out RB_PlayerAction playerAction)) //When the player enter
             {
                 _isPlayerIn = true;
                 EventOnPlayerEntered?.Invoke();
             }
-            
+            _detectedEntity.Add(enemyHealth.gameObject);
+            EventOnEntityEntered?.Invoke();
         }
         _detectedObjects.Add(other.gameObject);
         EventOnObjectEntered?.Invoke();
@@ -59,6 +65,11 @@ public class RB_CollisionDetection : MonoBehaviour
                 _detectedEnemies.Remove(enemyHealth.gameObject);
                 EventOnEnemyExit?.Invoke();
             }
+            if (_detectedEntity.Contains(enemyHealth.gameObject))
+            {
+                _detectedEntity.Remove(enemyHealth.gameObject);
+                EventOnEntityExit?.Invoke();
+            }
         }
         _detectedObjects.Remove(other.gameObject);
         EventOnObjectExit?.Invoke();
@@ -80,6 +91,11 @@ public class RB_CollisionDetection : MonoBehaviour
         return _detectedObjects;
     }
 
+    public List<GameObject> GetDetectedEntity()
+    {
+        DestroyDeletedObject();
+        return _detectedEntity;
+    }
     public bool IsPlayerIn()
     {
         //Getter to have if the player is in
@@ -102,6 +118,14 @@ public class RB_CollisionDetection : MonoBehaviour
             {
                 //If something in the list is empty then destroy it
                 _detectedEnemies.Remove(detectedObject);
+            }
+        }
+        foreach (GameObject detectedObject in _detectedEntity.ToList())
+        {
+            if (detectedObject == null)
+            {
+                //If something in the list is empty then destroy it
+                _detectedEntity.Remove(detectedObject);
             }
         }
     }

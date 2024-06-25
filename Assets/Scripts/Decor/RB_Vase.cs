@@ -7,6 +7,7 @@ public class RB_Vase : MonoBehaviour
     [Header("Properties")]
     [SerializeField] private Sprite _brokenSprite;
     [SerializeField] private int _particleAmount;
+    [Range(0, 100)][SerializeField] private int _probLife;
 
     //Components
     [Header("Components")]
@@ -20,6 +21,7 @@ public class RB_Vase : MonoBehaviour
     //Prefabs
     [Header("Prefabs")]
     [SerializeField] private GameObject _vaseParticlesPrefab;
+    [SerializeField] public GameObject _lifeParticlesPrefab;
 
     private LayerMask _originalExcludeLayer;
 
@@ -56,12 +58,17 @@ public class RB_Vase : MonoBehaviour
 
     public void Break()
     {
-        for(int i = 0; i < _particleAmount; i++)
+        for (int i = 0; i < _particleAmount; i++)
             Instantiate(_vaseParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles
         _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
         //_vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
         _health.TakeDamage(1); //"Kill" the vase
+        int _probTemp = Random.Range(0, 100); //take a number between 0 to 100 to simulate a %
+        if (100 - _probLife <= _probTemp) //100 - _problife = _problife%, basically if _problife is under or equal = probtemp then
+        {
+            Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles of life
+        }
         _navMeshObstacle.carving = false;
 
 

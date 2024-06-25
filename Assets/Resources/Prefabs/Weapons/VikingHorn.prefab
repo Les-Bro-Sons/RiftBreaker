@@ -178,7 +178,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 983554102513986759}
@@ -224,7 +224,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f1e29fce75a67014ba94f53e29926f58, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b71995e613393c54290fb2f8a7c85c77, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -299,9 +299,11 @@ MonoBehaviour:
   SpecialAttackChargeTime: 0
   _chargeZoom: 0.85
   _attackCooldown: 0.3
-  _attackDamage: 35
-  _chargedAttackDamage: 50
-  _specialAttackDamage: 90
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 0
+  AttackDamage: 10
+  ChargedAttackDamage: 10
+  SpecialAttackDamage: 10
   _normalKnockbackForce: 5
   _chargeAttackKnockbackForce: 5
   _specialAttackKnockbackForce: 5

@@ -224,7 +224,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.695, g: 0.695, b: 0.695, a: 1}
+      maxColor: {r: 1, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4944,8 +4944,6 @@ MonoBehaviour:
   _isAppearing: 0
   _isDisappearing: 0
   _sprite: {fileID: 3698686661636564063}
-  _damage: 0
-  _knockback: 0
   DamageCooldown: 0
   Team: 0
   _particles: {fileID: 8506813372929940094}
@@ -4965,6 +4963,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyEntered:
@@ -5311,9 +5321,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.78616345, g: 0.78616345, b: 0.78616345, a: 1}
-        key1: {r: 0.5345911, g: 0.5345911, b: 0.5345911, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
+        key0: {r: 0.7987421, g: 0, b: 0, a: 1}
+        key1: {r: 0.509434, g: 0, b: 0, a: 1}
+        key2: {r: 0, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -5329,7 +5339,7 @@ ParticleSystem:
         ctime7: 0
         atime0: 0
         atime1: 65535
-        atime2: 0
+        atime2: 65535
         atime3: 0
         atime4: 0
         atime5: 0

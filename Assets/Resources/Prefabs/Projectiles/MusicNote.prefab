@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _totalDistance: 5
+  _totalDistance: 10
   _projectileType: 1
   _launchForce: {x: 0, y: 0, z: 0}
   _totalLifeTime: 2
@@ -363,10 +363,16 @@ MonoBehaviour:
   EventOnObjectExit:
     m_PersistentCalls:
       m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
   EventOnEnemyEntered:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &186252890803079702
@@ -386,6 +392,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _health: {fileID: 0}
   _enemy: {fileID: 0}
+  _door: {fileID: 0}
 --- !u!114 &2270895058652355745
 MonoBehaviour:
   m_ObjectHideFlags: 0

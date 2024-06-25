@@ -48,7 +48,7 @@ public class RB_LevelExit : MonoBehaviour
     {
         ClosePortal();
 
-        _collisionDetection.EventOnObjectEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedObjects()); });
+        _collisionDetection.EventOnObjectEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedEnnemies()); });
 
         _robert.SetActive(_showRobert);
 

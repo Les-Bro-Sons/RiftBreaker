@@ -13,7 +13,7 @@ public class RB_ParticleCollision : MonoBehaviour
     //Properties
     private float _startTime;
     private bool _isGravitating = false;
-    [SerializeField] bool isLife = false;
+    [SerializeField] bool isLife = false; //If yes, the particles will give you life
 
     void Awake()
     {
@@ -64,7 +64,7 @@ public class RB_ParticleCollision : MonoBehaviour
             RB_PlayerAction.Instance.EventOnChargeSpecialAttackGathered?.Invoke();
             if (isLife)
             {
-                playerMovement.gameObject.GetComponent<RB_Health>().Heal(2);
+                playerMovement.gameObject.GetComponent<RB_Health>().Heal(2); //Heal player if particle colides
             }
             else
             {

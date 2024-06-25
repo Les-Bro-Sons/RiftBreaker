@@ -64,9 +64,8 @@ public class RB_Vase : MonoBehaviour
         //_vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
         _health.TakeDamage(1); //"Kill" the vase
-        int _probTemp = Random.Range(0, 100);
-        Debug.Log(_probTemp);
-        if (100 - _probLife <= _probTemp)
+        int _probTemp = Random.Range(0, 100); //take a number between 0 to 100 to simulate a %
+        if (100 - _probLife <= _probTemp) //100 - _problife = _problife%, basically if _problife is under or equal = probtemp then
         {
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles of life
         }

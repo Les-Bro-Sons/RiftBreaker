@@ -71,7 +71,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
             if (_btParent.Root.GetData("target") != null)
             {
                 Transform target = (Transform)_btParent.Root.GetData("target");
-                if (RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(_transform.position, target.position) < nearbyDetectionRange / 3f)
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(_transform.position, target.position) < nearbyDetectionRange / 1.5f)
                 {
                     return _state = BTNodeState.SUCCESS;
                 }

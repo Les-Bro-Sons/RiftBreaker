@@ -153,7 +153,6 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void OnKatanaGathered()
     {
-
         RB_LevelManager.Instance.EventPlayerLost.AddListener(OnPlayerDeathAfterAttack);
         RewindTutoRoom.CloseRoom(); //Close the room
         DisplayAttackTuto();
@@ -275,15 +274,14 @@ public class RB_TutorialManager : MonoBehaviour
         RB_TimeManager.Instance.EventStartNormalRewind.AddListener(OnRewindStarted); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopNormalRewind.AddListener(OnRewindStopped); //When the rewind is stopped
         RB_TimeManager.Instance.EventStopFullRewind.AddListener(OnDeathRewindFinished); //When the death rewind is finished
-        RoomExit.EventOnObjectEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
+        RoomExit.EventOnPlayerEntered.AddListener(OnPlayerExitRewindRoom); //When the player exit the rewind room
         RB_InputManager.Instance.RewindEnabled = false;
     }
 
     private void OnPlayerExitRewindRoom() //When the player exit the rewind room
     {
-        if (RoomExit.GetDetectedObjects().Contains(RB_PlayerMovement.Instance.gameObject))
+        if (RoomExit.IsPlayerIn())
         {
-            print("level exit");
             RoomExit.EventOnObjectEntered.RemoveListener(OnPlayerExitRewindRoom); //Remove listener
             InitializeAttackTuto();
         }

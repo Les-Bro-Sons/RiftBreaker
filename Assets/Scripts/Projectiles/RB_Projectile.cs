@@ -81,7 +81,7 @@ public class RB_Projectile : MonoBehaviour
         RB_CollisionDetection collision = GetComponent<RB_CollisionDetection>();
         if (collision)
         {
-            collision.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(collision.GetDetectedObjects()[collision.GetDetectedObjects().Count-1]); });
+            collision.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(collision.GetDetectedEnnemies()[collision.GetDetectedEnnemies().Count-1]); });
         }
 
         if (_followParticles)

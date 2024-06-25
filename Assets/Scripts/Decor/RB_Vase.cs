@@ -7,8 +7,7 @@ public class RB_Vase : MonoBehaviour
     [Header("Properties")]
     [SerializeField] private Sprite _brokenSprite;
     [SerializeField] private int _particleAmount;
-    [SerializeField] private int _probLife;
-    int _probMax = 10;
+    [Range(0, 100)][SerializeField] private int _probLife;
 
     //Components
     [Header("Components")]
@@ -59,14 +58,15 @@ public class RB_Vase : MonoBehaviour
 
     public void Break()
     {
-        for(int i = 0; i < _particleAmount; i++)
+        for (int i = 0; i < _particleAmount; i++)
             Instantiate(_vaseParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles
         _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
         //_vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
         _health.TakeDamage(1); //"Kill" the vase
-        int _probTemp = Random.Range(0, _probMax);
-        if (_probTemp <= _probLife)
+        int _probTemp = Random.Range(0, 100);
+        Debug.Log(_probTemp);
+        if (100 - _probLife <= _probTemp)
         {
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles of life
         }

@@ -1,5 +1,7 @@
 using MANAGERS;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_MusicBox : RB_Items
@@ -21,7 +23,8 @@ public class RB_MusicBox : RB_Items
 
     //Music Notes
     public List<Sprite> NoteSprites = new();
-    private GameObject _currentZone;
+    private List<GameObject> _currentZones = new();
+    private List<GameObject> _currentSpecialZones = new();
 
     //Prefabs
     [Header("Prefabs")]
@@ -70,10 +73,10 @@ public class RB_MusicBox : RB_Items
     {
         base.StartChargingAttack();
         
-        if (_currentZone == null || _charging == false)
+        if (_currentZones == null || _charging == false)
         {
             _charging = true;
-            _currentZone = Instantiate(_musicZonePrefab); //Instantiate the music zone
+            _currentZones.Add(Instantiate(_musicZonePrefab)); //Instantiate the music zone
             StartChargeZone(); //Start the charge zone
             RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
         }
@@ -82,6 +85,11 @@ public class RB_MusicBox : RB_Items
     public override void FinishChargingAttack() //Stop the charging animation attack
     {
         base.FinishChargingAttack();
+        foreach(var zone in _currentZones.ToList())
+        {
+            if(zone != null) 
+                zone.GetComponent<RB_MusicZone>().StopTakeAway();
+        }
         _shouldGrow = false;
     }
 
@@ -93,10 +101,14 @@ public class RB_MusicBox : RB_Items
 
     public void StopChargeZone() //Stop the animation of the zone
     {
-        if( _currentZone != null )
+        if( _currentZones != null )
         {
             _shouldGrow = false;
-            _currentZone.GetComponent<RB_MusicZone>().StopTakeAway();
+            foreach (var zone in _currentZones.ToList())
+            {
+                if(zone != null)
+                    zone.GetComponent<RB_MusicZone>().StopTakeAway();
+            }
         }
     }
 
@@ -112,7 +124,8 @@ public class RB_MusicBox : RB_Items
     {
         base.StopChargingAttack();
         StopChargeZone();
-        Invoke(nameof(DestroyZone), _stayTime);
+        if(_currentZones.Count > 0)
+            StartCoroutine(DestroyZone(_currentZones[_currentZones.Count - 1]));
         if (_charging)
         {
             _charging = false;
@@ -123,10 +136,12 @@ public class RB_MusicBox : RB_Items
         }
     }
 
-    private void DestroyZone() //Destroy the zone
+    private IEnumerator DestroyZone(GameObject zone) //Destroy the zone
     {
-        if(_currentZone != null)
-            _currentZone.GetComponent<RB_MusicZone>().StartDisapear();
+        yield return new WaitForSeconds(_stayTime);
+        if (zone != null)
+            zone.GetComponent<RB_MusicZone>().StartDisapear();
+        
     }
 
     private void Update()
@@ -148,7 +163,17 @@ public class RB_MusicBox : RB_Items
     public override void SpecialAttack()
     {
         base.SpecialAttack();
+        var currentZone = Instantiate(_musicZonePrefab);
+        _currentSpecialZones.Add(currentZone);
+        StartCoroutine(DestroySpecialZone(currentZone));
         RB_AudioManager.Instance.PlaySFX("Music_Box_Special_Attack", RB_PlayerController.Instance.transform.position, false, 0, 1f);
+    }
+
+    private IEnumerator DestroySpecialZone(GameObject zone)
+    {
+        yield return new WaitForSeconds(8);
+        if(zone != null)
+            zone.GetComponent<RB_MusicZone>().StartDisapear();
     }
     
 

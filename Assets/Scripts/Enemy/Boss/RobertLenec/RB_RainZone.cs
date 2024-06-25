@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -39,6 +40,7 @@ public class RB_RainZone : MonoBehaviour
 
     private void Start()
     {
+        RB_AudioManager.Instance.PlaySFX("Rain_Sound", transform.position, true, 0f, 1f);
         ParticleSystem.ShapeModule partShape = _particles.shape;
         partShape.radius = transform.lossyScale.x / 2f; //set the radius of particles
     }
@@ -85,6 +87,7 @@ public class RB_RainZone : MonoBehaviour
             _particles.Stop();
             _particles.transform.localScale = Vector3.one;
             Destroy(_particles, _particles.main.duration);
+            RB_AudioManager.Instance.StopSFXByClip("Rain_Sound");
             Destroy(gameObject);
             return;
         }

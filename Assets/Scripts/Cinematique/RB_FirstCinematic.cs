@@ -21,6 +21,7 @@ public class RB_FirstCinematic : MonoBehaviour
 
     private void Start()
     {
+        RB_LevelManager.Instance.CurrentScene = SCENENAMES.FirstCinematic;
         StartCinematic();
         RB_SaveManager.Instance.ResetSave();
     }

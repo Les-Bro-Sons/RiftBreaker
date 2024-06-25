@@ -7,6 +7,7 @@ public enum PHASES
 
 public enum SCENENAMES
 {
+    FirstCinematic,
     Tuto,
     Level1,
     Level2,

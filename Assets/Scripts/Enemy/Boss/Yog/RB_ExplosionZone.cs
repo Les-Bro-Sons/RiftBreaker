@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -67,6 +68,7 @@ public class RB_ExplosionZone : MonoBehaviour
     {
         yield return new WaitForSeconds(AreaExpandingTime);
         List<RB_Health> enemyList = new List<RB_Health>();
+        RB_AudioManager.Instance.PlaySFX("Explosion_Sound", transform.position, false, 0f, 1f);
         foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))

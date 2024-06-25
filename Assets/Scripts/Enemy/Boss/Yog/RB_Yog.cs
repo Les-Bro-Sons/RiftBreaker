@@ -277,8 +277,8 @@ public class RB_Yog : RB_Boss
     public void TentacleHit()
     {
         AiAnimator.SetTrigger("BasicAttack");
-        RB_AudioManager.Instance.PlaySFX("Tentacle_Hit_Sound", transform.position, false, 0, 1f);
         _numberOfAttackDone += 1;
+        RB_AudioManager.Instance.PlaySFX("Tentacle_Hit_Sound", transform.position, false, 1f, 1f);
         StartCoroutine(TentacleHitCoroutine());
     }
     IEnumerator TentacleHitCoroutine() //ATTACK 1

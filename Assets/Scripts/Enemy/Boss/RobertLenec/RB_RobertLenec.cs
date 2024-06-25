@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -243,6 +244,7 @@ public class RB_RobertLenec : RB_Boss
     {
         //Dash Into a Random Direction
         AiAnimator.SetTrigger("BasicZone");
+        RB_AudioManager.Instance.PlaySFX("Magic_Ball_Sound",transform.position, false, 0f, 1f);
         Vector3 randomDirection = Random.insideUnitSphere;
         randomDirection.y = 0;
         randomDirection.Normalize();

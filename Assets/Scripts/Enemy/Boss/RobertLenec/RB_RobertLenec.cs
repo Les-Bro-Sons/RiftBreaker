@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +10,8 @@ public class RB_RobertLenec : RB_Boss
     [HideInInspector] public UnityEvent EventPlayRobertMusic;
     private bool _inRoom = false;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+
+    private float _activationTimer = 0;
 
     [Header("Movement")]
     [SerializeField] private float _minMovementDistance = 3f;
@@ -98,8 +98,19 @@ public class RB_RobertLenec : RB_Boss
     {
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
         Room();
+        
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            _activationTimer += Time.deltaTime;
+            return;
+        }
+
         Repositionning();
         switch (CurrentState)
         {
@@ -253,7 +264,7 @@ public class RB_RobertLenec : RB_Boss
 
     public void WoodenPieceRainZoneAttack() //ATTACK 2
     {
-        //Spawn of the zone attack (attack n°2)
+        //Spawn of the zone attack (attack nÂ°2)
         AiAnimator.SetTrigger("BasicZone");
         float offset = 0.99f;
         Vector3 areaDamageSpawn = new Vector3(_currentTarget.position.x, _currentTarget.position.y - offset, _currentTarget.position.z);

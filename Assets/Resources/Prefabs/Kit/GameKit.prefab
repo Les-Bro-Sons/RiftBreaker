@@ -54,11 +54,11 @@ MonoBehaviour:
     RightTrigger: {fileID: 21300000, guid: 68f3bee87733aa94f9a8ba4209c740b7, type: 3}
     LeftShoulder: {fileID: 21300000, guid: c40be0546ac913a4c93db067a7d91241, type: 3}
     RightShoulder: {fileID: 21300000, guid: a344643ac5544d847a2f5d6e78989f7b, type: 3}
-    Dpad: {fileID: 21300000, guid: 51a6c49b2673e354392fdd7da07bca8c, type: 3}
-    DpadUp: {fileID: 21300000, guid: f7dd4e40bf2507043877fcc08cf75606, type: 3}
-    DpadDown: {fileID: 21300000, guid: 5e366c558688b8245880ca6661b7a96b, type: 3}
-    DpadLeft: {fileID: 21300000, guid: 9cbc208c62b959e4098fcc491c0487b6, type: 3}
-    DpadRight: {fileID: 21300000, guid: c41a788356bd16d4baaf732ddde03e57, type: 3}
+    Dpad: {fileID: 21300000, guid: 0bf409a83b28dd340af5180f65f2af19, type: 3}
+    DpadUp: {fileID: 21300000, guid: bb7ee4b8a7f2a9f458425518cf3e9c96, type: 3}
+    DpadDown: {fileID: 21300000, guid: 240cf1c57a05bd240b4097bb7ebc7b8f, type: 3}
+    DpadLeft: {fileID: 21300000, guid: 5336eb934e376274cb43374ec377192e, type: 3}
+    DpadRight: {fileID: 21300000, guid: 811ed6b8df094204cacfd2c88cc0c58e, type: 3}
     LeftStick: {fileID: 21300000, guid: fd22a2bcc97c3324c8a0a1c12ff27f85, type: 3}
     LeftStickPress: {fileID: 21300000, guid: 4a4604f184741ce45a85b8a583b24547, type: 3}
     LeftStickUp: {fileID: 21300000, guid: 79b6958e6c2f4c743ac4b44c1931e217, type: 3}
@@ -919,6 +919,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
+      value: 36cd7c80-472c-43f3-9d47-cb594bc6d0f6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
+      value: 655cdb03-163d-41cc-99c0-21643eb288ff
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
+      value: UI/MouseMouv[/Mouse/position]
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
+      value: UI/Any[/Keyboard/anyKey,/Mouse/leftButton,/Mouse/rightButton,/XInputControllerWindows1/buttonEast,/XInputControllerWindows1/buttonNorth,/XInputControllerWindows1/buttonSouth,/XInputControllerWindows1/buttonWest,/XInputControllerWindows1/dpad/left,/XInputControllerWindows1/dpad/down,/XInputControllerWindows1/dpad/right,/XInputControllerWindows1/dpad/up,/XInputControllerWindows1/leftStick/down,/XInputControllerWindows1/leftStick/left,/XInputControllerWindows1/leftStick/right,/XInputControllerWindows1/leftStick/up,/XInputControllerWindows1/leftStickPress,/XInputControllerWindows1/leftTrigger,/XInputControllerWindows1/leftShoulder,/XInputControllerWindows1/rightStick/down,/XInputControllerWindows1/rightStick/left,/XInputControllerWindows1/rightStick/right,/XInputControllerWindows1/rightStick/up,/XInputControllerWindows1/rightStickPress,/XInputControllerWindows1/rightTrigger,/XInputControllerWindows1/rightShoulder,/XInputControllerWindows1/select,/XInputControllerWindows1/start]
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -990,12 +1010,12 @@ PrefabInstance:
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnAny
+      value: OnMouseMoving
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnMouseMoving
+      value: OnAny
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}

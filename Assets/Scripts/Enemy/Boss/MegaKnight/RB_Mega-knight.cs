@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +10,8 @@ public class RB_Mega_knight : RB_Boss
     private new Transform transform;
     public bool _inRoom = false;
     [HideInInspector] public UnityEvent EventPlayMKMusic;
+
+    private float _activationTimer = 0;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -74,8 +76,17 @@ public class RB_Mega_knight : RB_Boss
     {
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
         Room();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            _activationTimer += Time.deltaTime;
+            return;
+        }
 
         switch (CurrentState)
         {

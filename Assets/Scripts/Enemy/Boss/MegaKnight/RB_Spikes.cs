@@ -40,7 +40,7 @@ public class RB_Spikes : MonoBehaviour
         _delayTimer = 0;
         _isGoingUp = true;
 
-        _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
+        _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEnnemies()[_collisionDetection.GetDetectedEnnemies().Count - 1]); });
 
         //Destroy(gameObject, _lifetime);
     }
@@ -95,7 +95,7 @@ public class RB_Spikes : MonoBehaviour
 
     private void CheckForEnemies()
     {
-        foreach (GameObject enemy in _collisionDetection.GetDetectedObjects())
+        foreach (GameObject enemy in _collisionDetection.GetDetectedEnnemies())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
             {

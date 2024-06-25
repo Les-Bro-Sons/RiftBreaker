@@ -23,6 +23,7 @@ public class RB_FirstCinematic : MonoBehaviour
     {
         RB_LevelManager.Instance.CurrentScene = SCENENAMES.FirstCinematic;
         StartCinematic();
+        RB_SaveManager.Instance.ResetSave();
     }
 
     public void StartCinematic() //after player has chosen their name

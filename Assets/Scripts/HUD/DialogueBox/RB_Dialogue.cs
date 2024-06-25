@@ -123,6 +123,7 @@ public class RB_Dialogue : MonoBehaviour
             _playerNameInputField.characterLimit = 12;
             _playerNameInputField.onValueChanged.AddListener(OnPlayerEnterLetterName);
             _playerNameInputField.onEndEdit.AddListener(OnPlayerFinishedEnterName);
+            _playerNameInputField.onDeselect.AddListener(OnPlayerFinishedEnterName);
         }
         _shouldWriteText = false; //Stop the drawing of the text
         _currentDialogueFinished = true; //The current dialogue is finished
@@ -248,6 +249,8 @@ public class RB_Dialogue : MonoBehaviour
         {
             NextDialogue();
         }
+        _playerNameInputField.Select();
+        _playerNameInputField.ActivateInputField();
     }
 
     private void ReadTextAction()

@@ -116,7 +116,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
                 _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
             }
 
-            if ( !RB_SaveManager.Instance.IsSaveExist && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton) {
+            if ( RB_SaveManager.Instance.SaveObject.CurrentLevel < 3 && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton) {
                 _button.enabled = false;
                 _text.color = _UnEnabledColor;
                 _buttonImage.raycastTarget = false;

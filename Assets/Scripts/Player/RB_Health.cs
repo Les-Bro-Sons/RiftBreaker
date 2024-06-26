@@ -1,3 +1,4 @@
+using MANAGERS;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -89,6 +90,7 @@ public class RB_Health : MonoBehaviour {
             _animUIPlayer.SetTrigger("isDamage");
         }
         else Debug.LogWarning("No _animUIPlayer in RB_Health");
+        RB_AudioManager.Instance.PlaySFX("DamageSound", transform.position, false, 0.25f, 0.5f);
         
     }
 

@@ -44,7 +44,7 @@ public class RB_MenuManager : MonoBehaviour {
 
     public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
-        if (RB_SaveManager.Instance.SaveObject.IsGameFinish) { RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 15); }
+        if (RB_SaveManager.Instance.SaveObject.IsGameFinish) { RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 15); RB_SaveManager.Instance.SaveObject.HpBossRush = 150; }
         else { RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel); }
         RB_InputManager.Instance.InputEnabled = true;
     }

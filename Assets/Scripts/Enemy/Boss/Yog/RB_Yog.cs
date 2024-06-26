@@ -87,6 +87,8 @@ public class RB_Yog : RB_Boss
 
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
+    [SerializeField] Transform _centerRoom;
+
     protected override void Awake()
     {
         base.Awake();
@@ -438,7 +440,7 @@ public class RB_Yog : RB_Boss
 
                 float randomDistance = Random.Range(_minMovementDistance, _maxMovementDistance);
 
-                Vector3 spawnPoint = transform.position + randomDirection * randomDistance;
+                Vector3 spawnPoint = _centerRoom.position + randomDirection * randomDistance;
 
                 spawnPoints.Add(spawnPoint);
 

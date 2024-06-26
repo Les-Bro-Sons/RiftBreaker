@@ -124,7 +124,7 @@ public class RB_PlayerMovement : MonoBehaviour
                 DirectionToAttack = DirectionToMove;
             }
             //If the direction of the attack is got set the direction to the attack direction
-            ForwardDirection = DirectionToAttack;
+            ForwardDirection = DirectionToAttack.normalized;
             Invoke(nameof(DelayStopAttack), _playerAction.Item.AttackCooldown());
         }
     }
@@ -145,7 +145,7 @@ public class RB_PlayerMovement : MonoBehaviour
                 DirectionToAttack = DirectionToMove;
             }
             //If the direction of the attack is got set the direction to the attack direction
-            ForwardDirection = DirectionToAttack;
+            ForwardDirection = DirectionToAttack.normalized;
             Invoke(nameof(DelayStopAttack), 1);
         }
     }
@@ -160,7 +160,23 @@ public class RB_PlayerMovement : MonoBehaviour
 
     private void OnStartChargeAttack()
     {
-        StartResetRotation();
+        if(!RB_PlayerAction.Instance.Item.FollowMouseOnChargeAttack && RB_InputManager.Instance.IsMouse)
+            StartResetRotation();
+        else
+        {
+            if (RB_InputManager.Instance.IsMouse)
+            {
+                //If the player is playing with the mouse the attack direction is set to the mouse direction
+                DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
+            }
+            else
+            {
+                //Otherwise, the attack direction is set to the move direction
+                DirectionToAttack = DirectionToMove;
+            }
+            //If the direction of the attack is got set the direction to the attack direction
+            ForwardDirection = DirectionToAttack.normalized;
+        }
     }
 
     private void OnStopChargeAttack()

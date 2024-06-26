@@ -316,10 +316,11 @@ MonoBehaviour:
   _objectToRemove: {fileID: 1349870191599121551}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}
+  ScaleSpriteHUD: 1
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
   CanAttackDuringAttack: 0
-  RobertShouldTalk: 1
+  RobertShouldTalk: 0
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -331,6 +332,7 @@ MonoBehaviour:
     type: 3}
   _zoneGrowthSpeed: 5
   _maxZoneSize: 5
+  ZoneDelay: 0.1
 --- !u!54 &-4520951782960010582
 Rigidbody:
   m_ObjectHideFlags: 0

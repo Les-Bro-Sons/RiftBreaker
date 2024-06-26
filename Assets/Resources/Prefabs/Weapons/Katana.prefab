@@ -100,16 +100,18 @@ MonoBehaviour:
   _objectToRemove: {fileID: 8480078606098514397}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}
+  ScaleSpriteHUD: 1
   FollowMouseOnChargeAttack: 0
   CanMoveDuringSpecialAttack: 0
   CanAttackDuringAttack: 0
-  RobertShouldTalk: 1
+  RobertShouldTalk: 0
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 100
 --- !u!54 &-3883859386281313995
 Rigidbody:
   m_ObjectHideFlags: 0

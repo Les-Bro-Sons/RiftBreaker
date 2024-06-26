@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -162,6 +163,7 @@ public class RB_UxWeaponControl : MonoBehaviour
         {
             //When an item is gathered, add it to the weapon slots
             _listWeapon[id].sprite = RB_PlayerAction.Instance.Items[id].CurrentSprite;
+            _listWeapon[id].transform.localScale = Vector3.one * RB_PlayerAction.Instance.Items[id].ScaleSpriteHUD;
             SetMaterialOnCurrentWeapon(_lastItemsId);
             //For safety, put the color to full white
             _currentWeapon.color = Color.white;

@@ -52,7 +52,7 @@ public class RB_Items : MonoBehaviour
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
     public Sprite CurrentSprite;
-
+    public float ScaleSpriteHUD = 1;
     //Player
     protected Transform _playerTransform;
 

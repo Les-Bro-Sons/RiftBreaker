@@ -23,7 +23,8 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _dashKnockback = 1f;
     private float _movingTimer = 0f;
     private Vector3 positionBehindPlayer;
-    [SerializeField] private float tooCloseTimer = 0;
+    [SerializeField] private float _tooCloseTime = 3;
+    private float _tooCloseTimer = 0;
     protected float _currentCooldownBetweenMovement;
     private LayerMask _layerMask;
 
@@ -213,7 +214,7 @@ public class RB_RobertLenec : RB_Boss
         }
 
         //Boss goes away the player if he's too far away
-        else if (GetTargetDistance() < 5f && tooCloseTimer < 5f)
+        else if (GetTargetDistance() < 5f && _tooCloseTimer < _tooCloseTime)
         {
             _movement.MoveIntoDirection(transform.position - _currentTarget.position);
         }
@@ -327,8 +328,8 @@ public class RB_RobertLenec : RB_Boss
 
         if (GetTargetDistance() < 4f)
         {
-            tooCloseTimer += Time.deltaTime;
-            if (tooCloseTimer <= 3f)
+            _tooCloseTimer += Time.deltaTime;
+            if (_tooCloseTimer <= _tooCloseTime)
             {
                 positionBehindPlayer = Vector3.zero;
             }  
@@ -365,7 +366,7 @@ public class RB_RobertLenec : RB_Boss
 
                     if (_movingTimer >= _movingDuration)
                     {
-                        tooCloseTimer = 0;
+                        _tooCloseTimer = 0;
                         
                     }
                 }
@@ -373,7 +374,7 @@ public class RB_RobertLenec : RB_Boss
         }
         else
         { 
-            tooCloseTimer = 0f;
+            _tooCloseTimer = 0f;
             _movingTimer = 0;
             positionBehindPlayer = Vector3.zero;
         }

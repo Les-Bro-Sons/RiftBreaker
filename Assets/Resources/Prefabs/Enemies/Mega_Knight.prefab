@@ -51,7 +51,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -195,6 +195,12 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 9101173564990518349}
   AiAnimator: {fileID: 7214748225881584283}
   ChargeSpecialAttackAmount: 0
+  EventAllyTeam:
+    m_PersistentCalls:
+      m_Calls: []
+  EventEnemyTeam:
+    m_PersistentCalls:
+      m_Calls: []
   AttackRange: 1
   AttackSpeed: 2
   DistanceFromPlayer: 0

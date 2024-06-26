@@ -51,7 +51,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -210,20 +210,26 @@ MonoBehaviour:
   EventDead:
     m_PersistentCalls:
       m_Calls: []
-  _isAttachedToAPhase: 1
-  _spawnInPhase: 0
-  SpriteRenderer: {fileID: 0}
-  AiAnimator: {fileID: 0}
+  _isAttachedToAPhase: 0
+  _spawnInPhase: 2
+  SpriteRenderer: {fileID: 9101173564990518349}
+  AiAnimator: {fileID: 7214748225881584283}
   ChargeSpecialAttackAmount: 0
-  AttackRange: 1
+  EventAllyTeam:
+    m_PersistentCalls:
+      m_Calls: []
+  EventEnemyTeam:
+    m_PersistentCalls:
+      m_Calls: []
+  AttackRange: 1.5
   AttackSpeed: 2
   DistanceFromPlayer: 0
   DetectionRadius: 100
-  CooldownAttack1: 10
-  CooldownAttack2: 10
-  CooldownAttack3: 10
+  CooldownAttack1: 0.75
+  CooldownAttack2: 2
+  CooldownAttack3: 5
   CooldownBetweenAttacks: 0
-  WaitInIdle: 1
+  WaitInIdle: 0.25
   BossRB: {fileID: 7950358798519079587}
   Health: {fileID: 0}
   EventPlayRobertMusic:
@@ -232,12 +238,12 @@ MonoBehaviour:
   CurrentState: 0
   _minMovementDistance: 10
   _maxMovementDistance: 20
-  _movementSpeed: 5
-  _delayMovement: 1
-  _distanceBehind: 1
-  _movingDuration: 1
-  _dashKnockback: 1
-  tooCloseTimer: 0
+  _movementSpeed: 15
+  _delayMovement: 0.5
+  _distanceBehind: 10
+  _movingDuration: 0.65
+  _dashKnockback: 4
+  _tooCloseTime: 1
   RedBall: {fileID: 2082089089255593965, guid: c33db515c40ac79429f3547156974591, type: 3}
   _minMovementBeforeAttackDistance: 3
   _maxMovementBeforeAttackDistance: 10
@@ -245,20 +251,21 @@ MonoBehaviour:
   _redBallOffset: 1
   WoodenPieceRainZone: {fileID: 4206258448558021486, guid: 3f1ce637d5db8c44bbfc8518f0b95385,
     type: 3}
-  _areaDamageRadius: 1
-  _areaDamageInterval: 1
-  _areaDamageAmount: 1
+  _areaDamageRadius: 3
+  _areaDamageInterval: 0.05
+  _areaDamageAmount: 2
   _areaDamageKnockback: 1
   _canAreaDamageZoneDamageMultipleTime: 1
   Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
   _waypoints: []
+  _tpPoint: {fileID: 0}
   _numberOfArrow: 0
   _cloneAttackInterval: 0.5
   _cloneAttackDelay: 1
-  _cloneLifeTime: 1
+  _cloneLifeTime: 1.75
   _cooldownForReaparition: 1
   _minCooldownForAttack: 10
-  _maxCooldownForAttack: 30
+  _maxCooldownForAttack: 20
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0

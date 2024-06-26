@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 #if (UNITY_EDITOR)
@@ -134,7 +133,7 @@ public class RB_RoomManager:MonoBehaviour
     {
         return _rooms;
     }
-
+#if UNITY_EDITOR
     public void ClearRooms()
     {
         UpdateRooms();
@@ -155,9 +154,10 @@ public class RB_RoomManager:MonoBehaviour
             if(maxIter <= 0)
                 break;
         }
-        
 
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
         
     }
+#endif
 }

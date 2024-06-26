@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class RB_RoomCreator : MonoBehaviour
 {
     // Properties section
@@ -344,3 +345,4 @@ public class RB_RoomCreator : MonoBehaviour
         }
     }
 }
+#endif

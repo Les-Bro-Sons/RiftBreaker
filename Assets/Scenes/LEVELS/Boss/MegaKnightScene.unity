@@ -503,6 +503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 58734537}
   - component: {fileID: 58734538}
+  - component: {fileID: 58734539}
   m_Layer: 0
   m_Name: Room
   m_TagString: Untagged
@@ -546,6 +547,18 @@ MonoBehaviour:
   Doors:
   - {fileID: 1174568152}
   IsPlayerInRoom: 0
+--- !u!114 &58734539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 58734536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b4783da7a76b3439406736856c0e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &72450446 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4166457479968353290, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
@@ -16368,7 +16381,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1940830564}
   - component: {fileID: 1940830565}
-  - component: {fileID: 1940830566}
   m_Layer: 0
   m_Name: Room
   m_TagString: Untagged
@@ -16411,18 +16423,6 @@ MonoBehaviour:
   DetectedEntities: []
   Doors: []
   IsPlayerInRoom: 0
---- !u!114 &1940830566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940830563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87b4783da7a76b3439406736856c0e18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1947877194
 PrefabInstance:
   m_ObjectHideFlags: 0

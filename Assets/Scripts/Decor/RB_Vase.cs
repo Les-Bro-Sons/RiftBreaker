@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -70,7 +71,7 @@ public class RB_Vase : MonoBehaviour
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles of life
         }
         _navMeshObstacle.carving = false;
-
+        RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 0.6f);
 
     }
 

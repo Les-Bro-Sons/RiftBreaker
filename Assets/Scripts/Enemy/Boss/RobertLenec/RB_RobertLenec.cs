@@ -115,6 +115,7 @@ public class RB_RobertLenec : RB_Boss
             _activationTimer += Time.deltaTime;
             return;
         }
+        GetTarget();
 
         Repositionning();
         switch (CurrentState)

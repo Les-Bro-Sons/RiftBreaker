@@ -138,7 +138,9 @@ public class RB_Yog : RB_Boss
             _activationTimer += Time.deltaTime;
             return;
         }
-        
+        GetTarget();
+
+
         switch (CurrentState)
         {
             case BOSSSTATES.Idle:

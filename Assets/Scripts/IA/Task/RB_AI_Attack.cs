@@ -38,7 +38,7 @@ public class RB_AI_Attack : RB_BTNode
 
         if (!_btParent.GetBool("IsWaitingForAttack"))
         {
-            _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
+            _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation(RB_Tools.GetHorizontalDirection(_target.transform.position - _btParent.transform.position).normalized));
         }
 
         _attackCounter += Time.deltaTime;

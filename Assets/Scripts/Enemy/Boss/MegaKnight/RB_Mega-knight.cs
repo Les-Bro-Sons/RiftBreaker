@@ -88,6 +88,7 @@ public class RB_Mega_knight : RB_Boss
             _activationTimer += Time.deltaTime;
             return;
         }
+        GetTarget();
 
         switch (CurrentState)
         {

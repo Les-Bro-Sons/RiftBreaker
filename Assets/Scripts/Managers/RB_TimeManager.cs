@@ -34,6 +34,8 @@ public class RB_TimeManager : MonoBehaviour
     [Header("Hourglass")]
     public List<GameObject> HourglassList = new();
 
+    private float _currentFps = 0;
+
     private void Awake()
     {
         if (Instance == null)
@@ -50,8 +52,14 @@ public class RB_TimeManager : MonoBehaviour
     {
         StartRecording();
 
-        RB_UxHourglassManager.Instance.NumberOfHourglass(3);
+        RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
     }
+
+    private void Update()
+    {
+        _currentFps = 1.0f / Time.unscaledDeltaTime;
+    }
+
     private void FixedUpdate()
     {
         if (_isRecording && !IsRewinding) // doesn't record if rewinding
@@ -73,14 +81,15 @@ public class RB_TimeManager : MonoBehaviour
             }
             else if (_currentTime - Time.fixedDeltaTime <= 0.5f) //stop rewinding if going before the scene was loaded
             {
-                if (_fullRewind) RB_UxHourglassManager.Instance.NumberOfHourglass(3);
+                if (_fullRewind) RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
                 StopRewinding(true);
                 return;
             }
             Rewind();
             if (_fullRewind)
             {
-                Time.timeScale = Mathf.Clamp(Time.timeScale + Time.fixedDeltaTime / 2.5f, 0, _maxRewindSpeed);
+                print(_currentFps);
+                Time.timeScale = Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed);
             }
         }
     }
@@ -142,8 +151,8 @@ public class RB_TimeManager : MonoBehaviour
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
             Time.timeScale = 1;
-            EventStopRewinding?.Invoke();
             IsRewinding = false;
+            EventStopRewinding?.Invoke();
             UxStopRewind();
             if (recordFrame) EventRecordFrame?.Invoke(); // used for interpolation
             if (stopFullRewind && _fullRewind)

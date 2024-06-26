@@ -47,7 +47,7 @@ public class RB_Clones : RB_Enemy
             else
             {
                 _rb.MovePosition(Vector3.Lerp(_startPosition, TargetPosition, _movingTimer / _movingDuration));
-                _rb.MoveRotation(Quaternion.Euler(transform.TransformDirection(TargetPosition - _startPosition)));
+                _rb.MoveRotation(Quaternion.LookRotation(TargetPosition - _startPosition));
                 _movingTimer += Time.deltaTime;
             }
         }
@@ -65,6 +65,7 @@ public class RB_Clones : RB_Enemy
             else
             {
                 _rb.MovePosition(Vector3.Lerp(TargetPosition, _startPosition, _movingTimer / _movingDuration));
+                _rb.MoveRotation(Quaternion.LookRotation(_startPosition - TargetPosition));
                 _movingTimer += Time.deltaTime;
             }
         }

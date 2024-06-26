@@ -1,3 +1,4 @@
+using MANAGERS;
 using System.Threading;
 using UnityEngine;
 
@@ -39,11 +40,15 @@ public class RB_Spikes : MonoBehaviour
         _delayTimer = 0;
         _isGoingUp = true;
 
-        _collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
+        _collisionDetection.EventOnEntityEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEntity()[_collisionDetection.GetDetectedEntity().Count - 1]); });
 
         //Destroy(gameObject, _lifetime);
     }
 
+    private void Start()
+    {
+        RB_AudioManager.Instance.PlaySFX("Spike_Sound", transform.position, false, 0, 1f);
+    }
     private void Update()
     {
         if (_isGoingUp)
@@ -90,7 +95,7 @@ public class RB_Spikes : MonoBehaviour
 
     private void CheckForEnemies()
     {
-        foreach (GameObject enemy in _collisionDetection.GetDetectedObjects())
+        foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
             {

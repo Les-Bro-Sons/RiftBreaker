@@ -54,11 +54,11 @@ MonoBehaviour:
     RightTrigger: {fileID: 21300000, guid: 68f3bee87733aa94f9a8ba4209c740b7, type: 3}
     LeftShoulder: {fileID: 21300000, guid: c40be0546ac913a4c93db067a7d91241, type: 3}
     RightShoulder: {fileID: 21300000, guid: a344643ac5544d847a2f5d6e78989f7b, type: 3}
-    Dpad: {fileID: 21300000, guid: 51a6c49b2673e354392fdd7da07bca8c, type: 3}
-    DpadUp: {fileID: 21300000, guid: f7dd4e40bf2507043877fcc08cf75606, type: 3}
-    DpadDown: {fileID: 21300000, guid: 5e366c558688b8245880ca6661b7a96b, type: 3}
-    DpadLeft: {fileID: 21300000, guid: 9cbc208c62b959e4098fcc491c0487b6, type: 3}
-    DpadRight: {fileID: 21300000, guid: c41a788356bd16d4baaf732ddde03e57, type: 3}
+    Dpad: {fileID: 21300000, guid: 0bf409a83b28dd340af5180f65f2af19, type: 3}
+    DpadUp: {fileID: 21300000, guid: bb7ee4b8a7f2a9f458425518cf3e9c96, type: 3}
+    DpadDown: {fileID: 21300000, guid: 240cf1c57a05bd240b4097bb7ebc7b8f, type: 3}
+    DpadLeft: {fileID: 21300000, guid: 5336eb934e376274cb43374ec377192e, type: 3}
+    DpadRight: {fileID: 21300000, guid: 811ed6b8df094204cacfd2c88cc0c58e, type: 3}
     LeftStick: {fileID: 21300000, guid: fd22a2bcc97c3324c8a0a1c12ff27f85, type: 3}
     LeftStickPress: {fileID: 21300000, guid: 4a4604f184741ce45a85b8a583b24547, type: 3}
     LeftStickUp: {fileID: 21300000, guid: 79b6958e6c2f4c743ac4b44c1931e217, type: 3}
@@ -77,10 +77,10 @@ MonoBehaviour:
     ButtonEast: {fileID: 21300000, guid: f40ca73f9a8d6d348a548b9e565a8b25, type: 3}
     ButtonWest: {fileID: 21300000, guid: 3634c1d96dc2c2e40925788f2625bea1, type: 3}
     Select: {fileID: 0}
-    LeftTrigger: {fileID: 21300000, guid: 99eaf37d9574d6c438ceae2dbd2e0b18, type: 3}
-    RightTrigger: {fileID: 21300000, guid: bceb5e5354183dc4296686cafd4ca0d7, type: 3}
-    LeftShoulder: {fileID: 21300000, guid: 271331cfe057e004485fe58ec21c5927, type: 3}
-    RightShoulder: {fileID: 21300000, guid: 9703022013dfca6438fc235f1f2c1ca8, type: 3}
+    LeftTrigger: {fileID: 21300000, guid: 271331cfe057e004485fe58ec21c5927, type: 3}
+    RightTrigger: {fileID: 21300000, guid: 9703022013dfca6438fc235f1f2c1ca8, type: 3}
+    LeftShoulder: {fileID: 21300000, guid: 99eaf37d9574d6c438ceae2dbd2e0b18, type: 3}
+    RightShoulder: {fileID: 21300000, guid: bceb5e5354183dc4296686cafd4ca0d7, type: 3}
     Dpad: {fileID: 21300000, guid: 51a6c49b2673e354392fdd7da07bca8c, type: 3}
     DpadUp: {fileID: 21300000, guid: f7dd4e40bf2507043877fcc08cf75606, type: 3}
     DpadDown: {fileID: 21300000, guid: 5e366c558688b8245880ca6661b7a96b, type: 3}
@@ -139,7 +139,28 @@ MonoBehaviour:
     Seven: {fileID: 21300000, guid: bd1819e1686f08a48b8eedf315ebd109, type: 3}
     Eight: {fileID: 21300000, guid: dc8f763dedda43b43a16c53def030950, type: 3}
     Nine: {fileID: 21300000, guid: 3df078b506adf7f4ab37efb3fc314081, type: 3}
+    F1: {fileID: 21300000, guid: 236954c15269369479a7c93adae9a916, type: 3}
+    F2: {fileID: 21300000, guid: b990926772697aa4a8cbb106ef89b936, type: 3}
+    F3: {fileID: 21300000, guid: 8b773a8bddae65a4ead466a9dba36cf6, type: 3}
+    F4: {fileID: 21300000, guid: 299bd7e2b0e247649a9b574d2c12b1eb, type: 3}
+    F5: {fileID: 21300000, guid: d6886822d6e1e7547a3e5ca4cb0b31ae, type: 3}
+    F6: {fileID: 21300000, guid: 31bc864c61419b447b7d409fd9474e6e, type: 3}
+    F7: {fileID: 21300000, guid: c6a5e300cc6e0eb42a7488f3c496eadd, type: 3}
+    F8: {fileID: 21300000, guid: a13c36468d456194cb4185861eafeaae, type: 3}
+    F9: {fileID: 21300000, guid: 740c1674f45a9bc4dac914e73d923fad, type: 3}
+    F10: {fileID: 21300000, guid: 1b665cbd1adc5444895aa8c487c22c47, type: 3}
+    F11: {fileID: 21300000, guid: 9ed1b4bc374ce8a4880cd36f42bf1dde, type: 3}
+    F12: {fileID: 21300000, guid: a24974fb639434246a0a14f6c4ceb306, type: 3}
+    Up: {fileID: 21300000, guid: 72563987a2ba85c4bb78d09428340e35, type: 3}
+    Down: {fileID: 21300000, guid: db0508d49730a964895d267530e2cd05, type: 3}
+    Left: {fileID: 21300000, guid: 9c6ee508bd895104b9a96b7eefc1d91a, type: 3}
+    Right: {fileID: 21300000, guid: 92d7e8200c5ca9141aa78b0bba44a9bf, type: 3}
     Space: {fileID: 21300000, guid: fa36589597d707340a9782ac20dedf2b, type: 3}
+    Square: {fileID: 21300000, guid: 3bc219e628d29e740b8297bf987888b9, type: 3}
+    Enter: {fileID: 21300000, guid: 829e844b78d922d448d8b1fdc2088340, type: 3}
+    Lock: {fileID: 21300000, guid: beb6ed45a185ec44d8e7aede2836f9b5, type: 3}
+    Shift: {fileID: 21300000, guid: 2af2a6c9945d45141aee653388a501f4, type: 3}
+    Tab: {fileID: 21300000, guid: 5a0604a7ac124ec4590e785cc9dfa59b, type: 3}
 --- !u!1 &3049410050188908799
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,6 +250,7 @@ MonoBehaviour:
   _mixer: {fileID: 24100000, guid: 331b24101625e8b45aa98eb584e08a3a, type: 2}
   _musicSource: {fileID: 6621290690904026540}
   AudioSources: []
+  SfxSource: {fileID: 0}
 --- !u!114 &6351173265087525059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +318,7 @@ MonoBehaviour:
   SaveObject:
     CurrentLevel: 0
     TutoDone: 0
+    PlayerName: 
   IsSaveExist: 0
 --- !u!1 &7995973177813662557
 GameObject:
@@ -812,16 +835,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}
-      propertyPath: m_Pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
-        type: 3}
-      propertyPath: Priority
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
-        type: 3}
       propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
@@ -837,8 +850,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4612532851052802101, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}
-      propertyPath: DopplerLevel
-      value: 1
+      propertyPath: rolloffMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4644970487092527044, guid: 65adb6d08fcf91d479a777be1db666da,
         type: 3}
@@ -927,6 +940,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
+      value: 36cd7c80-472c-43f3-9d47-cb594bc6d0f6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
+      value: 655cdb03-163d-41cc-99c0-21643eb288ff
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionId
+      value: ff4e86ea-5d81-4aeb-9e82-c4dc342381e1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
+      value: UI/MouseMouv[/Mouse/position]
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
+      value: UI/Any[/Keyboard/anyKey,/Mouse/leftButton,/Mouse/rightButton,/XInputControllerWindows1/buttonEast,/XInputControllerWindows1/buttonNorth,/XInputControllerWindows1/buttonSouth,/XInputControllerWindows1/buttonWest,/XInputControllerWindows1/dpad/left,/XInputControllerWindows1/dpad/down,/XInputControllerWindows1/dpad/right,/XInputControllerWindows1/dpad/up,/XInputControllerWindows1/leftStick/down,/XInputControllerWindows1/leftStick/left,/XInputControllerWindows1/leftStick/right,/XInputControllerWindows1/leftStick/up,/XInputControllerWindows1/leftStickPress,/XInputControllerWindows1/leftTrigger,/XInputControllerWindows1/leftShoulder,/XInputControllerWindows1/rightStick/down,/XInputControllerWindows1/rightStick/left,/XInputControllerWindows1/rightStick/right,/XInputControllerWindows1/rightStick/up,/XInputControllerWindows1/rightStickPress,/XInputControllerWindows1/rightTrigger,/XInputControllerWindows1/rightShoulder,/XInputControllerWindows1/select,/XInputControllerWindows1/start]
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionName
+      value: UI/New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -957,6 +1005,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4071725900689487352}
@@ -968,6 +1021,11 @@ PrefabInstance:
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4071725900689487352}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4071725900689487352}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
@@ -987,6 +1045,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[11].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnCancel
       objectReference: {fileID: 0}
@@ -998,12 +1061,17 @@ PrefabInstance:
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnAny
+      value: OnMouseMoving
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnMouseMoving
+      value: OnAny
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnNext
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
@@ -1022,6 +1090,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RB_MenuInputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -1033,6 +1106,11 @@ PrefabInstance:
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []

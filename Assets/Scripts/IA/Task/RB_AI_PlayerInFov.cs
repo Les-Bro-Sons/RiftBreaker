@@ -1,4 +1,6 @@
 using BehaviorTree;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -59,13 +61,24 @@ public class RB_AI_PlayerInFov : RB_BTNode
             object t = GetData("target");
             if (t == null)
             {
-                Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
-                if (colliders.Length > 0) //A MODIFIER
+                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer).ToList<Collider>();
+                foreach (Collider collider in colliders.ToList<Collider>())
+                {
+                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
+                    {
+                        colliders.Remove(collider);
+                    }
+                }
+                if (colliders.Count > 0) //A MODIFIER
                 {
                     _btParent.Root.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;
 
                     _btParent.BoolDictionnary["IsTargetSpotted"] = true;
+                }
+                else
+                {
+                    _btParent.BoolDictionnary["IsTargetSpotted"] = false;
                 }
             }
             else
@@ -102,15 +115,26 @@ public class RB_AI_PlayerInFov : RB_BTNode
         else
         {
             object t = _btParent.Root.GetData("target");
-            if (t == null)
+            //if (t == null)
             {
                 //Debug.Log("Recherche de la cible...");
-                Collider[] colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer);
-                if (colliders.Length > 0)
+                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer).ToList<Collider>();
+                foreach (Collider collider in colliders.ToList<Collider>())
+                {
+                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
+                    {
+                        colliders.Remove(collider);
+                    }
+                }
+                if (colliders.Count > 0)
                 {
                     //Debug.Log("Cible trouvée, assignation en cours...");
                     _btParent.Root.SetData("target", colliders[0].transform);
                     t = colliders[0].transform;
+                }
+                else
+                {
+                    t = null;
                 }
                 //else
                 //    Debug.Log("Aucune cible trouvée dans la portée.");
@@ -267,8 +291,8 @@ public class RB_AI_PlayerInFov : RB_BTNode
             _isUnloadingSpotBar = false;
 
         }
-
-        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / _btParent.DurationToLoadSpotBar;
+        Transform target = (Transform)_btParent.Root.GetData("target");
+        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / Mathf.Lerp(_btParent.MinDistDurationToLoadSpotBar, _btParent.MaxDistDurationToLoadSpotBar, Vector3.Distance(target.position, _transform.position) / _btParent.FovRange);
 
         if (_btParent.ImageSpotBar.fillAmount >= 1.0f)
         {

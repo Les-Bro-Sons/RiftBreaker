@@ -38,7 +38,7 @@ public class RB_Projectile : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private float _damage = 10; public float Damage { get { return _damage; } set { _damage = value; } }
     [SerializeField] private float _knocbackExplosionForce = 0; public float KnocbackExplosionForce { get {  return _knocbackExplosionForce; } set { _knocbackExplosionForce = value; } }
-    [SerializeField] private Vector3 _knockback = Vector3.zero;
+    [SerializeField] private Vector3 _knockback = Vector3.zero; 
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;
@@ -81,7 +81,7 @@ public class RB_Projectile : MonoBehaviour
         RB_CollisionDetection collision = GetComponent<RB_CollisionDetection>();
         if (collision)
         {
-            collision.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(collision.GetDetectedObjects()[collision.GetDetectedObjects().Count-1]); });
+            collision.EventOnEntityEntered.AddListener(delegate { EnemyEntered(collision.GetDetectedEntity()[collision.GetDetectedEntity().Count - 1]); });
         }
 
         if (_followParticles)
@@ -137,7 +137,7 @@ public class RB_Projectile : MonoBehaviour
         }
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
-        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, 1);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,false, 0, 1);
         DestroyProjectile();
     }
 
@@ -256,7 +256,7 @@ public class RB_Projectile : MonoBehaviour
 
     private void DestroyProjectile() 
     {
-        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,0, .1f);
+        RB_AudioManager.Instance.PlaySFX(_explosionSounds, transform.position,false, 0, .1f);
         if (_destroyParticles)
             Instantiate(_destroyParticles, _transform.position, _transform.rotation);
         Destroy(gameObject);

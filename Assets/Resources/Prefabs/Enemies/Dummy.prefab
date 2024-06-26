@@ -135,8 +135,9 @@ MonoBehaviour:
   _entityType: 0
   _spriteRenderer: {fileID: 9101173564990518349}
   _animator: {fileID: 7214748225881584283}
-  _health: {fileID: 0}
-  _enemy: {fileID: 0}
+  _health: {fileID: 263053956299020696}
+  _enemy: {fileID: 2387686529390378546}
+  _door: {fileID: 0}
 --- !u!114 &2387686529390378546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,7 +156,7 @@ MonoBehaviour:
   _isAttachedToAPhase: 1
   _spawnInPhase: 0
   SpriteRenderer: {fileID: 9101173564990518349}
-  AiAnimator: {fileID: 0}
+  AiAnimator: {fileID: 7214748225881584283}
   ChargeSpecialAttackAmount: 5
   DeathSpawnPrefabName: Dummy
 --- !u!114 &263053956299020696
@@ -171,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 100
-  _hpMax: 100
+  HpMax: 1000
   Armor: 0
   Team: 0
   Dead: 0
@@ -184,11 +185,17 @@ MonoBehaviour:
   EventHeal:
     m_PersistentCalls:
       m_Calls: []
+  EventResurect:
+    m_PersistentCalls:
+      m_Calls: []
   LerpTimer: 0
   _particleDamage: {fileID: 827747827748336171, guid: 6f1309b1a7e1f9b4e97af0d4ed517342,
     type: 3}
   _particleDeath: {fileID: 0}
   _particleHeal: {fileID: 0}
+  _animPlayer: {fileID: 0}
+  _animUX: {fileID: 0}
+  _animUIPlayer: {fileID: 0}
 --- !u!114 &6226715038938597900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +214,8 @@ MonoBehaviour:
   _movementAcceleration: 0
   _movementMaxSpeed: 13
   _movementFrictionForce: 50
-  _enemyAnimator: {fileID: 0}
+  MoveSpeedBoost: 1
+  _enemyAnimator: {fileID: 7214748225881584283}
 --- !u!1 &6172118446137551482
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,6 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!95 &7214748225881584283
 Animator:
   serializedVersion: 5

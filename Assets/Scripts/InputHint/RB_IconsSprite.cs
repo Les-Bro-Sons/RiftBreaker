@@ -142,8 +142,36 @@ public class RB_IconsSprite : MonoBehaviour{
         public Sprite Eight;
         public Sprite Nine;
 
+
+
+        //FN
+        public Sprite F1;
+        public Sprite F2;
+        public Sprite F3;
+        public Sprite F4;
+        public Sprite F5;
+        public Sprite F6;
+        public Sprite F7;
+        public Sprite F8;
+        public Sprite F9;
+        public Sprite F10;
+        public Sprite F11;
+        public Sprite F12;
+
+        //Arrow
+        public Sprite Up;
+        public Sprite Down;
+        public Sprite Left;
+        public Sprite Right;
+
         //Other
         public Sprite Space;
+        public Sprite Square;
+        public Sprite Enter;
+        public Sprite Lock;
+        public Sprite Shift;
+        public Sprite Tab;
+
 
         public Sprite GetSprite(string controlPath){
             switch (controlPath) {
@@ -185,6 +213,29 @@ public class RB_IconsSprite : MonoBehaviour{
                 case "9": return Nine;
                 case "numpad0": return Zero;
                 case "space": return Space;
+                case "backquote": return Square;
+                case "enter": return Enter;
+                case "f1": return F1;
+                case "f2": return F2;
+                case "f3": return F3;
+                case "f4": return F4;
+                case "f5": return F5;
+                case "f6": return F6;
+                case "f7": return F7;
+                case "f8": return F8;
+                case "f9": return F9;
+                case "f10": return F10;
+                case "f11": return F11;
+                case "f12": return F12;
+                case "upArrow": return Up;
+                case "downArrow": return Down;
+                case "leftArrow": return Left;
+                case "rightArrow": return Right;
+                case "capsLock": return Lock;
+                case "shift": return Shift;
+                case "leftShift": return Shift;
+                case "tab": return Tab;
+
             }
 
             return null;

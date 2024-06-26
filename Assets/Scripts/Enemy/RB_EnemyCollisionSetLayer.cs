@@ -8,6 +8,16 @@ public class RB_EnemyCollisionSetLayer : MonoBehaviour
 
     private void Start()
     {
+        SetCollisionLayer();
+
+        if (RB_Tools.TryGetComponentInParent<RB_Health>(gameObject, out RB_Health health))
+        {
+            health.EventResurect.AddListener(SetCollisionLayer);
+        }
+    }
+
+    private void SetCollisionLayer()
+    {
         int currentLayer = gameObject.layer;
 
         CapsuleCollider[] colliders = GetComponents<CapsuleCollider>();

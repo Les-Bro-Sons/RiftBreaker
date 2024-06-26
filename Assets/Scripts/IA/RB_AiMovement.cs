@@ -74,7 +74,7 @@ public class RB_AiMovement : MonoBehaviour
         LastDirection = direction;
     }
 
-    public void MoveToPosition(Vector3 targetPos, float? speed = null, float? acceleration = null, float? deltaTime = null)
+    public void MoveToPosition(Vector3 targetPos, float? speed = null, float? acceleration = null, float rotationSpeed = 4, float? deltaTime = null)
     {
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
@@ -92,7 +92,7 @@ public class RB_AiMovement : MonoBehaviour
             WalkDirection = direction;
 
             _rb.AddForce(direction * (speed.Value * MoveSpeedBoost) * deltaTime.Value * acceleration.Value); //move
-            _rb.MoveRotation(Quaternion.LookRotation(direction));
+            _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime.Value));
 
             LastDirection = direction;
         }

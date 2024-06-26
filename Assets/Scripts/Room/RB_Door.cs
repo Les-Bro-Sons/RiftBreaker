@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class RB_Door : MonoBehaviour
 {
     private Animator _doorAnimator;
+    public bool IsControledByRoom = true;
 
     public UnityEvent EventOpenDoor;
     public UnityEvent EventCloseDoor;

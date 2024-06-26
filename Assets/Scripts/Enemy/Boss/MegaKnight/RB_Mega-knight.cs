@@ -1,12 +1,16 @@
-using System.Collections.Generic;
 using MANAGERS;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Mega_knight : RB_Boss
 {
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
-    private new Transform transform;
+    public bool _inRoom = false;
+    [HideInInspector] public UnityEvent EventPlayMKMusic;
+
+    private float _activationTimer = 0;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
@@ -69,9 +73,22 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        Room();
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            CurrentState = BOSSSTATES.Idle;
+            _activationTimer += Time.deltaTime;
+            return;
+        }
+        GetTarget();
 
         switch (CurrentState)
         {
@@ -102,6 +119,7 @@ public class RB_Mega_knight : RB_Boss
         }
     }
 
+    
     private BOSSSTATES SwitchBossState()
     {
         GetTarget();
@@ -143,6 +161,19 @@ public class RB_Mega_knight : RB_Boss
         return CurrentState = BOSSSTATES.Moving;
     }
 
+    private void Room()
+    {
+
+        if (_inRoom == false)
+        {
+            EventPlayMKMusic.Invoke();
+            _inRoom = true;
+        }
+        if (_inRoom == true)
+        {
+            return;
+        }
+    }
     private bool WaitForSlash() //TIMER ATTACK 1
     {
         _slashDelayTimer -= Time.fixedDeltaTime;
@@ -153,7 +184,7 @@ public class RB_Mega_knight : RB_Boss
     {
         //Animations
         _enemyAnimation.TriggerBasicAttack();
-        RB_AudioManager.Instance.PlaySFX("BigSwooosh", transform.position,1, 1f);
+        RB_AudioManager.Instance.PlaySFX("BigSwooosh", transform.position, false, 1, 1f);
         List<RB_Health> alreadyDamaged = new();
         foreach (Collider enemy in Physics.OverlapBox(transform.position + (transform.forward * _slashRange / 2), Vector3.one * (_slashRange / 2f), transform.rotation))
         {
@@ -210,11 +241,11 @@ public class RB_Mega_knight : RB_Boss
 
             if (_landingParticles)
             {
-                RB_AudioManager.Instance.PlaySFX("gory-explosion", transform.position,0, 1f);
                 Instantiate(_landingParticles, transform.position, transform.rotation);
             }
 
             //ENDING STATE ATTACK 3
+            RB_AudioManager.Instance.PlaySFX("Jump_Attack_Viking_Horn", transform.position, false, 0, 1f);
             _currentCooldownAttack3 = CooldownAttack3;
             SwitchBossState();
         }

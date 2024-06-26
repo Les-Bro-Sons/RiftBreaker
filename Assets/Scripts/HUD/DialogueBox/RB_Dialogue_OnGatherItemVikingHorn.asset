@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ffa381e1ef77bb40ae1c73dbbda17bc, type: 3}
+  m_Name: RB_Dialogue_OnGatherItemVikingHorn
+  m_EditorClassIdentifier: 
+  Paragraph: "Ce que tu viens de r\xE9cup\xE9rer, [PLAYERNAME]! Cette corne, ayant
+    appartenu \xE0 un dieu de la guerre, contient une potion ancienne qui conf\xE8re
+    une force surhumaine et une rage intense \xE0 quiconque la boit."
+  Character_Sprite: {fileID: 0}
+  CurrentAnimation: 7
+  IsNameInput: 0
+  CloseAfterTime: 1
+  CloseByClick: 0
+  TimeAfterClose: 5
+  Clickable: 0

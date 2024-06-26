@@ -1180,6 +1180,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1181533793}
     m_Modifications:
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092642784933429506, guid: 9e7d692eff87be949b5658455aa963ba,
+        type: 3}
+      propertyPath: _scriptableDialogues.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: be4103667b40cb64b89f8363efbf6e80,
+        type: 2}
     - target: {fileID: 7933119062418324273, guid: 9e7d692eff87be949b5658455aa963ba,
         type: 3}
       propertyPath: m_Pivot.x

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,6 +43,7 @@ public class RB_UxWeaponControl : MonoBehaviour
         _currentWeapon.sprite = null;
         //Bind to the event called when an item is gathered
         RB_PlayerAction.Instance.EventItemGathered.AddListener(RefreshSprites);
+        RB_PlayerAction.Instance.EventItemDropped.AddListener(RefreshSprites);
 
         //Get the angle out of the direction of the first item slot
         Vector3 direction = _listWeapon[0].transform.position - _cursorTransform.position;
@@ -68,7 +70,7 @@ public class RB_UxWeaponControl : MonoBehaviour
 
     private void RefreshSprites()
     {
-        for (int i = 0; i < RB_PlayerAction.Instance.Items.Count; i++)
+        for (int i = 0; i < _listWeapon.Count; i++)
         {
             AddSprite(i);
         }
@@ -148,19 +150,33 @@ public class RB_UxWeaponControl : MonoBehaviour
 
     private void AddSprite(int id)
     {
-        //When an item is gathered, add it to the weapon slots
-        _listWeapon[id].sprite = RB_PlayerAction.Instance.Items[id].CurrentSprite;
+        if (RB_PlayerAction.Instance.Items.Count <= id)
+        {
+            //if weapon is null, remove the sprite
+            _listWeapon[id].sprite = null;
+            _listWeapon[id].material = null;
+            _currentWeapon.color = new Color(0, 0, 0, 0);
+            //Same to the current weapon slot
+            _listWeapon[id].color = new Color(0, 0, 0, 0);
+        }
+        else
+        {
+            //When an item is gathered, add it to the weapon slots
+            _listWeapon[id].sprite = RB_PlayerAction.Instance.Items[id].CurrentSprite;
+            _listWeapon[id].transform.localScale = Vector3.one * RB_PlayerAction.Instance.Items[id].ScaleSpriteHUD;
+            SetMaterialOnCurrentWeapon(_lastItemsId);
+            //For safety, put the color to full white
+            _currentWeapon.color = Color.white;
+            //Same to the current weapon slot
+            _listWeapon[id].color = Color.white;
+        }
 
         //Set the current weapon the newly gathered weapon
         _currentWeapon.sprite = _listWeapon[_lastItemsId].sprite;
 
-        //For safety, put the color to full white
-        _currentWeapon.color = Color.white;
+        
 
-        //Same to the current weapon slot
-        _listWeapon[id].color = Color.white;
-
-        SetMaterialOnCurrentWeapon(_lastItemsId);
+        
     }
 
     private void ChangeWeapon()

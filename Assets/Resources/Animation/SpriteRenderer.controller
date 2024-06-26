@@ -236,7 +236,7 @@ AnimatorStateTransition:
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_CanTransitionToSelf: 0
 --- !u!1101 &-7423229692818675546
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -262,13 +262,38 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &-7302903155589764609
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: ChargingAttack
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -6966935547614988138}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!206 &-7079577016744833333
 BlendTree:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlendTree
+  m_Name: ChessQueen
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1a3d453b2690f544baabddf360709c22, type: 2}
@@ -393,7 +418,8 @@ AnimatorState:
   m_Name: ChargeAttackFinish
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions: []
+  m_Transitions:
+  - {fileID: -7302903155589764609}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -1150,7 +1176,7 @@ BlendTree:
   m_Name: Combo4
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f551fe750633e7e48b9eb51704a2a129, type: 2}
+    m_Motion: {fileID: 7400000, guid: 5bd09eba0a54792408be5f4f653185b2, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 1}
     m_TimeScale: 1
@@ -1158,7 +1184,7 @@ BlendTree:
     m_DirectBlendParameter: Horizontal
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 0528e834f7815df4abc8bbbd211540c4, type: 2}
+    m_Motion: {fileID: 7400000, guid: 040f3ddf5a959d843b32fc20100643bc, type: 2}
     m_Threshold: 0.33333334
     m_Position: {x: 0, y: -1}
     m_TimeScale: 1
@@ -1166,7 +1192,7 @@ BlendTree:
     m_DirectBlendParameter: Horizontal
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 00c8fcddcbebbfa44a1aae1cd3fbf066, type: 2}
+    m_Motion: {fileID: 7400000, guid: 809cf265ce381114cbbf85b59765a026, type: 2}
     m_Threshold: 0.6666667
     m_Position: {x: -1, y: 0}
     m_TimeScale: 1
@@ -1174,7 +1200,7 @@ BlendTree:
     m_DirectBlendParameter: Horizontal
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 5aacf2d2dc512324799a557eb12338c7, type: 2}
+    m_Motion: {fileID: 7400000, guid: b24e17bb0b2356447948be35ab9404f1, type: 2}
     m_Threshold: 1
     m_Position: {x: 1, y: 0}
     m_TimeScale: 1
@@ -2541,7 +2567,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlendTree
+  m_Name: ChessQueen
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c31d5d1a0ca08ed4fab0724aa212a91f, type: 2}

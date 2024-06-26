@@ -1,15 +1,21 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_Yog : RB_Boss
 {
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
 
     public static RB_Yog Instance;
+    [HideInInspector] public UnityEvent EventPlayYogMusic;
+    private int? _bossRoom;
+    private int? _playerRoom;
+    private bool _inRoom = false;
 
     [Header("Movement")]
     [SerializeField] private float _minMovementDistance = 3f;
@@ -19,6 +25,8 @@ public class RB_Yog : RB_Boss
     [SerializeField] private float _timeForMoving = 6f;
     private float _timeUntilNextState;
     protected float _currentCooldownBetweenMovement;
+
+    private float _activationTimer = 0;
 
     [Header("Tentacle Hit (attack1)")]
     [SerializeField] private RB_Tentacles _tentacle;
@@ -79,6 +87,8 @@ public class RB_Yog : RB_Boss
 
     [SerializeField] RB_EnemyAnimation _enemyAnimation;
 
+    [SerializeField] Transform _centerRoom;
+
     protected override void Awake()
     {
         base.Awake();
@@ -109,9 +119,27 @@ public class RB_Yog : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
+
+        _bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
+        _playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
+        Room();
+        
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            CurrentState = BOSSSTATES.Idle;
+            _activationTimer += Time.deltaTime;
+            return;
+        }
+        GetTarget();
+
 
         switch (CurrentState)
         {
@@ -186,6 +214,19 @@ public class RB_Yog : RB_Boss
         EnemyGestion();
     }
     
+    private void Room()
+    {
+        
+        if (_inRoom == false)
+        {
+            EventPlayYogMusic.Invoke();
+            _inRoom = true;
+        }
+        if (_inRoom == true) 
+        {
+            return;
+        }  
+    }
     private void ResetTentacleHitTimer()
     {
         _tentacleHitDelayTimer = _tentacleHitDelay + _tentacleHitDuration + _tentacleRemoveDuration + _delayBeforeHit;
@@ -242,7 +283,9 @@ public class RB_Yog : RB_Boss
 
     public void TentacleHit()
     {
+        AiAnimator.SetTrigger("BasicAttack");
         _numberOfAttackDone += 1;
+        RB_AudioManager.Instance.PlaySFX("Tentacle_Hit_Sound", transform.position, false, 1f, 1f);
         StartCoroutine(TentacleHitCoroutine());
     }
     IEnumerator TentacleHitCoroutine() //ATTACK 1
@@ -279,7 +322,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(0, rangeForward, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(baseSize, fullSize, _tentacleHitCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEntity())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
@@ -304,7 +347,7 @@ public class RB_Yog : RB_Boss
             _tentacle.Size = Mathf.Lerp(rangeForward, 0, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleHitDuration));
             /*previTransform.localScale = Vector3.Lerp(fullSize, endSize, _tentacleRemoveCurve.Evaluate(tentacleTimer / _tentacleRemoveDuration));
             previTransform.position = transform.position + (transform.forward * previTransform.localScale.z / 2f);*/
-            foreach (GameObject enemy in _tentacleCollision.GetDetectedObjects())
+            foreach (GameObject enemy in _tentacleCollision.GetDetectedEntity())
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
                 {
@@ -341,7 +384,8 @@ public class RB_Yog : RB_Boss
 
     public void AreaBeforeExplosionAttack() //ATTACK 2
     {
-        //Spawn of the zone attack (attack n°2)
+        //Spawn of the zone attack (attack nÂ°2)
+        AiAnimator.SetTrigger("ZoneAttack");
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         GameObject Bomb = Instantiate(ExplosionZone, transform.position, Quaternion.identity);
         RB_ExplosionZone explosionZone = Bomb.GetComponent<RB_ExplosionZone>();
@@ -398,7 +442,7 @@ public class RB_Yog : RB_Boss
 
                 float randomDistance = Random.Range(_minMovementDistance, _maxMovementDistance);
 
-                Vector3 spawnPoint = transform.position + randomDirection * randomDistance;
+                Vector3 spawnPoint = _centerRoom.position + randomDirection * randomDistance;
 
                 spawnPoints.Add(spawnPoint);
 

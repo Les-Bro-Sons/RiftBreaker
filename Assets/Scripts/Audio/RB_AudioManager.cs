@@ -26,6 +26,9 @@ namespace MANAGERS
 		public const string SFX_KEY = "sfxVolume";
 
 		public List<AudioSource> AudioSources = new List<AudioSource>();
+		public AudioSource SfxSource;
+
+		private Coroutine _musicSwitchCoroutines;
 
 		private void Awake()
 		{
@@ -42,64 +45,165 @@ namespace MANAGERS
 
 		private void Start()
 		{
-			PlayMusic("zik_hugoval_final");
+			
 		}
 
 		public void PlayMusic(string nameClip)
 		{
-			if (_musicSource.isPlaying)
+            AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
+			if (_musicSource.clip == _musicClip) return;
+            _musicSource.spatialBlend = 0;
+
+
+
+            if (_musicClip != null)
 			{
-				_musicSource.Stop();
-			}
-			AudioClip _musicClip = Resources.Load<AudioClip>($"{ROOT_PATH}/Music/{nameClip}");
-			if (_musicClip != null)
-			{
-				_musicSource.clip = _musicClip;
 				if (_musicSource.loop != true)
 					_musicSource.loop = true;
 
-				_musicSource.Play();
+				if (_musicSource.isPlaying)
+				{
+					if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+					_musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip));
+				}
+				else
+				{
+                    if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                    _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                }
 			}
 			else
 			{
-				Debug.LogWarning("Music clip not found: " + nameClip);
+                if (_musicSwitchCoroutines != null) StopCoroutine(_musicSwitchCoroutines);
+                _musicSwitchCoroutines = StartCoroutine(ReplaceMusic(_musicClip, 1, false));
+                Debug.LogWarning("Music clip not found: " + nameClip);
 			}
 		}
 
+		private IEnumerator ReplaceMusic(AudioClip clip, float duration = 1, bool fadeOut = true)
+		{
+			float timer = 0;
+			float fadeOutDuration = (duration / 2);
+			float fadeInDuration = (duration / 2);
+			
+			if (fadeOut)
+			{
+				while (timer < fadeOutDuration)
+				{
+					_musicSource.volume = Mathf.Lerp(0, 1, timer / fadeOutDuration);
+					timer += Time.unscaledDeltaTime;
+					yield return null;
+				}
+			}
 
-		public AudioSource PlaySFX(string nameClip,Vector3 desiredPosition, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX) {
+			_musicSource.volume = 0;
+			timer = 0;
+		    _musicSource.clip = clip;
+            if (!_musicSource.isPlaying) _musicSource.Play();
+
+            while (timer < fadeInDuration)
+            {
+                _musicSource.volume = Mathf.Lerp(1, 0, timer / fadeInDuration);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+			_musicSource.volume = 1;
+
+            yield return null;
+		}
+
+
+        public AudioSource PlaySFX(string nameClip, Vector3 desiredPosition, bool loop = false, float pitchVariation = 0, float volume = 1,MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
+        {
 
             AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
-            GameObject _audioSource = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
-			AudioSource sfxSource = _audioSource.GetComponent<AudioSource>();
-			RB_AudioSource _audioScript = _audioSource.GetComponent<RB_AudioSource>();
-			
-			sfxSource.pitch += Random.Range(-pitchVariation, pitchVariation);
-			sfxSource.volume = volume;
-			sfxSource.spatialBlend = 1;
-			sfxSource.loop = false;
-			sfxSource.enabled = true;
-			
-			// Assignez le groupe à l'AudioSource
-			sfxSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
-			
+            GameObject _audioSourceObject = Instantiate(_prefabAudioSource, desiredPosition, quaternion.identity);
+			AudioSource _audioSource = _audioSourceObject.GetComponent<AudioSource>();
+
+            _audioSource.pitch += Random.Range(-pitchVariation, pitchVariation);
+			_audioSource.pitch = Mathf.Clamp(_audioSource.pitch + pitchOffset, 0, int.MaxValue);
+            _audioSource.volume = volume;
+            _audioSource.spatialBlend = 1;
+            _audioSource.loop = loop;
+            _audioSource.enabled = true;
+
+            // Assignez le groupe à l'AudioSource
+            _audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups(mixer.ToString())[0];
 			if (_sfxClip != null)
 			{
-				sfxSource.clip = _sfxClip;
-				sfxSource.Play();
-				//Destroy(_audioSource,_sfxClip.length);
-				return sfxSource;
+                _audioSource.clip = _sfxClip;
+                _audioSource.Play();
+                //Destroy(_audioSource,_sfxClip.length);
+                AudioSources.Add(_audioSource);
+                return _audioSource;
 			}
 			else
 			{
 				Debug.LogWarning("SFX clip not found: " + nameClip);
-				Destroy(_audioSource);
+				Destroy(_audioSourceObject);
 				return null;
             }
 		}
 
-		public void StopSFX() 
+        
+		public AudioSource PlaySFX(string nameClip, Transform desiredParent, bool loop = false, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
 		{
+			AudioSource audioSource = PlaySFX(nameClip, desiredParent.position, loop, pitchVariation, volume, mixer, pitchOffset);
+			audioSource.transform.parent = desiredParent;
+			return audioSource;
+		}
+
+        public AudioSource PlaySFX(string nameClip, bool localised = false, bool loop = false, float pitchVariation = 0, float volume = 1, MIXERNAME mixer = MIXERNAME.SFX, float pitchOffset = 0)
+        {
+            AudioSource audioSource = PlaySFX(nameClip, Vector3.zero, loop, pitchVariation, volume, mixer, pitchOffset);
+			audioSource.spatialize = false;
+			audioSource.spatialBlend = 0;
+            return audioSource;
+        }
+
+		public void StopSFXByClip(string nameClip)
+		{
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+            if (_sfxClip == null)
+                return;
+
+            foreach (AudioSource audioSource in AudioSources)
+            {
+                if (audioSource.clip.name == _sfxClip.name)
+                {
+                    audioSource.Stop();
+                }
+            }
+        }
+
+		public int ClipPlayingCount(string nameClip)
+		{
+			int clipPlaying = 0;
+            AudioClip _sfxClip = Resources.Load<AudioClip>($"{ROOT_PATH}/SFX/{nameClip}");
+
+			if (_sfxClip == null)
+				return 0;
+
+            foreach (AudioSource audioSource in AudioSources)
+			{
+				if (audioSource.clip == _sfxClip)
+				{
+					clipPlaying += 1;
+				}
+			}
+
+			return clipPlaying;
+		}
+
+        public void StopMusic()
+        {
+            _musicSource.Stop();
+            Debug.LogWarning("doesn't work");
+        }
+        public void StopSFX() 
+		{
+			//SfxSource?.Stop();
 			Debug.LogWarning("doesn't work");
 		}
 	}

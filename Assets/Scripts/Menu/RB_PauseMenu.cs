@@ -24,7 +24,7 @@ public class RB_PauseMenu : MonoBehaviour {
             }
         }
         else if (_isUnpausing) { 
-            if(_oldTimeScale > 1f) {
+            if(_oldTimeScale != 1f) {
                 Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);
             }
             else {
@@ -50,6 +50,7 @@ public class RB_PauseMenu : MonoBehaviour {
     }
 
     public void Pause() {
+        RB_InputManager.Instance.InputEnabled = false;
         if(!IsPaused){
             IsPaused = true;
             RB_MenuManager.Instance.PauseAnim();
@@ -62,6 +63,7 @@ public class RB_PauseMenu : MonoBehaviour {
     }
 
     public void UnPause() {
+        RB_InputManager.Instance.InputEnabled = true;
         RB_ButtonSelectioner.Instance.SelectMainButton(0);
         RB_MenuManager.Instance.BackMainMenu();
         RB_MenuManager.Instance.CancelQuit();

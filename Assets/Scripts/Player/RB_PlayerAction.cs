@@ -17,8 +17,6 @@ public class RB_PlayerAction : MonoBehaviour
     [HideInInspector] public bool IsAttacking;
     [HideInInspector] public bool IsOnCooldown; //Cannot attack
 
-
-    [Range(0, 100)] public float SpecialAttackCharge; //from 0 to 100
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
     private bool _shouldStartCharging = false;
@@ -33,6 +31,7 @@ public class RB_PlayerAction : MonoBehaviour
     private Transform _transform;
     private CinemachineImpulseSource _impulseSource;
     private RB_TimeBodyRecorder _timeRecorder;
+    public RB_Dialogue PickupGathered;
 
     //Charge attack
     private Coroutine _currentChargedAttack;
@@ -42,9 +41,11 @@ public class RB_PlayerAction : MonoBehaviour
     //Events
     public UnityEvent EventBasicAttack;
     public UnityEvent EventChargedAttack;
+    public UnityEvent EventSpecialAttack;
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
+    public UnityEvent EventItemDropped;
     public UnityEvent EventOnChargeSpecialAttackGathered;
 
     //Interacts
@@ -65,9 +66,6 @@ public class RB_PlayerAction : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _debugCurrentWeaponFeedback;
 
-
-    
-
     //Awake
     private void Awake()
     {
@@ -82,31 +80,29 @@ public class RB_PlayerAction : MonoBehaviour
         _timeRecorder = GetComponent<RB_TimeBodyRecorder>();
     }
 
+    private void Start()
+    {
+        GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
+    }
     //Update
     private void Update()
     {
         //count the time the player press the attack button
         TimerChargeAttack();
-        RechargeSpecialAttack();
     }
 
-
-
-    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    private void OnDeath()
     {
-        //Add the specialAttackChargeAmount
-        SpecialAttackCharge += amountToAdd;
+        StopChargeAttack();
+        StopAttack();
+        StopSpecialAttack();
     }
 
-    public virtual void RechargeSpecialAttack()
-    {
-        //Recharge over time the special attack
-        if (Item != null && SpecialAttackCharge <= 100 && Item.SpecialAttackChargeTime > 0)
-        {
-            SpecialAttackCharge += (Time.deltaTime / Item.SpecialAttackChargeTime) * 100;
-        }
 
-    }
+
+    
+
+    
 
     public void SetCurrentWeapon(string currentWeapon)
     {
@@ -148,8 +144,8 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void AddItemToList(RB_Items itemToAdd)
     {
+
         itemToAdd.transform.position = itemToAdd.transform.parent.position;
-        itemToAdd.Bind();
         int currentItemId = Items.IndexOf(Item);
         //Add the item gathered to the items
         if (Items.Count >= 3)
@@ -180,9 +176,11 @@ public class RB_PlayerAction : MonoBehaviour
                 IsItemNearby = true;
                 AddItemToList(itemGathered);
                 
+
+                RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
+
+               
                 
-                RB_AudioManager.Instance.PlaySFX("bicycle_bell", RB_PlayerController.Instance.transform.position, 0, 1);
-                RB_AudioManager.Instance.PlaySFX("Alarm1rr", RB_PlayerController.Instance.transform.position, 0, 1);
 
 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
@@ -287,12 +285,13 @@ public class RB_PlayerAction : MonoBehaviour
 
     public void SpecialAttack()
     {
-        if(Item != null && CanAttack() && SpecialAttackCharge >= 100)
+        if(Item != null && CanAttack() && Item.SpecialAttackCharge >= 100)
         {
             //Special Attack
             IsSpecialAttacking = true;
-            SpecialAttackCharge = 0;
+            Item.SpecialAttackCharge = 0;
             Item.SpecialAttack();
+            EventSpecialAttack?.Invoke();
         }
     }
 

@@ -32,6 +32,12 @@ public class RB_MenuInputManager : MonoBehaviour {
     public UnityEvent EventMouseMovingCanceled;
     public bool IsLastInputMouse;
 
+    [Header("Next")]
+    public UnityEvent EventNextStarted;
+    public UnityEvent EventNextCanceled;
+
+    public bool IsKeyBoard = true;
+
 
     private void Awake() {
         if (Instance == null){
@@ -64,18 +70,34 @@ public class RB_MenuInputManager : MonoBehaviour {
         if (context.started) { EventPauseStarted?.Invoke(); }
         else if (context.canceled) { EventPauseCanceled?.Invoke(); }
     }
+    public void OnNext(InputAction.CallbackContext context) {
+        if (context.started) { EventNextStarted?.Invoke(); }
+        else if (context.canceled) { EventNextCanceled?.Invoke(); }
+    }
 
     public void OnAny(InputAction.CallbackContext context) {
-        if (context.started) { EventAnyStarted?.Invoke();
-            if (context.action.activeControl.device.name != "Mouse") 
+        if (context.action.activeControl.device.name == "Mouse" || context.action.activeControl.device.name == "Keyboard")
+            IsKeyBoard = true;
+        else IsKeyBoard = false;
+
+        if (context.action.activeControl.device.name != "Mouse")
+        {
             IsLastInputMouse = false;
+        }
+            
+
+        if (context.started) { 
+            EventAnyStarted?.Invoke();
         }
         else if (context.canceled) { EventAnyCanceled?.Invoke(); }
     }
 
     public void OnMouseMoving(InputAction.CallbackContext context){
-        if (context.action.activeControl.device.name == "Mouse")
+        if (context.action.activeControl.device.name == "Mouse") {
             IsLastInputMouse = true;
+        }
+            
+
         if (context.started) {
             EventMouseMovingStarted?.Invoke(); 
         }

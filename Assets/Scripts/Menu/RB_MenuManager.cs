@@ -1,4 +1,5 @@
- using UnityEngine;
+using MANAGERS;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -10,11 +11,11 @@ public class RB_MenuManager : MonoBehaviour {
 
     public Animator Animator;
 
-    enum MENUSTATE { 
+    public enum MENUSTATE { 
         Audio, Video, Control
     }
 
-    MENUSTATE _menuState;
+    public MENUSTATE MenuState;
 
     [Header("Sliders")]
     [SerializeField] Slider _sliderGeneral;
@@ -37,48 +38,52 @@ public class RB_MenuManager : MonoBehaviour {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SaveManager.Instance.ResetSave();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void MainMenu() {
         Time.timeScale = 1f;
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
+        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void Options() {
         Animator.SetBool("IsOptionOpen", true);
         IsOptionOpen = true;
-        _menuState = MENUSTATE.Audio;
+        MenuState = MENUSTATE.Audio;
     }
 
     public void CloseOption() {
         if (IsOptionOpen) {
+            Animator.SetBool("IsOptionOpen", false);
             RB_ButtonSelectioner.Instance.SelectMainButton(2);  
             IsOptionOpen = false;
         }
     }
 
     public void OptionAudio() {
-        if(_menuState != MENUSTATE.Audio) { 
+        if(MenuState != MENUSTATE.Audio) { 
             Animator.SetTrigger("Audio");
-            _menuState = MENUSTATE.Audio;
+            MenuState = MENUSTATE.Audio;
         }
     }
     public void OptionVideo() {
-        if (_menuState != MENUSTATE.Video) { 
+        if (MenuState != MENUSTATE.Video) { 
             Animator.SetTrigger("Video");
-            _menuState= MENUSTATE.Video;
+            MenuState= MENUSTATE.Video;
         }
 
     }
     public void OptionControl() {
-        if (_menuState != MENUSTATE.Control) { 
+        if (MenuState != MENUSTATE.Control) { 
             Animator.SetTrigger("Control");
-            _menuState = MENUSTATE.Control;
+            MenuState = MENUSTATE.Control;
         }
     }
 

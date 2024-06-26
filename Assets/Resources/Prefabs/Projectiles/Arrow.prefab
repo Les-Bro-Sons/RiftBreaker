@@ -320,8 +320,8 @@ MonoBehaviour:
   _launchForce: {x: 0, y: 0, z: 0}
   _totalLifeTime: 2
   Team: 1
-  _destroyOnWall: 0
-  _wallDetectionLength: 0.1
+  _destroyOnWall: 1
+  _wallDetectionLength: 1
   _spriteRenderer: {fileID: 1644690312164681494}
   _alphaCurve:
     serializedVersion: 2
@@ -407,6 +407,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _health: {fileID: 0}
   _enemy: {fileID: 0}
+  _door: {fileID: 0}
 --- !u!114 &2270895058652355745
 MonoBehaviour:
   m_ObjectHideFlags: 0

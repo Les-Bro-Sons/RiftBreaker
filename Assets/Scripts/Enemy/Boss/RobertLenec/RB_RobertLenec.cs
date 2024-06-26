@@ -1,15 +1,17 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RB_RobertLenec : RB_Boss
 {
     public static RB_RobertLenec Instance;
-    private new Transform transform;
-
+    [HideInInspector] public UnityEvent EventPlayRobertMusic;
+    private bool _inRoom = false;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
+
+    private float _activationTimer = 0;
 
     [Header("Movement")]
     [SerializeField] private float _minMovementDistance = 3f;
@@ -21,7 +23,8 @@ public class RB_RobertLenec : RB_Boss
     [SerializeField] private float _dashKnockback = 1f;
     private float _movingTimer = 0f;
     private Vector3 positionBehindPlayer;
-    [SerializeField] private float tooCloseTimer = 0;
+    [SerializeField] private float _tooCloseTime = 3;
+    private float _tooCloseTimer = 0;
     protected float _currentCooldownBetweenMovement;
     private LayerMask _layerMask;
 
@@ -46,6 +49,7 @@ public class RB_RobertLenec : RB_Boss
     [Header("Clone Attack (attack3)")]
     public GameObject Clone;
     [SerializeField] private List<Transform> _waypoints;
+    [SerializeField] private Transform _tpPoint;
     [SerializeField] private int _numberOfArrow;
     [SerializeField] private float _cloneAttackInterval = 0.5f;
     [SerializeField] private float _cloneAttackDelay = 1f;
@@ -94,9 +98,24 @@ public class RB_RobertLenec : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
+
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value)) return;
+        Room();
+        
+        if (bossRoom == null || playerRoom == null || (bossRoom.Value != playerRoom.Value))
+        {
+            _activationTimer = 0;
+            return;
+        }
+        else if (_activationTimer < 0.5f)
+        {
+            CurrentState = BOSSSTATES.Idle;
+            _activationTimer += Time.deltaTime;
+            return;
+        }
+        GetTarget();
 
         Repositionning();
         switch (CurrentState)
@@ -174,6 +193,19 @@ public class RB_RobertLenec : RB_Boss
         return CurrentState = BOSSSTATES.Moving;
     }
 
+    private void Room()
+    {
+
+        if (_inRoom == false)
+        {
+            EventPlayRobertMusic.Invoke();
+            _inRoom = true;
+        }
+        if (_inRoom == true)
+        {
+            return;
+        }
+    }
     public void Movement()
     {
         //Boss goes to the player if he's too far away
@@ -183,7 +215,7 @@ public class RB_RobertLenec : RB_Boss
         }
 
         //Boss goes away the player if he's too far away
-        else if (GetTargetDistance() < 5f && tooCloseTimer < 5f)
+        else if (GetTargetDistance() < 5f && _tooCloseTimer < _tooCloseTime)
         {
             _movement.MoveIntoDirection(transform.position - _currentTarget.position);
         }
@@ -216,6 +248,8 @@ public class RB_RobertLenec : RB_Boss
     public void ShootAttack() //ATTACK 1
     {
         //Dash Into a Random Direction
+        AiAnimator.SetTrigger("BasicZone");
+        RB_AudioManager.Instance.PlaySFX("Magic_Ball_Sound",transform.position, false, 0f, 1f);
         Vector3 randomDirection = Random.insideUnitSphere;
         randomDirection.y = 0;
         randomDirection.Normalize();
@@ -237,7 +271,8 @@ public class RB_RobertLenec : RB_Boss
 
     public void WoodenPieceRainZoneAttack() //ATTACK 2
     {
-        //Spawn of the zone attack (attack n°2)
+        //Spawn of the zone attack (attack nÂ°2)
+        AiAnimator.SetTrigger("BasicZone");
         float offset = 0.99f;
         Vector3 areaDamageSpawn = new Vector3(_currentTarget.position.x, _currentTarget.position.y - offset, _currentTarget.position.z);
         RB_RainZone rainZone = Instantiate(WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>();
@@ -263,6 +298,7 @@ public class RB_RobertLenec : RB_Boss
     public void CloneAttack()
     {
         //Instantiation of clones
+        AiAnimator.SetTrigger("Clonage");
         for (int i = 0; i < 4; i++)
         {
             GameObject clone = Instantiate(Clone, transform.position, Quaternion.identity);
@@ -274,7 +310,7 @@ public class RB_RobertLenec : RB_Boss
         //get the position of the boss before the attack
         _lastPosition = transform.position;
         //tp the boss out of the map
-        transform.position = new Vector3(transform.position.x + 3000, transform.position.y, transform.position.z);
+        transform.position = _tpPoint.position;
 
         //Cooldown
         _currentCooldownAttack3 = Random.Range(_minCooldownForAttack, _maxCooldownForAttack);
@@ -293,8 +329,8 @@ public class RB_RobertLenec : RB_Boss
 
         if (GetTargetDistance() < 4f)
         {
-            tooCloseTimer += Time.deltaTime;
-            if (tooCloseTimer <= 3f)
+            _tooCloseTimer += Time.deltaTime;
+            if (_tooCloseTimer <= _tooCloseTime)
             {
                 positionBehindPlayer = Vector3.zero;
             }  
@@ -331,7 +367,7 @@ public class RB_RobertLenec : RB_Boss
 
                     if (_movingTimer >= _movingDuration)
                     {
-                        tooCloseTimer = 0;
+                        _tooCloseTimer = 0;
                         
                     }
                 }
@@ -339,7 +375,7 @@ public class RB_RobertLenec : RB_Boss
         }
         else
         { 
-            tooCloseTimer = 0f;
+            _tooCloseTimer = 0f;
             _movingTimer = 0;
             positionBehindPlayer = Vector3.zero;
         }

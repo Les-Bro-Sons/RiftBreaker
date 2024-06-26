@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8826780879403972723}
   - component: {fileID: 7427043173483663160}
+  - component: {fileID: -3402885080873481290}
   m_Layer: 0
   m_Name: MagicWand
   m_TagString: Untagged
@@ -79,24 +80,66 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 1
+  ChargeTime: 0.45
+  SpecialAttackChargeTime: 20
   _chargeZoom: 0.85
-  _attackCooldown: 0.1
-  _attackDamage: 0
-  _chargedAttackDamage: 0
-  _specialAttackDamage: 0
-  _normalKnockbackForce: 0
-  _chargeAttackKnockbackForce: 0
-  _specialAttackKnockbackForce: 0
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _attackCooldown: 0.3
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 1
+  AttackDamage: 40
+  ChargedAttackDamage: 60
+  SpecialAttackDamage: 125
+  _normalKnockbackForce: 5
+  _chargeAttackKnockbackForce: 8
+  _specialAttackKnockbackForce: 10
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 303180539450567437}
   HudSprite: {fileID: 0}
+  CurrentSprite: {fileID: 0}
+  ScaleSpriteHUD: 3
   FollowMouseOnChargeAttack: 1
+  CanMoveDuringSpecialAttack: 0
+  CanAttackDuringAttack: 0
+  RobertShouldTalk: 0
+  EventOnEndOfAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnItemGathered:
+    m_PersistentCalls:
+      m_Calls: []
+  SpecialAttackCharge: 0
+--- !u!54 &-3402885080873481290
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431539422267341651}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1836797541521782879
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,6 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0a88e3376cd6b4d93c40a3ddf85e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billboardXAxis: 0
 --- !u!1 &8004833693781729086
 GameObject:
   m_ObjectHideFlags: 0

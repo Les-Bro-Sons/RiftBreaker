@@ -16,15 +16,21 @@ public class RB_Scythe : RB_Items
     //Properties
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
+    public float ZoneDelay = .1f;
 
     public override void Attack() {
         base.Attack();
-        RB_AudioManager.Instance.PlaySFX("SwordSwing", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Scythe_basic_attack", RB_PlayerController.Instance.transform.position, false, 0, 1);
     }
 
     public override void Bind()
     {
         base.Bind();
+        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
+        {
+            RB_PlayerAction.Instance.PickupGathered.StartDialogue(5);
+            RobertShouldTalk = false;
+        }
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 5);
         _colliderAnimator.SetFloat("WeaponID", 5);
@@ -37,7 +43,7 @@ public class RB_Scythe : RB_Items
         if(_instantiatedZone == null)
         {
             _instantiatedZone = Instantiate(_zonePrefab, _playerTransform.position, Quaternion.identity);
-            LoopSound();
+            RB_AudioManager.Instance.PlaySFX("darkMagic", RB_PlayerController.Instance.transform.position, true, 0, 1f);
             StartChargeZone();
         }
     }
@@ -73,35 +79,21 @@ public class RB_Scythe : RB_Items
 
     private void StopSound() {
         _stopSound = false;
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("darkMagic");
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ChargeZone();
-        if (_stopSound)
-        {
-            LoopSound();
-        }
-    }
-    private void LoopSound() {
-        _timer -= Time.deltaTime;
-        if (_timer<=0)
-        {
-            _timer = RB_AudioManager.Instance.PlaySFX("darkMagic",
-                RB_PlayerController.Instance.transform.position,
-                0,
-                1f).clip.length;
-        }
     }
 
     public override void SpecialAttack() {
         base.SpecialAttack();
         int? currentPlayerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        print(currentPlayerRoom);
         if (currentPlayerRoom != null)
         {
-            List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEnemies;
+            List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEntities;
             foreach (RB_Health enemy in detectedEnemies)
             {
                 if (enemy.Dead)
@@ -113,11 +105,11 @@ public class RB_Scythe : RB_Items
         }
         
 
-        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, 0, 1f);
+        RB_AudioManager.Instance.PlaySFX("summon-dark", RB_PlayerController.Instance.transform.position, false, 0, 1f);
     }
     
     public override void ChooseSfx() {
         base.ChooseSfx();
-        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, 0,1f);
+        RB_AudioManager.Instance.PlaySFX("sheating_Scythe", RB_PlayerController.Instance.transform.position, false, 0,1f);
     }
 }

@@ -18,25 +18,27 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _chargeZoom = 0.85f;
 
     [Header("Cooldowns")]
-    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown {  get { return _attackCooldown; } }
+    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(float? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
+    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(float? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
+    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(float? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
 
     [Header("Damages")]
-    [SerializeField] private float _attackDamage;
-    [SerializeField] private float _chargedAttackDamage;
-    [SerializeField] private float _specialAttackDamage;
+    public float AttackDamage = 10;
+    public float ChargedAttackDamage = 10;
+    public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
-    [SerializeField] private float _normalKnockbackForce;
-    [SerializeField] private float _chargeAttackKnockbackForce;
-    [SerializeField] private float _specialAttackKnockbackForce;
+    [SerializeField] protected float _normalKnockbackForce = 5;
+    [SerializeField] protected float _chargeAttackKnockbackForce = 8;
+    [SerializeField] protected float _specialAttackKnockbackForce = 10;
 
     [Header("Screenshake")]
-    [SerializeField] protected float _normalAttackScreenshakeForce;
-    [SerializeField] protected float _normalHitScreenshakeForce;
-    [SerializeField] protected float _chargedAttackScreenshakeForce;
-    [SerializeField] protected float _chargedHitScreenshakeForce;
-    [SerializeField] protected float _specialAttackScreenshakeForce;
-    [SerializeField] protected float _specialHitScreenshakeForce;
+    [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f;
+    [SerializeField] protected float _normalHitScreenshakeForce = .1f;
+    [SerializeField] protected float _chargedAttackScreenshakeForce = .3f;
+    [SerializeField] protected float _chargedHitScreenshakeForce = .75f;
+    [SerializeField] protected float _specialAttackScreenshakeForce = .5f;
+    [SerializeField] protected float _specialHitScreenshakeForce = 1;
     
 
     //Components
@@ -50,7 +52,7 @@ public class RB_Items : MonoBehaviour
     public Sprite HudSprite;
     protected CinemachineImpulseSource _impulseSource;
     public Sprite CurrentSprite;
-
+    public float ScaleSpriteHUD = 1;
     //Player
     protected Transform _playerTransform;
 
@@ -58,9 +60,14 @@ public class RB_Items : MonoBehaviour
     public bool FollowMouseOnChargeAttack;
     public bool CanMoveDuringSpecialAttack;
     public bool CanAttackDuringAttack;
+    public bool RobertShouldTalk = true;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
+    public UnityEvent EventOnItemGathered;
+
+    //Special attack
+    [HideInInspector] public float SpecialAttackCharge = 100;
 
     protected virtual void Awake()
     {
@@ -72,7 +79,28 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    public virtual void ShootProjectile(string projectileToShoot)
+    protected virtual void Update()
+    {
+        RechargeSpecialAttack();
+    }
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if (SpecialAttackCharge <= 100)
+        {
+            SpecialAttackCharge += (Time.deltaTime / SpecialAttackChargeTime) * 100;
+        }
+    }
+
+
+    public virtual RB_Projectile ShootProjectile(string projectileToShoot)
     {
         GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + projectileToShoot), _playerTransform.position, Quaternion.LookRotation(RB_PlayerMovement.Instance.DirectionToAttack)) as GameObject;
         if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
@@ -80,10 +108,12 @@ public class RB_Items : MonoBehaviour
             newObject.transform.position += RB_PlayerMovement.Instance.DirectionToAttack * projectile.SpawnDistanceFromPlayer;
             projectile.Team = TEAMS.Player;
         }
+        return projectile;
     }
 
     protected virtual void Start()
     {
+        SpecialAttackCharge = 100;
         _playerTransform = RB_PlayerAction.Instance.transform;
         _playerAction = RB_PlayerAction.Instance;
         _playerAnimator = _playerAction.PlayerAnimator;
@@ -113,7 +143,10 @@ public class RB_Items : MonoBehaviour
 
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
-        
+        EventOnItemGathered?.Invoke();
+        if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
+            _impulseSource = impulseSource;
+
     }
 
     public virtual void Drop()
@@ -127,30 +160,42 @@ public class RB_Items : MonoBehaviour
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
-        
+        _playerAction.EventItemDropped?.Invoke();
+        //RobertShouldTalk = true;
+
     }
 
     public virtual void ResetAttack()
     {
         //Turning off all attack animations
-        _playerAnimator.SetBool("ChargeAttack", false);
-        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopAttack();
+    }
+
+    public virtual void ResetChargeAttack()
+    {
+        _playerAnimator.SetBool("ChargeAttack", false);
         _playerAction.StopChargedAttack();
+    }
+
+    public virtual void ResetSpecialAttack()
+    {
+
+        _playerAnimator.SetBool("SpecialAttack", false);
         _playerAction.StopSpecialAttack();
     }
 
     public virtual void Attack()
     {
         _lastUsedAttackTime = Time.time;
-        _currentDamage = _attackDamage;
+        _currentDamage = AttackDamage;
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
-        StartCoroutine(WaitToResetAttacks());
         //Starting and resetting the attack animation
+        print("1");
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetAttack), _attackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -164,7 +209,7 @@ public class RB_Items : MonoBehaviour
     public virtual void DealDamage()
     {
         List<RB_Health> alreadyDamaged = new();
-        foreach (GameObject detectedObject in _collisionDetection.GetDetectedObjects())
+        foreach (GameObject detectedObject in _collisionDetection.GetDetectedEnnemies())
         {
             //If on the detected object, there's life script, it deals damage
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && _enemyHealth.Team != TEAMS.Player && !alreadyDamaged.Contains(_enemyHealth))
@@ -179,14 +224,6 @@ public class RB_Items : MonoBehaviour
             }
         }
     }
-
-    protected IEnumerator WaitToResetAttacks()
-    {
-        //Wait for the end of the frame 
-        yield return new WaitForEndOfFrame();
-        //Reset attack
-        Invoke("ResetAttack", _playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length );
-    } 
 
     public virtual bool CanAttack()
     {
@@ -204,11 +241,12 @@ public class RB_Items : MonoBehaviour
     {
         print("charged attack");
         //Starting charge attack animations
-        _currentDamage = _chargedAttackDamage;
+        _currentDamage = ChargedAttackDamage;
         _currentKnockbackForce = _chargeAttackKnockbackForce;
         _playerAnimator.SetTrigger("ChargeAttack");
         _colliderAnimator.SetTrigger("ChargeAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetChargeAttack), _chargeAttackCooldown);
 
         /////UX/////
         if (_impulseSource)
@@ -222,11 +260,12 @@ public class RB_Items : MonoBehaviour
     public virtual void SpecialAttack()
     {
         //Starting special attack
-        _currentDamage = _specialAttackDamage;
+        _currentDamage = SpecialAttackDamage;
         _currentKnockbackForce = _specialAttackKnockbackForce;
         _playerAnimator.SetTrigger("SpecialAttack");
         _colliderAnimator.SetTrigger("SpecialAttack");
-        StartCoroutine(WaitToResetAttacks());
+        //Reset attack
+        Invoke(nameof(ResetSpecialAttack), _specialAttackCooldown);
 
         /////UX/////
         if (_impulseSource)

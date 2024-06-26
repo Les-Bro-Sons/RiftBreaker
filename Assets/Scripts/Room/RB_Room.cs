@@ -6,29 +6,64 @@ public class RB_Room : MonoBehaviour
     //Properties
     [Header("Properties")]
     public bool IsClosedRoom;
-    private bool isRoomClosed;
+    private bool _isRoomClosed;
 
     //In room
     [Header("In Room")]
     public List<RB_Health> DetectedEnemies = new();
     public List<RB_Health> DetectedAllies = new();
+    public List<RB_Health> DetectedEntities = new();
     public List<RB_Door> Doors = new();
     public bool IsPlayerInRoom;
 
+    private void Start()
+    {
+        SetLayerToAllChildren(LayerMask.NameToLayer("Room"), transform);
+    }
+
     private void Update()
     {
-        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
+        if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !_isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
         {
-            CloseRoom();
-        }else if (isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
+            CloseRoomByRoom();
+        }else if (_isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
         {
-            OpenRoom();
+            OpenRoomByRoom();
+        }
+    }
+
+    private void SetLayerToAllChildren(int layer, Transform obj)
+    {
+        foreach (Transform child in obj)
+        {
+            child.gameObject.layer = layer;
+            SetLayerToAllChildren(layer, child);
+        }
+    }
+
+    public void OpenRoomByRoom() //Open the room. Action made by the room itself
+    {
+        _isRoomClosed = false;
+        foreach (RB_Door door in Doors)
+        {
+            if (door.IsControledByRoom)
+                door.Open();
+        }
+    }
+
+    public void CloseRoomByRoom() //Close the room. Action made by the room itself
+    {
+        _isRoomClosed = true;
+        foreach (RB_Door door in Doors)
+        {
+            if (door.IsControledByRoom)
+                door.Close();
         }
     }
 
     public void CloseRoom()
     {
-        isRoomClosed = true;
+        _isRoomClosed = true;
         foreach (RB_Door door in Doors)
         {
             door.Close();
@@ -37,23 +72,40 @@ public class RB_Room : MonoBehaviour
 
     public void OpenRoom()
     {
-        isRoomClosed = false;
+        _isRoomClosed = false;
         foreach (RB_Door door in Doors)
         {
             door.Open();
         }
     }
 
-    public void AddDetectedEnemy(RB_Health detectedEnemy)
+    public void AddDetectedEntity(RB_Health detectedEntity)
+    {
+        if (!DetectedEntities.Contains(detectedEntity))
+        {
+            DetectedEntities.Add(detectedEntity);
+        }
+    }
+
+    public void RemoveDetectedEntity(RB_Health lostEntity)
+    {
+        if (DetectedEntities.Contains(lostEntity))
+        {
+            DetectedEntities.Remove(lostEntity);
+        }
+    }
+
+    public void AddDetectedEnemy(RB_Health detectedEnemy) //Add the detected enemies to the list of detected enemies
     {
         if (!DetectedEnemies.Contains(detectedEnemy))
         {
             if (DetectedAllies.Contains(detectedEnemy)) DetectedAllies.Remove(detectedEnemy);
             DetectedEnemies.Add(detectedEnemy);
         }
+        
     }
 
-    public void RemoveDetectedEnemy(RB_Health lostEnemy)
+    public void RemoveDetectedEnemy(RB_Health lostEnemy) //Remove the detected enemies from the list of detected enemies
     {
         if (DetectedEnemies.Contains(lostEnemy))
         {
@@ -61,7 +113,7 @@ public class RB_Room : MonoBehaviour
         }
     }
 
-    public void AddDectedAlly(RB_Health detectedAlly)
+    public void AddDectedAlly(RB_Health detectedAlly) //Add the detected allies to the list of detected enemies
     {
         if (!DetectedAllies.Contains(detectedAlly))
         {
@@ -70,7 +122,7 @@ public class RB_Room : MonoBehaviour
         }
     }
 
-    public void RemoveDectedAlly(RB_Health lostAlly)
+    public void RemoveDectedAlly(RB_Health lostAlly) //Remove the detected allies from the list of detected enemies
     {
         if (DetectedAllies.Contains(lostAlly))
         {
@@ -78,7 +130,7 @@ public class RB_Room : MonoBehaviour
         }
     }
 
-    public bool IsAllEnemyDied()
+    public bool IsAllEnemyDied() //If all the enemies are dead
     {
         int enemyDead = 0;
         foreach(RB_Health enemyHealth in DetectedEnemies)

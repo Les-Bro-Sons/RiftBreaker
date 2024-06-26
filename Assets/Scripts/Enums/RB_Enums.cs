@@ -5,8 +5,9 @@ public enum PHASES
     Boss
 }
 
-public enum SCENENAMES
-{
+public enum SCENENAMES 
+{ //SI VOUS VOULEZ RAJOUTER UNE VALEUR, AJOUTEZ LA A LA FIN
+    Tuto,
     Level1,
     Level2,
     Level3,
@@ -20,6 +21,9 @@ public enum SCENENAMES
     Boss1,
     Boss2,
     Boss3,
+
+    FirstCinematic,
+    EndCinematic,
 }
 
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~

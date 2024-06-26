@@ -36,7 +36,7 @@ public class RB_HUDRecastTime : MonoBehaviour {
                 RB_PlayerMovement.Instance.EventDash.AddListener(delegate { RecastTimerStart(RB_PlayerMovement.Instance.DashCooldown); });
                 break;
             case RECASTTYPE.AttackBase:
-                RB_PlayerAction.Instance.EventBasicAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.AttackCooldown); });
+                RB_PlayerAction.Instance.EventBasicAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.AttackCooldown()); });
                 break;
             case RECASTTYPE.AttackCharged:
                 RB_PlayerAction.Instance.EventStartChargingAttack.AddListener(delegate { RecastTimerStart(RB_PlayerAction.Instance.CurrentItem.ChargeTime - RB_PlayerAction.Instance.StartChargingDelay); });
@@ -71,19 +71,23 @@ public class RB_HUDRecastTime : MonoBehaviour {
         switch (Type)
         {
             case RECASTTYPE.AttackSpecial:
-                float charge = RB_PlayerAction.Instance.SpecialAttackCharge;
-                if (charge < 100)
+                if (RB_PlayerAction.Instance.Item != null)
                 {
-                    //_displayCast.color = Color.gray;
-                    _timerText.text = charge.ToString("0");
-                    _fillImage.fillAmount = Mathf.Abs((charge * _multiplierFactor) - 1);
+                    float charge = RB_PlayerAction.Instance.Item.SpecialAttackCharge;
+                    if (charge < 100)
+                    {
+                        //_displayCast.color = Color.gray;
+                        _timerText.text = charge.ToString("0");
+                        _fillImage.fillAmount = Mathf.Abs((charge * _multiplierFactor) - 1);
+                    }
+                    else
+                    {
+                        //_displayCast.color = Color.white;
+                        _timerText.text = "";
+                        _fillImage.fillAmount = 0;
+                    }
                 }
-                else
-                {
-                    //_displayCast.color = Color.white;
-                    _timerText.text = "";
-                    _fillImage.fillAmount = 0;
-                }
+                
 
                 break;
         }

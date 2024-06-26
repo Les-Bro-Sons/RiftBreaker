@@ -9,7 +9,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [Header("Player movement properties")]
     [HideInInspector] public Vector3 LastDirection;
     [SerializeField] private float _movementAcceleration;
-    [SerializeField] private float _movementMaxSpeed;
+    public float MovementMaxSpeed = 12;
     [SerializeField] private float _movementFrictionForce;
     public Vector3 ForwardDirection = new();
     public Vector3 DirectionToMove;
@@ -84,6 +84,11 @@ public class RB_PlayerMovement : MonoBehaviour
         }
     }
 
+    public bool IsDashing()
+    {
+        return _isDashing;
+    }
+
     private void UpdateDirection()
     {
         if (_playerAction.IsDoingAnyAttack() || _playerAction.IsChargingAttack)
@@ -116,7 +121,10 @@ public class RB_PlayerMovement : MonoBehaviour
     private void UpdateForward()
     {
         //Constantly set the direction of the player to the right direction
-        _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        if (ForwardDirection != Vector3.zero)
+        {
+            _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+        }
     }
 
     private void SetDirectionToAttack()
@@ -129,7 +137,7 @@ public class RB_PlayerMovement : MonoBehaviour
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = ForwardDirection;
+            DirectionToAttack = transform.forward ;
         }
     }
 
@@ -155,7 +163,8 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public void GetDirection(Vector3 direction)
     {
-        DirectionToMove = new Vector3(direction.x, 0, direction.y);
+        if(_isMoving)
+            DirectionToMove = new Vector3(direction.x, 0, direction.y);
     }
 
     public Vector3 GetDirectionToMove()
@@ -172,8 +181,8 @@ public class RB_PlayerMovement : MonoBehaviour
     {
         //Clamping to max speed in the x and z axes
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
-        horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, _movementMaxSpeed);
-        _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+        horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, MovementMaxSpeed);
+        if (!_rb.isKinematic) _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
     }
 
     private void FrictionForce()
@@ -185,10 +194,10 @@ public class RB_PlayerMovement : MonoBehaviour
     //Moving the player
     public void Move()
     {
-        if(_currentVelocity.magnitude < _movementMaxSpeed)
+        if(_currentVelocity.magnitude < MovementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(DirectionToMove * _movementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
+            _rb.AddForce(DirectionToMove * MovementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
         }
     }
 
@@ -233,7 +242,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
-        RB_AudioManager.Instance.PlaySFX("dash2", RB_PlayerController.Instance.transform.position, 0, 1);
+        RB_AudioManager.Instance.PlaySFX("Dash", RB_PlayerController.Instance.transform.position, false, 0, 1);
         EventDash.Invoke();
     }
 
@@ -254,7 +263,7 @@ public class RB_PlayerMovement : MonoBehaviour
             {
                 StopDash();
             }
-            _rb.velocity = _dashSpeed * _dashDirection;
+            _rb.velocity = _dashSpeed * _dashDirection.normalized;
         }
     }
 

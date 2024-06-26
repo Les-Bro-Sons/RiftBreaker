@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 1
+  ChargeTime: 0.2
   SpecialAttackChargeTime: 30
   _chargeZoom: 0.85
   _attackCooldown: 0.3
@@ -326,6 +326,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _jumpCurve:
     serializedVersion: 2
     m_Curve:

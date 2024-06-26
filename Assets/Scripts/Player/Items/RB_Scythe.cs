@@ -16,6 +16,7 @@ public class RB_Scythe : RB_Items
     //Properties
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
+    public float ZoneDelay = .1f;
 
     public override void Attack() {
         base.Attack();

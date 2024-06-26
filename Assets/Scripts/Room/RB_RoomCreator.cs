@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class RB_RoomCreator : MonoBehaviour
@@ -63,7 +62,7 @@ public class RB_RoomCreator : MonoBehaviour
                 break;
         }
         _meshObjects.Clear();
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
     }
 
     // Creates mesh colliders based on the given points and normal
@@ -202,7 +201,7 @@ public class RB_RoomCreator : MonoBehaviour
         meshCollider.sharedMesh = mesh;
 
         EditorUtility.SetDirty(meshCollider);
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
 
         return meshCollider;
     }

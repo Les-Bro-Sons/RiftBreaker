@@ -239,10 +239,13 @@ public class RB_PlayerMovement : MonoBehaviour
         
         _firstDashPosition = _transform.position;
         _dashDirection = (RB_InputManager.Instance.MoveValue.magnitude >= .1f )  ? new Vector3(RB_InputManager.Instance.MoveValue.x, 0, RB_InputManager.Instance.MoveValue.y) : -_transform.forward;
-        if (Physics.Raycast(_transform.position, _dashDirection.normalized * _dashDistance, out RaycastHit hit, 1 << 3))
+        if (Physics.Raycast(_transform.position, _dashDirection.normalized * _dashDistance, out RaycastHit hit, (1 << 3)))
         {
-            print("wall hitted");
-            _dashDistance = (hit.point - _transform.position).magnitude - 1;
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+            {
+                print(hit.collider.name);
+                _dashDistance = (hit.point - _transform.position).magnitude - .5f;
+            }
         }
 
         _lastUsedDashTime = Time.time;

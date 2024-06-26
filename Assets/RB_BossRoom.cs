@@ -22,4 +22,10 @@ public class RB_BossRoom : MonoBehaviour{
             RB_InputManager.Instance.SpecialAttackEnabled = false;
         }
     }
+
+    private void OnDestroy()
+    {
+        RB_InputManager.Instance.AttackEnabled = true;
+        RB_InputManager.Instance.SpecialAttackEnabled = true;
+    }
 }

@@ -99,6 +99,7 @@ public class RB_Scythe : RB_Items
                 if (enemy.Dead)
                 {
                     enemy.Team = TEAMS.Player;
+                    enemy.HpMax /= 2f;
                     enemy.Heal();
                 }
             }

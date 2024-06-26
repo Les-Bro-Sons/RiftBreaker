@@ -236,8 +236,15 @@ public class RB_PlayerMovement : MonoBehaviour
     public void StartDash()
     {
         //Starting dash
+        
         _firstDashPosition = _transform.position;
         _dashDirection = (RB_InputManager.Instance.MoveValue.magnitude >= .1f )  ? new Vector3(RB_InputManager.Instance.MoveValue.x, 0, RB_InputManager.Instance.MoveValue.y) : -_transform.forward;
+        if (Physics.Raycast(_transform.position, _dashDirection.normalized * _dashDistance, out RaycastHit hit, 1 << 3))
+        {
+            print("wall hitted");
+            _dashDistance = (hit.point - _transform.position).magnitude - 1;
+        }
+
         _lastUsedDashTime = Time.time;
         _isDashing = true;
         //Starting dash animation

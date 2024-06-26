@@ -184,9 +184,13 @@ public class RB_CommandManager : MonoBehaviour
     {
         if(int.TryParse(damageMultiplier, out int damageMultiplierInt))
         {
-            RB_PlayerAction.Instance.Item.AttackDamage *= damageMultiplierInt;
-            RB_PlayerAction.Instance.Item.ChargedAttackDamage *= damageMultiplierInt;
-            RB_PlayerAction.Instance.Item.SpecialAttackDamage *= damageMultiplierInt;
+            foreach (RB_Items item in _items)
+            {
+                item.AttackDamage *= damageMultiplierInt;
+                item.ChargedAttackDamage *= damageMultiplierInt;
+                item.SpecialAttackDamage *= damageMultiplierInt;
+            }
+            
         }
     }
 

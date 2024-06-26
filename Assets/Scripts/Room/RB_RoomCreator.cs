@@ -73,6 +73,7 @@ public class RB_RoomCreator : MonoBehaviour
         meshObject.transform.parent = transform;
         colliders.transform.parent = meshObject.transform;
 
+
         for (int i = 0; i < ColliderPoints.Count; i++)
         {
             GameObject childObject = new GameObject("MeshCollider_" + i);

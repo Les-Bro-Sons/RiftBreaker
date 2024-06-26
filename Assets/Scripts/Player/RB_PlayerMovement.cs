@@ -22,6 +22,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _dashCooldown; public float DashCooldown { get { return _dashCooldown; } }
     [SerializeField] private float _dashSpeed;
     [SerializeField] private float _dashDistance;
+    private float _currentDashDistance;
     [SerializeField] private float _fadeOutInterval;
     [SerializeField] private float _fadeForce;
     [SerializeField] private float _zFadeOffset;
@@ -239,13 +240,17 @@ public class RB_PlayerMovement : MonoBehaviour
         
         _firstDashPosition = _transform.position;
         _dashDirection = (RB_InputManager.Instance.MoveValue.magnitude >= .1f )  ? new Vector3(RB_InputManager.Instance.MoveValue.x, 0, RB_InputManager.Instance.MoveValue.y) : -_transform.forward;
-        if (Physics.Raycast(_transform.position, _dashDirection.normalized * _dashDistance, out RaycastHit hit, (1 << 3)))
+        if (Physics.Raycast(_transform.position, _dashDirection.normalized, out RaycastHit hit, _dashDistance, (1 << 3)))
         {
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
             {
                 print(hit.collider.name);
-                _dashDistance = (hit.point - _transform.position).magnitude - .5f;
+                _currentDashDistance = (hit.point - _transform.position).magnitude - .5f;
             }
+        }
+        else
+        {
+            _currentDashDistance = _dashDistance;
         }
 
         _lastUsedDashTime = Time.time;
@@ -269,7 +274,7 @@ public class RB_PlayerMovement : MonoBehaviour
         {
             //Dashing
             float distanceThisFrame = Vector3.Distance(_firstDashPosition, _transform.position);
-            if (distanceThisFrame >= _dashDistance || (Time.time >= _lastUsedDashTime + _totalDashTime && _currentVelocity.magnitude <= 1))
+            if (distanceThisFrame >= _currentDashDistance || (Time.time >= _lastUsedDashTime + _totalDashTime && _currentVelocity.magnitude <= 1))
             {
                 StopDash();
             }

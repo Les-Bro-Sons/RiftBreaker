@@ -28,7 +28,7 @@ public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointe
     }
 
     public void OnClick() {
-        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0.3f, 10f);
+        RB_AudioManager.Instance.PlaySFX("click", false, false, 0.3f, 10f);
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -41,7 +41,7 @@ public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnSelect(BaseEventData eventData){
         _isSelectedByNavigation = true;
-        RB_AudioManager.Instance.PlaySFX("select" ,transform, false, 0.3f, 10f);
+        RB_AudioManager.Instance.PlaySFX("select" , false, false, 0.3f, 10f);
     }
 
     public void OnDeselect(BaseEventData eventData){

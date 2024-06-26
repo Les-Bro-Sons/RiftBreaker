@@ -50,7 +50,7 @@ public class RB_Dialogue : MonoBehaviour
 
     private void Start()
     {
-        RB_InputManager.Instance.EventAttackStartedEvenIfDisabled.AddListener(Click);
+        RB_MenuInputManager.Instance.EventNextStarted.AddListener(Click);
         _currentDialogueIndex = 0;
     }
 

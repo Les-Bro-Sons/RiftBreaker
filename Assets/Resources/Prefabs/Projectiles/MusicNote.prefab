@@ -299,8 +299,8 @@ MonoBehaviour:
   _launchForce: {x: 0, y: 0, z: 0}
   _totalLifeTime: 2
   Team: 1
-  _destroyOnWall: 0
-  _wallDetectionLength: 1
+  _destroyOnWall: 1
+  _wallDetectionLength: 0.5
   _spriteRenderer: {fileID: 7471767154871852418}
   _alphaCurve:
     serializedVersion: 2
@@ -366,13 +366,19 @@ MonoBehaviour:
   EventOnPlayerEntered:
     m_PersistentCalls:
       m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
+    m_PersistentCalls:
+      m_Calls: []
   EventOnEnemyEntered:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyExit:
-    m_PersistentCalls:
-      m_Calls: []
-  EventOnPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &186252890803079702

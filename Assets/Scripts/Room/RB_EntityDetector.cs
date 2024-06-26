@@ -10,7 +10,7 @@ public class RB_EntityDetector : MonoBehaviour
         _room = GetComponentInParent<RB_Room>();
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health entityHealth))
         {

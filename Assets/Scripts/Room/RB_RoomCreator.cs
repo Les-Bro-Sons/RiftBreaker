@@ -1,10 +1,6 @@
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.SceneManagement;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RB_RoomCreator : MonoBehaviour
 {
@@ -53,18 +49,16 @@ public class RB_RoomCreator : MonoBehaviour
             foreach (Transform room in transform)
             {
                 room.parent = _roomManager.transform;
-                EditorUtility.SetDirty(room);
             }
             maxIteration--;
             if(maxIteration <= 0)
                 break;
         }
         _meshObjects.Clear();
-
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
-    private GameObject CreateMeshCollidersOld(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
+    // Creates mesh colliders based on the given points and normal
+    private GameObject CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
     {
         GameObject meshObject = new GameObject("Room");
         meshObject.AddComponent<RB_Room>();
@@ -112,84 +106,6 @@ public class RB_RoomCreator : MonoBehaviour
             meshCollider.sharedMesh = mesh;
             _meshObjects.Add(childObject);
         }
-
-        return meshObject;
-    }
-
-    // Creates mesh colliders based on the given points and normal
-    private GameObject CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
-    {
-        GameObject meshObject = new GameObject("Room");
-        meshObject.AddComponent<RB_Room>();
-        GameObject collider = new GameObject("Colliders");
-        MeshCollider meshCollider = collider.AddComponent<MeshCollider>();
-        meshCollider.convex = true;
-        meshCollider.isTrigger = IsCollidersTrigger;
-        collider.AddComponent<RB_EntityDetector>();
-        Mesh mesh = new();
-        collider.layer = LayerMask.NameToLayer("Room");
-        meshObject.transform.parent = transform;
-        collider.transform.parent = meshObject.transform;
-        Vector3[] vertices = new Vector3[(ColliderPoints.Count + 1) * 2];
-        int[] faces = new int[ColliderPoints.Count * 12];
-
-        //Generate top and base faces
-        int verticesOffset = ColliderPoints.Count+1;
-        vertices[0] = centerBase;
-        vertices[verticesOffset] = centerBase+normal*ColliderHeight;
-        for(int i = 1; i <= ColliderPoints.Count; i++)
-        {
-            vertices[i] = ColliderPoints[i-1];
-            vertices[i + verticesOffset] = vertices[i] + normal * ColliderHeight;
-        }
-        int faceArrayIndex = 0;
-        int faceOffset = ColliderPoints.Count * 3;
-        int n;
-        for (int i = 1; i <= ColliderPoints.Count; i++)
-        {
-            n = (i == ColliderPoints.Count) ? 1 : i + 1;
-            //BaseFace
-
-            faceArrayIndex = i * 3;
-            faces[faceArrayIndex] = 0;
-            faces[faceArrayIndex + 1] = i;
-            faces[faceArrayIndex + 2] = n;
-
-            //TopFace
-            faces[faceArrayIndex + faceOffset] = verticesOffset;
-            faces[faceArrayIndex + faceOffset + 1] = i + verticesOffset;
-            faces[faceArrayIndex + faceOffset + 2] = n + verticesOffset;
-        }
-
-        int sideOffset = ColliderPoints.Count * 6;
-        print(sideOffset);
-
-        for (int i = 1; i <= ColliderPoints.Count; i++)
-        {
-            n = (i == ColliderPoints.Count) ? 1 : i + 1;
-            faceArrayIndex = sideOffset;
-            faces[faceArrayIndex] = i;
-            faces[faceArrayIndex + 1] = n;
-            faces[faceArrayIndex + 2] = i + verticesOffset;
-
-            print(faceArrayIndex + sideOffset);
-            
-            faces[faceArrayIndex] = i + verticesOffset;
-            faces[faceArrayIndex + 1] = n + verticesOffset;
-            faces[faceArrayIndex + 2] = n;
-            sideOffset += 6;
-        }
-
-        mesh.vertices = vertices;
-        mesh.triangles = faces;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-        mesh.name = "CustomCollider";
-
-        meshCollider.sharedMesh = mesh;
-
-        EditorUtility.SetDirty(meshObject);
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 
         return meshObject;
     }
@@ -283,7 +199,7 @@ public class RB_RoomCreator : MonoBehaviour
         Vector3 normal = Vector3.Cross(v1, v2).normalized;
 
         // Ensure the normal is oriented towards Vector3.up
-        if (Vector3.Dot(normal, Vector3.up) < 0)
+        if (Vector3.Dot(normal, Vector3.up) > 0)
         {
             normal = -normal;
         }
@@ -298,19 +214,14 @@ public class RB_RoomCreator : MonoBehaviour
         {
             foreach (GameObject mesh in _meshObjects.ToList())
             {
-                EditorUtility.SetDirty(mesh);
                 DestroyImmediate(mesh);
             }
             foreach (Transform colliders in transform)
             {
-                EditorUtility.SetDirty(colliders);
                 DestroyImmediate(colliders.gameObject);
             }
         }
         _meshObjects.Clear();
-
-        // Mark the current scene as dirty to ensure the changes are recognized
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
     // Function to calculate the area of a triangle given its vertices

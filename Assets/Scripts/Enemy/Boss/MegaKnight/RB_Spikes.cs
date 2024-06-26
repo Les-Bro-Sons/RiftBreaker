@@ -47,7 +47,7 @@ public class RB_Spikes : MonoBehaviour
 
     private void Start()
     {
-        //RB_AudioManager.Instance.PlaySFX("Spike_Sound", transform.position, false, 0, 1f);
+        RB_AudioManager.Instance.PlaySFX("Spike_Sound", transform.position, false, 0, 1f);
     }
     private void Update()
     {

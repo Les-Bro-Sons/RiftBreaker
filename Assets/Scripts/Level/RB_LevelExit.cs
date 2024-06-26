@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using MANAGERS;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class RB_LevelExit : MonoBehaviour
 {
     public static RB_LevelExit Instance;
 
+    [HideInInspector] public UnityEvent EventEnterInPortal;
+
     [Header("General")]
     [SerializeField] private bool _goToNextSceneID = true;
     [SerializeField] private string _nextSceneName = "";
     [SerializeField] private int _nextSceneID = -1;
     [SerializeField] private bool _isSwitchingOnPortalOpening = false;
+    [SerializeField] private bool _isSaving = true;
 
     [Header("Phase")]
     [SerializeField] private bool _availableOnPhase = false;
@@ -123,9 +127,14 @@ public class RB_LevelExit : MonoBehaviour
 
     private void EnterPortal()
     {
+        EventEnterInPortal?.Invoke();
+
         if (_goToNextSceneID) //switch scene to next build index
         {
-            RB_SaveManager.Instance.SaveToJson();
+            if (_isSaving)
+            {
+                RB_SaveManager.Instance.SaveToJson();
+            }
             RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
         }
         else

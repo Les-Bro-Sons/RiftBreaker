@@ -184,9 +184,13 @@ public class RB_CommandManager : MonoBehaviour
     {
         if(int.TryParse(damageMultiplier, out int damageMultiplierInt))
         {
-            RB_PlayerAction.Instance.Item.AttackDamage *= damageMultiplierInt;
-            RB_PlayerAction.Instance.Item.ChargedAttackDamage *= damageMultiplierInt;
-            RB_PlayerAction.Instance.Item.SpecialAttackDamage *= damageMultiplierInt;
+            foreach (RB_Items item in _items)
+            {
+                item.AttackDamage *= damageMultiplierInt;
+                item.ChargedAttackDamage *= damageMultiplierInt;
+                item.SpecialAttackDamage *= damageMultiplierInt;
+            }
+            
         }
     }
 
@@ -214,8 +218,7 @@ public class RB_CommandManager : MonoBehaviour
     private void Weapon()
     {
         RB_Items foundItem = FindAnyObjectByType<RB_Items>();
-        print(foundItem.name);
-        _playerRb.position = foundItem.transform.position;
+        if (foundItem) _playerRb.position = foundItem.transform.position;
     }
 
     private void Speed(string speed)

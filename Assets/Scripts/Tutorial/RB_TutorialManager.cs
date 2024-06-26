@@ -68,7 +68,6 @@ public class RB_TutorialManager : MonoBehaviour
     public float RobertMoveSpeed;
     public RB_Room TutorialRoom;
     public RB_Room RewindTutoRoom;
-    public RB_Room StartTutoRoom;
     public RB_CollisionDetection RoomExit;
     private List<RB_FadeEffect> _fadeEffects = new List<RB_FadeEffect>();
     private List<ButtonEffect> _buttonEffects = new List<ButtonEffect>();

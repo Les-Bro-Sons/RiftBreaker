@@ -123,6 +123,7 @@ public class RB_Dialogue : MonoBehaviour
         {
             _isListening = true;
             _playerNameInputField.Select();
+            _playerNameInputField.ActivateInputField();
             _playerNameInputField.characterLimit = 12;
             _playerNameInputField.onValueChanged.AddListener(OnPlayerEnterLetterName);
             _playerNameInputField.onEndEdit.AddListener(OnPlayerFinishedEnterName);
@@ -247,13 +248,11 @@ public class RB_Dialogue : MonoBehaviour
 
     private void OnPlayerFinishedEnterName(string playerName)
     {
-        print("player finished");
-        if (_playerNameInputField.text != "")
+        if(_playerNameInputField.isFocused)
         {
-            NextDialogue();
+            _playerNameInputField.ReleaseSelection();
+            _playerNameInputField.DeactivateInputField();
         }
-        _playerNameInputField.Select();
-        _playerNameInputField.ActivateInputField();
     }
 
     private void ReadTextAction()

@@ -5,4 +5,6 @@ public class RB_SaveObject
     public bool TutoDone = false;
 
     public string PlayerName = "";
+
+    public float HpBossRush = 150;
 }

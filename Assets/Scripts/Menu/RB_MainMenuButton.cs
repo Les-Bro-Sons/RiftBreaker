@@ -36,7 +36,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     }
 
     public void OnClick() {
-        RB_AudioManager.Instance.PlaySFX("click", transform, false, 0, 100f);
+        RB_AudioManager.Instance.PlaySFX("click", false, false, 0, 100f);
     }
 
     private void Start()
@@ -58,7 +58,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     public void OnPointerEnter(PointerEventData eventData){
         if (_button.enabled) {
-            RB_AudioManager.Instance.PlaySFX("select", transform, false, 0, 100f);
+            RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 100f);
             RB_MainMenuButtonManager.Instance.ButtonHooveredCount++;
             _button.Select();
         }

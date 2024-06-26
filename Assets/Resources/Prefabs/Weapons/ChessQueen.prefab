@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 3
+  ChargeTime: 1
   SpecialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 1
@@ -164,6 +164,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _pawnPrefab: {fileID: 3802911559949533877, guid: 2ff2e45e915a8c445805ebad3cd3c5c2,
     type: 3}
   _towerPrefab: {fileID: 4019689486546910041, guid: 2fc813b3e0297cf41ae7d7f0d250a838,

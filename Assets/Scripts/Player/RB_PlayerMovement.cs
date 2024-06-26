@@ -137,7 +137,7 @@ public class RB_PlayerMovement : MonoBehaviour
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = ForwardDirection;
+            DirectionToAttack = transform.forward ;
         }
     }
 
@@ -163,7 +163,8 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public void GetDirection(Vector3 direction)
     {
-        DirectionToMove = new Vector3(direction.x, 0, direction.y);
+        if(_isMoving)
+            DirectionToMove = new Vector3(direction.x, 0, direction.y);
     }
 
     public Vector3 GetDirectionToMove()

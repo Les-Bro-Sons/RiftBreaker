@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class RB_RobertLenec : RB_Boss
 {
     public static RB_RobertLenec Instance;
-    private new Transform transform;
     [HideInInspector] public UnityEvent EventPlayRobertMusic;
     private bool _inRoom = false;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
@@ -49,6 +48,7 @@ public class RB_RobertLenec : RB_Boss
     [Header("Clone Attack (attack3)")]
     public GameObject Clone;
     [SerializeField] private List<Transform> _waypoints;
+    [SerializeField] private Transform _tpPoint;
     [SerializeField] private int _numberOfArrow;
     [SerializeField] private float _cloneAttackInterval = 0.5f;
     [SerializeField] private float _cloneAttackDelay = 1f;
@@ -308,7 +308,7 @@ public class RB_RobertLenec : RB_Boss
         //get the position of the boss before the attack
         _lastPosition = transform.position;
         //tp the boss out of the map
-        transform.position = new Vector3(transform.position.x + 3000, transform.position.y, transform.position.z);
+        transform.position = _tpPoint.position;
 
         //Cooldown
         _currentCooldownAttack3 = Random.Range(_minCooldownForAttack, _maxCooldownForAttack);

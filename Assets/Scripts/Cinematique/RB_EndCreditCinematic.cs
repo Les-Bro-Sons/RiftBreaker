@@ -22,6 +22,8 @@ public class RB_EndCreditCinematic : MonoBehaviour
         {
             RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
             RB_SaveManager.Instance.ResetSave();
+            RB_SaveManager.Instance.SaveObject.IsGameFinish = true;
+            Debug.Log(RB_SaveManager.Instance.SaveObject.IsGameFinish);
         }
     }
 

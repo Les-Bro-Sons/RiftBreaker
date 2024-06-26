@@ -327,7 +327,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 49848244}
   m_OnClick:
     m_PersistentCalls:
@@ -1751,6 +1751,7 @@ GameObject:
   - component: {fileID: 772765846}
   - component: {fileID: 772765845}
   - component: {fileID: 772765848}
+  - component: {fileID: 772765849}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1876,6 +1877,19 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &772765849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772765844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febec79384c41d948a69670bdeae14a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buttonToShake: {fileID: 654837859}
 --- !u!1 &902583238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,6 +2787,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Credit
+      objectReference: {fileID: 0}
+    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 919
+      objectReference: {fileID: 0}
+    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2444
       objectReference: {fileID: 0}
     - target: {fileID: 3472642188951070558, guid: 4f75c56de35c4854ca5a4fc650ebb669,
         type: 3}

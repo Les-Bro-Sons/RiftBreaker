@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class RB_RoomCreator : MonoBehaviour
 {
     // Properties section
@@ -23,6 +25,9 @@ public class RB_RoomCreator : MonoBehaviour
     //Room section
     [Header("Rooms")]
     [SerializeField] private RB_RoomManager _roomManager;
+    private MeshCollider _currentCollider;
+    private GameObject _currentColliderObject;
+    private GameObject _currentMeshObject;
 
     // Updates the collider mesh based on the defined points
     public void UpdateCollider()
@@ -37,12 +42,15 @@ public class RB_RoomCreator : MonoBehaviour
 
             // Calculate the top center by translating along the inverted normal
             Vector3 centerTop = centerBase - normal * ColliderHeight;
-            CreateMeshVisual(centerBase, centerTop, normal, CreateMeshColliders(centerBase, centerTop, normal).transform);
+            CreateMeshColliders(centerBase, centerTop, normal);
         }
     }
 
     public void CreateRoom()
     {
+        _currentCollider = null;
+        _currentColliderObject = null;
+        _currentMeshObject = null;
         int maxIteration = transform.childCount + 100;
         while (transform.childCount != 0)
         {
@@ -51,14 +59,15 @@ public class RB_RoomCreator : MonoBehaviour
                 room.parent = _roomManager.transform;
             }
             maxIteration--;
-            if(maxIteration <= 0)
+            if (maxIteration <= 0)
                 break;
         }
         _meshObjects.Clear();
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
     }
 
     // Creates mesh colliders based on the given points and normal
-    private GameObject CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
+    private GameObject CreateMeshCollidersOld(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
     {
         GameObject meshObject = new GameObject("Room");
         meshObject.AddComponent<RB_Room>();
@@ -108,6 +117,94 @@ public class RB_RoomCreator : MonoBehaviour
         }
 
         return meshObject;
+    }
+
+    // Creates mesh colliders based on the given points and normal
+    private MeshCollider CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
+    {
+        if(_currentMeshObject == null)
+        {
+            _currentMeshObject = new GameObject("Room");
+            _currentMeshObject.AddComponent<RB_Room>();
+
+            _currentMeshObject.transform.parent = transform;
+        }
+
+        if(_currentColliderObject == null)
+        {
+            _currentColliderObject = new GameObject("Colliders");
+            _currentColliderObject.transform.parent = _currentMeshObject.transform;
+            _currentColliderObject.AddComponent<RB_EntityDetector>();
+            _currentColliderObject.layer = LayerMask.NameToLayer("Room");
+        }
+
+        MeshCollider meshCollider = _currentColliderObject.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
+        meshCollider.isTrigger = IsCollidersTrigger;
+        Mesh mesh = new();
+        
+        Vector3[] vertices = new Vector3[(ColliderPoints.Count + 1) * 2];
+        int[] faces = new int[ColliderPoints.Count * 12];
+
+        //Generate top and base faces
+        int verticesOffset = ColliderPoints.Count+1;
+        vertices[0] = centerBase;
+        vertices[verticesOffset] = centerBase+normal*ColliderHeight;
+        for(int i = 1; i <= ColliderPoints.Count; i++)
+        {
+            vertices[i] = ColliderPoints[i-1];
+            vertices[i + verticesOffset] = vertices[i] + normal * ColliderHeight;
+        }
+        int faceArrayIndex = 0;
+        int faceOffset = ColliderPoints.Count * 3;
+        int n;
+        for (int i = 1; i <= ColliderPoints.Count; i++)
+        {
+            n = (i == ColliderPoints.Count) ? 1 : i + 1;
+            //BaseFace
+
+            faceArrayIndex = i * 3;
+            faces[faceArrayIndex] = 0;
+            faces[faceArrayIndex + 1] = i;
+            faces[faceArrayIndex + 2] = n;
+
+            //TopFace
+            faces[faceArrayIndex + faceOffset] = verticesOffset;
+            faces[faceArrayIndex + faceOffset + 1] = i + verticesOffset;
+            faces[faceArrayIndex + faceOffset + 2] = n + verticesOffset;
+        }
+
+        int sideOffset = ColliderPoints.Count * 6;
+        print(sideOffset);
+
+        for (int i = 1; i <= ColliderPoints.Count; i++)
+        {
+            n = (i == ColliderPoints.Count) ? 1 : i + 1;
+            faceArrayIndex = sideOffset;
+            faces[faceArrayIndex] = i;
+            faces[faceArrayIndex + 1] = n;
+            faces[faceArrayIndex + 2] = i + verticesOffset;
+
+            print(faceArrayIndex + sideOffset);
+            
+            faces[faceArrayIndex] = i + verticesOffset;
+            faces[faceArrayIndex + 1] = n + verticesOffset;
+            faces[faceArrayIndex + 2] = n;
+            sideOffset += 6;
+        }
+
+        mesh.vertices = vertices;
+        mesh.triangles = faces;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        mesh.name = "CustomCollider";
+
+        meshCollider.sharedMesh = mesh;
+
+        EditorUtility.SetDirty(meshCollider);
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+
+        return meshCollider;
     }
 
     // Creates a visual representation of the collider mesh
@@ -199,7 +296,7 @@ public class RB_RoomCreator : MonoBehaviour
         Vector3 normal = Vector3.Cross(v1, v2).normalized;
 
         // Ensure the normal is oriented towards Vector3.up
-        if (Vector3.Dot(normal, Vector3.up) > 0)
+        if (Vector3.Dot(normal, Vector3.up) < 0)
         {
             normal = -normal;
         }
@@ -248,3 +345,4 @@ public class RB_RoomCreator : MonoBehaviour
         }
     }
 }
+#endif

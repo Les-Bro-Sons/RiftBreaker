@@ -450,7 +450,7 @@ MonoBehaviour:
   BowRange: 10
   BowDamage: 15
   BowKnockback: 10
-  BowDelay: 1
+  BowDelay: 0.25
   ArrowSpeed: 15
   ArrowDistance: 15
   HeavyArrowPrefab: {fileID: 4324573190562381960, guid: f629e2a76095f2b428be2ad69b0b416b,
@@ -458,7 +458,7 @@ MonoBehaviour:
   HeavyBowRange: 15
   HeavyBowDamage: 10
   HeavyBowKnockback: 15
-  HeavyBowDelay: 1
+  HeavyBowDelay: 0.25
   HeavyBowProjectileNumber: 3
   HeavyBowDelayBetweenProjectile: 0.2
   HeavyArrowSpeed: 15
@@ -466,7 +466,7 @@ MonoBehaviour:
   HeavySlashRange: 2
   HeavySlashDamage: 20
   HeavySlashKnockback: 10
-  HeavySlashFirstDelay: 0.8
+  HeavySlashFirstDelay: 0.4
   HeavySlashComboDelay: 0.1
   HeavySlashCollisionSize: 3
   CurrentHeavySlashCombo: 0

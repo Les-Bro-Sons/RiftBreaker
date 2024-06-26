@@ -290,6 +290,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 .WithControlsExcluding("<Gamepad>/leftStick/y").WithControlsExcluding("<Gamepad>/leftStick/x")
                 .WithControlsExcluding("<Gamepad>/rightStick/y").WithControlsExcluding("<Gamepad>/rightStick/x")
                 .WithControlsExcluding("<keyboard>/leftmeta").WithControlsExcluding("<keyboard>/rightmeta")
+                .WithControlsExcluding("<Keyboard>/ period")
                 .WithCancelingThrough("<keyboard>/escape")
                 .OnPotentialMatch(operation =>
                 {

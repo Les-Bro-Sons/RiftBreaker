@@ -57,5 +57,10 @@ public class RB_SaveManager : MonoBehaviour
     public void ResetSave()
     {
         SaveObject = new();
+        string saveObjectData = JsonUtility.ToJson(SaveObject);
+        string filePath = Application.persistentDataPath + "/SaveObjectData.json";
+        System.IO.File.WriteAllText(filePath, saveObjectData);
+        IsSaveExist = false;
+        print("Sauvegard effectué");
     }
 }

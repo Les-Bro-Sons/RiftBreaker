@@ -219,7 +219,7 @@ public class RB_AI_Attack : RB_BTNode
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy.gameObject, out RB_Health enemyHealth))
             {
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
-                RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, false, 0f, 1f);
+                RB_AudioManager.Instance.PlaySFX("BloodStab", _transform.position, false, 0.1f, 1f);
                 _playSoundDamaged = true;
                 
                 alreadyDamaged.Add(enemyHealth);
@@ -244,7 +244,7 @@ public class RB_AI_Attack : RB_BTNode
                 if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
                 if (_playSoundDamaged)
                 {
-                    RB_AudioManager.Instance.PlaySFX("BloodStab", RB_PlayerController.Instance.transform.position, false, 0f, 1f);
+                    RB_AudioManager.Instance.PlaySFX("BloodStab", _transform.position, false, 0.1f, 1f);
                     _playSoundDamaged = false;
                 }
                 alreadyDamaged.Add(enemyHealth);

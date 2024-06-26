@@ -14,12 +14,18 @@ public class RB_BossRoom : MonoBehaviour{
     void Update() {
         if (_room.IsPlayerInRoom)
         {
-            RB_InputManager.Instance.AttackEnabled = false;
-            RB_InputManager.Instance.SpecialAttackEnabled = false;
-        }
-        else{
             RB_InputManager.Instance.AttackEnabled = true;
             RB_InputManager.Instance.SpecialAttackEnabled = true;
         }
+        else{
+            RB_InputManager.Instance.AttackEnabled = false;
+            RB_InputManager.Instance.SpecialAttackEnabled = false;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        RB_InputManager.Instance.AttackEnabled = true;
+        RB_InputManager.Instance.SpecialAttackEnabled = true;
     }
 }

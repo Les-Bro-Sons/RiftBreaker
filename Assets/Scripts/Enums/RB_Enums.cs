@@ -24,6 +24,10 @@ public enum SCENENAMES
 
     FirstCinematic,
     EndCinematic,
+
+    BossRush1,
+    BossRush2,
+    BossRush3,
 }
 
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~

@@ -37,6 +37,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     public void OnClick() {
         RB_AudioManager.Instance.PlaySFX("click", false, false, 0, 1f);
+
     }
 
     private void Start()

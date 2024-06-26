@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 #if (UNITY_EDITOR)
@@ -144,6 +145,7 @@ public class RB_RoomManager:MonoBehaviour
             {
                 if (room.gameObject.TryGetComponent<RB_Room>(out RB_Room roomScript) && _rooms.Contains(roomScript))
                 {
+                    EditorUtility.SetDirty(room);
                     DestroyImmediate(roomScript.gameObject);
                     _rooms.Remove(roomScript);
                 }
@@ -153,6 +155,9 @@ public class RB_RoomManager:MonoBehaviour
             if(maxIter <= 0)
                 break;
         }
+        
+
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         
     }
 }

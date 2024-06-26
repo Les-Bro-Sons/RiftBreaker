@@ -75,6 +75,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_health)
         {
             newPoint.Health = _health.Hp;
+            newPoint.MaxHealth = _health.HpMax;
             newPoint.Dead = _health.Dead;
         }
         if (_rb) newPoint.Velocity = _rb.velocity;
@@ -154,8 +155,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
         if (_health)
         {
-
-            //_health.Hp = currentP.Health;
+            _health.HpMax = currentP.MaxHealth;
             if (_health.Hp > currentP.Health)
                 _health.TakeDamage(Mathf.Abs(_health.Hp - currentP.Health), true);
             else if (_health.Hp < currentP.Health)

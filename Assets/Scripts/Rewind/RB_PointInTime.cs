@@ -21,6 +21,7 @@ public struct PointInTime
 
     //RB_Health//
     public float Health;
+    public float MaxHealth;
     public bool Dead;
     /////////////
 

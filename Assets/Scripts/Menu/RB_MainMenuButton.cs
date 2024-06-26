@@ -71,6 +71,7 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     public void OnSelect(BaseEventData eventData){
         RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton;
+        RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f);
         _isSelected = true;
     }
 

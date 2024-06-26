@@ -597,7 +597,6 @@ MonoBehaviour:
   IsSpecialAttacking: 0
   IsAttacking: 0
   IsOnCooldown: 0
-  SpecialAttackCharge: 100
   PlayerAnimator: {fileID: 461484540895704965}
   ColliderAnimator: {fileID: 7873082402642551729}
   CollisionDetection: {fileID: 1560718448460901250}
@@ -621,6 +620,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventItemGathered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventItemDropped:
     m_PersistentCalls:
       m_Calls: []
   EventOnChargeSpecialAttackGathered:
@@ -1221,7 +1223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 0
-  HpMax: 100
+  HpMax: 150
   Armor: 0
   Team: 1
   Dead: 0

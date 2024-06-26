@@ -97,6 +97,8 @@ public class RB_RobertLenec : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
+
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();

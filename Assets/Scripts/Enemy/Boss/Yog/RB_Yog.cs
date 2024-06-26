@@ -117,6 +117,8 @@ public class RB_Yog : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
+
         _bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         _playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();

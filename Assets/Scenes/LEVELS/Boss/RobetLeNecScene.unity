@@ -5161,76 +5161,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
         type: 3}
-      propertyPath: AiAnimator
-      value: 
-      objectReference: {fileID: 513824827}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _spawnInPhase
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: SpriteRenderer
-      value: 
-      objectReference: {fileID: 513824828}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _cloneLifeTime
-      value: 1.75
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _dashKnockback
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: CooldownAttack1
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: CooldownAttack2
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: CooldownAttack3
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _distanceBehind
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _movingDuration
-      value: 0.65
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _areaDamageAmount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _areaDamageRadius
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _areaDamageInterval
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
-      propertyPath: _isAttachedToAPhase
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
-        type: 3}
       propertyPath: _waypoints.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -5329,18 +5259,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1419d593263f5fa49924781dc409ec49, type: 3}
---- !u!95 &513824827 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7214748225881584283, guid: 1419d593263f5fa49924781dc409ec49,
-    type: 3}
-  m_PrefabInstance: {fileID: 513824825}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &513824828 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 9101173564990518349, guid: 1419d593263f5fa49924781dc409ec49,
-    type: 3}
-  m_PrefabInstance: {fileID: 513824825}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &513824829 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -5315812548548587530, guid: 1419d593263f5fa49924781dc409ec49,
@@ -9582,6 +9500,7 @@ MonoBehaviour:
   IsClosedRoom: 1
   DetectedEnemies: []
   DetectedAllies: []
+  DetectedEntities: []
   Doors:
   - {fileID: 1174568152}
   IsPlayerInRoom: 0
@@ -19978,6 +19897,7 @@ MonoBehaviour:
   IsClosedRoom: 0
   DetectedEnemies: []
   DetectedAllies: []
+  DetectedEntities: []
   Doors: []
   IsPlayerInRoom: 0
 --- !u!1001 &1947877194

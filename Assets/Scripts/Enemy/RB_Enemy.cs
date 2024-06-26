@@ -27,6 +27,8 @@ public class RB_Enemy : MonoBehaviour
 
     public float ChargeSpecialAttackAmount;
 
+    private Sprite _spriteBeforeDeath;
+
     [HideInInspector] public UnityEvent EventAllyTeam;
     [HideInInspector] public UnityEvent EventEnemyTeam;
 
@@ -51,6 +53,7 @@ public class RB_Enemy : MonoBehaviour
         }
         Spawned();
         GetTarget();
+        SetLayerToTeam();
     }
 
     private void SetLayerToTeam()
@@ -106,6 +109,7 @@ public class RB_Enemy : MonoBehaviour
             if (_btTree) _btTree.enabled = false;
             if (AiAnimator) AiAnimator.enabled = false;
             _isTombstoned = true;
+            _spriteBeforeDeath = SpriteRenderer.sprite;
             SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
             _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
             _rb.velocity = Vector3.zero;
@@ -125,6 +129,7 @@ public class RB_Enemy : MonoBehaviour
                 _btTree.enabled = true;
                 _btTree.BoolDictionnary.Clear();
             }
+            SpriteRenderer.sprite = _spriteBeforeDeath;
             if (AiAnimator && !RB_TimeManager.Instance.IsRewinding) AiAnimator.enabled = true;
             _isTombstoned = false;
             _rb.excludeLayers = _originalExcludeLayer;

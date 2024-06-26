@@ -8,9 +8,8 @@ public class RB_FriendlyOutline : MonoBehaviour
     [SerializeField] private Material _outlineMaterial;
     private Material _baseMaterial;
 
-    private void Start()
+    private void Awake()
     {
-        SpriteRenderer[] sprites;
         _selfSpriteRenderer = GetComponent<SpriteRenderer>();
         if (RB_Tools.TryGetComponentInParent<RB_Enemy>(transform, out RB_Enemy enemy))
         {

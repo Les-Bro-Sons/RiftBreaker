@@ -23,6 +23,7 @@ public enum SCENENAMES
     Boss3,
 
     FirstCinematic,
+    EndCinematic,
 }
 
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~

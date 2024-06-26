@@ -77,7 +77,7 @@ public class RB_LevelManager : MonoBehaviour
             }
             RB_HUDManager.Instance.PlayAnimation(_phaseBoss);
         }
-        if (CurrentPhase == PHASES.Infiltration && CurrentScene != SCENENAMES.FirstCinematic)
+        if (CurrentPhase == PHASES.Infiltration && CurrentScene != SCENENAMES.FirstCinematic && CurrentScene != SCENENAMES.EndCinematic && CurrentScene != SCENENAMES.Tuto)
         {
             RB_AudioManager.Instance.PlayMusic("Infiltration_Music");
         }

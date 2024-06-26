@@ -189,7 +189,7 @@ public class RB_LevelManager : MonoBehaviour
         }
     }
 
-        public void PlayerLost() 
+    public void PlayerLost() 
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();

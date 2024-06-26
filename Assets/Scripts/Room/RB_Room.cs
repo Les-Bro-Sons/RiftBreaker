@@ -12,6 +12,7 @@ public class RB_Room : MonoBehaviour
     [Header("In Room")]
     public List<RB_Health> DetectedEnemies = new();
     public List<RB_Health> DetectedAllies = new();
+    public List<RB_Health> DetectedEntities = new();
     public List<RB_Door> Doors = new();
     public bool IsPlayerInRoom;
 
@@ -78,6 +79,22 @@ public class RB_Room : MonoBehaviour
         }
     }
 
+    public void AddDetectedEntity(RB_Health detectedEntity)
+    {
+        if (!DetectedEntities.Contains(detectedEntity))
+        {
+            DetectedEntities.Add(detectedEntity);
+        }
+    }
+
+    public void RemoveDetectedEntity(RB_Health lostEntity)
+    {
+        if (DetectedEntities.Contains(lostEntity))
+        {
+            DetectedEntities.Remove(lostEntity);
+        }
+    }
+
     public void AddDetectedEnemy(RB_Health detectedEnemy) //Add the detected enemies to the list of detected enemies
     {
         if (!DetectedEnemies.Contains(detectedEnemy))
@@ -85,6 +102,7 @@ public class RB_Room : MonoBehaviour
             if (DetectedAllies.Contains(detectedEnemy)) DetectedAllies.Remove(detectedEnemy);
             DetectedEnemies.Add(detectedEnemy);
         }
+        
     }
 
     public void RemoveDetectedEnemy(RB_Health lostEnemy) //Remove the detected enemies from the list of detected enemies

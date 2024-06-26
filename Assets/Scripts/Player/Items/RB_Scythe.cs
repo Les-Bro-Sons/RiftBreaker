@@ -16,6 +16,7 @@ public class RB_Scythe : RB_Items
     //Properties
     [SerializeField] private float _zoneGrowthSpeed;
     [SerializeField] private float _maxZoneSize;
+    public float ZoneDelay = .1f;
 
     public override void Attack() {
         base.Attack();
@@ -92,7 +93,7 @@ public class RB_Scythe : RB_Items
         int? currentPlayerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         if (currentPlayerRoom != null)
         {
-            List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEnemies;
+            List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEntities;
             foreach (RB_Health enemy in detectedEnemies)
             {
                 if (enemy.Dead)

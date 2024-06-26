@@ -26,6 +26,10 @@ public class RB_Enemy : MonoBehaviour
     protected RB_AiMovement _movement;
 
     public float ChargeSpecialAttackAmount;
+
+    [HideInInspector] public UnityEvent EventAllyTeam;
+    [HideInInspector] public UnityEvent EventEnemyTeam;
+
     protected virtual void Awake()
     {
         transform = GetComponent<Transform>();
@@ -54,9 +58,15 @@ public class RB_Enemy : MonoBehaviour
         int layer;
         TEAMS team = GetComponent<RB_Health>().Team;
         if (team == TEAMS.Ai)
+        {
             layer = LayerMask.NameToLayer("Enemy");
+            EventEnemyTeam?.Invoke();
+        }
         else
+        {
             layer = LayerMask.NameToLayer("Ally");
+            EventAllyTeam?.Invoke();
+        }
 
         gameObject.layer = layer;
         SetLayerToAllChildren(layer, transform);

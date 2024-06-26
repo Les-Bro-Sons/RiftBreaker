@@ -284,7 +284,8 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (RoomExit.IsPlayerIn())
         {
-            RoomExit.EventOnPlayerEntered.RemoveAllListeners(); //Remove listener
+            print("destroy");
+            Destroy(RoomExit.gameObject); //Remove listener
             InitializeAttackTuto();
         }
     }

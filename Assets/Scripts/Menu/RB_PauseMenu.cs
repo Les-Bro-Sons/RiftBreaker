@@ -24,7 +24,7 @@ public class RB_PauseMenu : MonoBehaviour {
             }
         }
         else if (_isUnpausing) { 
-            if(_oldTimeScale > 1f) {
+            if(_oldTimeScale != 1f) {
                 Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);
             }
             else {

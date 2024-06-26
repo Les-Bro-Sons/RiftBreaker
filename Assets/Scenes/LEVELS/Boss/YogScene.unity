@@ -8962,6 +8962,11 @@ PrefabInstance:
       objectReference: {fileID: 940450116}
     - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
         type: 3}
+      propertyPath: _centerRoom
+      value: 
+      objectReference: {fileID: 1088034549}
+    - target: {fileID: -8971773865608367034, guid: 3b0b5bf6fae28ab47981358a1ec1561d,
+        type: 3}
       propertyPath: _spawnInPhase
       value: 2
       objectReference: {fileID: 0}
@@ -10864,6 +10869,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1079100266}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1088034548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1088034549}
+  m_Layer: 0
+  m_Name: CenterRoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1088034549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088034548}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1090028668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22239,3 +22275,4 @@ SceneRoots:
   - {fileID: 181222536}
   - {fileID: 113038984}
   - {fileID: 1338780524}
+  - {fileID: 1088034549}

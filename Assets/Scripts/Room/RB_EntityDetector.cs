@@ -20,6 +20,7 @@ public class RB_EntityDetector : MonoBehaviour
                 _room.IsPlayerInRoom = true;
             else if(entityHealth.Team == TEAMS.Player)
                 _room.AddDectedAlly(entityHealth);
+            _room.AddDetectedEntity(entityHealth);
         }
         
     }
@@ -35,6 +36,7 @@ public class RB_EntityDetector : MonoBehaviour
             }
             _room.RemoveDetectedEnemy(entityHealth);
             _room.RemoveDectedAlly(entityHealth);
+            _room.RemoveDetectedEntity(entityHealth);
         }
     }
 }

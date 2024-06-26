@@ -57,6 +57,5 @@ public class RB_SaveManager : MonoBehaviour
     public void ResetSave()
     {
         SaveObject = new();
-        SaveToJson();
     }
 }

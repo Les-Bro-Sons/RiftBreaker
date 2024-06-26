@@ -104,7 +104,12 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     public void OnDeselect(BaseEventData eventData){
         _isSelected = false;
-        StopCoroutine(_cameraShake);
+
+        if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
+        {
+            StopCoroutine(_cameraShake);
+        }
+        
 
     }
 

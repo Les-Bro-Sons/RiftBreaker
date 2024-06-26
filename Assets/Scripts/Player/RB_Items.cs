@@ -105,7 +105,7 @@ public class RB_Items : MonoBehaviour
         GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + projectileToShoot), _playerTransform.position, Quaternion.LookRotation(RB_PlayerMovement.Instance.DirectionToAttack)) as GameObject;
         if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
         {
-            newObject.transform.position += RB_PlayerMovement.Instance.DirectionToAttack * projectile.SpawnDistanceFromPlayer;
+            newObject.transform.position += (RB_PlayerMovement.Instance.DirectionToAttack * 4) * projectile.SpawnDistanceFromPlayer;
             projectile.Team = TEAMS.Player;
         }
         return projectile;

@@ -7,7 +7,6 @@ public class RB_Mega_knight : RB_Boss
 {
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
-    private new Transform transform;
     public bool _inRoom = false;
     [HideInInspector] public UnityEvent EventPlayMKMusic;
 
@@ -74,6 +73,7 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();
@@ -84,6 +84,7 @@ public class RB_Mega_knight : RB_Boss
         }
         else if (_activationTimer < 0.5f)
         {
+            CurrentState = BOSSSTATES.Idle;
             _activationTimer += Time.deltaTime;
             return;
         }

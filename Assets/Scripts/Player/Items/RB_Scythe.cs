@@ -25,7 +25,7 @@ public class RB_Scythe : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(5);
             RobertShouldTalk = false;
@@ -78,18 +78,18 @@ public class RB_Scythe : RB_Items
 
     private void StopSound() {
         _stopSound = false;
-        RB_AudioManager.Instance.StopSFX();
+        RB_AudioManager.Instance.StopSFXByClip("darkMagic");
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ChargeZone();
     }
 
     public override void SpecialAttack() {
         base.SpecialAttack();
         int? currentPlayerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
-        print(currentPlayerRoom);
         if (currentPlayerRoom != null)
         {
             List<RB_Health> detectedEnemies = RB_RoomManager.Instance.GetAllRooms()[currentPlayerRoom.Value].DetectedEnemies;

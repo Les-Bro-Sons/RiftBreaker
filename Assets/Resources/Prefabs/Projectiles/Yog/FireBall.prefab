@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a2af8c374782e41a94b7c6f02fcec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _speed: 20
   _totalDistance: 20
   _projectileType: 1
   _launchForce: {x: 0, y: 0, z: 0}
@@ -224,6 +224,13 @@ MonoBehaviour:
   Team: 0
   _destroyOnWall: 0
   _wallDetectionLength: 1
+  _spriteRenderer: {fileID: 0}
+  _alphaCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _followParticles: {fileID: 0}
   _destroyParticles: {fileID: 0}
   _continuousForceScreenshake: 0
@@ -238,6 +245,9 @@ MonoBehaviour:
   _isDestroyingOnDamage: 1
   _damageOnExplosion: 0
   _explosionRadius: 1
+  _isBouncing: 0
+  _maxBounces: 3
+  _explosionSounds: 
   _projectileAnimator: {fileID: 0}
   SpawnDistanceFromPlayer: 0
 --- !u!54 &3218349457936010009
@@ -283,6 +293,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyEntered:

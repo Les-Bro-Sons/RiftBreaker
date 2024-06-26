@@ -1,3 +1,4 @@
+using MANAGERS;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class RB_HealthCustomEditor : Editor
 
 public class RB_Health : MonoBehaviour {
     [SerializeField] float _hp; public float Hp { get { return _hp; } set { _hp = value; } }
-    [SerializeField] float _hpMax; public float HpMax { get { return _hpMax; } }        
+    public float HpMax = 150;    
     public float Armor;
     public TEAMS Team = TEAMS.Ai;
 
@@ -36,6 +37,7 @@ public class RB_Health : MonoBehaviour {
     [HideInInspector] public UnityEvent EventDeath;
     [HideInInspector] public UnityEvent EventTakeDamage;
     [HideInInspector] public UnityEvent EventHeal;
+    [HideInInspector] public UnityEvent EventResurect;
 
     
     // ~~~~~~~~~~ UX ~~~~~~~~~~
@@ -53,7 +55,7 @@ public class RB_Health : MonoBehaviour {
 
     void Awake() {
         _name = gameObject.name;
-        _hp = _hpMax;
+        _hp = HpMax;
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -61,7 +63,7 @@ public class RB_Health : MonoBehaviour {
     public void TakeDamage(float amount, bool ignoreParticle = false) {
         if (amount == 0 && Dead) return;
 
-        _hp = Mathf.Clamp(_hp - amount, 0, _hpMax);
+        _hp = Mathf.Clamp(_hp - amount, 0, HpMax);
         LerpTimer = 0.0f;
         EventTakeDamage.Invoke();
         if (_hp <= 0 && !Dead)
@@ -88,6 +90,7 @@ public class RB_Health : MonoBehaviour {
             _animUIPlayer.SetTrigger("isDamage");
         }
         else Debug.LogWarning("No _animUIPlayer in RB_Health");
+        RB_AudioManager.Instance.PlaySFX("DamageSound", transform.position, false, 0.25f, 0.5f);
         
     }
 
@@ -102,7 +105,7 @@ public class RB_Health : MonoBehaviour {
 
     //Fonction de soin
     public void Heal(float amount, bool ignoreParticle = false) {
-        _hp = Mathf.Clamp(_hp + amount, 0, _hpMax);
+        _hp = Mathf.Clamp(_hp + amount, 0, HpMax);
         LerpTimer = 0.0f;
         EventHeal.Invoke();
         if (_particleHeal && !ignoreParticle)
@@ -113,12 +116,13 @@ public class RB_Health : MonoBehaviour {
             if (TryGetComponent<RB_Enemy>(out RB_Enemy enemy))
             {
                 enemy.UnTombstone();
+                EventResurect?.Invoke();
             }
         }
     }
 
     //Fonction de soin Maximum
     public void Heal() {
-        Heal(_hpMax);
+        Heal(HpMax);
     }
 }

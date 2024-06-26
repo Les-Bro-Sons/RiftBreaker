@@ -18,9 +18,9 @@ public class RB_Items : MonoBehaviour
     [SerializeField] private float _chargeZoom = 0.85f;
 
     [Header("Cooldowns")]
-    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(int? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
-    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(int? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
-    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(int? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
+    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(float? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
+    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(float? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
+    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(float? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
 
     [Header("Damages")]
     public float AttackDamage = 10;
@@ -28,17 +28,17 @@ public class RB_Items : MonoBehaviour
     public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
-    [SerializeField] private float _normalKnockbackForce;
-    [SerializeField] private float _chargeAttackKnockbackForce;
-    [SerializeField] private float _specialAttackKnockbackForce;
+    [SerializeField] protected float _normalKnockbackForce = 5;
+    [SerializeField] protected float _chargeAttackKnockbackForce = 8;
+    [SerializeField] protected float _specialAttackKnockbackForce = 10;
 
     [Header("Screenshake")]
-    [SerializeField] protected float _normalAttackScreenshakeForce;
-    [SerializeField] protected float _normalHitScreenshakeForce;
-    [SerializeField] protected float _chargedAttackScreenshakeForce;
-    [SerializeField] protected float _chargedHitScreenshakeForce;
-    [SerializeField] protected float _specialAttackScreenshakeForce;
-    [SerializeField] protected float _specialHitScreenshakeForce;
+    [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f;
+    [SerializeField] protected float _normalHitScreenshakeForce = .1f;
+    [SerializeField] protected float _chargedAttackScreenshakeForce = .3f;
+    [SerializeField] protected float _chargedHitScreenshakeForce = .75f;
+    [SerializeField] protected float _specialAttackScreenshakeForce = .5f;
+    [SerializeField] protected float _specialHitScreenshakeForce = 1;
     
 
     //Components
@@ -66,6 +66,9 @@ public class RB_Items : MonoBehaviour
     public UnityEvent EventOnEndOfAttack;
     public UnityEvent EventOnItemGathered;
 
+    //Special attack
+    [HideInInspector] public float SpecialAttackCharge = 100;
+
     protected virtual void Awake()
     {
         _transform = transform;
@@ -76,7 +79,28 @@ public class RB_Items : MonoBehaviour
         }
     }
 
-    public virtual void ShootProjectile(string projectileToShoot)
+    protected virtual void Update()
+    {
+        RechargeSpecialAttack();
+    }
+
+    public virtual void AddToSpecialChargeAttack(float amountToAdd)
+    {
+        //Add the specialAttackChargeAmount
+        SpecialAttackCharge += amountToAdd;
+    }
+
+    public void RechargeSpecialAttack()
+    {
+        //Recharge over time the special attack
+        if (SpecialAttackCharge <= 100)
+        {
+            SpecialAttackCharge += (Time.deltaTime / SpecialAttackChargeTime) * 100;
+        }
+    }
+
+
+    public virtual RB_Projectile ShootProjectile(string projectileToShoot)
     {
         GameObject newObject = Instantiate(Resources.Load("Prefabs/Projectiles/" + projectileToShoot), _playerTransform.position, Quaternion.LookRotation(RB_PlayerMovement.Instance.DirectionToAttack)) as GameObject;
         if (newObject.TryGetComponent<RB_Projectile>(out RB_Projectile projectile))
@@ -84,10 +108,12 @@ public class RB_Items : MonoBehaviour
             newObject.transform.position += RB_PlayerMovement.Instance.DirectionToAttack * projectile.SpawnDistanceFromPlayer;
             projectile.Team = TEAMS.Player;
         }
+        return projectile;
     }
 
     protected virtual void Start()
     {
+        SpecialAttackCharge = 100;
         _playerTransform = RB_PlayerAction.Instance.transform;
         _playerAction = RB_PlayerAction.Instance;
         _playerAnimator = _playerAction.PlayerAnimator;
@@ -118,6 +144,8 @@ public class RB_Items : MonoBehaviour
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
         EventOnItemGathered?.Invoke();
+        if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
+            _impulseSource = impulseSource;
 
     }
 
@@ -162,6 +190,7 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
         //Starting and resetting the attack animation
+        print("1");
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
         //Reset attack

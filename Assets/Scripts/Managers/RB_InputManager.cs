@@ -7,6 +7,8 @@ public class RB_InputManager : MonoBehaviour
 {
     public static RB_InputManager Instance;
 
+    public bool InputEnabled = true;
+
     [Header("Move")]
     public bool MoveEnabled = true;
     [HideInInspector] public UnityEvent EventMoveStarted;
@@ -67,7 +69,7 @@ public class RB_InputManager : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         
-        if (!MoveEnabled) return;
+        if (!InputEnabled || !MoveEnabled) return;
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
@@ -82,6 +84,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (!InputEnabled) return;
         if (context.started) 
             EventAttackStartedEvenIfDisabled?.Invoke();
 
@@ -96,7 +99,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
     {
-        if (!SpecialAttackEnabled) return;
+        if (!InputEnabled || !SpecialAttackEnabled) return;
 
         if (context.started)
             EventSpecialAttackStarted?.Invoke();
@@ -106,7 +109,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (!DashEnabled) return;
+        if (!InputEnabled || !DashEnabled) return;
         if (context.started) {
             EventDashStarted?.Invoke();
         }
@@ -116,7 +119,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnRewind(InputAction.CallbackContext context)
     {
-        if (!RewindEnabled) return;
+        if (!InputEnabled || !RewindEnabled) return;
 
         if (context.started)
             EventRewindStarted?.Invoke();
@@ -126,7 +129,7 @@ public class RB_InputManager : MonoBehaviour
 
     public void OnItem1(InputAction.CallbackContext context)
     {
-        if (!ItemsEnabled) return;
+        if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
             EventItem1Started?.Invoke();
@@ -135,7 +138,7 @@ public class RB_InputManager : MonoBehaviour
     }
 
     public void OnItem2(InputAction.CallbackContext context) {
-        if (!ItemsEnabled) return;
+        if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
             EventItem2Started?.Invoke();
@@ -144,7 +147,7 @@ public class RB_InputManager : MonoBehaviour
     }
 
     public void OnItem3(InputAction.CallbackContext context) {
-        if (!ItemsEnabled) return;
+        if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
             EventItem3Started?.Invoke();

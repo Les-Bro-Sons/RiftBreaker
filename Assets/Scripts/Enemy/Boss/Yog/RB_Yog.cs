@@ -117,6 +117,8 @@ public class RB_Yog : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
+
         _bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         _playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();
@@ -130,6 +132,7 @@ public class RB_Yog : RB_Boss
         }
         else if (_activationTimer < 0.5f)
         {
+            CurrentState = BOSSSTATES.Idle;
             _activationTimer += Time.deltaTime;
             return;
         }

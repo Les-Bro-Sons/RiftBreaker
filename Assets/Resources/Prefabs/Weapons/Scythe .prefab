@@ -114,7 +114,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4514608731442758760}
@@ -160,7 +160,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 664d0cf4a23f91b47b6d5a06b3c7037b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 25653a1416ee45c4ca84d63a96772ad6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -296,21 +296,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
-  SpecialAttackChargeTime: 0
+  SpecialAttackChargeTime: 35
   _chargeZoom: 0.85
   _attackCooldown: 0.5
-  _attackDamage: 0
-  _chargedAttackDamage: 0
-  _specialAttackDamage: 0
-  _normalKnockbackForce: 0
-  _chargeAttackKnockbackForce: 0
-  _specialAttackKnockbackForce: 0
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 1
+  AttackDamage: 25
+  ChargedAttackDamage: 60
+  SpecialAttackDamage: 0
+  _normalKnockbackForce: 5
+  _chargeAttackKnockbackForce: 8
+  _specialAttackKnockbackForce: 10
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 1349870191599121551}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}
@@ -324,6 +326,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _zonePrefab: {fileID: 6379153291856199861, guid: cfa322bc17e5e6f4c9e51aa1d6d29480,
     type: 3}
   _zoneGrowthSpeed: 5

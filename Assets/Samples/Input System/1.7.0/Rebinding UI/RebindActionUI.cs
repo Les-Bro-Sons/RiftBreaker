@@ -176,6 +176,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (string.IsNullOrEmpty(m_BindingId))
                 return false;
 
+            string deviceLayoutName;
+            string controlPath;
             // Look up binding index.
             var bindingId = new Guid(m_BindingId);
             bindingIndex = action.bindings.IndexOf(x => x.id == bindingId);
@@ -184,8 +186,16 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 Debug.LogError($"Cannot find binding with ID '{bindingId}' on '{action}'", this);
                 return false;
             }
+/*            action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
 
-            return true;
+            if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "DualShockGamepad") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse") && m_InputType == PLAYERINPUT.Controller)){
+                return false;
+            } 
+            else if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Keyboard") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Gamepad") && m_InputType == PLAYERINPUT.Keyboard)){
+                return false;
+            }*/
+
+                return true;
         }
 
         /// <summary>
@@ -301,13 +311,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         CleanUp();
                     })
                 .OnComplete(
-                    operation =>
-                    {
+                    operation => {
                         Debug.Log("Rebind completed");
-/*                        Debug.Log($"Old binding path: {action.bindings[bindingIndex].effectivePath}");
-                        var newBindingPath = operation.selectedControl.path;
-                        action.ApplyBindingOverride(bindingIndex, newBindingPath);
-                        Debug.Log($"New binding path: {action.bindings[bindingIndex].effectivePath}");*/
 
                         if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts))
                         {
@@ -389,7 +394,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 }
              }
              if (!allCompositeParts && bindingIndex > 1 && m_InputType == PLAYERINPUT.Controller) {
-                for (int v = 5; v < 9 ; v++) { 
+                for (int v = 5; v < 10 ; v++) {
                     if (v == bindingIndex) {
                         continue;
                     }

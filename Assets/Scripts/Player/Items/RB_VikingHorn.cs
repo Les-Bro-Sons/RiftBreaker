@@ -31,7 +31,7 @@ public class RB_VikingHorn : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RobertShouldTalk && RB_PlayerAction.Instance.PickupGathered != null)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(3);
             RobertShouldTalk = false;
@@ -149,8 +149,9 @@ public class RB_VikingHorn : RB_Items
         JumpAttack();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ComboTimer();
         UpdateAnim();
     }

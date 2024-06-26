@@ -27,7 +27,7 @@ public class RB_ChessQueen : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RobertShouldTalk && RB_PlayerAction.Instance.PickupGathered != null)
         {
             RB_PlayerAction.Instance.PickupGathered.StartDialogue(4);
             RobertShouldTalk = false;
@@ -40,12 +40,13 @@ public class RB_ChessQueen : RB_Items
     public override void Attack()
     {
         base.Attack();
-        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection();
         _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
         GameObject spawnedChessPawn = Instantiate(_pawnPrefab, _spawnPos, Quaternion.identity);
+        RB_AI_BTTree pawn = spawnedChessPawn.GetComponent<RB_AI_BTTree>();
+        pawn.SlashDamage = AttackDamage;
         if (_shouldBoost)
         {
-            //spawnedChessPawn.Boost();
+            pawn.Boost(2);
         }
         SpawnedChessPawns.Add(spawnedChessPawn);
         RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position,false, 0, 1);
@@ -55,13 +56,14 @@ public class RB_ChessQueen : RB_Items
     public override void ChargedAttack()
     {
         base.ChargedAttack();
-        _playerTransform.forward = RB_InputManager.Instance.GetMouseDirection();
         _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
         GameObject spawnedChessPawn = Instantiate(_towerPrefab, _spawnPos, Quaternion.identity);
         RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position, false, 0, 1);
+        RB_AI_BTTree pawn = spawnedChessPawn.GetComponent<RB_AI_BTTree>();
+        pawn.ExplosionDamage = ChargedAttackDamage;
         if (_shouldBoost)
         {
-            //spawnedChessPawn.Boost();
+            pawn.Boost(2);
         }
         SpawnedChessPawns.Add(spawnedChessPawn);
     }

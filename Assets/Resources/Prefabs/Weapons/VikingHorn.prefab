@@ -295,24 +295,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
-  ChargeTime: 1
-  SpecialAttackChargeTime: 0
+  ChargeTime: 0.2
+  SpecialAttackChargeTime: 30
   _chargeZoom: 0.85
   _attackCooldown: 0.3
   _chargeAttackCooldown: 0
-  _specialAttackCooldown: 0
-  AttackDamage: 10
-  ChargedAttackDamage: 10
-  SpecialAttackDamage: 10
+  _specialAttackCooldown: 1
+  AttackDamage: 55
+  ChargedAttackDamage: 110
+  SpecialAttackDamage: 200
   _normalKnockbackForce: 5
-  _chargeAttackKnockbackForce: 5
-  _specialAttackKnockbackForce: 5
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _chargeAttackKnockbackForce: 8
+  _specialAttackKnockbackForce: 10
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 6577973786371852535}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}
@@ -326,6 +326,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _jumpCurve:
     serializedVersion: 2
     m_Curve:

@@ -48,6 +48,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
                 foreach (Collider collider in Physics.OverlapSphere(_transform.position, nearbyDetectionRange, ~((1 << 3) | (1 << allyLayer) | (1 << 10))))
                 {
                     if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth)
+                        && !enemyHealth.Dead
                         && enemyHealth.Team != _btParent.AiHealth.Team
                         && Physics.Raycast(_transform.position, (enemyHealth.transform.position - _transform.position).normalized, out RaycastHit hit, nearbyDetectionRange, ~((1 << allyLayer) | (1 << 10)))
                         && RB_Tools.TryGetComponentInParent<RB_Health>(hit.collider.gameObject, out RB_Health enemyCheck)
@@ -71,7 +72,7 @@ public class RB_AICheck_EnemyInRoom : RB_BTNode
             if (_btParent.Root.GetData("target") != null)
             {
                 Transform target = (Transform)_btParent.Root.GetData("target");
-                if (RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(_transform.position, target.position) < nearbyDetectionRange / 1.5f)
+                if (target != null && RB_Tools.TryGetComponentInParent<RB_Health>(target, out RB_Health currentTarget) && !currentTarget.Dead && Vector3.Distance(_transform.position, target.position) < nearbyDetectionRange / 1.5f)
                 {
                     return _state = BTNodeState.SUCCESS;
                 }

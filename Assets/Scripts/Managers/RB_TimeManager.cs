@@ -34,6 +34,8 @@ public class RB_TimeManager : MonoBehaviour
     [Header("Hourglass")]
     public List<GameObject> HourglassList = new();
 
+    private float _currentFps = 0;
+
     private void Awake()
     {
         if (Instance == null)
@@ -52,6 +54,12 @@ public class RB_TimeManager : MonoBehaviour
 
         RB_UxHourglassManager.Instance?.NumberOfHourglass(3);
     }
+
+    private void Update()
+    {
+        _currentFps = 1.0f / Time.unscaledDeltaTime;
+    }
+
     private void FixedUpdate()
     {
         if (_isRecording && !IsRewinding) // doesn't record if rewinding
@@ -80,7 +88,8 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                Time.timeScale = Mathf.Clamp(Time.timeScale + Time.fixedDeltaTime / 2.5f, 0, _maxRewindSpeed);
+                print(_currentFps);
+                Time.timeScale = Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed);
             }
         }
     }

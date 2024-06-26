@@ -134,21 +134,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAttackCombo: 0
   ChargeTime: 1
-  SpecialAttackChargeTime: 0
+  SpecialAttackChargeTime: 20
   _chargeZoom: 0.85
   _attackCooldown: 1
-  _attackDamage: 0
-  _chargedAttackDamage: 0
-  _specialAttackDamage: 0
-  _normalKnockbackForce: 0
-  _chargeAttackKnockbackForce: 0
-  _specialAttackKnockbackForce: 0
-  _normalAttackScreenshakeForce: 0
-  _normalHitScreenshakeForce: 0
-  _chargedAttackScreenshakeForce: 0
-  _chargedHitScreenshakeForce: 0
-  _specialAttackScreenshakeForce: 0
-  _specialHitScreenshakeForce: 0
+  _chargeAttackCooldown: 0
+  _specialAttackCooldown: 1
+  AttackDamage: 0
+  ChargedAttackDamage: 0
+  SpecialAttackDamage: 0
+  _normalKnockbackForce: 15
+  _chargeAttackKnockbackForce: 70
+  _specialAttackKnockbackForce: 50
+  _normalAttackScreenshakeForce: 0.025
+  _normalHitScreenshakeForce: 0.1
+  _chargedAttackScreenshakeForce: 0.3
+  _chargedHitScreenshakeForce: 0.75
+  _specialAttackScreenshakeForce: 0.5
+  _specialHitScreenshakeForce: 1
   _objectToRemove: {fileID: 297102425777051744}
   HudSprite: {fileID: 0}
   CurrentSprite: {fileID: 0}
@@ -162,6 +164,7 @@ MonoBehaviour:
   EventOnItemGathered:
     m_PersistentCalls:
       m_Calls: []
+  SpecialAttackCharge: 0
   _pawnPrefab: {fileID: 3802911559949533877, guid: 2ff2e45e915a8c445805ebad3cd3c5c2,
     type: 3}
   _towerPrefab: {fileID: 4019689486546910041, guid: 2fc813b3e0297cf41ae7d7f0d250a838,

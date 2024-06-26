@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 1000
-  _hpMax: 1000
+  HpMax: 1000
   Armor: 0
   Team: 0
   Dead: 0
@@ -162,6 +162,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  EventResurect:
     m_PersistentCalls:
       m_Calls: []
   LerpTimer: 0.15
@@ -204,6 +207,10 @@ MonoBehaviour:
   BossRB: {fileID: 7950358798519079587}
   Health: {fileID: 0}
   CurrentState: 0
+  _inRoom: 0
+  EventPlayMKMusic:
+    m_PersistentCalls:
+      m_Calls: []
   _slashDamage: 40
   _slashKnockback: 15
   _slashRange: 3

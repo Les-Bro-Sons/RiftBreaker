@@ -284,7 +284,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (RoomExit.IsPlayerIn())
         {
-            RoomExit.EventOnObjectEntered.RemoveListener(OnPlayerExitRewindRoom); //Remove listener
+            RoomExit.EventOnPlayerEntered.RemoveAllListeners(); //Remove listener
             InitializeAttackTuto();
         }
     }
@@ -304,7 +304,7 @@ public class RB_TutorialManager : MonoBehaviour
         if (RewindTutoRoom.IsPlayerInRoom)
         {
             RewindTutoRoom.OpenRoom();
-            RoomExit.EventOnObjectEntered.AddListener(delegate { RewindTutoRoom.CloseRoom(); RoomExit.EventOnObjectEntered.RemoveAllListeners(); });
+            RoomExit.EventOnPlayerEntered.AddListener(delegate { RewindTutoRoom.CloseRoom(); RoomExit.EventOnObjectEntered.RemoveAllListeners(); });
         }
     }
 

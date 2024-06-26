@@ -24,7 +24,7 @@ public class RB_VisionCone : MonoBehaviour
         if (RB_Tools.TryGetComponentInParent<RB_AI_BTTree>(_transform, out RB_AI_BTTree btTree))
         {
             VisionAngle = btTree.FovAngle;
-            VisionRange = btTree.FovRange;
+            VisionRange = btTree.FovRange + 0.75f;
             VisionConeMaterial = new Material(VisionConeMaterial);
             _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
 

@@ -1,11 +1,12 @@
 using MANAGERS;
-using UnityEngine;
 
 public class RB_MagicWand : RB_Items
 {
     public override void Attack() {
         base.Attack();
-        ShootProjectile("BasicPowerBall");
+        var projectile = ShootProjectile("BasicPowerBall");
+        projectile.Damage = AttackDamage;
+        projectile.KnocbackExplosionForce = _normalKnockbackForce;
         RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position,false, 0, 1);
 
     }
@@ -30,7 +31,9 @@ public class RB_MagicWand : RB_Items
 
     public override void ChargedAttack() {
         base.ChargedAttack();
-        ShootProjectile("ChargePowerBall");
+        var projectile = ShootProjectile("ChargePowerBall");
+        projectile.Damage = ChargedAttackDamage;
+        projectile.KnocbackExplosionForce = _chargeAttackKnockbackForce;
         RB_AudioManager.Instance.PlaySFX("boom-magic", RB_PlayerController.Instance.transform.position,false, 0, 1);
     }
 
@@ -41,7 +44,9 @@ public class RB_MagicWand : RB_Items
 
     public override void SpecialAttack() {
         base.SpecialAttack();
-        ShootProjectile("SpecialPowerBall");
+        var projectile = ShootProjectile("SpecialPowerBall");
+        projectile.Damage = SpecialAttackDamage;
+        projectile.KnocbackExplosionForce = _specialAttackKnockbackForce;
         RB_AudioManager.Instance.PlaySFX("fireball", RB_PlayerController.Instance.transform.position, false, .1f, 1);
     }
     

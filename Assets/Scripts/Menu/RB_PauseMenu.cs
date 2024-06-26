@@ -50,6 +50,7 @@ public class RB_PauseMenu : MonoBehaviour {
     }
 
     public void Pause() {
+        RB_InputManager.Instance.InputEnabled = false;
         if(!IsPaused){
             IsPaused = true;
             RB_MenuManager.Instance.PauseAnim();
@@ -62,6 +63,7 @@ public class RB_PauseMenu : MonoBehaviour {
     }
 
     public void UnPause() {
+        RB_InputManager.Instance.InputEnabled = true;
         RB_ButtonSelectioner.Instance.SelectMainButton(0);
         RB_MenuManager.Instance.BackMainMenu();
         RB_MenuManager.Instance.CancelQuit();

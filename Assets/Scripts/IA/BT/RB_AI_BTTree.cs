@@ -21,6 +21,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MovementSpeed = 4f;
     public float MovementSpeedAggro = 8f;
     public float MovementSpeedFlee = 6f;
+    public float FleeDistance = 2.5f;
     public float AttackSpeed = 0.2f;
     public float BoostMultiplier = 1f;
     public ParticleSystem BoostParticle;
@@ -141,6 +142,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         base.Update();
         SpotCanvasAlpha();
         ApplyBoostParticles();
+        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
+        else Debug.LogWarning("NO AiAnimator in " + gameObject.name);
     }
 
     private void ApplyBoostParticles()
@@ -197,9 +200,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     protected override RB_BTNode SetupTree()
     {
-        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
-        else Debug.LogWarning("NO AiAnimator in " + gameObject.name);
-        
         _infiltrationPhases.Add(PHASES.Infiltration);
         _combatPhases.Add(PHASES.Combat);
         _combatPhases.Add(PHASES.Boss);
@@ -305,13 +305,14 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
                                 new RB_AICheck_Bool(this, "PlayerSpottedInCombat"),
+                                new RB_AICheck_IsTargetAlive(this),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
-                                        new RB_AICheck_IsTargetClose(this, 5),
-                                        new RB_AI_FleeFromTarget(this, 5, MovementSpeedFlee),
+                                        new RB_AICheck_IsTargetClose(this, FleeDistance),
+                                        new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //bow sequence
@@ -325,6 +326,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", false),
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest),
                                 new RB_AI_SetBool(this, "PlayerSpottedInCombat", true),
                             }),
@@ -352,7 +354,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), //when bow attack
                                         new RB_AICheck_IsTargetClose(this, HeavyBowRange/1.5f),
-                                        new RB_AI_FleeFromTarget(this, HeavyBowRange/1.5f, MovementSpeedFlee),
+                                        new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence

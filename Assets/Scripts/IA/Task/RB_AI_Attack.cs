@@ -204,7 +204,7 @@ public class RB_AI_Attack : RB_BTNode
             _btParent.BoolDictionnary["IsWaitingForAttack"] = true;
             if (rotateTowardTarget && (!_btParent.GetBool("AlreadyAttacked") || rotateWhenAttacking))
             {
-                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((_target.transform.position - _btParent.transform.position).normalized));
+                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((RB_Tools.GetHorizontalDirection(_target.transform.position - _btParent.transform.position).normalized)));
             }
             return false;
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MANAGERS;
 using UnityEngine;
 
@@ -72,7 +73,8 @@ public class RB_ChessQueen : RB_Items
     {
         base.SpecialAttack();
         RB_AudioManager.Instance.PlaySFX("Chess_Special_Attack", _transform.position, false, 0, 1);
-        foreach(GameObject spawnedChessPawn in SpawnedChessPawns)
+        SpawnedChessPawns.RemoveAll(chess => chess == null);
+        foreach(GameObject spawnedChessPawn in SpawnedChessPawns.ToList())
         {
             spawnedChessPawn.GetComponent<RB_AI_BTTree>().Boost(2);
         }

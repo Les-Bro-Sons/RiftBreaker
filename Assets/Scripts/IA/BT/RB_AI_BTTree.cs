@@ -305,6 +305,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
                                 new RB_AICheck_Bool(this, "PlayerSpottedInCombat"),
+                                new RB_AICheck_IsTargetAlive(this),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
@@ -325,6 +326,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
+                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", false),
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest),
                                 new RB_AI_SetBool(this, "PlayerSpottedInCombat", true),
                             }),

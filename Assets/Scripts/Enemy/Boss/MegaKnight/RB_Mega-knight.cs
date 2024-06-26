@@ -7,7 +7,6 @@ public class RB_Mega_knight : RB_Boss
 {
     public static RB_Mega_knight Instance;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;
-    private new Transform transform;
     public bool _inRoom = false;
     [HideInInspector] public UnityEvent EventPlayMKMusic;
 

@@ -15,6 +15,11 @@ public class RB_Room : MonoBehaviour
     public List<RB_Door> Doors = new();
     public bool IsPlayerInRoom;
 
+    private void Start()
+    {
+        SetLayerToAllChildren(LayerMask.NameToLayer("Room"), transform);
+    }
+
     private void Update()
     {
         if((RB_LevelManager.Instance.CurrentPhase == PHASES.Combat || RB_LevelManager.Instance.CurrentPhase == PHASES.Boss) && IsClosedRoom && IsPlayerInRoom && !_isRoomClosed && DetectedEnemies.Count >= 0 && !IsAllEnemyDied())
@@ -23,6 +28,15 @@ public class RB_Room : MonoBehaviour
         }else if (_isRoomClosed && (IsAllEnemyDied() || !IsPlayerInRoom))
         {
             OpenRoomByRoom();
+        }
+    }
+
+    private void SetLayerToAllChildren(int layer, Transform obj)
+    {
+        foreach (Transform child in obj)
+        {
+            child.gameObject.layer = layer;
+            SetLayerToAllChildren(layer, child);
         }
     }
 

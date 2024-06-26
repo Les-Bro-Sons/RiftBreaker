@@ -1,6 +1,4 @@
 using BehaviorTree;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_AI_FleeFromTarget : RB_BTNode
@@ -36,7 +34,7 @@ public class RB_AI_FleeFromTarget : RB_BTNode
             return _state = BTNodeState.FAILURE;
         }
 
-        if (Vector3.Distance(_target.position, _transform.position) >= _distanceNeeded )
+        if (Vector3.Distance(_target.position, _transform.position) >= _distanceNeeded || Physics.Raycast(_transform.position, (_transform.position - _target.position).normalized, 2f))
         {
             return _state = BTNodeState.SUCCESS;
         }

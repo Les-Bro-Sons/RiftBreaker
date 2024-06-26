@@ -32,6 +32,10 @@ public class RB_MenuInputManager : MonoBehaviour {
     public UnityEvent EventMouseMovingCanceled;
     public bool IsLastInputMouse;
 
+    [Header("Next")]
+    public UnityEvent EventNextStarted;
+    public UnityEvent EventNextCanceled;
+
     public bool IsKeyBoard = true;
 
 
@@ -65,6 +69,10 @@ public class RB_MenuInputManager : MonoBehaviour {
     public void OnPause(InputAction.CallbackContext context) {
         if (context.started) { EventPauseStarted?.Invoke(); }
         else if (context.canceled) { EventPauseCanceled?.Invoke(); }
+    }
+    public void OnNext(InputAction.CallbackContext context) {
+        if (context.started) { EventNextStarted?.Invoke(); }
+        else if (context.canceled) { EventNextCanceled?.Invoke(); }
     }
 
     public void OnAny(InputAction.CallbackContext context) {

@@ -73,6 +73,7 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
+        if (Health.Dead) return;
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();

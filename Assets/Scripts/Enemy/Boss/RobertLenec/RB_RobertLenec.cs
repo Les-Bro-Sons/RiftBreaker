@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class RB_RobertLenec : RB_Boss
 {
     public static RB_RobertLenec Instance;
-    private new Transform transform;
     [HideInInspector] public UnityEvent EventPlayRobertMusic;
     private bool _inRoom = false;
     public BOSSSTATES CurrentState = BOSSSTATES.Idle;

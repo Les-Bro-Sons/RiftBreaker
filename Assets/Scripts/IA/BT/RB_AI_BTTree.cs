@@ -392,6 +392,11 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_GoToTarget(this, MovementSpeedAggro, SlashRange),
                                 new RB_AI_Attack(this, 0), //slash
                             }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //follow leader sequence
+                            {
+                                new RB_AI_FollowLeader(this),
+                            }),
                         }),
                     }),
 
@@ -405,6 +410,11 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
                                 new RB_AI_GoToTarget(this, MovementSpeedAggro, ExplosionStartRange),
                                 new RB_AI_Attack(this, 0), //explode
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //follow leader sequence
+                            {
+                                new RB_AI_FollowLeader(this),
                             }),
                         }),
                     }),

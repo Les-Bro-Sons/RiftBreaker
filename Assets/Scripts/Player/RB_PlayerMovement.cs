@@ -125,7 +125,7 @@ public class RB_PlayerMovement : MonoBehaviour
             }
             //If the direction of the attack is got set the direction to the attack direction
             ForwardDirection = DirectionToAttack;
-            StartCoroutine(StopAttack());
+            Invoke(nameof(DelayStopAttack), _playerAction.Item.AttackCooldown());
         }
     }
 
@@ -153,12 +153,6 @@ public class RB_PlayerMovement : MonoBehaviour
     private void DelayStopAttack()
     {
         _isAttacking = false;
-    }
-
-    private IEnumerator StopAttack()
-    {
-        yield return 0;
-        Invoke(nameof(DelayStopAttack), _playerAction.Item.AttackCooldown());
     }
 
     #endregion
@@ -314,7 +308,7 @@ public class RB_PlayerMovement : MonoBehaviour
             {
                 StopDash();
             }
-            _rb.velocity = _dashSpeed * _dashDirection;
+            _rb.velocity = _dashSpeed * _dashDirection.normalized;
         }
     }
 

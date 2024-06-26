@@ -36,7 +36,7 @@ public class RB_AI_FleeFromTarget : RB_BTNode
             return _state = BTNodeState.FAILURE;
         }
 
-        if (Vector3.Distance(_target.position, _transform.position) >= _distanceNeeded)
+        if (Vector3.Distance(_target.position, _transform.position) >= _distanceNeeded )
         {
             return _state = BTNodeState.SUCCESS;
         }

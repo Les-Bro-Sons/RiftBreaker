@@ -45,6 +45,7 @@ public class RB_PlayerAction : MonoBehaviour
     public UnityEvent EventStartChargingAttack;
     public UnityEvent EventStopChargingAttack;
     public UnityEvent EventItemGathered;
+    public UnityEvent EventItemDropped;
     public UnityEvent EventOnChargeSpecialAttackGathered;
 
     //Interacts

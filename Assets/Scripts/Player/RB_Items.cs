@@ -160,6 +160,7 @@ public class RB_Items : MonoBehaviour
             _playerAction.Item = null;
             _playerAction.SetCurrentWeapon("");
         }
+        _playerAction.EventItemDropped?.Invoke();
         //RobertShouldTalk = true;
 
     }

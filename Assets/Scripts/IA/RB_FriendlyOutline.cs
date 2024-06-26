@@ -16,7 +16,8 @@ public class RB_FriendlyOutline : MonoBehaviour
         {
             _entity = enemy;
             _entity.EventAllyTeam?.AddListener(ApplyFriendlyEffect);
-            _entity.EventEnemyTeam?.AddListener(DisableFriendEffect);
+            _entity.EventEnemyTeam?.AddListener(DisableFriendlyEffect);
+            _entity.GetComponent<RB_Health>().EventDeath?.AddListener(DisableFriendlyEffect);
         }
     }
 
@@ -26,7 +27,7 @@ public class RB_FriendlyOutline : MonoBehaviour
         _selfSpriteRenderer.material = _outlineMaterial;
     }
 
-    public void DisableFriendEffect()
+    public void DisableFriendlyEffect()
     {
         _selfSpriteRenderer.enabled = false;
         _selfSpriteRenderer.material = _baseMaterial;

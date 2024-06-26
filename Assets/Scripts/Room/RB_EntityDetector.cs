@@ -31,23 +31,6 @@ public class RB_EntityDetector : MonoBehaviour
         
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (_triggerStayActivated && RB_Tools.TryGetComponentInParent<RB_Health>(other.gameObject, out RB_Health entityHealth))
-        {
-            if (entityHealth.Team == TEAMS.Ai)//If it the entity is an ai then add it to the enemy list
-                _room.AddDetectedEnemy(entityHealth);
-            else if (entityHealth.Team == TEAMS.Player && entityHealth.TryGetComponent<RB_PlayerMovement>(out RB_PlayerMovement playerMovement))//Otherwise if it's a player check the IsPlayerInRoom bool
-            {
-                _room.IsPlayerInRoom = true;
-                print("player in room");
-            }
-            else if (entityHealth.Team == TEAMS.Player)
-                _room.AddDectedAlly(entityHealth);
-            _room.AddDetectedEntity(entityHealth);
-        }
-    }
-
     private void EnableTriggerStay()
     {
         _triggerStayActivated = true;

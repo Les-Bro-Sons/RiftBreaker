@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEditor.Rendering;
 
 public class RB_RoomCreator : MonoBehaviour
 {
@@ -48,6 +48,7 @@ public class RB_RoomCreator : MonoBehaviour
 
     public void CreateRoom()
     {
+        _meshObjects.Clear();
         int maxIteration = transform.childCount + 100;
         while (transform.childCount != 0)
         {
@@ -59,12 +60,11 @@ public class RB_RoomCreator : MonoBehaviour
             if (maxIteration <= 0)
                 break;
         }
-        _meshObjects.Clear();
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
     // Creates mesh colliders based on the given points and normal
-    private GameObject CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
+    private GameObject CreateMeshCollidersOld(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
     {
         GameObject meshObject = new GameObject("Room");
         meshObject.AddComponent<RB_Room>();
@@ -72,7 +72,6 @@ public class RB_RoomCreator : MonoBehaviour
         colliders.layer = LayerMask.NameToLayer("Room");
         meshObject.transform.parent = transform;
         colliders.transform.parent = meshObject.transform;
-
 
         for (int i = 0; i < ColliderPoints.Count; i++)
         {

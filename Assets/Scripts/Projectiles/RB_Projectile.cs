@@ -38,7 +38,7 @@ public class RB_Projectile : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private float _damage = 10; public float Damage { get { return _damage; } set { _damage = value; } }
     [SerializeField] private float _knocbackExplosionForce = 0; public float KnocbackExplosionForce { get {  return _knocbackExplosionForce; } set { _knocbackExplosionForce = value; } }
-    [SerializeField] private Vector3 _knockback = Vector3.zero;
+    [SerializeField] private Vector3 _knockback = Vector3.zero; 
     [SerializeField] private bool _isDealingDamageMultipleTime = false;
     [SerializeField] private bool _isDealingKnockbackMultipleTime = false;
     [SerializeField] private bool _canDamageAlly = false;

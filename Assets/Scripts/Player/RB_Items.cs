@@ -28,9 +28,9 @@ public class RB_Items : MonoBehaviour
     public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
-    [SerializeField] private float _normalKnockbackForce = 5;
-    [SerializeField] private float _chargeAttackKnockbackForce = 8;
-    [SerializeField] private float _specialAttackKnockbackForce = 10;
+    [SerializeField] protected float _normalKnockbackForce = 5;
+    [SerializeField] protected float _chargeAttackKnockbackForce = 8;
+    [SerializeField] protected float _specialAttackKnockbackForce = 10;
 
     [Header("Screenshake")]
     [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f;
@@ -144,6 +144,8 @@ public class RB_Items : MonoBehaviour
         //Remove the colliders and visuals of the weapon
         _objectToRemove.SetActive(false);
         EventOnItemGathered?.Invoke();
+        if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
+            _impulseSource = impulseSource;
 
     }
 

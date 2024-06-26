@@ -48,7 +48,9 @@ public class RB_RoomCreator : MonoBehaviour
 
     public void CreateRoom()
     {
-        _meshObjects.Clear();
+        _currentCollider = null;
+        _currentColliderObject = null;
+        _currentMeshObject = null;
         int maxIteration = transform.childCount + 100;
         while (transform.childCount != 0)
         {
@@ -60,6 +62,7 @@ public class RB_RoomCreator : MonoBehaviour
             if (maxIteration <= 0)
                 break;
         }
+        _meshObjects.Clear();
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
@@ -293,7 +296,7 @@ public class RB_RoomCreator : MonoBehaviour
         Vector3 normal = Vector3.Cross(v1, v2).normalized;
 
         // Ensure the normal is oriented towards Vector3.up
-        if (Vector3.Dot(normal, Vector3.up) > 0)
+        if (Vector3.Dot(normal, Vector3.up) < 0)
         {
             normal = -normal;
         }

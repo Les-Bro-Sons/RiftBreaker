@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RB_BossRushManager : MonoBehaviour
 {
@@ -13,10 +14,16 @@ public class RB_BossRushManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().Hp = RB_SaveManager.Instance.SaveObject.HpBossRush;
         RB_LevelExit.Instance.EventEnterInPortal.AddListener(SaveHp);
+        RB_LevelManager.Instance.EventPlayerLost.AddListener(StopBossRush);
     }
 
     public void SaveHp()
     {
         RB_SaveManager.Instance.SaveObject.HpBossRush = RB_PlayerController.Instance.GetComponent<RB_Health>().Hp;
+    }
+
+    public void StopBossRush()
+    {
+        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
     }
 }

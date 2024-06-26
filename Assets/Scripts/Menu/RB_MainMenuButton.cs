@@ -76,7 +76,6 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f);
         _isSelected = true;
         if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton) {
-            Debug.LogWarning(name);
             _cameraShake = StartCoroutine(CameraShake.Instance.Shake(100f, 20f));
         }
      }

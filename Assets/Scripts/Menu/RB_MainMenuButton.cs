@@ -25,6 +25,8 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
     TextMeshProUGUI _text;
     Image _buttonImage;
 
+    Coroutine _cameraShake;
+
     private void Awake() {
         _originalXPos = _textTrasform.localPosition.x;
         _button = GetComponent<Button>();
@@ -73,7 +75,11 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
         RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton;
         RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f);
         _isSelected = true;
-    }
+        if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton) {
+            Debug.LogWarning(name);
+            _cameraShake = StartCoroutine(CameraShake.Instance.Shake(100f, 20f));
+        }
+     }
 
     public void FixNavigation() {
         Navigation buttonNavigation = _button.navigation;
@@ -99,7 +105,8 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
 
     public void OnDeselect(BaseEventData eventData){
         _isSelected = false;
-        
+        StopCoroutine(_cameraShake);
+
     }
 
     private void Update() {
@@ -122,12 +129,20 @@ public class RB_MainMenuButton : MonoBehaviour , IPointerEnterHandler,IPointerEx
                 _button.enabled = false;
                 _text.color = _UnEnabledColor;
                 _buttonImage.raycastTarget = false;
+                if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton){
+                    _text.text = "Boss Rush";
+                    _text.color = Color.red;
+                    _button.enabled = true;
+                    _buttonImage.raycastTarget = true;
+                }
             }
             else { 
                 _button.enabled = true;
                 _text.color = _defaultColor;
                 _buttonImage.raycastTarget = true;
+
             }
+
         }
 
     }

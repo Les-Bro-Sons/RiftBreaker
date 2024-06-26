@@ -37,13 +37,15 @@ public class RB_MenuManager : MonoBehaviour {
     public void NewGame() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
         RB_SaveManager.Instance.ResetSave();
+        RB_SaveManager.Instance.SaveObject.IsGameFinish = false;
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
         RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void Continue() {
         RB_ButtonSelectioner.Instance.BlockInteraction();
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);
+        if (RB_SaveManager.Instance.SaveObject.IsGameFinish) { RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 15); }
+        else { RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel); }
         RB_InputManager.Instance.InputEnabled = true;
     }
 

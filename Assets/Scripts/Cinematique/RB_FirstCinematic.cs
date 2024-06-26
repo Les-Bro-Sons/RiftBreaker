@@ -36,6 +36,7 @@ public class RB_FirstCinematic : MonoBehaviour
     {
         Transform mark = Instantiate(_exclamationMark, RB_PlayerController.Instance.transform).transform;
         mark.rotation = Quaternion.identity;
+        RB_AudioManager.Instance.PlaySFX("rift_closing", false, false, 0f, 1f);
     }
 
     public void FirstRobertDialogue() //robert talk

@@ -59,7 +59,7 @@ public class RB_MusicBox : RB_Items
     {
         base.Attack();
         ShootProjectile("MusicNote").Damage = AttackDamage; //Instantiate the music note
-        RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform .position, false, 0.15f, 1);
+        RB_AudioManager.Instance.PlaySFX("Test", RB_PlayerController.Instance.transform.position, false, 0.25f, 0.15f);
     }
 
     public override void ChargedAttack() //Charged attack
@@ -78,7 +78,7 @@ public class RB_MusicBox : RB_Items
             _charging = true;
             _currentZones.Add(Instantiate(_musicZonePrefab)); //Instantiate the music zone
             StartChargeZone(); //Start the charge zone
-            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 1f);
+            RB_AudioManager.Instance.PlaySFX("Music_Box_Charged_Attack", RB_PlayerController.Instance.transform.position, true, 0, 0.5f);
         }
     }
 

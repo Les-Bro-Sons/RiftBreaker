@@ -45,7 +45,8 @@ public class RB_Vase : MonoBehaviour
     {
         if (!_health.Dead && collision.gameObject.TryGetComponent(out RB_PlayerMovement playerMovement) && playerMovement.IsDashing())
         {
-            Break(); //When the player dash into the vase, break
+            _health.TakeDamage(_health.HpMax); //"Kill" the vase
+            //Break(); //When the player dash into the vase, break
         }
     }
 
@@ -53,7 +54,8 @@ public class RB_Vase : MonoBehaviour
     {
         if (!_health.Dead && collision.gameObject.TryGetComponent(out RB_PlayerMovement playerMovement) && playerMovement.IsDashing())
         {
-            Break(); //When the player dash into the vase, break
+            _health.TakeDamage(_health.HpMax); //"Kill" the vase
+            //Break(); //When the player dash into the vase, break
         }
     }
 
@@ -64,14 +66,14 @@ public class RB_Vase : MonoBehaviour
         _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
         //_vaseCollider.isTrigger = true; //Desactivate colliders of the vase
         _spriteRenderer.sprite = _brokenSprite; //Set the sprite to the broken one
-        _health.TakeDamage(1); //"Kill" the vase
+        //_health.TakeDamage(1); //"Kill" the vase
         int _probTemp = Random.Range(0, 100); //take a number between 0 to 100 to simulate a %
         if (100 - _probLife <= _probTemp) //100 - _problife = _problife%, basically if _problife is under or equal = probtemp then
         {
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); //Instantiate particles of life
         }
         _navMeshObstacle.carving = false;
-        RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 0.6f);
+        RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 1);
 
     }
 

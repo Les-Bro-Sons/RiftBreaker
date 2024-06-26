@@ -1,8 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.SceneManagement;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor.Rendering;
@@ -57,7 +54,6 @@ public class RB_RoomCreator : MonoBehaviour
             foreach (Transform room in transform)
             {
                 room.parent = _roomManager.transform;
-                EditorUtility.SetDirty(room);
             }
             maxIteration--;
             if (maxIteration <= 0)
@@ -67,7 +63,8 @@ public class RB_RoomCreator : MonoBehaviour
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
-    private GameObject CreateMeshCollidersOld(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
+    // Creates mesh colliders based on the given points and normal
+    private GameObject CreateMeshColliders(Vector3 centerBase, Vector3 centerTop, Vector3 normal)
     {
         GameObject meshObject = new GameObject("Room");
         meshObject.AddComponent<RB_Room>();
@@ -297,7 +294,7 @@ public class RB_RoomCreator : MonoBehaviour
         Vector3 normal = Vector3.Cross(v1, v2).normalized;
 
         // Ensure the normal is oriented towards Vector3.up
-        if (Vector3.Dot(normal, Vector3.up) < 0)
+        if (Vector3.Dot(normal, Vector3.up) > 0)
         {
             normal = -normal;
         }
@@ -312,19 +309,14 @@ public class RB_RoomCreator : MonoBehaviour
         {
             foreach (GameObject mesh in _meshObjects.ToList())
             {
-                EditorUtility.SetDirty(mesh);
                 DestroyImmediate(mesh);
             }
             foreach (Transform colliders in transform)
             {
-                EditorUtility.SetDirty(colliders);
                 DestroyImmediate(colliders.gameObject);
             }
         }
         _meshObjects.Clear();
-
-        // Mark the current scene as dirty to ensure the changes are recognized
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 
     // Function to calculate the area of a triangle given its vertices

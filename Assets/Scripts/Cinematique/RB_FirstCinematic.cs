@@ -23,6 +23,7 @@ public class RB_FirstCinematic : MonoBehaviour
     {
         RB_LevelManager.Instance.CurrentScene = SCENENAMES.FirstCinematic;
         StartCinematic();
+        RB_AudioManager.Instance.PlayMusic("Birds_Sound");
         RB_SaveManager.Instance.ResetSave();
     }
 

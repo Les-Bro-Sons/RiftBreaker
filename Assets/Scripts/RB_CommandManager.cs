@@ -214,8 +214,7 @@ public class RB_CommandManager : MonoBehaviour
     private void Weapon()
     {
         RB_Items foundItem = FindAnyObjectByType<RB_Items>();
-        print(foundItem.name);
-        _playerRb.position = foundItem.transform.position;
+        if (foundItem) _playerRb.position = foundItem.transform.position;
     }
 
     private void Speed(string speed)

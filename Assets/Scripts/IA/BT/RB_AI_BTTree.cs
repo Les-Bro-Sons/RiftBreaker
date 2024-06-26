@@ -141,6 +141,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         base.Update();
         SpotCanvasAlpha();
         ApplyBoostParticles();
+        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
+        else Debug.LogWarning("NO AiAnimator in " + gameObject.name);
     }
 
     private void ApplyBoostParticles()
@@ -197,9 +199,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     protected override RB_BTNode SetupTree()
     {
-        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
-        else Debug.LogWarning("NO AiAnimator in " + gameObject.name);
-        
         _infiltrationPhases.Add(PHASES.Infiltration);
         _combatPhases.Add(PHASES.Combat);
         _combatPhases.Add(PHASES.Boss);

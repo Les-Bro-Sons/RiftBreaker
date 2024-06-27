@@ -61,7 +61,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             object t = GetData("target");
             if (t == null)
             {
-                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer).ToList<Collider>();
+                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange * 2, _layerMaskPlayer).ToList<Collider>();
                 foreach (Collider collider in colliders.ToList<Collider>())
                 {
                     if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
@@ -242,7 +242,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             RaycastHit hit;
 
             Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange * 2, ~((1 << 6) | (1 << 10))))
             {
                 _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);

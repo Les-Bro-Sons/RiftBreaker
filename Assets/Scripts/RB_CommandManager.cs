@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -138,6 +139,12 @@ public class RB_CommandManager : MonoBehaviour
                 break;
             case "/normal":
                 Normal();
+                break;
+            case "/stopcamera":
+                RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = null;
+                break;
+            case "/restartcamera":
+                RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = RB_PlayerController.Instance.transform;
                 break;
             // Ajouter d'autres cas selon les besoins
             default:

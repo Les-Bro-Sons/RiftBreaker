@@ -71,7 +71,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         newPoint.Position = transform.position;
         newPoint.Rotation = transform.rotation;
         if (_spriteRenderer)
-            newPoint.Sprite = _spriteRenderer.sprite;
+            newPoint.Sprite = _spriteRenderer.sprite; //save current sprite
         if (_health)
         {
             newPoint.Health = _health.Hp;
@@ -82,9 +82,9 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         if (_levelManager) newPoint.Phase = _levelManager.CurrentPhase;
         if (_btTree)
         {
-            newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
-            if (_btTree.ImageSpotBar) newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount;
-            newPoint.CurrentWaypointIndex = _btTree.CurrentWaypointIndex;
+            newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value); //save the bool value of the bt tree
+            if (_btTree.ImageSpotBar) newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount; //save the current spot value
+            newPoint.CurrentWaypointIndex = _btTree.CurrentWaypointIndex; //save the current patrol index
         }
         newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
@@ -92,7 +92,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         _timeEventForNextPoint.Clear();
     }
 
-    private void Rewind(bool interpolate = true, PointInTime? GoToPointInTime = null)
+    private void Rewind(bool interpolate = true, PointInTime? GoToPointInTime = null) //rewind the body
     {
         if (_pointsInTime.Count <= 1)
         {
@@ -107,9 +107,9 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         PointInTime currentP;
         if (!GoToPointInTime.HasValue)
         {
-            RemoveLastPointIfFuture(currentTime);
+            RemoveLastPointIfFuture(currentTime); // remove the points that are in the future
 
-        
+
             PointInTime closestPointInTime = _pointsInTime[_pointsInTime.Count - 1];
             if (_pointsInTime.Count > 1) 
             {
@@ -133,9 +133,9 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             currentP = GoToPointInTime.Value;
         }
 
-        if (!currentP.Position.IsNaN())
+        if (!currentP.Position.IsNaN()) //fix errors
         {
-            if (_rb && !GoToPointInTime.HasValue)
+            if (_rb && !GoToPointInTime.HasValue) //rigidbody rewind
             {
                 _rb.MovePosition(currentP.Position);
                 _rb.rotation = currentP.Rotation;
@@ -153,7 +153,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         }
 
         if (currentP.Sprite) _spriteRenderer.sprite = currentP.Sprite;
-        if (_health)
+        if (_health) //health rewind
         {
             _health.HpMax = currentP.MaxHealth;
             if (_health.Hp > currentP.Health)
@@ -174,19 +174,19 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             }
             _health.Dead = currentP.Dead;
         }
-        if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) 
+        if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) //level manager rewind
             _levelManager.SwitchPhase(currentP.Phase);
-        if (_btTree)
+        if (_btTree) //bttree rewind
         {
             _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
             if (_btTree.ImageSpotBar) _btTree.ImageSpotBar.fillAmount = currentP.SpotValue;
             _btTree.CurrentWaypointIndex = currentP.CurrentWaypointIndex;
         }
-        foreach (EventInTime timeEvent in currentP.TimeEvents)
+        foreach (EventInTime timeEvent in currentP.TimeEvents) // EVENTS
         {
             switch(timeEvent.TypeEvent)
             {
-                case TYPETIMEEVENT.TookWeapon:
+                case TYPETIMEEVENT.TookWeapon: // if an item has been taken
                     timeEvent.ItemTook.Drop();
                     break;
                 case TYPETIMEEVENT.CloseDoor:
@@ -206,7 +206,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void StartRewinding()
     {
-        _oldPointsInTime = _pointsInTime.ToList();
+        _oldPointsInTime = _pointsInTime.ToList(); //used for reset rewind
         _isRewinding = true;
         if (_rb)
             _rb.isKinematic = true;
@@ -235,7 +235,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
         RemoveFuturePointsInTime(RB_TimeManager.Instance.CurrentTime); // remove the points that are in the future since we stop rewinding
     }
     
-    private void ResetRewinding()
+    private void ResetRewinding() //scrapped
     {
         _pointsInTime = _oldPointsInTime.ToList();
         Rewind(false, _pointsInTime[_pointsInTime.Count - 1]);

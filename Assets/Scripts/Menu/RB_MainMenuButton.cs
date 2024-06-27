@@ -148,6 +148,14 @@ public class RB_MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 _textTrasform.localPosition = new Vector3(xPos, _textTrasform.localPosition.y, _textTrasform.localPosition.z);
             }
 
+            if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
+            {
+                _text.text = "Boss Rush"; // Change button text to "Boss Rush"
+                _text.color = Color.red; // Change text color to red
+                _button.enabled = true; // Enable button interaction
+                _buttonImage.raycastTarget = true; // Enable raycast target of the button image
+            }
+
             // Handle button interaction based on game state and button conditions
             if (RB_SaveManager.Instance.SaveObject.CurrentLevel < 3 && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
             {
@@ -156,13 +164,7 @@ public class RB_MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 _buttonImage.raycastTarget = false; // Disable raycast target of the button image
 
                 // If game is finished and this button is Continue, enable specific conditions
-                if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
-                {
-                    _text.text = "Boss Rush"; // Change button text to "Boss Rush"
-                    _text.color = Color.red; // Change text color to red
-                    _button.enabled = true; // Enable button interaction
-                    _buttonImage.raycastTarget = true; // Enable raycast target of the button image
-                }
+
             }
             else
             {

@@ -157,7 +157,7 @@ public class RB_MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
             }
 
             // Handle button interaction based on game state and button conditions
-            if (RB_SaveManager.Instance.SaveObject.CurrentLevel < 3 && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
+            else if (RB_SaveManager.Instance.SaveObject.CurrentLevel < 3 && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
             {
                 _button.enabled = false; // Disable button interaction
                 _text.color = _UnEnabledColor; // Change text color to disabled color

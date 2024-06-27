@@ -138,7 +138,16 @@ public class RB_PlayerMovement : MonoBehaviour
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = transform.forward ;
+            Vector3 direction = RB_InputManager.Instance.DirectAttackControllerValue;
+            if(direction.magnitude <= .1f)
+            {
+                DirectionToAttack = _transform.forward;
+            }
+            else
+            {
+                direction = direction.normalized;
+                DirectionToAttack = new Vector3(direction.x, 0, direction.y);
+            }
         }
     }
 

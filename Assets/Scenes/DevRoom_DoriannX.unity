@@ -1059,6 +1059,74 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &630774786
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 431539422267341651, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_Name
+      value: MagicWand
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826780879403972723, guid: 3bb6363e6f1213347b63d034576fff9d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3bb6363e6f1213347b63d034576fff9d, type: 3}
 --- !u!43 &640990649
 Mesh:
   m_ObjectHideFlags: 0
@@ -1591,6 +1659,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameKit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
+      value: acf8113f-39cd-467e-9597-c9c277cc6952
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
+      value: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3923,6 +4001,7 @@ MonoBehaviour:
   IsClosedRoom: 0
   DetectedEnemies: []
   DetectedAllies: []
+  DetectedEntities: []
   Doors: []
   IsPlayerInRoom: 0
 --- !u!1001 &5166654971526652494
@@ -4084,3 +4163,4 @@ SceneRoots:
   - {fileID: 560023213}
   - {fileID: 1614486010}
   - {fileID: 332597717}
+  - {fileID: 630774786}

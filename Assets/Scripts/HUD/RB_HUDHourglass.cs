@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_HUDHourglass : MonoBehaviour {
@@ -9,7 +7,7 @@ public class RB_HUDHourglass : MonoBehaviour {
         _animator = GetComponent<Animator>();
     }
 
-    //Pour lancer le renversement du sablier
+    //Reverse the Hourglass
     public void StartAnim() {
         _animator.SetTrigger("IsReversed");
     }

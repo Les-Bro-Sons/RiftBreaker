@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace MANAGERS
 {
+	//NOT USED
 	public class RB_AudioSettings : MonoBehaviour
 	{
 		public static RB_AudioSettings Instance;

@@ -6,10 +6,11 @@ public class RB_VisionCone : MonoBehaviour
     public Material VisionConeMaterial;
     public float VisionRange;
     public float VisionAngle;
-    public LayerMask VisionObstructingLayer;//layer with objects that obstruct the enemy view, like walls, for example
-    public int VisionConeResolution = 120;//the vision cone will be made up of triangles, the higher this value is the pretier the vision cone will be
-    Mesh VisionConeMesh;
-    MeshFilter MeshFilter_;
+    public LayerMask VisionObstructingLayer; // Layer with objects that obstruct the enemy view, like walls
+    public int VisionConeResolution = 120; // Number of triangles in the vision cone for visual quality
+
+    private Mesh VisionConeMesh;
+    private MeshFilter MeshFilter_;
     //Create all of these variables, most of them are self explanatory, but for the ones that aren't i've added a comment to clue you in on what they do
     //for the ones that you dont understand dont worry, just follow along
 
@@ -18,7 +19,11 @@ public class RB_VisionCone : MonoBehaviour
     [SerializeField] private float _distanceRequiredToDraw = 25;
     private bool _isInReach = false;
     private float _baseAlpha;
-    void Start()
+
+    /// <summary>
+    /// Initializes the vision cone components and sets up initial values.
+    /// </summary>
+    private void Start()
     {
         _transform = transform;
         if (RB_Tools.TryGetComponentInParent<RB_AI_BTTree>(_transform, out RB_AI_BTTree btTree))
@@ -37,61 +42,69 @@ public class RB_VisionCone : MonoBehaviour
         }
     }
 
-
-    void Update()
+    /// <summary>
+    /// Updates the vision cone every frame if the player is within reach.
+    /// </summary>
+    private void Update()
     {
         if (_isInReach)
         {
-            DrawVisionCone();//calling the vision cone function everyframe just so the cone is updated every frame
+            DrawVisionCone();
         }
-        
     }
 
+    /// <summary>
+    /// Checks the distance between the player and the enemy to determine if the vision cone should be drawn.
+    /// </summary>
     private void CheckDistance()
     {
         _isInReach = Vector3.Distance(_playerTransform.position, _transform.position) < _distanceRequiredToDraw;
         Invoke("CheckDistance", 1);
     }
 
-    void DrawVisionCone()//this method creates the vision cone mesh
+    /// <summary>
+    /// Draws the vision cone mesh based on the enemy's vision parameters.
+    /// </summary>
+    private void DrawVisionCone()
     {
         if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
         {
             VisionConeMaterial.SetFloat("_BaseAlpha", Mathf.Lerp(VisionConeMaterial.GetFloat("_BaseAlpha"), _baseAlpha, 4 * Time.deltaTime));
+
             int[] triangles = new int[(VisionConeResolution - 1) * 3];
-            Vector3[] Vertices = new Vector3[VisionConeResolution + 1];
-            Vertices[0] = Vector3.zero;
-            float Currentangle = -VisionAngle / 2;
-            float angleIcrement = VisionAngle / (VisionConeResolution - 1);
-            float Sine;
-            float Cosine;
+            Vector3[] vertices = new Vector3[VisionConeResolution + 1];
+            vertices[0] = Vector3.zero;
+            float currentAngle = -VisionAngle / 2;
+            float angleIncrement = VisionAngle / (VisionConeResolution - 1);
 
             for (int i = 0; i < VisionConeResolution; i++)
             {
-                Sine = Mathf.Sin(Currentangle);
-                Cosine = Mathf.Cos(Currentangle);
-                Vector3 RaycastDirection = (transform.forward * Cosine) + (transform.right * Sine);
-                Vector3 VertForward = (Vector3.forward * Cosine) + (Vector3.right * Sine);
-                if (Physics.Raycast(transform.position, RaycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
+                float sine = Mathf.Sin(currentAngle);
+                float cosine = Mathf.Cos(currentAngle);
+                Vector3 raycastDirection = (_transform.forward * cosine) + (_transform.right * sine);
+                Vector3 vertForward = (Vector3.forward * cosine) + (Vector3.right * sine);
+
+                if (Physics.Raycast(_transform.position, raycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
                 {
-                    Vertices[i + 1] = VertForward * hit.distance;
+                    vertices[i + 1] = vertForward * hit.distance;
                 }
                 else
                 {
-                    Vertices[i + 1] = VertForward * VisionRange;
+                    vertices[i + 1] = vertForward * VisionRange;
                 }
 
-
-                Currentangle += angleIcrement;
+                currentAngle += angleIncrement;
             }
+
             for (int i = 0, j = 0; i < triangles.Length; i += 3, j++)
             {
                 triangles[i] = 0;
                 triangles[i + 1] = j + 1;
                 triangles[i + 2] = j + 2;
             }
+
             VisionConeMesh.Clear();
-            VisionConeMesh.vertices = Vertices;
+            VisionConeMesh.vertices = vertices;
             VisionConeMesh.triangles = triangles;
             MeshFilter_.mesh = VisionConeMesh;
         }
@@ -99,9 +112,5 @@ public class RB_VisionCone : MonoBehaviour
         {
             VisionConeMaterial.SetFloat("_BaseAlpha", Mathf.Lerp(VisionConeMaterial.GetFloat("_BaseAlpha"), 0, 4 * Time.deltaTime));
         }
-        
-        
     }
-
-
 }

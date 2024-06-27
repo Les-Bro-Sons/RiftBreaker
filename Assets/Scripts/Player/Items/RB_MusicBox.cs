@@ -65,7 +65,6 @@ public class RB_MusicBox : RB_Items
     public override void ChargedAttack() //Charged attack
     {
         base.ChargedAttack();
-        RB_AudioManager.Instance.StopSFX();
         _charging = false;
     }
 

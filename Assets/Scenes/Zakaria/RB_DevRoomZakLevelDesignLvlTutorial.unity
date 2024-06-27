@@ -40286,7 +40286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Square
+  m_text: R1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -51204,7 +51204,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Square
+  m_text: R1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -68877,6 +68877,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameKit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
+      value: acf8113f-39cd-467e-9597-c9c277cc6952
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
+      value: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

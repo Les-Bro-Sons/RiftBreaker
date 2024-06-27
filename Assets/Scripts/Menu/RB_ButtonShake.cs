@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+public class RB_ButtonShake : MonoBehaviour
 {
-    public static CameraShake Instance;
+    public static RB_ButtonShake Instance;
     private Vector3 _defaultPos = new();
 
     [SerializeField] GameObject _buttonToShake;

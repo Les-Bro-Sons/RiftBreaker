@@ -238,7 +238,7 @@ public class RB_RobertLenec : RB_Boss
                 Vector3 destination = transform.position + randomDirection * randomDistance;
 
                 _movement.MoveIntoDirection(destination, _movementSpeed);
-                transform.forward = (_currentTarget.position - transform.position).normalized;
+                _rb.MoveRotation(Quaternion.LookRotation(RB_Tools.GetHorizontalDirection(_currentTarget.position - transform.position)).normalized);
 
             }
             _currentCooldownBetweenMovement = _delayMovement;
@@ -261,7 +261,7 @@ public class RB_RobertLenec : RB_Boss
         _movement.MoveIntoDirection(destination, _dashBeforeAttackSpeed);
 
         //Spawn of projectiles (attack 1)
-        transform.forward = _currentTarget.position - transform.position;
+        _rb.MoveRotation(Quaternion.LookRotation(RB_Tools.GetHorizontalDirection(_currentTarget.position - transform.position)));
         Vector3 offset = transform.forward * _redBallOffset;
         Vector3 spawnProjectile = transform.position + offset;
         Instantiate(RedBall, spawnProjectile, transform.rotation);

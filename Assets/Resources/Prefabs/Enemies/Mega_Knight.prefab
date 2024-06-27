@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 1000
-  HpMax: 1000
+  HpMax: 3000
   Armor: 0
   Team: 0
   Dead: 0
@@ -224,9 +224,9 @@ MonoBehaviour:
   _slashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
   Spikes: {fileID: 2961350032249756260, guid: 0622cd3023ddc6042985be73f21414c2, type: 3}
-  _spikesLength: 10
-  _spikesSpaces: 1.5
-  _spikeDamage: 10
+  _spikesLength: 13
+  _spikesSpaces: 1.3
+  _spikeDamage: 25
   _spikeKnockback: 10
   _canSpikeDamageMultipleTime: 0
   _spikeDelayIncrementation: 0.1
@@ -276,7 +276,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _jumpDuration: 1
   _landingRadius: 4
-  _landingDamage: 20
+  _landingDamage: 40
   _landingKnockback: 10
   _landingParticles: {fileID: 5863619617303975607, guid: 5016fd15725d98343b6da7d931c9df1b,
     type: 3}

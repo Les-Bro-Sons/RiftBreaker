@@ -1,19 +1,28 @@
 using UnityEngine;
 
-public class RB_MainMenuButtonManager : MonoBehaviour {
-    public static RB_MainMenuButtonManager Instance;
+public class RB_MainMenuButtonManager : MonoBehaviour
+{
+    public static RB_MainMenuButtonManager Instance; // Singleton instance
 
-    public enum BUTTONS { NewGame, Continue, Options, Credits, Quit}
-    public enum PAUSE_BUTTONS { Continue, Options, MainMenu}
+    // Enum for main menu buttons
+    public enum BUTTONS { NewGame, Continue, Options, Credits, Quit }
 
-    public BUTTONS CurrentButton;
-    public PAUSE_BUTTONS CurrentButton2;
+    // Enum for pause menu buttons
+    public enum PAUSE_BUTTONS { Continue, Options, MainMenu }
 
-    public int ButtonHooveredCount;
+    public BUTTONS CurrentButton; // Current selected main menu button
+    public PAUSE_BUTTONS CurrentButton2; // Current selected pause menu button
 
+    public int ButtonHooveredCount; // Count of hovered buttons
+
+    // Property to check if any buttons are hovered
     public bool IsButtonsHoovered => ButtonHooveredCount > 0 ? true : false;
 
-    private void Awake(){
-        if (Instance == null) { Instance = this; }
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this; // Set the singleton instance
+        }
     }
 }

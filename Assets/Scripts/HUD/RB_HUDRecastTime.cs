@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class RB_HUDRecastTime : MonoBehaviour {
-    public enum RECASTTYPE
+public class RB_HUDRecastTime : MonoBehaviour 
+{
+    public enum RECASTTYPE 
     {
         Dash,
         AttackBase,
@@ -16,22 +15,27 @@ public class RB_HUDRecastTime : MonoBehaviour {
 
     public RECASTTYPE Type;
 
-    [SerializeField] TextMeshProUGUI _timerText;
-    [SerializeField] Image _fillImage;
-    [SerializeField] Image _displayCast;
+    [SerializeField] private TextMeshProUGUI _timerText;
+    [SerializeField] private Image _fillImage;
+    [SerializeField] private Image _displayCast;
 
-    float _remainTime;
-    bool _isTimerStarted;
-    float _multiplierFactor;
+    private float _remainTime;
+    private bool _isTimerStarted;
+    private float _multiplierFactor;
 
     public UnityEvent EventTimerEnd;
 
-    //Par Défaut le système de RecastTime (ou rechargement des compétences) n'est pas activé
-    private void Start() {
+    /// <summary>
+    /// Initializes the recast time system and sets up event listeners.
+    /// </summary>
+    private void Start() 
+    {
         _multiplierFactor = 1f / _remainTime;
         _fillImage.fillAmount = 0;
         _timerText.text = "";
-        switch (Type) {
+
+        switch (Type) 
+        {
             case RECASTTYPE.Dash:
                 RB_PlayerMovement.Instance.EventDash.AddListener(delegate { RecastTimerStart(RB_PlayerMovement.Instance.DashCooldown); });
                 break;
@@ -46,16 +50,20 @@ public class RB_HUDRecastTime : MonoBehaviour {
                 _multiplierFactor = 1f / 100f;
                 break;
         }
-
     }
 
-    //Initilisation du system de Recast Time
-    public void RecastTimerStart(float timer) {
-        _multiplierFactor = 1f/timer;
+    /// <summary>
+    /// Initializes the recast timer with a specified duration.
+    /// </summary>
+    /// <param name="timer">The duration of the recast timer in seconds.</param>
+    public void RecastTimerStart(float timer) 
+    {
+        _multiplierFactor = 1f / timer;
         _remainTime = timer;
         _timerText.text = _remainTime.ToString();
         _isTimerStarted = true;
-        switch (Type)
+
+        switch (Type) 
         {
             default:
                 _fillImage.fillAmount = _remainTime * _multiplierFactor;
@@ -64,64 +72,79 @@ public class RB_HUDRecastTime : MonoBehaviour {
                 _fillImage.fillAmount = 1;
                 break;
         }
-        
     }
 
-    void Update() { 
-        switch (Type)
+    /// <summary>
+    /// Updates the recast timer and handles special attack charge.
+    /// </summary>
+    private void Update() 
+    {
+        if (Type == RECASTTYPE.AttackSpecial) 
         {
-            case RECASTTYPE.AttackSpecial:
-                if (RB_PlayerAction.Instance.Item != null)
-                {
-                    float charge = RB_PlayerAction.Instance.Item.SpecialAttackCharge;
-                    if (charge < 100)
-                    {
-                        //_displayCast.color = Color.gray;
-                        _timerText.text = charge.ToString("0");
-                        _fillImage.fillAmount = Mathf.Abs((charge * _multiplierFactor) - 1);
-                    }
-                    else
-                    {
-                        //_displayCast.color = Color.white;
-                        _timerText.text = "";
-                        _fillImage.fillAmount = 0;
-                    }
-                }
-                
-
-                break;
+            HandleSpecialAttackCharge();
         }
 
-        if (!_isTimerStarted) { return; }
+        if (!_isTimerStarted) return;
 
-        //Défilement du Recast Time
-        if(_remainTime > 0f) {
-            //_displayCast.color = Color.gray;
-            _remainTime -= Time.deltaTime;
-            _timerText.text = _remainTime.ToString("0.0");
-            switch (Type)
-            {
-                case RECASTTYPE.AttackCharged:
-                    _fillImage.fillAmount = 1 - (_remainTime * _multiplierFactor);
-                    break;
-                default:
-                    _fillImage.fillAmount = _remainTime * _multiplierFactor;
-                    break;
-            }
-            
-        }
-        else { 
+        if (_remainTime > 0f) 
+        {
+            UpdateRecastTimer();
+        } 
+        else 
+        {
             RecastTimerEnd();
         }
     }
 
-    //Fonction qui se fait appeler quand la compétence à totalement rechargé. 
-    void RecastTimerEnd() {
+    /// <summary>
+    /// Handles the special attack charge display.
+    /// </summary>
+    private void HandleSpecialAttackCharge() 
+    {
+        if (RB_PlayerAction.Instance.Item != null) 
+        {
+            float charge = RB_PlayerAction.Instance.Item.SpecialAttackCharge;
+
+            if (charge < 100) 
+            {
+                _timerText.text = charge.ToString("0");
+                _fillImage.fillAmount = Mathf.Abs((charge * _multiplierFactor) - 1);
+            } 
+            else 
+            {
+                _timerText.text = "";
+                _fillImage.fillAmount = 0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Updates the recast timer values and UI elements.
+    /// </summary>
+    private void UpdateRecastTimer() 
+    {
+        _remainTime -= Time.deltaTime;
+        _timerText.text = _remainTime.ToString("0.0");
+
+        switch (Type) 
+        {
+            case RECASTTYPE.AttackCharged:
+                _fillImage.fillAmount = 1 - (_remainTime * _multiplierFactor);
+                break;
+            default:
+                _fillImage.fillAmount = _remainTime * _multiplierFactor;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Called when the recast timer ends.
+    /// </summary>
+    private void RecastTimerEnd() 
+    {
         _timerText.text = "";
         _remainTime = 0;
         _fillImage.fillAmount = 0;
         EventTimerEnd?.Invoke();
-        //_displayCast.color = Color.white;
     }
-
 }

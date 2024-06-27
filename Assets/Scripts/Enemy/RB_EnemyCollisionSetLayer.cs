@@ -1,11 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_EnemyCollisionSetLayer : MonoBehaviour
 {
-    CapsuleCollider _triggerCollider;
-    CapsuleCollider _collider;
+    // Colliders used for setting collision layers
+    private CapsuleCollider _triggerCollider;
+    private CapsuleCollider _collider;
 
+    /// <summary>
+    /// Initializes the collision layers and sets up event listeners on Start.
+    /// </summary>
     private void Start()
     {
         SetCollisionLayer();
@@ -16,6 +19,9 @@ public class RB_EnemyCollisionSetLayer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Configures the collision layers for the enemy's colliders.
+    /// </summary>
     private void SetCollisionLayer()
     {
         int currentLayer = gameObject.layer;

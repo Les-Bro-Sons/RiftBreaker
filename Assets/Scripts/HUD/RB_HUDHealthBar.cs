@@ -2,7 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RB_HUDHealthBar : MonoBehaviour {
+public class RB_HUDHealthBar : MonoBehaviour
+{
+    // Enumeration for the health bar modes
     enum MODE
     {
         Player,
@@ -10,50 +12,56 @@ public class RB_HUDHealthBar : MonoBehaviour {
         Other
     }
 
-    [SerializeField] private MODE _mode = MODE.Other;
+    [SerializeField] private MODE _mode = MODE.Other; // Mode of the health bar (Player, Boss, Other)
 
-    [SerializeField] TextMeshProUGUI _hpText;
-    public RB_Health Rb_health;
+    [SerializeField] private TextMeshProUGUI _hpText; // Reference to the health text display
+    public RB_Health Rb_health; // Reference to the health component
 
-    [SerializeField] TextMeshProUGUI _bossName;
+    [SerializeField] private TextMeshProUGUI _bossName; // Reference to the boss name display
 
-    private void Start() {
-        //Pour avoir le nom du boss au dessus de sa barre de vie
-        if (_mode == MODE.Boss && Rb_health.Name != null) { 
+    [Header("UX")]
+    [SerializeField] private float _chipSpeed = 2.0f; // Speed at which the health bar updates
+    [SerializeField] private Image _frontHealthBar; // Front health bar image
+    [SerializeField] private Image _backHealthBar; // Back health bar image
+    [SerializeField] private TMP_Text _healthTextPlayer; // Player health text display
+
+    private float _displayedHealth; // Displayed health value for smooth transitions
+
+    /// <summary>
+    /// Initializes the health bar and sets the boss name if applicable.
+    /// </summary>
+    private void Start()
+    {
+        // Set the boss name above the health bar if in Boss mode
+        if (_mode == MODE.Boss && Rb_health.Name != null)
+        {
             _bossName.text = Rb_health.Name;
         }
-        //Le joueur ne possède pas de système d'affichage de son nom
-        else if( _bossName != null) {
+        else if (_bossName != null)
+        {
             _bossName.text = "";
         }
 
-        switch (_mode)
+        // Set the health component to the player's health if in Player mode
+        if (_mode == MODE.Player)
         {
-            case MODE.Player:
-                Rb_health = RB_PlayerController.Instance.GetComponent<RB_Health>();
-                break;
+            Rb_health = RB_PlayerController.Instance.GetComponent<RB_Health>();
         }
 
         UxStart();
     }
 
+    /// <summary>
+    /// Updates the health bar every frame.
+    /// </summary>
     private void Update()
     {
         UxUpdateXHealthBar();
     }
 
-    // ~~~~~~~~~~ UX ~~~~~~~~~~
-
-    [Header("UX")]
-    [SerializeField] private float _chipSpeed = 2.0f;
-    
-
-    [SerializeField] private Image _frontHealthBar;
-    [SerializeField] private Image _backHealthBar;
-    [SerializeField] private TMP_Text _healthTextPlayer;
-    private float _displayedHealth;
-
-
+    /// <summary>
+    /// Initializes the UX elements of the health bar.
+    /// </summary>
     private void UxStart()
     {
         _displayedHealth = Rb_health.Hp;
@@ -62,19 +70,26 @@ public class RB_HUDHealthBar : MonoBehaviour {
         _backHealthBar.fillAmount = Rb_health.Hp / Rb_health.HpMax;
     }
 
+    /// <summary>
+    /// Updates the UX elements of the health bar.
+    /// </summary>
     private void UxUpdateXHealthBar()
     {
         UxUpdateCheck();
         UxRefreshText();
     }
 
+    /// <summary>
+    /// Updates the fill amounts of the front and back health bars based on the current health.
+    /// </summary>
     private void UxUpdateCheck()
     {
         float fillF = _frontHealthBar.fillAmount;
         float fillB = _backHealthBar.fillAmount;
-        float hFraction = Rb_health.Hp / Rb_health.HpMax; // decimal 0 to 1
+        float hFraction = Rb_health.Hp / Rb_health.HpMax; // Decimal representation of health (0 to 1)
 
-        if (fillB > hFraction) // background
+        // Update back health bar (damage taken)
+        if (fillB > hFraction)
         {
             _frontHealthBar.fillAmount = hFraction;
             _backHealthBar.color = Color.red;
@@ -85,7 +100,9 @@ public class RB_HUDHealthBar : MonoBehaviour {
 
             _backHealthBar.fillAmount = Mathf.Lerp(fillB, hFraction, percentComplete);
         }
-        if (fillF < hFraction) // front
+
+        // Update front health bar (healing)
+        if (fillF < hFraction)
         {
             _backHealthBar.color = Color.green;
             _backHealthBar.fillAmount = hFraction;
@@ -98,6 +115,9 @@ public class RB_HUDHealthBar : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Refreshes the displayed health text.
+    /// </summary>
     private void UxRefreshText()
     {
         Rb_health.LerpTimer += Time.deltaTime;

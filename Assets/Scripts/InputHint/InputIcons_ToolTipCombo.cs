@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 namespace UnityEngine.InputSystem.Samples.RebindUI
 {
     /// <summary>

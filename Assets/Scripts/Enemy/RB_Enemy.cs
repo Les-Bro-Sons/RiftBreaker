@@ -11,7 +11,7 @@ public class RB_Enemy : MonoBehaviour
     [Header("Spawn")]
     [SerializeField] private bool _isAttachedToAPhase = true; // if false, everything under this in "Spawn" is useless
     [SerializeField] private PHASES _spawnInPhase = PHASES.Infiltration;
-    public SpriteRenderer SpriteRenderer; //PLACEHOLDER
+    public SpriteRenderer SpriteRenderer; // Placeholder
     public Animator AiAnimator;
 
     protected Rigidbody _rb;
@@ -32,6 +32,9 @@ public class RB_Enemy : MonoBehaviour
     [HideInInspector] public UnityEvent EventAllyTeam;
     [HideInInspector] public UnityEvent EventEnemyTeam;
 
+    /// <summary>
+    /// Initialization of the enemy. Sets up references and initial states.
+    /// </summary>
     protected virtual void Awake()
     {
         transform = GetComponent<Transform>();
@@ -44,6 +47,9 @@ public class RB_Enemy : MonoBehaviour
         SetLayerToTeam();
     }
 
+    /// <summary>
+    /// Called on the frame when the script is enabled. Handles enemy spawning logic.
+    /// </summary>
     protected virtual void Start()
     {
         if (_isAttachedToAPhase && _spawnInPhase != RB_LevelManager.Instance.CurrentPhase)
@@ -56,6 +62,9 @@ public class RB_Enemy : MonoBehaviour
         SetLayerToTeam();
     }
 
+    /// <summary>
+    /// Sets the layer of the enemy and all its children based on its team.
+    /// </summary>
     private void SetLayerToTeam()
     {
         int layer;
@@ -75,34 +84,47 @@ public class RB_Enemy : MonoBehaviour
         SetLayerToAllChildren(layer, transform);
     }
 
+    /// <summary>
+    /// Recursively sets the layer of all children of a given transform.
+    /// </summary>
     private void SetLayerToAllChildren(int layer, Transform obj)
     {
-        foreach(Transform child in obj)
+        foreach (Transform child in obj)
         {
             child.gameObject.layer = layer;
             SetLayerToAllChildren(layer, child);
         }
-    }  
-
-
-    public virtual void Spawned() //when the enemy is spawned
-    {
-
     }
 
-     protected virtual void TakeDamage()
-     {
-    
-     }
+    /// <summary>
+    /// Called when the enemy is spawned.
+    /// </summary>
+    public virtual void Spawned()
+    {
+        // Custom spawn logic can be implemented in derived classes.
+    }
 
+    /// <summary>
+    /// Called when the enemy takes damage.
+    /// </summary>
+    protected virtual void TakeDamage()
+    {
+        // Custom damage handling can be implemented in derived classes.
+    }
+
+    /// <summary>
+    /// Called when the enemy dies.
+    /// </summary>
     protected virtual void Death()
     {
         EventDead?.Invoke();
         Tombstone();
-        //Destroy(gameObject);
     }
 
-    public virtual void Tombstone() // make the enemy a tombstone (dead)
+    /// <summary>
+    /// Turns the enemy into a tombstone.
+    /// </summary>
+    public virtual void Tombstone()
     {
         if (!_isTombstoned)
         {
@@ -110,16 +132,18 @@ public class RB_Enemy : MonoBehaviour
             if (AiAnimator) AiAnimator.enabled = false;
             _isTombstoned = true;
             _spriteBeforeDeath = SpriteRenderer.sprite;
-            SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); //PLACEHOLDER
+            SpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Ai/Tombstone/Tombstone"); // Placeholder
             _rb.excludeLayers = ~(1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Room"));
             _rb.velocity = Vector3.zero;
-            //Create charge special attack particles
             GameObject instantiatedChargeSpecialAttackParticleSystem = Instantiate(RB_LevelManager.Instance.ChargeSpecialAttackParticlePrefab, transform);
             instantiatedChargeSpecialAttackParticleSystem.transform.position = transform.position;
         }
     }
 
-    public virtual void UnTombstone() // make the enemy alive again
+    /// <summary>
+    /// Revives the enemy from a tombstone state.
+    /// </summary>
+    public virtual void UnTombstone()
     {
         if (_isTombstoned)
         {
@@ -137,13 +161,22 @@ public class RB_Enemy : MonoBehaviour
         }
     }
 
-    protected float GetTargetDistance() // made so it's easier to modify it for the pawn item (multiple character in the player team)
+    /// <summary>
+    /// Gets the distance to the current target.
+    /// </summary>
+    /// <returns>Distance to the current target.</returns>
+    protected float GetTargetDistance()
     {
         if (_currentTarget == null) GetTarget();
         return Vector3.Distance(_currentTarget.transform.position, transform.position);
     }
 
-    protected Transform GetTarget(TARGETMODE targetMode = TARGETMODE.Closest) // made so it's easier to modify it for the pawn item (multiple character in the player team)
+    /// <summary>
+    /// Gets a target based on the specified target mode.
+    /// </summary>
+    /// <param name="targetMode">Mode for selecting the target.</param>
+    /// <returns>Transform of the selected target.</returns>
+    protected Transform GetTarget(TARGETMODE targetMode = TARGETMODE.Closest)
     {
         List<RB_Health> _enemies = new();
         RB_Health bossHealth = GetComponent<RB_Health>();
@@ -210,7 +243,6 @@ public class RB_Enemy : MonoBehaviour
                 targetDistance = 0;
                 foreach (RB_Health enemy in _enemies)
                 {
-                    targetDistance = 0;
                     float enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
                     if (enemyDistance > targetDistance)
                     {

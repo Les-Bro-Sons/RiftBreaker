@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+//NOT USED
 public class RB_BlurEffect : ScriptableRendererFeature {
     class RB_BlurPass : ScriptableRenderPass {
         public Material BlurMaterial = null;

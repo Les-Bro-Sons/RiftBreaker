@@ -26,7 +26,7 @@ public class RB_EndCreditCinematic : MonoBehaviour
         _creditTransform.localPosition += Vector3.up * _creditSpeed * Time.deltaTime;
 
         // Check if the credits have scrolled past a certain point
-        if (_creditTransform.localPosition.y > 4600)
+        if (_creditTransform.localPosition.y > 4000)
         {
             RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0); // Transition to another scene (assuming scene index 0)
             RB_SaveManager.Instance.ResetSave(); // Reset save data

@@ -21,6 +21,10 @@ public class RB_InputManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventAttackStarted;
     [HideInInspector] public UnityEvent EventAttackCanceled;
 
+    [HideInInspector] public UnityEvent EventDirectAttackControllerStarted;
+    [HideInInspector] public UnityEvent EventDirectAttackControllerPerformed;
+    [HideInInspector] public UnityEvent EventDirectAttackControllerCanceled;
+
     [Header("Special Attack")]
     public bool SpecialAttackEnabled = true;
     [HideInInspector] public UnityEvent EventSpecialAttackStarted;
@@ -48,6 +52,8 @@ public class RB_InputManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventItem3Canceled;
 
     public Vector2 MoveValue;
+
+    public Vector2 DirectAttackControllerValue;
 
     public bool IsMouse = false;
 
@@ -80,6 +86,22 @@ public class RB_InputManager : MonoBehaviour
             EventMovePerformed?.Invoke();
         else if (context.canceled)
             EventMoveCanceled?.Invoke();
+    }
+
+    public void OnDirectionAttackJoystick(InputAction.CallbackContext context)
+    {
+
+        print("right stick");
+        if (!InputEnabled) return;
+        DirectAttackControllerValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
+        if (context.started)
+        {
+            EventDirectAttackControllerStarted?.Invoke();
+        }
+        else if (context.performed)
+            EventDirectAttackControllerPerformed?.Invoke();
+        else if (context.canceled)
+            EventDirectAttackControllerCanceled?.Invoke();
     }
 
     public void OnAttack(InputAction.CallbackContext context)

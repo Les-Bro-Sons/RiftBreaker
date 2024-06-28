@@ -77,6 +77,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             newPoint.Health = _health.Hp;
             newPoint.MaxHealth = _health.HpMax;
             newPoint.Dead = _health.Dead;
+            newPoint.Team = _health.Team;
         }
         if (_rb) newPoint.Velocity = _rb.velocity;
         if (_levelManager) newPoint.Phase = _levelManager.CurrentPhase;
@@ -173,6 +174,11 @@ public class RB_TimeBodyRecorder : MonoBehaviour
                 }
             }
             _health.Dead = currentP.Dead;
+            if (_health.Team != currentP.Team)
+            {
+                _health.Team = currentP.Team;
+                _enemy.SetLayerToTeam();
+            }
         }
         if (_levelManager && _levelManager.CurrentPhase != currentP.Phase) //level manager rewind
             _levelManager.SwitchPhase(currentP.Phase);

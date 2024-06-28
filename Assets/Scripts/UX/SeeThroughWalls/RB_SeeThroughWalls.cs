@@ -5,6 +5,7 @@ public class RB_SeeThroughWalls : MonoBehaviour
     private new Transform transform;
 
     public static int PosID = Shader.PropertyToID("_PlayerPosition");
+    public static int WorldPosID = Shader.PropertyToID("_WorldPlayerPosition");
     public static int SizeID = Shader.PropertyToID("_Size");
 
     [SerializeField] private Material _wallMaterial;
@@ -38,5 +39,6 @@ public class RB_SeeThroughWalls : MonoBehaviour
 
         Vector3 view = _camera.WorldToViewportPoint(transform.position);
         _wallMaterial.SetVector(PosID, view);
+        _wallMaterial.SetVector(WorldPosID, transform.position);
     }
 }

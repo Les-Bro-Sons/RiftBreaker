@@ -33,7 +33,15 @@ public class RB_EnemyCollisionSetLayer : MonoBehaviour
         _triggerCollider.isTrigger = true;
         _collider.isTrigger = false;
 
-        _collider.excludeLayers = (1 << currentLayer);
-        _triggerCollider.excludeLayers = ~(1 << currentLayer);
+        if (currentLayer == 9 || currentLayer == 7)
+        {
+            _collider.excludeLayers = (1 << 9 | 1 << 7);
+            _triggerCollider.excludeLayers = ~(1 << 9 | 1 << 7);
+        }
+        else
+        {
+            _collider.excludeLayers = (1 << currentLayer);
+            _triggerCollider.excludeLayers = ~(1 << currentLayer);
+        }
     }
 }

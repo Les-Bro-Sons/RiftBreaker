@@ -133,12 +133,21 @@ public class RB_PlayerMovement : MonoBehaviour
         if (RB_InputManager.Instance.IsMouse)
         {
             //If the player is playing with the mouse the attack direction is set to the mouse direction
-            DirectionToAttack = RB_InputManager.Instance.GetMouseDirection();
+            DirectionToAttack = RB_InputManager.Instance.GetMouseDirection().normalized;
         }
         else
         {
             //Otherwise, the attack direction is set to the move direction
-            DirectionToAttack = transform.forward ;
+            Vector3 direction = RB_InputManager.Instance.DirectAttackControllerValue;
+            if(direction.magnitude <= .1f)
+            {
+                DirectionToAttack = _transform.forward;
+            }
+            else
+            {
+                direction = direction.normalized;
+                DirectionToAttack = new Vector3(direction.x, 0, direction.y);
+            }
         }
     }
 

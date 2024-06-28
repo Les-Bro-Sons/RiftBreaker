@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd0f18d2b7b1e149ab4b761bdfbb167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputEnabled: 1
   MoveEnabled: 1
   EventMoveStarted:
     m_PersistentCalls:
@@ -56,10 +57,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   AttackEnabled: 1
+  EventAttackStartedEvenIfDisabled:
+    m_PersistentCalls:
+      m_Calls: []
   EventAttackStarted:
     m_PersistentCalls:
       m_Calls: []
   EventAttackCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  EventDirectAttackControllerStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  EventDirectAttackControllerPerformed:
+    m_PersistentCalls:
+      m_Calls: []
+  EventDirectAttackControllerCanceled:
     m_PersistentCalls:
       m_Calls: []
   SpecialAttackEnabled: 1
@@ -103,6 +116,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   MoveValue: {x: 0, y: 0}
+  DirectAttackControllerValue: {x: 0, y: 0}
   IsMouse: 0
 --- !u!114 &5636846860869108747
 MonoBehaviour:
@@ -258,6 +272,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bec4db36-c8b4-4fad-9823-fbb7c8314a79
     m_ActionName: Player/Item3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8940931488551022478}
+        m_TargetAssemblyTypeName: RB_InputManager, Assembly-CSharp
+        m_MethodName: OnDirectionAttackJoystick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: acf8113f-39cd-467e-9597-c9c277cc6952
+    m_ActionName: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

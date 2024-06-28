@@ -41,7 +41,12 @@ public class RB_ChessQueen : RB_Items
     public override void Attack()
     {
         base.Attack();
-        _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
+        float spawnDistance = _pawnSpawnDistance;
+        if(Physics.Raycast(_playerTransform.position, RB_PlayerMovement.Instance.DirectionToAttack, out RaycastHit hitInfo, _pawnSpawnDistance, 1<<3 ))
+        {
+            spawnDistance = (hitInfo.point - _playerTransform.position ).magnitude - .5f;
+        }
+        _spawnPos = _playerTransform.position + RB_PlayerMovement.Instance.DirectionToAttack * spawnDistance;
         GameObject spawnedChessPawn = Instantiate(_pawnPrefab, _spawnPos, Quaternion.identity);
         RB_AI_BTTree pawn = spawnedChessPawn.GetComponent<RB_AI_BTTree>();
         pawn.SlashDamage = AttackDamage;
@@ -57,7 +62,12 @@ public class RB_ChessQueen : RB_Items
     public override void ChargedAttack()
     {
         base.ChargedAttack();
-        _spawnPos = _playerTransform.position + _playerTransform.forward * _pawnSpawnDistance;
+        float spawnDistance = _pawnSpawnDistance;
+        if (Physics.Raycast(_playerTransform.position, RB_PlayerMovement.Instance.DirectionToAttack, out RaycastHit hitInfo, _pawnSpawnDistance, 1<<3))
+        {
+            spawnDistance = (hitInfo.point - _playerTransform.position).magnitude - .5f;
+        }
+        _spawnPos = _playerTransform.position + RB_PlayerMovement.Instance.DirectionToAttack * spawnDistance;
         GameObject spawnedChessPawn = Instantiate(_towerPrefab, _spawnPos, Quaternion.identity);
         RB_AudioManager.Instance.PlaySFX("chess_move", RB_PlayerController.Instance.transform.position, false, 0, 1);
         RB_AI_BTTree pawn = spawnedChessPawn.GetComponent<RB_AI_BTTree>();

@@ -9,11 +9,14 @@ public class RB_InputManager : MonoBehaviour
 
     public bool InputEnabled = true;
 
+    #region EventAction
     [Header("Move")]
     public bool MoveEnabled = true;
     [HideInInspector] public UnityEvent EventMoveStarted;
     [HideInInspector] public UnityEvent EventMovePerformed;
     [HideInInspector] public UnityEvent EventMoveCanceled;
+
+    public Vector2 MoveValue;
 
     [Header("Attack")]
     public bool AttackEnabled = true;
@@ -50,14 +53,18 @@ public class RB_InputManager : MonoBehaviour
 
     [HideInInspector] public UnityEvent EventItem3Started;
     [HideInInspector] public UnityEvent EventItem3Canceled;
-
-    public Vector2 MoveValue;
+#endregion
 
     public Vector2 DirectAttackControllerValue;
 
     public bool IsMouse = false;
 
     private Transform _playerTransform;
+
+    Gamepad _pad;
+    float _shakeDuration;
+    float _elapsedTime;
+    bool _isShaking;
 
     private void Awake()
     {
@@ -72,6 +79,7 @@ public class RB_InputManager : MonoBehaviour
         }
     }
 
+    #region Move
     public void OnMove(InputAction.CallbackContext context)
     {
         
@@ -87,7 +95,9 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventMoveCanceled?.Invoke();
     }
+    #endregion
 
+    #region Attacks
     public void OnDirectionAttackJoystick(InputAction.CallbackContext context)
     {
 
@@ -128,7 +138,9 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventSpecialAttackCanceled?.Invoke();
     }
+    #endregion
 
+    #region Dash
     public void OnDash(InputAction.CallbackContext context)
     {
         if (!InputEnabled || !DashEnabled) return;
@@ -138,7 +150,9 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
         EventDashCanceled?.Invoke();
     }
+    #endregion
 
+    #region Rewind
     public void OnRewind(InputAction.CallbackContext context)
     {
         if (!InputEnabled || !RewindEnabled) return;
@@ -148,7 +162,9 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventRewindCanceled?.Invoke();
     }
+#endregion
 
+    #region Items
     public void OnItem1(InputAction.CallbackContext context)
     {
         if (!InputEnabled || !ItemsEnabled) return;
@@ -176,6 +192,7 @@ public class RB_InputManager : MonoBehaviour
         else if (context.canceled)
             EventItem3Canceled?.Invoke();
     }
+ #endregion
 
     public Vector3 GetMouseDirection()
     {
@@ -220,5 +237,35 @@ public class RB_InputManager : MonoBehaviour
         direction.y = 0;
 
         return direction;
+    }
+
+    public void GamepadShake(float lowFrequency, float highFrequency, float duration) { 
+        //Get reference of player's gamepad
+        _pad = Gamepad.current;
+
+        //If player have a current Gamepad
+        if (_pad != null) {
+            //Start vibration
+            _pad.SetMotorSpeeds(lowFrequency, highFrequency);
+
+            // Set shake duration and reset elapsed time
+            _shakeDuration = duration;
+            _elapsedTime = 0f;
+            _isShaking = true;
+        }
+    }
+
+    private void Update() {
+        if (_isShaking) {
+            // Update elapsed time
+            _elapsedTime += Time.unscaledDeltaTime;
+
+            // Check if the duration is over
+            if (_elapsedTime >= _shakeDuration) {
+                // Stop vibration
+                _pad.SetMotorSpeeds(0f, 0f);
+                _isShaking = false;
+            }
+        }
     }
 }

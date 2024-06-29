@@ -117,12 +117,19 @@ MonoBehaviour:
   Team: 0
   _destroyOnWall: 0
   _wallDetectionLength: 1
+  _spriteRenderer: {fileID: 0}
+  _alphaCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _followParticles: {fileID: 5559467424925952968, guid: 55fef1c9bfb97d645b2a346b16f239c1,
     type: 3}
   _destroyParticles: {fileID: 0}
   _continuousForceScreenshake: 0.2
   _continuousDelayScreenshake: 0
-  _damage: 10
+  _damage: 100
   _knocbackExplosionForce: 3
   _knockback: {x: 0, y: 2, z: 10}
   _isDealingDamageMultipleTime: 0
@@ -132,6 +139,8 @@ MonoBehaviour:
   _isDestroyingOnDamage: 0
   _damageOnExplosion: 0
   _explosionRadius: 1
+  _isBouncing: 0
+  _maxBounces: 3
   _explosionSounds: gory-explosion
   _projectileAnimator: {fileID: 0}
   SpawnDistanceFromPlayer: 0
@@ -151,6 +160,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyEntered:
@@ -176,6 +197,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _health: {fileID: 0}
   _enemy: {fileID: 0}
+  _door: {fileID: 0}
 --- !u!114 &499330220030018901
 MonoBehaviour:
   m_ObjectHideFlags: 0

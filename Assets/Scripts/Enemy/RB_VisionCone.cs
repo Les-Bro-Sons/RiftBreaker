@@ -51,6 +51,10 @@ public class RB_VisionCone : MonoBehaviour
         {
             DrawVisionCone();
         }
+        else if (RB_LevelManager.Instance.CurrentPhase != PHASES.Infiltration)
+        {
+            VisionConeMaterial.SetFloat("_BaseAlpha", 0);
+        }
     }
 
     /// <summary>

@@ -90,7 +90,7 @@ public class RB_TimeManager : MonoBehaviour
             if (_fullRewind)
             {
                 if (Time.timeScale >= 1) _currentRewindSpeed = Mathf.Clamp(_currentRewindSpeed + (((_currentFps > 20) ? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f), 1, _maxRewindSpeed);
-                RB_TimescaleManager.Instance.SetModifier("RewindTimescale", _currentRewindSpeed, 100);
+                RB_TimescaleManager.Instance.SetModifier(gameObject, "RewindTimescale", _currentRewindSpeed, 100);
             }
         }
     }

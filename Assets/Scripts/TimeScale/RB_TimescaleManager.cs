@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_TimescaleManager : MonoBehaviour
@@ -6,6 +7,9 @@ public class RB_TimescaleManager : MonoBehaviour
     public static RB_TimescaleManager Instance;
 
     public Dictionary<string, TimescaleModifier> Modifiers = new();
+
+    private float _lastRefreshTime = 0;
+    [SerializeField] private float _refreshDelay = 1;
 
     private float _currentTimescaleTarget;
     private float _currentLerpSpeed;
@@ -21,7 +25,7 @@ public class RB_TimescaleManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        SetModifier("BaseTimescale", 1, 0);
+        SetModifier(gameObject, "BaseTimescale", 1, 0);
     }
 
     private void Update()
@@ -31,6 +35,29 @@ public class RB_TimescaleManager : MonoBehaviour
         {
             Time.timeScale = _currentTimescaleTarget;
         }
+        if (Time.unscaledTime > _lastRefreshTime + _refreshDelay)
+        {
+            _lastRefreshTime = Time.unscaledTime;
+            HasModifierNullOwner(true, true);
+        }
+    }
+
+    private bool HasModifierNullOwner(bool remove = true, bool refreshCurrentTarget = true)
+    {
+        bool nullOwner = false;
+
+        Dictionary<string, TimescaleModifier>.KeyCollection modifierKeys = Modifiers.Keys;
+        foreach (string key in modifierKeys.ToList())
+        {
+            if (Modifiers[key].Owner == null)
+            {
+                if (remove) Modifiers.Remove(key);
+                nullOwner = true;
+            }
+        }
+
+        if (nullOwner && refreshCurrentTarget) RefreshCurrentTimescaleTarget(); 
+        return nullOwner;
     }
 
     private void RefreshCurrentTimescaleTarget()
@@ -40,9 +67,11 @@ public class RB_TimescaleManager : MonoBehaviour
         float highestPriority = float.MinValue;
 
         Dictionary<string, TimescaleModifier>.KeyCollection modifierKeys = Modifiers.Keys;
-        foreach(string key in modifierKeys)
+        foreach(string key in modifierKeys.ToList())
         {
             TimescaleModifier modifier = Modifiers[key];
+            if (modifier.Owner == null) Modifiers.Remove(key);
+
             if (modifier.Priority > highestPriority) //check the highest priority modifier
             {
                 timescaleTargets.Clear();
@@ -83,12 +112,13 @@ public class RB_TimescaleManager : MonoBehaviour
         }
     }
 
-    public void SetModifier(string id, float timescale, float priority, float lerpSpeed = 10)
+    public void SetModifier(GameObject owner, string id, float timescale, float priority, float lerpSpeed = 10)
     {
         TimescaleModifier modifier = new TimescaleModifier();
         modifier.TimescaleTarget = timescale;
         modifier.Priority = priority;
         modifier.LerpSpeed = lerpSpeed;
+        modifier.Owner = owner;
         SetModifier(id, modifier);
     }
 

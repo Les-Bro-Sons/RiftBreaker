@@ -55,7 +55,7 @@ public class RB_PauseMenu : MonoBehaviour
             IsPaused = true;  // Set game state to paused
             RB_MenuManager.Instance.PauseAnim();  // Trigger pause animation in RB_MenuManager
             RB_ButtonSelectioner.Instance.SelectMainButton(0);  // Select the main button (index 0) using RB_ButtonSelectioner
-            RB_TimescaleManager.Instance.SetModifier("PauseTimescale", 0, 1000);
+            RB_TimescaleManager.Instance.SetModifier(gameObject, "PauseTimescale", 0, 1000);
         }
         else
         {

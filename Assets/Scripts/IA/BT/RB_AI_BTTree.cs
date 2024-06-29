@@ -228,7 +228,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_AI_DoFailure(),
                     }),
 
-                    new RB_BTSequence(new List<RB_BTNode>
+                    new RB_BTSequence(new List<RB_BTNode> //static sequence
                     {
                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
                         new RB_AI_StaticWatchOut(this),

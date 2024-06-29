@@ -65,23 +65,31 @@ public class RB_AI_PlayerInFov : RB_BTNode
         }
         else
         {
-            object t = _btParent.Root.GetData("target");
-            if (Time.time > _lastTimeCheckTarget + _checkTargetDelay)
+            Transform t = (Transform)_btParent.Root.GetData("target");
+            if (Time.time > _lastTimeCheckTarget + _checkTargetDelay || (t != null && ((RB_Tools.TryGetComponentInParent<RB_Health>(t.gameObject, out RB_Health targetHealth) && targetHealth.Dead))))
             {
                 //searching for a target
                 _lastTimeCheckTarget = Time.time;
-                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange * 2, _layerMaskPlayer).ToList<Collider>();
+                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange * 2, _layerMaskPlayer).ToList();
                 foreach (Collider collider in colliders.ToList<Collider>())
                 {
-                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
+                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+                    {
+                        if (enemyHealth.Dead || enemyHealth.Team == _btParent.AiHealth.Team)
+                        {
+                            colliders.Remove(collider);
+                        }
+                    }
+                    else
                     {
                         colliders.Remove(collider);
                     }
                 }
                 if (colliders.Count > 0)
                 {
-                    _btParent.Root.SetData("target", colliders[0].transform);
-                    t = colliders[0].transform;
+                    RB_Tools.TryGetComponentInParent<RB_Health>(colliders[0].gameObject, out RB_Health enemyHealth);
+                    _btParent.Root.SetData("target", enemyHealth.transform);
+                    t = enemyHealth.transform;
                 }
                 else
                 {

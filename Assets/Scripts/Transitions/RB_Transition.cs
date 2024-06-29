@@ -34,7 +34,7 @@ public class RB_Transition : MonoBehaviour
         {
             if (fadeIn)
             {
-                RB_TimescaleManager.Instance.AddModifier("TransitionSceneTimescale", 0, 900);
+                RB_TimescaleManager.Instance.SetModifier("TransitionSceneTimescale", 0, 900, 4);
             }
             else
             {

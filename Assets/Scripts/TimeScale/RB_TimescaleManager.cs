@@ -21,7 +21,7 @@ public class RB_TimescaleManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        AddModifier("BaseTimescale", 1, 0);
+        SetModifier("BaseTimescale", 1, 0);
     }
 
     private void Update()
@@ -83,16 +83,16 @@ public class RB_TimescaleManager : MonoBehaviour
         }
     }
 
-    public void AddModifier(string id, float timescale, float priority, float lerpSpeed = 10)
+    public void SetModifier(string id, float timescale, float priority, float lerpSpeed = 10)
     {
         TimescaleModifier modifier = new TimescaleModifier();
         modifier.TimescaleTarget = timescale;
         modifier.Priority = priority;
         modifier.LerpSpeed = lerpSpeed;
-        AddModifier(id, modifier);
+        SetModifier(id, modifier);
     }
 
-    public void AddModifier(string id, TimescaleModifier modifier)
+    public void SetModifier(string id, TimescaleModifier modifier)
     {
         if (Modifiers.ContainsKey(id)) Modifiers[id] = modifier;
         else Modifiers.Add(id, modifier);

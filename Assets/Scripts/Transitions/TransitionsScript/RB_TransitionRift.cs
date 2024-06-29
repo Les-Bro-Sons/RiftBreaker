@@ -53,7 +53,7 @@ public class RB_TransitionRift : RB_Transition
             float elapsedTime = (Time.unscaledTime - startTime) / duration;
             if (fadeIn)
             {
-                RB_TimescaleManager.Instance.AddModifier("TransitionSceneTimescale", 0, 900);
+                RB_TimescaleManager.Instance.SetModifier("TransitionSceneTimescale", 0, 900, 4);
             }
             else
             {

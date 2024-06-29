@@ -88,7 +88,7 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                RB_TimescaleManager.Instance.AddModifier("RewindTimescale", Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed), 100);
+                RB_TimescaleManager.Instance.SetModifier("RewindTimescale", Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed), 100);
             }
         }
     }

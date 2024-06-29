@@ -64,6 +64,7 @@ public class RB_MenuManager : MonoBehaviour
     // Return to the main menu
     public void MainMenu()
     {
+        RB_TimescaleManager.Instance.RemoveModifier("PauseTimescale");
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);  // Transition to the main menu scene
         RB_InputManager.Instance.InputEnabled = true;  // Enable input
     }

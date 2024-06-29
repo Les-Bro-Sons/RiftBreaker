@@ -27,7 +27,7 @@ public class RB_TimescaleManager : MonoBehaviour
     private void Update()
     {
         Time.timeScale = Mathf.Lerp(Time.timeScale, _currentTimescaleTarget, _currentLerpSpeed * Time.unscaledDeltaTime);
-        if (Mathf.Abs(Time.timeScale - _currentTimescaleTarget) < 0.05)
+        if (Mathf.Abs(Time.timeScale - _currentTimescaleTarget) < 0.01f)
         {
             Time.timeScale = _currentTimescaleTarget;
         }
@@ -43,7 +43,7 @@ public class RB_TimescaleManager : MonoBehaviour
         foreach(string key in modifierKeys)
         {
             TimescaleModifier modifier = Modifiers[key];
-            if (modifier.Priority > highestPriority)
+            if (modifier.Priority > highestPriority) //check the highest priority modifier
             {
                 timescaleTargets.Clear();
                 lerpSpeeds.Clear();
@@ -51,19 +51,19 @@ public class RB_TimescaleManager : MonoBehaviour
                 timescaleTargets.Add(modifier.TimescaleTarget);
                 lerpSpeeds.Add(modifier.LerpSpeed);
             }
-            else if (modifier.Priority == highestPriority)
+            else if (modifier.Priority == highestPriority) //if there's more than one modifier of a priority
             {
                 timescaleTargets.Add(modifier.TimescaleTarget);
                 lerpSpeeds.Add(modifier.LerpSpeed);
             }
         }
 
-        if (timescaleTargets.Count == 1)
+        if (timescaleTargets.Count == 1) //if there's only one modifier of this priority
         {
             _currentTimescaleTarget = timescaleTargets[0];
             _currentLerpSpeed = lerpSpeeds[0];
         }
-        else if (timescaleTargets.Count > 1)
+        else if (timescaleTargets.Count > 1) //does an average of the timescales value of the same priority
         {
             float averageTarget = 0;
             float averageLerpSpeed = 0;

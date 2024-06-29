@@ -52,6 +52,7 @@ public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointe
     // Interface method for when the selectable is selected
     public void OnSelect(BaseEventData eventData)
     {
+        RB_InputManager.Instance.GamepadShake(10, 30, 0.2f);
         _isSelectedByNavigation = true; // Set flag to true when selected
         RB_AudioManager.Instance.PlaySFX("select", false, false, 0.3f, 10f); // Play select sound effect using AudioManager
     }

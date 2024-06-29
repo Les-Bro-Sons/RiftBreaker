@@ -88,8 +88,7 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                print(_currentFps);
-                Time.timeScale = Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed);
+                RB_TimescaleManager.Instance.AddModifier("RewindTimescale", Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed), 100);
             }
         }
     }
@@ -150,7 +149,7 @@ public class RB_TimeManager : MonoBehaviour
 
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
-            Time.timeScale = 1;
+            RB_TimescaleManager.Instance.RemoveModifier("RewindTimescale");
             IsRewinding = false;
             EventStopRewinding?.Invoke();
             UxStopRewind();

@@ -33,7 +33,6 @@ public class RB_MenuManager : MonoBehaviour
     private void Start()
     {
         RB_ButtonSelectioner.Instance.SelectMainButton(0);  // Select the main button when the game starts
-        Time.timeScale = 1f;  // Set the time scale to normal speed
     }
 
     // Start a new game
@@ -65,7 +64,6 @@ public class RB_MenuManager : MonoBehaviour
     // Return to the main menu
     public void MainMenu()
     {
-        Time.timeScale = 1f;  // Set time scale to normal speed
         RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);  // Transition to the main menu scene
         RB_InputManager.Instance.InputEnabled = true;  // Enable input
     }

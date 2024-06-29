@@ -32,7 +32,14 @@ public class RB_Transition : MonoBehaviour
 
         while (image.color.a < targetAlpha)
         {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, (fadeIn)? 0: 1, 4 * Time.unscaledDeltaTime);
+            if (fadeIn)
+            {
+                RB_TimescaleManager.Instance.AddModifier("TransitionSceneTimescale", 0, 900);
+            }
+            else
+            {
+                RB_TimescaleManager.Instance.RemoveModifier("TransitionSceneTimescale");
+            }
             float elapsedTime = (Time.unscaledTime - startTime) / duration;
             float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
             image.color = new Color(image.color.r, image.color.g, image.color.b, newAlpha);

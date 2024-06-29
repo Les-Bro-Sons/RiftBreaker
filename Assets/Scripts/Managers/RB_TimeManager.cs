@@ -29,6 +29,7 @@ public class RB_TimeManager : MonoBehaviour
     private bool _isRecording = true;
     public bool IsRewinding = false;
     private bool _fullRewind = false;
+    private float _currentRewindSpeed = 1;
     [SerializeField] private float _maxRewindSpeed = 15f;
 
     [Header("Hourglass")]
@@ -88,8 +89,8 @@ public class RB_TimeManager : MonoBehaviour
             Rewind();
             if (_fullRewind)
             {
-                print(_currentFps);
-                Time.timeScale = Mathf.Clamp(Time.timeScale + ((_currentFps > 20)? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f , 0, _maxRewindSpeed);
+                if (Time.timeScale >= 1) _currentRewindSpeed = Mathf.Clamp(_currentRewindSpeed + (((_currentFps > 20) ? Time.fixedDeltaTime : -Time.fixedDeltaTime) / 2.5f), 1, _maxRewindSpeed);
+                RB_TimescaleManager.Instance.SetModifier(gameObject, "RewindTimescale", _currentRewindSpeed, 100);
             }
         }
     }
@@ -150,7 +151,8 @@ public class RB_TimeManager : MonoBehaviour
 
         if (IsRewinding && (!_fullRewind || stopFullRewind))
         {
-            Time.timeScale = 1;
+            RB_TimescaleManager.Instance.RemoveModifier("RewindTimescale");
+            _currentRewindSpeed = 1;
             IsRewinding = false;
             EventStopRewinding?.Invoke();
             UxStopRewind();

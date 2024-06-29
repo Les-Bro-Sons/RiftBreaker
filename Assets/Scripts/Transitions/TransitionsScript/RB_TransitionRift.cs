@@ -25,7 +25,7 @@ public class RB_TransitionRift : RB_Transition
         yield return new WaitForEndOfFrame(); // Wait for one frame.
 
         RB_SceneTransitionManager.Instance.TransitionCanvas.worldCamera = Camera.main;
-        Time.timeScale = 1;
+        RB_TimescaleManager.Instance.RemoveModifier("TransitionSceneTimescale");
 
 
         //_virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera as CinemachineVirtualCamera;
@@ -51,7 +51,14 @@ public class RB_TransitionRift : RB_Transition
         while (Mathf.Abs(targetValue - maskAmount) > 0.01f)
         {
             float elapsedTime = (Time.unscaledTime - startTime) / duration;
-            if(fadeIn) Time.timeScale = Mathf.Lerp(Time.timeScale, (fadeIn) ? 0 : 1, 4 * Time.unscaledDeltaTime);
+            if (fadeIn)
+            {
+                RB_TimescaleManager.Instance.SetModifier(gameObject, "TransitionSceneTimescale", 0, 900, 4);
+            }
+            else
+            {
+                RB_TimescaleManager.Instance.RemoveModifier("TransitionSceneTimescale");
+            }
             maskAmount = Mathf.Lerp(startValue, targetValue, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime)); // avec le speed value
             material.SetFloat("_MaskAmount", maskAmount);
             yield return null;

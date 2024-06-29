@@ -24,6 +24,9 @@ public class RB_InputToolTipCombo : MonoBehaviour {
     [SerializeField] GameObject _textParent;
     [SerializeField] GameObject _imageParent;
 
+    private float _lastUpdateTime = 0;
+    private float _updateDelay = 0.2f;
+
     /// <summary>
     /// ID (in string form) of the binding that is to be rebound on the action.
     /// </summary>
@@ -181,8 +184,12 @@ public class RB_InputToolTipCombo : MonoBehaviour {
 
     public void Update()
     {
-        UpdateBindingDisplay();
-        UpdateModifierDisplay();
+        if (Time.unscaledTime > _lastUpdateTime + _updateDelay)
+        {
+            UpdateBindingDisplay();
+            UpdateModifierDisplay();
+            _lastUpdateTime = Time.unscaledTime;
+        }
     }
 
 #if UNITY_EDITOR

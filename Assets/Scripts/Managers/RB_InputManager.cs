@@ -51,6 +51,9 @@ public class RB_InputManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventItem3Started;
     [HideInInspector] public UnityEvent EventItem3Canceled;
 
+    [Header("Console")]
+    [HideInInspector] public UnityEvent ConsoleToggledEvent;
+
     public Vector2 MoveValue;
 
     public Vector2 DirectAttackControllerValue;
@@ -72,10 +75,16 @@ public class RB_InputManager : MonoBehaviour
         }
     }
 
+    public void OnConsoleToggled(InputAction.CallbackContext context) //When the console is toggled
+    {
+        if (context.started)
+            ConsoleToggledEvent?.Invoke(); //Invoke the event that will open / close the console
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         
-        if (!InputEnabled || !MoveEnabled) return;
+        if (!InputEnabled || !MoveEnabled){ MoveValue = Vector2.zero; return; }
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)

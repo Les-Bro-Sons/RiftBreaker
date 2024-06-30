@@ -3,12 +3,21 @@ using UnityEngine;
 public class RB_PauseMenu : MonoBehaviour
 {
 
+    //Making RB_PauseMenu an Instance
+    public static RB_PauseMenu Instance;
+
     [SerializeField] float _timeScaleSpeed;   // Speed at which time scale changes during pause/unpause
     public bool IsPaused;                     // Flag indicating if the game is currently paused
     [SerializeField] bool _isUnpausing;       // Flag indicating if the game is currently in the process of unpausing
     CanvasGroup _canvasGroup;                 // Reference to the CanvasGroup component attached to this GameObject
 
     float _oldTimeScale = 1;                  // Previous time scale value before pausing
+
+    private void Awake()
+    {
+        if(Instance == null)
+            Instance = this;
+    }
 
     void Start()
     {

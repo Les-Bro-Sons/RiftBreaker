@@ -123,6 +123,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &292615743 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4261856430790287830, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1841303693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7113725ea55c68f4d8d8ab7ad11267b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &332597717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,6 +143,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 263053956299020696, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
+        type: 3}
+      propertyPath: HpMax
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3453180199176938183, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
         type: 3}
       propertyPath: m_Name
@@ -1145,8 +1162,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionId
+      value: 0099f291-e30c-40b5-8f82-fa77f7696675
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_ActionName
       value: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionName
+      value: Player/OpenCloseConsole[/Keyboard/period,/DualSenseGamepadHID/select]
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1710,7 +1737,7 @@ PrefabInstance:
     - target: {fileID: 510754635741991097, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -258.5
+      value: 258.50024
       objectReference: {fileID: 0}
     - target: {fileID: 972639614009032283, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -1891,6 +1918,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 4.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514228750130966461, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514228750130966461, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4928457873244245176, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -2187,6 +2224,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 292615743}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ProcessCommand
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RB_CommandManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8261797564023682027, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}

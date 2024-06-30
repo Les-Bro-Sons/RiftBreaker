@@ -6,8 +6,7 @@ using UnityEngine.Events;
 
 ////TODO: deal with composites that have parts bound in different control schemes
 
-namespace UnityEngine.InputSystem.Samples.RebindUI
-{
+namespace UnityEngine.InputSystem.Samples.RebindUI {
     /// <summary>
     /// A reusable component with a self-contained UI for rebinding a single action.
     /// </summary>
@@ -36,11 +35,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// ID (in string form) of the binding that is to be rebound on the action.
         /// </summary>
         /// <seealso cref="InputBinding.id"/>
-        public string bindingId
-        {
+        public string bindingId {
             get => m_BindingId;
-            set
-            {
+            set {
                 m_BindingId = value;
                 UpdateBindingDisplay();
             }
@@ -117,10 +114,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// Event that is triggered every time the UI updates to reflect the current binding.
         /// This can be used to tie custom visualizations to bindings.
         /// </summary>
-        public UpdateBindingUIEvent updateBindingUIEvent
-        {
-            get
-            {
+        public UpdateBindingUIEvent updateBindingUIEvent {
+            get {
                 if (m_UpdateBindingUIEvent == null)
                     m_UpdateBindingUIEvent = new UpdateBindingUIEvent();
                 return m_UpdateBindingUIEvent;
@@ -176,41 +171,27 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (string.IsNullOrEmpty(m_BindingId))
                 return false;
 
-            string deviceLayoutName;
-            string controlPath;
             // Look up binding index.
             var bindingId = new Guid(m_BindingId);
             bindingIndex = action.bindings.IndexOf(x => x.id == bindingId);
-            if (bindingIndex == -1)
-            {
+            if (bindingIndex == -1) {
                 Debug.LogError($"Cannot find binding with ID '{bindingId}' on '{action}'", this);
                 return false;
             }
-/*            action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
-
-            if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "DualShockGamepad") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse") && m_InputType == PLAYERINPUT.Controller)){
-                return false;
-            } 
-            else if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Keyboard") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Gamepad") && m_InputType == PLAYERINPUT.Keyboard)){
-                return false;
-            }*/
-
                 return true;
         }
 
         /// <summary>
         /// Trigger a refresh of the currently displayed binding.
         /// </summary>
-        public void UpdateBindingDisplay()
-        {
+        public void UpdateBindingDisplay() {
             var displayString = string.Empty;
             var deviceLayoutName = default(string);
             var controlPath = default(string);
 
             // Get display string from action.
             var action = m_Action?.action;
-            if (action != null)
-            {
+            if (action != null) {
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
                 if (bindingIndex != -1)
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
@@ -257,21 +238,18 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             Debug.Log("Resolved action: " + action.name + ", binding index: " + bindingIndex);
 
             // If the binding is a composite, we need to rebind each part in turn.
-            if (action.bindings[bindingIndex].isComposite)
-            {
+            if (action.bindings[bindingIndex].isComposite) {
                 var firstPartIndex = bindingIndex + 1;
                 if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
                     PerformInteractiveRebind(action, firstPartIndex, allCompositeParts: true);
             }
-            else
-            {
+            else {
                 Debug.Log("Performing interactive rebind for binding index: " + bindingIndex);
                 PerformInteractiveRebind(action, bindingIndex);
             }
         }
 
-        private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
-        {
+        private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)  {
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
             void CleanUp()
@@ -288,7 +266,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("<mouse>/scroll")
                 .WithControlsExcluding("<Gamepad>/leftStick/y").WithControlsExcluding("<Gamepad>/leftStick/x")
-                .WithControlsExcluding("<Gamepad>/rightStick/y").WithControlsExcluding("<Gamepad>/rightStick/x")
+/*                .WithControlsExcluding("<Gamepad>/rightStick/y").WithControlsExcluding("<Gamepad>/rightStick/x")*/
+                .WithControlsExcluding("<Gamepad>/rightStick")
                 .WithControlsExcluding("<keyboard>/leftmeta").WithControlsExcluding("<keyboard>/rightmeta")
                 .WithControlsExcluding("<Keyboard>/ period")
                 .WithCancelingThrough("<keyboard>/escape")
@@ -315,9 +294,16 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     operation => {
                         Debug.Log("Rebind completed");
 
-                        if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts))
-                        {
+                        if (CheckForDuplicateBind(action, bindingIndex, allCompositeParts)) {
                             Debug.LogWarning("Duplicate binding detected");
+                            action.RemoveBindingOverride(bindingIndex);
+                            CleanUp();
+                            PerformInteractiveRebind(action, bindingIndex, allCompositeParts);
+                            return;
+                        }
+
+                        if (!CheckBindLayout(action, bindingIndex)) {
+                            Debug.Log($"Wrong Layout for {action}");
                             action.RemoveBindingOverride(bindingIndex);
                             CleanUp();
                             PerformInteractiveRebind(action, bindingIndex, allCompositeParts);
@@ -371,7 +357,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_RebindOperation.Start();
         }
 
-
         bool CheckForDuplicateBind(InputAction action, int bindingIndex, bool allCompositeParts = false) {
             InputBinding newBinding = action.bindings[bindingIndex];
 
@@ -403,6 +388,20 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         return true;
                     }
                 }
+            }
+            return false;
+        }
+
+        bool CheckBindLayout(InputAction action, int bindingIndex) {
+            string deviceLayoutName;
+            string controlPath;
+            action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
+
+            if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "DualShockGamepad") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Gamepad")) && m_InputType == PLAYERINPUT.Controller) {
+                return true;
+            }
+            else if ((InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Keyboard") || InputSystem.IsFirstLayoutBasedOnSecond(deviceLayoutName, "Mouse") ) && m_InputType == PLAYERINPUT.Keyboard) {
+                return true;
             }
             return false;
         }

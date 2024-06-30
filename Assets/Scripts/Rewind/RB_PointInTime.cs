@@ -23,6 +23,7 @@ public struct PointInTime
     public float Health;
     public float MaxHealth;
     public bool Dead;
+    public TEAMS Team;
     /////////////
 
     //RB_LEVELMANAGER//

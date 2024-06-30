@@ -29,8 +29,8 @@ public class RB_Enemy : MonoBehaviour
 
     private Sprite _spriteBeforeDeath;
 
-    [HideInInspector] public UnityEvent EventAllyTeam;
-    [HideInInspector] public UnityEvent EventEnemyTeam;
+    [HideInInspector] public UnityEvent EventJoinAllyTeam;
+    [HideInInspector] public UnityEvent EventJoinEnemyTeam;
 
     /// <summary>
     /// Initialization of the enemy. Sets up references and initial states.
@@ -65,19 +65,19 @@ public class RB_Enemy : MonoBehaviour
     /// <summary>
     /// Sets the layer of the enemy and all its children based on its team.
     /// </summary>
-    private void SetLayerToTeam()
+    public void SetLayerToTeam()
     {
         int layer;
         TEAMS team = GetComponent<RB_Health>().Team;
         if (team == TEAMS.Ai)
         {
             layer = LayerMask.NameToLayer("Enemy");
-            EventEnemyTeam?.Invoke();
+            EventJoinEnemyTeam?.Invoke();
         }
         else
         {
             layer = LayerMask.NameToLayer("Ally");
-            EventAllyTeam?.Invoke();
+            EventJoinAllyTeam?.Invoke();
         }
 
         gameObject.layer = layer;

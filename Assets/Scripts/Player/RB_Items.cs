@@ -191,7 +191,6 @@ public class RB_Items : MonoBehaviour
         _currentKnockbackForce = _normalKnockbackForce;
         //Cooldown for attack
         //Starting and resetting the attack animation
-        print("1");
         _playerAnimator.SetTrigger("Attack");
         _colliderAnimator.SetTrigger("Attack");
         //Reset attack
@@ -214,6 +213,10 @@ public class RB_Items : MonoBehaviour
             //If on the detected object, there's life script, it deals damage
             if(RB_Tools.TryGetComponentInParent<RB_Health>(detectedObject, out RB_Health _enemyHealth) && _enemyHealth.Team != TEAMS.Player && !alreadyDamaged.Contains(_enemyHealth))
             {
+                if(Physics.Raycast(_playerTransform.position, RB_PlayerMovement.Instance.DirectionToAttack, (_enemyHealth.transform.position - _playerTransform.position).magnitude, 1 << 3))
+                {
+                    return;
+                }
                 alreadyDamaged.Add(_enemyHealth);
                 _enemyHealth.TakeKnockback((_enemyHealth.transform.position - _playerAction.transform.position).normalized, _currentKnockbackForce);
                 _enemyHealth.TakeDamage(_currentDamage);

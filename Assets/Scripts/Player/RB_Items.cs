@@ -215,7 +215,6 @@ public class RB_Items : MonoBehaviour
             {
                 if(Physics.Raycast(_playerTransform.position, RB_PlayerMovement.Instance.DirectionToAttack, (_enemyHealth.transform.position - _playerTransform.position).magnitude, 1 << 3))
                 {
-                    print("wall hitted");
                     return;
                 }
                 alreadyDamaged.Add(_enemyHealth);

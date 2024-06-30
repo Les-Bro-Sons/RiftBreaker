@@ -1,5 +1,4 @@
 using Cinemachine;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class RB_CommandManager : MonoBehaviour
 {
+    RB_CommandManager Instance;
+
     public TMP_InputField CommandInput; // Assure-toi que tu as attaché le champ de saisie dans l'inspecteur Unity.
     private bool _opened = false;
     [SerializeField] private List<RB_Items> _items = new();
@@ -32,8 +33,18 @@ public class RB_CommandManager : MonoBehaviour
     //Player
     private Rigidbody _playerRb;
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     private void Start()
     {
+        DontDestroyOnLoad(gameObject);
+
         _playerRb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
         _items.AddRange(FindObjectsOfType<RB_Items>());
 
@@ -51,13 +62,13 @@ public class RB_CommandManager : MonoBehaviour
             };
             _defaultItemProperties.Add(properties);
         }
-        
+
     }
     private void Update()
     {
         // Vérifie si la touche "Return" (ou "Enter") est pressée pour exécuter la commande
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Period))
+        if (Input.GetKeyDown(KeyCode.Period))
         {
             if (!_opened)
             {
@@ -67,35 +78,25 @@ public class RB_CommandManager : MonoBehaviour
                 CommandInput.Select();
                 CommandInput.onEndEdit.AddListener(CloseCommand);
                 CommandInput.ActivateInputField();
-                StartCoroutine(DelayStartEnd());
                 ExecuteCommand();
                 RB_InputManager.Instance.InputEnabled = false;
             }
         }
-        
-    }
 
-    private IEnumerator DelayStartEnd()
-    {
-        yield return 0;
-        CommandInput.MoveTextEnd(false);
     }
 
     void ExecuteCommand()
     {
-        string inputText = CommandInput.text;
-
         // Efface le champ de saisie après avoir traité la commande, si nécessaire.
-        CommandInput.text = "/";
+        CommandInput.text = "";
     }
 
     private void CloseCommand(string command)
     {
+        RB_InputManager.Instance.InputEnabled = true;
         CommandInput.GetComponent<CanvasGroup>().alpha = 0;
-        print("close");
         _opened = false;
         ProcessCommand(command);
-        RB_InputManager.Instance.InputEnabled = true;
     }
 
     public void ProcessCommand(string input)
@@ -107,43 +108,43 @@ public class RB_CommandManager : MonoBehaviour
         // Interpréter la commande
         switch (command)
         {
-            case "/life":
+            case "life":
                 if (parts.Length >= 2)
                     Life(parts[1]);
                 break;
-            case "/nextlevel":
+            case "nextlevel":
                 Level();
                 break;
-            case "/damage":
+            case "damage":
                 if(parts.Length >= 2)
                     Damage(parts[1]);
                 break;
-            case "/godmode":
+            case "godmode":
                 GodMode();
                 break;
-            case "/beginning":
+            case "beginning":
                 Beginning(); break;
-            case "/weapon":
+            case "weapon":
                 Weapon(); break;
-            case "/resetlevel":
+            case "resetlevel":
                 ResetLevel(); break;
-            case "/previouslevel":
+            case "previouslevel":
                 PreviousLevel(); break;
-            case "/speed":
+            case "speed":
                 if (parts.Length >= 2)
                     Speed(parts[1]);
                 break;
-            case "/rewind":
+            case "rewind":
                 if(parts.Length >= 2)
                     Rewind(parts[1]);
                 break;
-            case "/normal":
+            case "normal":
                 Normal();
                 break;
-            case "/stopcamera":
+            case "stopcamera":
                 RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = null;
                 break;
-            case "/restartcamera":
+            case "restartcamera":
                 RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = RB_PlayerController.Instance.transform;
                 break;
             // Ajouter d'autres cas selon les besoins
@@ -151,16 +152,6 @@ public class RB_CommandManager : MonoBehaviour
                 Debug.Log("Commande non reconnue");
                 break;
         }
-    }
-
-    // Méthode d'exemple pour téléporter le joueur
-    void TeleportPlayer(string x, string y)
-    {
-        // Logique pour téléporter le joueur
-        float newX = float.Parse(x);
-        float newY = float.Parse(y);
-        // Implémenter la téléportation du joueur
-        Debug.Log("Teleported to (" + newX + ", " + newY + ")");
     }
 
     private void ResetLevel()
@@ -184,7 +175,7 @@ public class RB_CommandManager : MonoBehaviour
 
     private void Level()
     {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void Damage(string damageMultiplier)

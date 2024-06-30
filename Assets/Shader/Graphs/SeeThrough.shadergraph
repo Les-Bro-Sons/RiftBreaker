@@ -648,7 +648,13 @@
             "m_Id": "dd06359e8d4a44c88989a1aa5ed65508"
         },
         {
+            "m_Id": "c5c7c35f50fd47f699d9380432dc5dc4"
+        },
+        {
             "m_Id": "7558c1813be54528b75c9c56dbba557e"
+        },
+        {
+            "m_Id": "3f42b71adc8e4df0882eb01d288da364"
         }
     ],
     "synonyms": [],
@@ -666,7 +672,8 @@
         "034cfe9f-fe3b-4b26-8b97-6bae681234b9",
         "eddef7c8-b09a-470d-abf6-5fbc3ef397ea",
         "07a07a6d-d2f1-415c-88d2-277b1312e804",
-        "0ee6e49d-fd71-4463-904d-886ae42275f0"
+        "0ee6e49d-fd71-4463-904d-886ae42275f0",
+        "03c68788-0cd1-499d-9358-4ca1a9261e74"
     ],
     "m_PropertyIds": [
         -2127123310,
@@ -674,7 +681,8 @@
         1597343047,
         -65322297,
         959670279,
-        -797411688
+        -797411688,
+        -1626737309
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -849,6 +857,21 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "VertexDescription.Position"
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "3f42b71adc8e4df0882eb01d288da364",
+    "m_Id": 2,
+    "m_DisplayName": "AlphaClipping",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "AlphaClipping",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -1049,10 +1072,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "7558c1813be54528b75c9c56dbba557e",
     "m_Id": 1,
-    "m_DisplayName": "Out_Vector1",
+    "m_DisplayName": "Alpha",
     "m_SlotType": 1,
     "m_Hidden": false,
-    "m_ShaderOutputName": "OutVector1",
+    "m_ShaderOutputName": "Alpha",
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -1536,6 +1559,21 @@
     "m_ShaderOutputName": "Sampler",
     "m_StageCapability": 3,
     "m_BareResource": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "c5c7c35f50fd47f699d9380432dc5dc4",
+    "m_Id": -1626737309,
+    "m_DisplayName": "DitherSize",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_DitherSize",
+    "m_StageCapability": 3,
+    "m_Value": 1.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {

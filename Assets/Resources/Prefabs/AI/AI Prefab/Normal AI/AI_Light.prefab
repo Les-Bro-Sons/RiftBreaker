@@ -566,6 +566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2486585511892211472}
+  - component: {fileID: 1808468880574409535}
   m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
@@ -590,6 +591,22 @@ Transform:
   - {fileID: 2205603734318345085}
   m_Father: {fileID: 7118112953485518528}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1808468880574409535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927620360262412809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f3bf107f4942244184317a9b4c7ea7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallMaterial: {fileID: 2100000, guid: fd5237d6f1c0ed244a65d669494bc502, type: 2}
+  _mask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &8012067226985678990
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,10 +906,10 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 662286531341207993}
   AiAnimator: {fileID: 4265850386259287309}
   ChargeSpecialAttackAmount: 5
-  EventAllyTeam:
+  EventJoinAllyTeam:
     m_PersistentCalls:
       m_Calls: []
-  EventEnemyTeam:
+  EventJoinEnemyTeam:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &5090107859350373542

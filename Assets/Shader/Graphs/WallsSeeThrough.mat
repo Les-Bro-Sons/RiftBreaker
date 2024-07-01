@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 2450
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -48,6 +48,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _EntityPositionsTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -61,6 +65,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RBSeeThrough_fce663b66e7449b28a2df4dd8f5a7134_EntityPositionsTex_3759607337_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -94,7 +102,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _BorderAnimationSpeed: 1
+    - _BorderAnimationSpeed: 0.6
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
@@ -103,6 +111,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DitherSize: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
@@ -112,8 +121,9 @@ Material:
     - _IsTriplanar: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _Opacity: 1
+    - _Opacity: 0.6
     - _Parallax: 0.005
+    - _PosDivider: 1000
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -133,9 +143,9 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlayerPosition: {r: 0.49999204, g: 0.5000001, b: 50, a: 0}
+    - _PlayerPosition: {r: 0.51269656, g: 0.50000006, b: 49.999992, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _WorldPlayerPosition: {r: 6.421483, g: 0.000000072620125, b: 5.584408, a: 0}
+    - _WorldPlayerPosition: {r: 6.5356293, g: 0.00000008921155, b: 5.4999995, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2935653266641081064
 MonoBehaviour:

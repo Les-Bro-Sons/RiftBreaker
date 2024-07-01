@@ -10,7 +10,6 @@ public class RB_GamepadShakeManager : MonoBehaviour {
     float _shakeDuration;
     float _elapsedTime;
     bool _isShaking;
-
     [SerializeField] Slider _shakeIntensity;
 
     private void Awake() {
@@ -39,6 +38,7 @@ public class RB_GamepadShakeManager : MonoBehaviour {
     }
 
     public void ChangeFrequency() { 
+
         
     }
 

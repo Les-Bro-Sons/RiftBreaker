@@ -11,11 +11,10 @@ public class RB_VisionCone : MonoBehaviour
 
     private Mesh VisionConeMesh;
     private MeshFilter MeshFilter_;
-    //Create all of these variables, most of them are self explanatory, but for the ones that aren't i've added a comment to clue you in on what they do
-    //for the ones that you dont understand dont worry, just follow along
 
     private Transform _transform;
     private Transform _playerTransform;
+    private RB_Health _health;
     [SerializeField] private float _distanceRequiredToDraw = 25;
     private bool _isInReach = false;
     private float _baseAlpha;
@@ -26,20 +25,22 @@ public class RB_VisionCone : MonoBehaviour
     private void Start()
     {
         _transform = transform;
+        RB_Tools.TryGetComponentInParent<RB_Health>(gameObject, out _health);
         if (RB_Tools.TryGetComponentInParent<RB_AI_BTTree>(_transform, out RB_AI_BTTree btTree))
         {
             VisionAngle = btTree.FovAngle;
             VisionRange = btTree.FovRange + 0.75f;
-            VisionConeMaterial = new Material(VisionConeMaterial);
-            _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
-
-            _transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
-            MeshFilter_ = _transform.AddComponent<MeshFilter>();
-            VisionConeMesh = new Mesh();
-            VisionAngle *= Mathf.Deg2Rad;
-            _playerTransform = RB_PlayerController.Instance.transform;
-            CheckDistance();
         }
+
+        VisionConeMaterial = new Material(VisionConeMaterial);
+        _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
+
+        _transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
+        MeshFilter_ = _transform.AddComponent<MeshFilter>();
+        VisionConeMesh = new Mesh();
+        VisionAngle *= Mathf.Deg2Rad;
+        _playerTransform = RB_PlayerController.Instance.transform;
+        CheckDistance();
     }
 
     /// <summary>
@@ -71,7 +72,7 @@ public class RB_VisionCone : MonoBehaviour
     /// </summary>
     private void DrawVisionCone()
     {
-        if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
+        if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration && !_health.Dead)
         {
             VisionConeMaterial.SetFloat("_BaseAlpha", Mathf.Lerp(VisionConeMaterial.GetFloat("_BaseAlpha"), _baseAlpha, 4 * Time.deltaTime));
 

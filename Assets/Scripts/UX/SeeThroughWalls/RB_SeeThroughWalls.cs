@@ -25,6 +25,7 @@ public class RB_SeeThroughWalls : MonoBehaviour
     private void Start()
     {
         _lastRaycastTime += Random.Range(0, _raycastDelay);
+        if (RB_SeeThroughWallsManager.Instance == null) this.enabled = false;
         RB_SeeThroughWallsManager.Instance.AddEntity(transform);
     }
 

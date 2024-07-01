@@ -5,14 +5,17 @@ public class RB_SeeThroughWalls : MonoBehaviour
 {
     private new Transform transform;
 
+    private bool _isTouchingWall = false;
     public float LastTimeWallTouched = 0;
     private float _lastTimeWallTouchedOld = 0;
-    private bool _isTouchingWall = false;
     private float _lastUntouchedTime = 0;
-    private float _timeToNormal = 1;
+    private float _timeTarget = 0;
 
+    [SerializeField] private float _raycastLength = 1.5f;
     [SerializeField] private float _raycastDelay = 0.2f;
     private float _lastRaycastTime = 0;
+
+    [SerializeField] private float _unLerpingOffset = 0.1f;
 
     private void Awake()
     {
@@ -22,14 +25,14 @@ public class RB_SeeThroughWalls : MonoBehaviour
     private void Start()
     {
         _lastRaycastTime += Random.Range(0, _raycastDelay);
-        RB_SeeThroughWallsManager.Instance.Entities.Add(transform);
+        RB_SeeThroughWallsManager.Instance.AddEntity(transform);
     }
 
     private void Update()
     {
         bool canShootRaycast = Time.time > _lastRaycastTime + _raycastDelay;
         if (canShootRaycast) _lastRaycastTime = Time.time;
-        if ((canShootRaycast && Physics.Raycast(transform.position, Vector3.back, 1.5f, (1 << 3))) || (!canShootRaycast && _isTouchingWall))
+        if ((canShootRaycast && Physics.Raycast(transform.position, Vector3.back, _raycastLength, (1 << 3))) || (!canShootRaycast && _isTouchingWall))
         {
             if (!_isTouchingWall)
             {
@@ -43,10 +46,12 @@ public class RB_SeeThroughWalls : MonoBehaviour
             {
                 _lastTimeWallTouchedOld = LastTimeWallTouched;
                 _lastUntouchedTime = Time.time;
-                //LastTimeWallTouched = Time.time;
+                _timeTarget = Time.time + RB_SeeThroughWallsManager.Instance.LerpTime;
                 _isTouchingWall = false;
             }
-            LastTimeWallTouched = Mathf.Lerp(_lastTimeWallTouchedOld, Time.time, Mathf.Clamp((Time.time - _lastUntouchedTime) / (RB_SeeThroughWallsManager.Instance.LerpTime), 0, 1));
+            float currentValue = (Time.time + _unLerpingOffset - _lastUntouchedTime) / (RB_SeeThroughWallsManager.Instance.LerpTime);
+            LastTimeWallTouched = Mathf.Lerp(_lastTimeWallTouchedOld, _timeTarget, Mathf.Clamp(currentValue, 0, 1));
+            if (currentValue >= 1) _timeTarget = Time.time; 
         }
     }
 }

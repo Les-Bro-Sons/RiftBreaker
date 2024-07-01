@@ -46,5 +46,13 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
         _entityPositionsTexture.filterMode = FilterMode.Point;
         WallMaterial.SetTexture("_EntityPositionsTex", _entityPositionsTexture);
         WallMaterial.SetFloat("_PosDivider", _divider);
+        WallMaterial.SetFloat("_EntityTexHeight", textureSize);
+        WallMaterial.SetFloat("_EntityTexWidth", textureSize);
+    }
+
+    public void AddEntity(Transform entity)
+    {
+        if (!Entities.Contains(entity)) Entities.Add(entity);
+        CreateTexture();
     }
 }

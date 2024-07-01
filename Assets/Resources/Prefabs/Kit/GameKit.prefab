@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &829667406799129204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3744751825404806632}
+  - component: {fileID: 4772617280399795448}
+  m_Layer: 0
+  m_Name: ShakeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3744751825404806632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829667406799129204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2844205410739935513}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4772617280399795448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829667406799129204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034cf06a9f9cfa24a95d4a5475c5c5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2106381168543017716
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +240,7 @@ Transform:
   - {fileID: 1755633059025996507}
   - {fileID: 6046840401098088269}
   - {fileID: 7736144449267227752}
+  - {fileID: 3744751825404806632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4264253808203449260
@@ -319,6 +364,8 @@ MonoBehaviour:
     CurrentLevel: 0
     TutoDone: 0
     PlayerName: 
+    IsGameFinish: 0
+    HpBossRush: 150
   IsSaveExist: 0
 --- !u!1 &7995973177813662557
 GameObject:
@@ -617,7 +664,7 @@ PrefabInstance:
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_ActionId
-      value: e6bcbc05-ea6c-4efb-9515-8b26a0b9ce94
+      value: acf8113f-39cd-467e-9597-c9c277cc6952
       objectReference: {fileID: 0}
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}
@@ -687,7 +734,7 @@ PrefabInstance:
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_ActionName
-      value: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+      value: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
       objectReference: {fileID: 0}
     - target: {fileID: 5636846860869108747, guid: 25e781b5c240795489094e9a602a9188,
         type: 3}

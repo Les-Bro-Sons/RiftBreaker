@@ -72,7 +72,7 @@ public class RB_SceneTransitionManager : MonoBehaviour
 
     public void NewTransition(string nameTransition, int nextSceneIndex)
     {
-        print(RB_SaveManager.Instance.SaveObject.CurrentLevel);
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings) nextSceneIndex = 0;
         TransitionCanvas.worldCamera = Camera.main;
         if (CurrentTransition == null)
         {

@@ -30,16 +30,17 @@ public class RB_VisionCone : MonoBehaviour
         {
             VisionAngle = btTree.FovAngle;
             VisionRange = btTree.FovRange + 0.75f;
-            VisionConeMaterial = new Material(VisionConeMaterial);
-            _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
-
-            _transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
-            MeshFilter_ = _transform.AddComponent<MeshFilter>();
-            VisionConeMesh = new Mesh();
-            VisionAngle *= Mathf.Deg2Rad;
-            _playerTransform = RB_PlayerController.Instance.transform;
-            CheckDistance();
         }
+
+        VisionConeMaterial = new Material(VisionConeMaterial);
+        _baseAlpha = VisionConeMaterial.GetFloat("_BaseAlpha");
+
+        _transform.AddComponent<MeshRenderer>().material = VisionConeMaterial;
+        MeshFilter_ = _transform.AddComponent<MeshFilter>();
+        VisionConeMesh = new Mesh();
+        VisionAngle *= Mathf.Deg2Rad;
+        _playerTransform = RB_PlayerController.Instance.transform;
+        CheckDistance();
     }
 
     /// <summary>

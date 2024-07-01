@@ -11,15 +11,17 @@ void CalculateHoles_float(float texWidth, float texHeight, float3 worldPosition,
     hole = float3(9999, 9999, 9999);
     holeAlpha = 1;
     
+    texHeight += 1;
+    texWidth += 1;
     int maxTexWidth = (int) min(texWidth, MAX_TEX_DIM);
     int maxTexHeight = (int) min(texHeight, MAX_TEX_DIM);
     
     for (int x = 0; x < MAX_TEX_DIM; x++)
     {
-        if (x >= maxTexWidth) break;
+        if (x > maxTexWidth) break;
         for (int y = 0; y < MAX_TEX_DIM; y++)
         {
-            if (y >= maxTexHeight) break;
+            if (y > maxTexHeight) break;
             uv = float2(x / texWidth, y / texHeight);
             entityPosition = entityPositionsTex.Sample(samplerState, uv).xyz * posDivider;
             float entityAlpha = entityPositionsTex.Sample(samplerState, uv).a;

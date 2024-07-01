@@ -77,7 +77,7 @@ public class RB_MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
    
     public void OnSelect(BaseEventData eventData) {
-        RB_InputManager.Instance.GamepadShake(10, 30, 0.2f);
+        RB_GamepadShakeManager.Instance.GamepadShake(10, 30, 0.2f);
         RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton; // Set current button in button manager
         RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f); // Play select sound effect
         _isSelected = true; // Set selected flag to true

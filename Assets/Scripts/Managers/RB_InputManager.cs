@@ -61,10 +61,6 @@ public class RB_InputManager : MonoBehaviour
 
     private Transform _playerTransform;
 
-    Gamepad _pad;
-    float _shakeDuration;
-    float _elapsedTime;
-    bool _isShaking;
 
     private void Awake()
     {
@@ -239,33 +235,5 @@ public class RB_InputManager : MonoBehaviour
         return direction;
     }
 
-    public void GamepadShake(float lowFrequency, float highFrequency, float duration) { 
-        //Get reference of player's gamepad
-        _pad = Gamepad.current;
-
-        //If player have a current Gamepad
-        if (_pad != null) {
-            //Start vibration
-            _pad.SetMotorSpeeds(lowFrequency, highFrequency);
-
-            // Set shake duration and reset elapsed time
-            _shakeDuration = duration;
-            _elapsedTime = 0f;
-            _isShaking = true;
-        }
-    }
-
-    private void Update() {
-        if (_isShaking) {
-            // Update elapsed time
-            _elapsedTime += Time.unscaledDeltaTime;
-
-            // Check if the duration is over
-            if (_elapsedTime >= _shakeDuration) {
-                // Stop vibration
-                _pad.SetMotorSpeeds(0f, 0f);
-                _isShaking = false;
-            }
-        }
-    }
+   
 }

@@ -52,6 +52,17 @@ public class RB_RoomManager:MonoBehaviour
         }
     }
 
+    public List<RB_Health> GetAllEntities()
+    {
+        List<RB_Health> entities = new();
+        for(int i = 0; i <  _rooms.Count; i++)
+        {
+            entities.AddRange(GetDetectedAllies(i));
+            entities.AddRange(GetDetectedEnemies(i));
+        }
+        return entities;
+    }
+
     private void UpdateRooms()
     {
         foreach (Transform roomTransform in transform)
@@ -75,9 +86,9 @@ public class RB_RoomManager:MonoBehaviour
 
     public List<RB_Health> GetDetectedAllies(int roomIndex)
     {
-        foreach (RB_Health enemy in _rooms[roomIndex].DetectedAllies.ToList())
+        foreach (RB_Health ally in _rooms[roomIndex].DetectedAllies.ToList())
         {
-            if (enemy == null) _rooms[roomIndex].DetectedAllies.Remove(enemy);
+            if (ally == null) _rooms[roomIndex].DetectedAllies.Remove(ally);
         }
         return _rooms[roomIndex].DetectedAllies;
     }

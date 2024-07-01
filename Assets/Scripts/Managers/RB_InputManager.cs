@@ -52,7 +52,7 @@ public class RB_InputManager : MonoBehaviour
     [HideInInspector] public UnityEvent EventItem3Canceled;
 
     [Header("Console")]
-    [HideInInspector] public UnityEvent ConsoleToggledEvent;
+    [HideInInspector] public UnityEvent ConsoleToggleInputEvent;
 
     public Vector2 MoveValue;
 
@@ -78,7 +78,7 @@ public class RB_InputManager : MonoBehaviour
     public void OnConsoleToggled(InputAction.CallbackContext context) //When the console is toggled
     {
         if (context.started)
-            ConsoleToggledEvent?.Invoke(); //Invoke the event that will open / close the console
+            ConsoleToggleInputEvent?.Invoke(); //Invoke the event that will open / close the console
     }
 
     public void OnMove(InputAction.CallbackContext context)

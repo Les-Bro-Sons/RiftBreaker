@@ -9,6 +9,7 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
 
     private Texture2D _entityPositionsTexture;
     [SerializeField] private float _divider = 10f;
+    public float LerpTime = 0.5f;
 
     private void Awake()
     {
@@ -30,10 +31,12 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
             int x = i % _entityPositionsTexture.width;
             int y = i / _entityPositionsTexture.width;
             Vector3 pos = Entities[i].position;
-            _entityPositionsTexture.SetPixel(x, y, new Color(pos.x / _divider, pos.y / _divider, pos.z / _divider, 1.0f));
+            float a = Entities[i].GetComponent<RB_SeeThroughWalls>().LastTimeWallTouched;
+            _entityPositionsTexture.SetPixel(x, y, new Color(pos.x / _divider, pos.y / _divider, pos.z / _divider, a / _divider));
         }
         _entityPositionsTexture.Apply();
         WallMaterial.SetTexture("_EntityPositionsTex", _entityPositionsTexture);
+        WallMaterial.SetFloat("_LerpTime", LerpTime);
     }
 
     private void CreateTexture()

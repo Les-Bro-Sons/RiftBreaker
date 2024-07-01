@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8877058714890970649}
+  - component: {fileID: 1015747286618268449}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   - {fileID: 2882543537107160420}
   m_Father: {fileID: 3007666358255782289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1015747286618268449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804373679975519380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f3bf107f4942244184317a9b4c7ea7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LastTimeWallTouched: 0
 --- !u!1 &1269826075000150853
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,10 +383,10 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 8145346850076723994}
   AiAnimator: {fileID: 2702173301748188}
   ChargeSpecialAttackAmount: 5
-  EventAllyTeam:
+  EventJoinAllyTeam:
     m_PersistentCalls:
       m_Calls: []
-  EventEnemyTeam:
+  EventJoinEnemyTeam:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8504773875681969578

@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 
 public class RB_SeeThroughWalls : MonoBehaviour
 {
     private new Transform transform;
 
-    public static int WorldPosID = Shader.PropertyToID("_WorldPlayerPosition");
-    public static int SizeID = Shader.PropertyToID("_Size");
+    public float LastTimeWallTouched = 0;
+    private float _lastTimeWallTouchedOld = 0;
+    private bool _isTouchingWall = false;
+    private float _lastUntouchedTime = 0;
+    private float _timeToNormal = 1;
 
-    [SerializeField] private Material _wallMaterial;
-    private Camera _camera;
-    [SerializeField] private LayerMask _mask;
+    [SerializeField] private float _raycastDelay = 0.2f;
+    private float _lastRaycastTime = 0;
 
     private void Awake()
     {
@@ -18,25 +21,32 @@ public class RB_SeeThroughWalls : MonoBehaviour
 
     private void Start()
     {
+        _lastRaycastTime += Random.Range(0, _raycastDelay);
         RB_SeeThroughWallsManager.Instance.Entities.Add(transform);
-        _camera = RB_Camera.Instance.GetComponent<Camera>();
     }
 
     private void Update()
     {
-
-        Vector3 dir = _camera.transform.position - transform.position;
-
-        /*Debug.DrawRay(transform.position, dir.normalized * 10, Color.magenta);
-        if (Physics.Raycast(transform.position, dir.normalized, 10, (1 << 3)))
+        bool canShootRaycast = Time.time > _lastRaycastTime + _raycastDelay;
+        if (canShootRaycast) _lastRaycastTime = Time.time;
+        if ((canShootRaycast && Physics.Raycast(transform.position, Vector3.back, 1.5f, (1 << 3))) || (!canShootRaycast && _isTouchingWall))
         {
-            _wallMaterial.SetFloat(SizeID, 1);
+            if (!_isTouchingWall)
+            {
+                LastTimeWallTouched = Time.time;
+                _isTouchingWall = true;
+            }
         }
         else
         {
-            _wallMaterial.SetFloat(SizeID, 0);
-        }*/
-
-        _wallMaterial.SetVector(WorldPosID, RB_PlayerController.Instance.transform.position);
+            if (_isTouchingWall)
+            {
+                _lastTimeWallTouchedOld = LastTimeWallTouched;
+                _lastUntouchedTime = Time.time;
+                //LastTimeWallTouched = Time.time;
+                _isTouchingWall = false;
+            }
+            LastTimeWallTouched = Mathf.Lerp(_lastTimeWallTouchedOld, Time.time, Mathf.Clamp((Time.time - _lastUntouchedTime) / (RB_SeeThroughWallsManager.Instance.LerpTime), 0, 1));
+        }
     }
 }

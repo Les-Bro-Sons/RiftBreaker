@@ -1682,7 +1682,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: X
+  m_text: RB
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -2123,6 +2123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2159113513237132384}
+  - component: {fileID: 3043731172276249989}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -2146,6 +2147,23 @@ Transform:
   - {fileID: 6450831057342154319}
   m_Father: {fileID: 1430315345098359259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3043731172276249989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340333729715674358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f3bf107f4942244184317a9b4c7ea7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallMaterial: {fileID: 2100000, guid: fd5237d6f1c0ed244a65d669494bc502, type: 2}
+  _mask:
+    serializedVersion: 2
+    m_Bits: 8
+  LastTimeWallTouched: 0
 --- !u!1 &6498023518539953681
 GameObject:
   m_ObjectHideFlags: 0

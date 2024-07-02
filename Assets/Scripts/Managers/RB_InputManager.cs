@@ -58,8 +58,6 @@ public class RB_InputManager : MonoBehaviour
     [Header("Console")]
     [HideInInspector] public UnityEvent ConsoleToggleInputEvent;
 
-    public Vector2 MoveValue;
-
     public Vector2 DirectAttackControllerValue;
 
     public bool IsMouse = false;

@@ -44,25 +44,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 034cf06a9f9cfa24a95d4a5475c5c5a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _frequencies:
+  _vibrations:
   - Name: Aucune Vibration
     Low: 0
     High: 0
-  - Name: 
-    Low: 0
-    High: 0
-  - Name: 
-    Low: 0
-    High: 0
-  - Name: 
-    Low: 0
-    High: 0
-  - Name: 
-    Low: 0
-    High: 0
-  - Name: 
-    Low: 100
-    High: 100
+    Duration: 0
+  - Name: Faibles Vibrations
+    Low: 0.25
+    High: 0.25
+    Duration: 0.25
+  - Name: Moyennes Vibrations
+    Low: 0.5
+    High: 0.5
+    Duration: 0.5
+  - Name: Fortes Vibrations
+    Low: 0.75
+    High: 0.75
+    Duration: 0.75
+  - Name: Vibrations Maximales
+    Low: 1
+    High: 1
+    Duration: 1
   ActualName: 
 --- !u!1 &2106381168543017716
 GameObject:

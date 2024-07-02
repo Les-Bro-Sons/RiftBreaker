@@ -6872,7 +6872,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad/Left
+  m_text: D-Pad Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -9298,7 +9298,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6963736389185159724}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RB_VibrationSlider, Assembly-CSharp
         m_MethodName: Default
         m_Mode: 1
@@ -14419,7 +14419,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS/Right
+  m_text: LS Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -14688,7 +14688,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS/Left
+  m_text: LS Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -16039,7 +16039,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2016866378273620999}
   - component: {fileID: 6332794569914178577}
-  - component: {fileID: 6963736389185159724}
   m_Layer: 5
   m_Name: (controller)
   m_TagString: Untagged
@@ -16199,20 +16198,6 @@ MonoBehaviour:
     Lock: {fileID: 21300000, guid: beb6ed45a185ec44d8e7aede2836f9b5, type: 3}
     Shift: {fileID: 21300000, guid: 2af2a6c9945d45141aee653388a501f4, type: 3}
     Tab: {fileID: 21300000, guid: 5a0604a7ac124ec4590e785cc9dfa59b, type: 3}
---- !u!114 &6963736389185159724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5026813035634998792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc2de312c4939414b89cf02e1f97568a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _vibrationSlider: {fileID: 5391637865662089463}
-  _vibartionLevel: {fileID: 5143738451167072273}
 --- !u!1 &5089843681441999806
 GameObject:
   m_ObjectHideFlags: 0
@@ -21994,7 +21979,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad/Right
+  m_text: D-Pad Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -24644,7 +24629,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS/Up
+  m_text: LS Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -26862,9 +26847,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4359464920841938434}
   m_Direction: 2
   m_MinValue: 0
-  m_MaxValue: 5
+  m_MaxValue: 4
   m_WholeNumbers: 1
-  m_Value: 5
+  m_Value: 4
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -27380,7 +27365,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LS/Down
+  m_text: LS Down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,
@@ -29329,7 +29314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D-Pad/Up
+  m_text: D-Pad Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3eb6af959c1a9b4b9aff42b13c7a67c, type: 2}
   m_sharedMaterial: {fileID: -5691584282331242684, guid: d3eb6af959c1a9b4b9aff42b13c7a67c,

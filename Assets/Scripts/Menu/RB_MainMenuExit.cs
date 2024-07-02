@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_MainMenuExit : MonoBehaviour
@@ -12,7 +10,7 @@ public class RB_MainMenuExit : MonoBehaviour
     void Start()
     {
         // Listen to the pause started event in the menu input manager
-        RB_MenuInputManager.Instance.EventPauseStarted.AddListener(CloseOption);
+        RB_MenuInputManager.Instance.EventCancelStarted.AddListener(CloseOption);
     }
 
     // Method called when the pause event is triggered

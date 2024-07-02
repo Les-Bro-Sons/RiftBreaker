@@ -1,3 +1,4 @@
+using MANAGERS;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,13 +31,15 @@ public class RB_MenuSlider : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         int value = Mathf.RoundToInt(_slider.value * 100);
 
-        if (RB_MenuInputManager.Instance.NavigationValue.x > 0)
+        if (RB_MenuInputManager.Instance.NavigationValue.x > 0 || RB_MenuInputManager.Instance.NavigationValue.y > 0)
         {
             value += _offsetValue;  // Increase slider value by offset if navigating right
+            RB_AudioManager.Instance.PlaySFX("click", false, false, 0, 1f);
         }
-        else if (RB_MenuInputManager.Instance.NavigationValue.x < 0)
+        else if (RB_MenuInputManager.Instance.NavigationValue.x < 0 || RB_MenuInputManager.Instance.NavigationValue.y < 0)
         {
             value -= _offsetValue;  // Decrease slider value by offset if navigating left
+            RB_AudioManager.Instance.PlaySFX("click", false, false, 0, 1f);
         }
         _slider.value = (float)value / 100;  // Update slider value
     }
@@ -50,6 +53,7 @@ public class RB_MenuSlider : MonoBehaviour, ISelectHandler, IDeselectHandler
             _slider.interactable = false;  // Disable slider interaction
             _handlerRenderer.sprite = _selected;  // Change handler sprite to selected state
             RB_MenuInputManager.Instance.EventNavigateStarted.AddListener(UpdateSlider);  // Listen for navigation input to update slider
+            RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f);
         }
         else if (_isInteracting)
         {
@@ -95,4 +99,5 @@ public class RB_MenuSlider : MonoBehaviour, ISelectHandler, IDeselectHandler
         _isSelected = false;
         _handlerRenderer.sprite = _default;  // Reset handler sprite to default
     }
+
 }

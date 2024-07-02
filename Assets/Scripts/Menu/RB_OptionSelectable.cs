@@ -31,6 +31,7 @@ public class RB_OptionSelectable : MonoBehaviour, IPointerEnterHandler, IPointer
     // Called when the selectable is selected
     public void OnSelect(BaseEventData eventData)
     {
+
         RB_OptionsSelectableManager.Instance.CurrentSelectable = _selectable;  // Set this selectable as the current selectable in RB_OptionsSelectableManager
         _isSelected = true;  // Mark this selectable as selected
     }

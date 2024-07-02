@@ -344,6 +344,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1345049706}
+        m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &49848244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,6 +1006,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1345049706}
+        m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &420121240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1050,6 +1074,18 @@ MonoBehaviour:
   _offsetSpeed: 10
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _UnEnabledColor: {r: 0.504043, g: 0.504043, b: 0.504043, a: 0.6901961}
+--- !u!114 &459480621 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5391637865662089463, guid: 7d4353a52b5bd0742abe3c7da044ccc6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4947435120835795209}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &475164341
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,6 +1587,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1345049706}
+        m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &681638919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1739,6 +1787,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &759686389 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5143738451167072273, guid: 7d4353a52b5bd0742abe3c7da044ccc6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4947435120835795209}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &772765844
 GameObject:
   m_ObjectHideFlags: 0
@@ -2488,6 +2548,12 @@ MonoBehaviour:
   CurrentButton: 0
   CurrentButton2: 0
   ButtonHooveredCount: 0
+--- !u!1 &1345049706 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2352426738262133709, guid: 51fd2ae82528e2642868b3cbe99454d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1596403794}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1363676817
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,13 +2656,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1775722174}
+      - m_Target: {fileID: 1345049706}
         m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
-        m_MethodName: NewGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2787,26 +2853,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Credit
-      objectReference: {fileID: 0}
-    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 919
-      objectReference: {fileID: 0}
-    - target: {fileID: 2533111542907364523, guid: 4f75c56de35c4854ca5a4fc650ebb669,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -2444
       objectReference: {fileID: 0}
     - target: {fileID: 3472642188951070558, guid: 4f75c56de35c4854ca5a4fc650ebb669,
         type: 3}
@@ -3062,26 +3108,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 772765846}
-    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
-      value: acf8113f-39cd-467e-9597-c9c277cc6952
-      objectReference: {fileID: 0}
-    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[9].m_ActionId
-      value: 0099f291-e30c-40b5-8f82-fa77f7696675
-      objectReference: {fileID: 0}
-    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
-      value: Player/AttackDirectionController[/DualSenseGamepadHID/rightStick/up,/DualSenseGamepadHID/rightStick/down,/DualSenseGamepadHID/rightStick/left,/DualSenseGamepadHID/rightStick/right]
-      objectReference: {fileID: 0}
-    - target: {fileID: 6728968578190810794, guid: 51fd2ae82528e2642868b3cbe99454d8,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[9].m_ActionName
-      value: Player/OpenCloseConsole[/Keyboard/period,/DualSenseGamepadHID/select]
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3296,6 +3322,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1345049706}
+        m_TargetAssemblyTypeName: RB_MenuManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3644,6 +3682,7 @@ GameObject:
   - component: {fileID: 1775722175}
   - component: {fileID: 1775722177}
   - component: {fileID: 1775722178}
+  - component: {fileID: 1775722179}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -3830,6 +3869,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: 2be19c4d736fe9f428a04d9670072a42, type: 3}
+--- !u!114 &1775722179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775722169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc2de312c4939414b89cf02e1f97568a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _vibrationSlider: {fileID: 459480621}
+  _vibartionLevel: {fileID: 759686389}
 --- !u!1 &1836648813
 GameObject:
   m_ObjectHideFlags: 0

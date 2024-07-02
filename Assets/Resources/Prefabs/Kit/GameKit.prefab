@@ -44,6 +44,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 034cf06a9f9cfa24a95d4a5475c5c5a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _frequencies:
+  - Name: Aucune Vibration
+    Low: 0
+    High: 0
+  - Name: 
+    Low: 0
+    High: 0
+  - Name: 
+    Low: 0
+    High: 0
+  - Name: 
+    Low: 0
+    High: 0
+  - Name: 
+    Low: 0
+    High: 0
+  - Name: 
+    Low: 100
+    High: 100
+  ActualName: 
 --- !u!1 &2106381168543017716
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,13 +329,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioMixer: {fileID: 24100000, guid: 331b24101625e8b45aa98eb584e08a3a, type: 2}
-  GeneralSlider: {fileID: 0}
-  GeneralVolume: {fileID: 0}
-  MusicSlider: {fileID: 0}
-  MusicVolume: {fileID: 0}
-  SFXSlider: {fileID: 0}
-  SFXVolume: {fileID: 0}
-  ResetButton: {fileID: 0}
 --- !u!1 &7313658995141611838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1046,11 @@ PrefabInstance:
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[10].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5253739096490891372, guid: ce16fe68972cf0d4883fae2c67ad1c43,

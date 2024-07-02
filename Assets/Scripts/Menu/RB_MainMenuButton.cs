@@ -77,13 +77,14 @@ public class RB_MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
    
     public void OnSelect(BaseEventData eventData) {
-        RB_GamepadShakeManager.Instance.GamepadShake(10, 30, 0.2f);
+        RB_VibrationManager.Instance.GamepadShake(0.5F, 1F);
         RB_MainMenuButtonManager.Instance.CurrentButton = _currentButton; // Set current button in button manager
         RB_AudioManager.Instance.PlaySFX("select", false, false, 0, 1f); // Play select sound effect
         _isSelected = true; // Set selected flag to true
         // If game is finished and this button is Continue, start camera shake
         if (RB_SaveManager.Instance.SaveObject.IsGameFinish && RB_MainMenuButtonManager.BUTTONS.Continue == _currentButton)
-        {
+        {   
+            RB_VibrationManager.Instance.GamepadShake(1F, 1f);
             _cameraShake = StartCoroutine(RB_ButtonShake.Instance.Shake(100f, 20f)); // Start camera shake coroutine
         }
     }

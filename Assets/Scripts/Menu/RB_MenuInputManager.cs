@@ -63,7 +63,6 @@ public class RB_MenuInputManager : MonoBehaviour {
 
     public void OnCancel(InputAction.CallbackContext context) {
         if (context.started) { EventCancelStarted?.Invoke();
-            Debug.Log(context.action.activeControl.device.name);
 
         }
         else if (context.canceled) { EventCancelCanceled?.Invoke(); }

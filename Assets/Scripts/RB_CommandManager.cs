@@ -1,259 +1,141 @@
-using Cinemachine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class RB_CommandManager : MonoBehaviour
 {
-    public TMP_InputField CommandInput; // Assure-toi que tu as attaché le champ de saisie dans l'inspecteur Unity.
-    private bool _opened = false;
-    [SerializeField] private List<RB_Items> _items = new();
+    //Instance
+    public static RB_CommandManager Instance; //An instance of this object
 
-    private float _defaultHpMax;
-    private float _defaultHp;
+    //Components
+    public TMP_InputField CommandInput; //The input field that will be used to collect the commands
+    public CanvasGroup CommandCanvasGroup; //A canvas group to make the commandInput appear and dispaear
 
-    private struct DefaultItemProperties
+    //Commands
+    private Dictionary<string, MethodInfo> _commands = new(); //All the commands available (Filled later in the code)
+
+    //Bools
+    private bool _opened = false; //If the console is opened or not
+
+    //Events
+    [HideInInspector] public UnityEvent OpenConsoleEvent; //Event called when the console is opened
+    [HideInInspector] public UnityEvent CloseConsoleEvent; //Event called when the console is closed
+
+    //Awake
+    private void Awake()
     {
-        public float DefaultAttackDamage;
-        public float DefaultChargedAttackDamage;
-        public float DefaultSpecialAttackDamage;
-        public float? DefaultAttackCooldown;
-        public float DefaultChargeAttackCooldown;
-        public float DefaultSpecialAttackChargeTime;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
     }
 
-    private List<DefaultItemProperties> _defaultItemProperties = new();
-
-    
-
-
-    //Player
-    private Rigidbody _playerRb;
-
+    //Start
     private void Start()
     {
-        _playerRb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
-        _items.AddRange(FindObjectsOfType<RB_Items>());
-
-        
-        foreach (RB_Items item in _items)
-        {
-            DefaultItemProperties properties = new DefaultItemProperties
-            {
-                DefaultAttackDamage = item.AttackDamage,
-                DefaultChargedAttackDamage = item.ChargedAttackDamage,
-                DefaultSpecialAttackDamage = item.SpecialAttackDamage,
-                DefaultAttackCooldown = item.AttackCooldown(),
-                DefaultChargeAttackCooldown = item.ChargeAttackCooldown(),
-                DefaultSpecialAttackChargeTime = item.SpecialAttackChargeTime,
-            };
-            _defaultItemProperties.Add(properties);
-        }
-        
+        InitCommands();
     }
-    private void Update()
+
+    /// <summary>
+    /// This function initializes all of the commands available in the script of type "Type"
+    /// </summary>
+    public void InitCommands()
     {
-        // Vérifie si la touche "Return" (ou "Enter") est pressée pour exécuter la commande
-
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Period))
+        Type type = typeof(RB_Commands); //Get the type of the script that contains the commands (to change with the name of your commands container)
+        foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)) //Get every methods of the RB_Commands class with the flags nonpublic instance public and static
         {
-            if (!_opened)
+            if (method.Name.StartsWith("Cmd")) //If the method start with cmd it means it's a command function
             {
-
-                _opened = true;
-                CommandInput.GetComponent<CanvasGroup>().alpha = 1;
-                CommandInput.Select();
-                CommandInput.onEndEdit.AddListener(CloseCommand);
-                CommandInput.ActivateInputField();
-                StartCoroutine(DelayStartEnd());
-                ExecuteCommand();
-                RB_InputManager.Instance.InputEnabled = false;
+                _commands.Add(method.Name.Substring(3).ToLower(), method); //Add it to the commands list with command that you have to enter into the console and method to call
             }
         }
+    }
+
+    /// <summary>
+    /// This function opens the console if it's closed and close it if it's opened
+    /// </summary>
+    public void ToggleConsole()
+    {
+        if (RB_PauseMenu.Instance.IsPaused) return;
+        CommandInput.text = string.Empty;
+        if (_opened)
+            CloseConsole();
+        else
+            OpenConsole();
+    }
+
+    /// <summary>
+    /// This function opens the console by displaying, selecting and activating it
+    /// </summary>
+    public void OpenConsole()
+    {
+        _opened = true;
+        CommandInput.text = string.Empty; //Reset the text
+        CommandCanvasGroup.alpha = 1; //Display the console
+        CommandInput.Select(); //Select the console so the player doesn't have to
+        CommandInput.ActivateInputField(); //Active the input field so the player type in
+        CommandInput.onSubmit.AddListener(OnSubmit);
+        OpenConsoleEvent?.Invoke(); //Call the the open console event for any other script
         
     }
 
-    private IEnumerator DelayStartEnd()
+
+
+    public void OnSubmit(string command) //When the player submit something
     {
-        yield return 0;
-        CommandInput.MoveTextEnd(false);
+        SubmitCommand();
     }
 
-    void ExecuteCommand()
+    /// <summary>
+    /// This function process the command that the player wrote and close the console
+    /// </summary>
+    public void SubmitCommand()
     {
-        string inputText = CommandInput.text;
-
-        // Efface le champ de saisie après avoir traité la commande, si nécessaire.
-        CommandInput.text = "/";
+        CommandInput.onSubmit.RemoveListener(OnSubmit);
+        ProcessCommand(CommandInput.text); //Process the command entered by the player that is stocked in the CommandInput text
+        CloseConsole(); //Close the console after processing it
     }
 
-    private void CloseCommand(string command)
+    /// <summary>
+    /// This function closes the console by undisplaying, releasing and deactivating it
+    /// </summary>
+    public void CloseConsole()
     {
-        CommandInput.GetComponent<CanvasGroup>().alpha = 0;
-        print("close");
         _opened = false;
-        ProcessCommand(command);
-        RB_InputManager.Instance.InputEnabled = true;
+        CommandCanvasGroup.alpha = 0; //Undisplay the console
+        CommandInput.ReleaseSelection(); //Release the commande so the navigation is no longer locked
+        CommandInput.DeactivateInputField(); //Deactivate the input field so the navigation is no longer locked
+        CommandInput.text = string.Empty; //Emptying the text
+        CloseConsoleEvent?.Invoke();
     }
 
+    /// <summary>
+    /// This function process the command entered by the player by invoking the right function stored in another script
+    /// </summary>
+    /// <param name="input"> The command eneter by the player </param>
     public void ProcessCommand(string input)
     {
-        // Parser la commande ici
-        string[] parts = input.Split(' ');
-        string command = parts[0];
+        string[] parts = input.Split(' '); //Get all the parts of the command entered
+        string command = parts[0]; //Get the actual command
+        string[] args = parts.Skip(1).ToArray(); //And its argumentes
 
-        // Interpréter la commande
-        switch (command)
+        if (_commands.TryGetValue(command, out MethodInfo method)) //Try to get a method with the command entered, if the method exist get in a variable called method
         {
-            case "/life":
-                if (parts.Length >= 2)
-                    Life(parts[1]);
-                break;
-            case "/nextlevel":
-                Level();
-                break;
-            case "/damage":
-                if(parts.Length >= 2)
-                    Damage(parts[1]);
-                break;
-            case "/godmode":
-                GodMode();
-                break;
-            case "/beginning":
-                Beginning(); break;
-            case "/weapon":
-                Weapon(); break;
-            case "/resetlevel":
-                ResetLevel(); break;
-            case "/previouslevel":
-                PreviousLevel(); break;
-            case "/speed":
-                if (parts.Length >= 2)
-                    Speed(parts[1]);
-                break;
-            case "/rewind":
-                if(parts.Length >= 2)
-                    Rewind(parts[1]);
-                break;
-            case "/normal":
-                Normal();
-                break;
-            case "/stopcamera":
-                RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = null;
-                break;
-            case "/restartcamera":
-                RB_Camera.Instance.GetComponentInChildren<CinemachineVirtualCamera>().Follow = RB_PlayerController.Instance.transform;
-                break;
-            // Ajouter d'autres cas selon les besoins
-            default:
-                Debug.Log("Commande non reconnue");
-                break;
+            method.Invoke(this, new object[] { args }); //invoke that method with arguments got before
         }
+        else //if the method doesn't exit, return an "error message"
+            Debug.Log("Commande non reconnue");
     }
 
-    // Méthode d'exemple pour téléporter le joueur
-    void TeleportPlayer(string x, string y)
-    {
-        // Logique pour téléporter le joueur
-        float newX = float.Parse(x);
-        float newY = float.Parse(y);
-        // Implémenter la téléportation du joueur
-        Debug.Log("Teleported to (" + newX + ", " + newY + ")");
-    }
-
-    private void ResetLevel()
-    {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private void PreviousLevel()
-    {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
-    }
-
-    private void Life(string lifeAmount)
-    {
-        if(int.TryParse(lifeAmount, out int lifeAmoutInt))
-        {
-            RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = lifeAmoutInt;
-            RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = lifeAmoutInt;
-        }
-    }
-
-    private void Level()
-    {
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-    private void Damage(string damageMultiplier)
-    {
-        if(int.TryParse(damageMultiplier, out int damageMultiplierInt))
-        {
-            foreach (RB_Items item in _items)
-            {
-                item.AttackDamage *= damageMultiplierInt;
-                item.ChargedAttackDamage *= damageMultiplierInt;
-                item.SpecialAttackDamage *= damageMultiplierInt;
-            }
-            
-        }
-    }
-
-    private void GodMode()
-    {
-        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax = float.MaxValue;
-        RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = float.MaxValue;
-        foreach (RB_Items item in _items)
-        {
-            item.AttackDamage = float.MaxValue;
-            item.ChargedAttackDamage *= float.MaxValue;
-            item.SpecialAttackDamage *= float.MaxValue;
-            item.AttackCooldown(0);
-            item.ChargeAttackCooldown(0);
-            item.SpecialAttackChargeTime = .1f;
-        }
-        
-    }
-
-    private void Beginning()
-    {
-        _playerRb.position = RB_LevelManager.Instance.BeginningPos;
-    }
-
-    private void Weapon()
-    {
-        RB_Items foundItem = FindAnyObjectByType<RB_Items>();
-        if (foundItem) _playerRb.position = foundItem.transform.position;
-    }
-
-    private void Speed(string speed)
-    {
-        if(int.TryParse(speed, out int speedInt))
-            RB_PlayerMovement.Instance.MovementMaxSpeed = speedInt;
-    }
-
-    private void Rewind(string rewindAmount)
-    {
-        if(int.TryParse(rewindAmount, out int rewindAmountInt))
-        {
-            RB_PlayerAction.Instance.RewindLeft = rewindAmountInt;
-        }
-    }
-
-    private void Normal()
-    {
-        RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax =  _defaultHpMax;
-        RB_PlayerAction.Instance.GetComponent<RB_Health>().Hp = _defaultHp;
-        for(int i = 0; i < _items.Count; i++)
-        {
-            _items[i].AttackDamage = _defaultItemProperties[i].DefaultAttackDamage;
-            _items[i].ChargedAttackDamage = _defaultItemProperties[i].DefaultChargedAttackDamage;
-            _items[i].SpecialAttackDamage = _defaultItemProperties[i].DefaultSpecialAttackDamage;
-            _items[i].AttackCooldown(_defaultItemProperties[i].DefaultAttackCooldown);
-            _items[i].ChargeAttackCooldown(_defaultItemProperties[i].DefaultAttackCooldown);
-            _items[i].SpecialAttackChargeTime = _defaultItemProperties[i].DefaultSpecialAttackChargeTime;
-        }
-    }
+    
 }

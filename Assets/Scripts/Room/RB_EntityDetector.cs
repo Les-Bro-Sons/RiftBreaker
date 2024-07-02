@@ -22,7 +22,6 @@ public class RB_EntityDetector : MonoBehaviour
             else if (entityHealth.Team == TEAMS.Player && entityHealth.TryGetComponent<RB_PlayerMovement>(out RB_PlayerMovement playerMovement) && !_room.IsPlayerInRoom)//Otherwise if it's a player check the IsPlayerInRoom bool
             {
                 _room.IsPlayerInRoom = true;
-                print("player enter room");
             }
             else if(entityHealth.Team == TEAMS.Player)
                 _room.AddDectedAlly(entityHealth);
@@ -48,7 +47,6 @@ public class RB_EntityDetector : MonoBehaviour
             if(entityHealth.Team == TEAMS.Player && (entityHealth.TryGetComponent<RB_PlayerController>(out RB_PlayerController playerController)) && _room.IsPlayerInRoom)
             {
                 //If the player leaves then uncheck the IsPlayerInRoom
-                print("player exit");
                 _room.IsPlayerInRoom = false;
             }
             _room.RemoveDetectedEnemy(entityHealth);

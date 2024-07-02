@@ -14,8 +14,8 @@ public class RB_FriendlyOutline : MonoBehaviour
         if (RB_Tools.TryGetComponentInParent<RB_Enemy>(transform, out RB_Enemy enemy))
         {
             _entity = enemy;
-            _entity.EventAllyTeam?.AddListener(ApplyFriendlyEffect);
-            _entity.EventEnemyTeam?.AddListener(DisableFriendlyEffect);
+            _entity.EventJoinAllyTeam?.AddListener(ApplyFriendlyEffect);
+            _entity.EventJoinEnemyTeam?.AddListener(DisableFriendlyEffect);
             _entity.GetComponent<RB_Health>().EventDeath?.AddListener(DisableFriendlyEffect);
         }
     }

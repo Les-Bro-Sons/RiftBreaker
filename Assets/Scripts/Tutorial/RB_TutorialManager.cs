@@ -379,7 +379,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
-            Time.timeScale = 1.0f;
+            RB_TimescaleManager.Instance.RemoveModifier("TutorialTimescale");
         }
     }
 
@@ -387,7 +387,7 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto)
         {
-            Time.timeScale = 0f;
+            RB_TimescaleManager.Instance.SetModifier(gameObject, "TutorialTimescale", 0, 50);
         }
     }
 
@@ -404,8 +404,9 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto && _shouldSlowTimeByEnemyDistance)
         {
-            Time.timeScale = Vector3.Distance(RB_PlayerMovement.Instance.transform.position, _enemyToSlowDownTimeByDistance.transform.position) / _startEnemyDistance;
-            if (Time.timeScale <= .5f)
+            float currentTimescale = Vector3.Distance(RB_PlayerMovement.Instance.transform.position, _enemyToSlowDownTimeByDistance.transform.position) / _startEnemyDistance;
+            RB_TimescaleManager.Instance.SetModifier(gameObject, "TutorialTimescale", currentTimescale, 50);
+            if (currentTimescale <= .5f)
             {
                 StartSlowTime();
             }
@@ -432,11 +433,10 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto && _shouldSpeedUpTime)
         {
-            Time.timeScale += Time.unscaledDeltaTime * ChangeSpeed;
+            RB_TimescaleManager.Instance.RemoveModifier("TutorialTimescale");
             if (Time.timeScale >= .9f)
             {
                 print("Time = normal");
-                Time.timeScale = 1;
                 _shouldSpeedUpTime = false;
             }
         }
@@ -451,10 +451,9 @@ public class RB_TutorialManager : MonoBehaviour
     {
         if (IsTuto && _shouldSlowTime)
         {
-            Time.timeScale -= Time.unscaledDeltaTime * ChangeSpeed;
+            RB_TimescaleManager.Instance.SetModifier(gameObject, "TutorialTimescale", 0, 50);
             if (Time.timeScale <= 0.1)
             {
-                Time.timeScale = 0;
                 _shouldSlowTime = false;
                 GetRewindFirstPos();
             }

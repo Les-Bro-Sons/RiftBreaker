@@ -24,6 +24,9 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     private bool _lookAtSuspicious;
 
+    private float _lastTimeCheckTarget = 0;
+    private float _checkTargetDelay = 1;
+
     public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range, bool lookAtSuspicious = true)
     {
         _btParent = BtParent;
@@ -44,65 +47,13 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 break;
             case PHASES.Boss:
             case PHASES.Combat:
-                _state = CombatCheck();
+                _state = InfiltrationCheck();
                 break;
             default:
                 break;
         }
         return _state;
     }
-
-
-    ////COMBAT////
-    private BTNodeState CombatCheck()
-    {
-        if (!_btParent.GetBool("IsTargetSpotted"))
-        {
-            object t = GetData("target");
-            if (t == null)
-            {
-                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange * 2, _layerMaskPlayer).ToList<Collider>();
-                foreach (Collider collider in colliders.ToList<Collider>())
-                {
-                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
-                    {
-                        colliders.Remove(collider);
-                    }
-                }
-                if (colliders.Count > 0) //A MODIFIER
-                {
-                    _btParent.Root.SetData("target", colliders[0].transform);
-                    t = colliders[0].transform;
-
-                    _btParent.BoolDictionnary["IsTargetSpotted"] = true;
-                }
-                else
-                {
-                    _btParent.BoolDictionnary["IsTargetSpotted"] = false;
-                }
-            }
-            else
-            {
-                _btParent.BoolDictionnary["IsTargetSpotted"] = false;
-            }
-
-            Transform target = (Transform)t;
-
-            if (target == null)
-            {
-                _state = BTNodeState.FAILURE;
-                return _state;
-            }
-        }
-
-        if (_btParent.GetBool("IsTargetSpotted"))
-            _state = BTNodeState.SUCCESS;
-        else
-            _state = BTNodeState.FAILURE;
-
-        return _state;
-    }
-
 
     //////INFILTRATION//////
     public BTNodeState InfiltrationCheck()
@@ -114,30 +65,36 @@ public class RB_AI_PlayerInFov : RB_BTNode
         }
         else
         {
-            object t = _btParent.Root.GetData("target");
-            //if (t == null)
+            Transform t = (Transform)_btParent.Root.GetData("target");
+            if (Time.time > _lastTimeCheckTarget + _checkTargetDelay || (t != null && ((RB_Tools.TryGetComponentInParent<RB_Health>(t.gameObject, out RB_Health targetHealth) && targetHealth.Dead))))
             {
-                //Debug.Log("Recherche de la cible...");
-                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange, _layerMaskPlayer).ToList<Collider>();
+                //searching for a target
+                _lastTimeCheckTarget = Time.time;
+                List<Collider> colliders = Physics.OverlapSphere(_transform.position, _btParent.FovRange * 2, _layerMaskPlayer).ToList();
                 foreach (Collider collider in colliders.ToList<Collider>())
                 {
-                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health health) && health.Dead)
+                    if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+                    {
+                        if (enemyHealth.Dead || enemyHealth.Team == _btParent.AiHealth.Team)
+                        {
+                            colliders.Remove(collider);
+                        }
+                    }
+                    else
                     {
                         colliders.Remove(collider);
                     }
                 }
                 if (colliders.Count > 0)
                 {
-                    //Debug.Log("Cible trouvée, assignation en cours...");
-                    _btParent.Root.SetData("target", colliders[0].transform);
-                    t = colliders[0].transform;
+                    RB_Tools.TryGetComponentInParent<RB_Health>(colliders[0].gameObject, out RB_Health enemyHealth);
+                    _btParent.Root.SetData("target", enemyHealth.transform);
+                    t = enemyHealth.transform;
                 }
                 else
                 {
                     t = null;
                 }
-                //else
-                //    Debug.Log("Aucune cible trouvée dans la portée.");
             }
 
             Transform target = (Transform)t;
@@ -153,7 +110,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
             if (_btParent.GetBool("IsTargetSpotted"))
             {
-                if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange)
+                if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange + 0.5f)
                 {
                     UnloadSpotBar();
                     _btParent.LastTargetPos = target.position;
@@ -241,8 +198,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             RaycastHit hit;
 
-            Debug.DrawLine(_transform.position, _transform.position + targetDir.normalized * _btParent.FovRange, Color.red);
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange * 2, ~((1 << 6) | (1 << 10))))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
             {
                 _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);

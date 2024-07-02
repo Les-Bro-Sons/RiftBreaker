@@ -71,7 +71,8 @@ public class RB_ParticleCollision : MonoBehaviour
             {
                 if (RB_Tools.TryGetComponentInParent<RB_Enemy>(gameObject, out RB_Enemy enemy))
                 {
-                    RB_PlayerAction.Instance.Item.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
+                    if(RB_PlayerAction.Instance.Item != null)
+                        RB_PlayerAction.Instance.Item.AddToSpecialChargeAttack(enemy.ChargeSpecialAttackAmount / (float)currentAmount); //Set the chargeAttackAmount gathered to the charge attack of the player
                     RB_AudioManager.Instance.PlaySFX("XpSound", false, false, 0.65f, 0.15f, MIXERNAME.SFX, 0.4f);
                 }
             }

@@ -3,12 +3,21 @@ using UnityEngine;
 public class RB_PauseMenu : MonoBehaviour
 {
 
+    //Making RB_PauseMenu an Instance
+    public static RB_PauseMenu Instance;
+
     [SerializeField] float _timeScaleSpeed;   // Speed at which time scale changes during pause/unpause
     public bool IsPaused;                     // Flag indicating if the game is currently paused
     [SerializeField] bool _isUnpausing;       // Flag indicating if the game is currently in the process of unpausing
     CanvasGroup _canvasGroup;                 // Reference to the CanvasGroup component attached to this GameObject
 
     float _oldTimeScale = 1;                  // Previous time scale value before pausing
+
+    private void Awake()
+    {
+        if(Instance == null)
+            Instance = this;
+    }
 
     void Start()
     {
@@ -22,32 +31,17 @@ public class RB_PauseMenu : MonoBehaviour
         if (IsPaused)
         {
             // During pause:
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 0f, Time.unscaledDeltaTime * _timeScaleSpeed);  // Smoothly lerp time scale to 0
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);  // Smoothly fade in the pause menu
-
-            if (Time.timeScale < 0.05f)
-            {
-                Time.timeScale = 0;  // Ensure time scale reaches 0 for accurate pausing
-            }
         }
         else if (_isUnpausing)
         {
             // During unpause:
-            if (_oldTimeScale != 1f)
-            {
-                Time.timeScale = Mathf.Lerp(Time.timeScale, _oldTimeScale, Time.unscaledDeltaTime * _timeScaleSpeed);  // Smoothly lerp time scale back to its previous value
-            }
-            else
-            {
-                Time.timeScale = Mathf.Lerp(Time.timeScale, 1f, Time.unscaledDeltaTime * _timeScaleSpeed);  // Smoothly lerp time scale back to 1 (normal speed)
-            }
 
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, 0f, Time.unscaledDeltaTime * _timeScaleSpeed);  // Smoothly fade out the pause menu
             RB_MenuManager.Instance.UnPauseAnim();  // Trigger unpause animation
 
-            if (Time.timeScale > 0.99f)
+            if (_canvasGroup.alpha < 0.1f)
             {
-                Time.timeScale = 1;  // Ensure time scale returns to 1 (normal speed)
                 _isUnpausing = false;  // Reset unpause flag
                 _canvasGroup.alpha = 0f;  // Set canvas alpha to 0 (fully transparent)
                 RB_MenuManager.Instance.CloseOption();  // Close any open pause menu options
@@ -70,7 +64,7 @@ public class RB_PauseMenu : MonoBehaviour
             IsPaused = true;  // Set game state to paused
             RB_MenuManager.Instance.PauseAnim();  // Trigger pause animation in RB_MenuManager
             RB_ButtonSelectioner.Instance.SelectMainButton(0);  // Select the main button (index 0) using RB_ButtonSelectioner
-            _oldTimeScale = Time.timeScale;  // Store current time scale as the old time scale before pausing
+            RB_TimescaleManager.Instance.SetModifier(gameObject, "PauseTimescale", 0, 1000);
         }
         else
         {
@@ -86,6 +80,7 @@ public class RB_PauseMenu : MonoBehaviour
         RB_MenuManager.Instance.CancelQuit();  // Cancel any ongoing quit action using RB_MenuManager
         IsPaused = false;  // Set game state to not paused
         _isUnpausing = true;  // Set flag to indicate unpause process is active
+        RB_TimescaleManager.Instance.RemoveModifier("PauseTimescale");
     }
 
 }

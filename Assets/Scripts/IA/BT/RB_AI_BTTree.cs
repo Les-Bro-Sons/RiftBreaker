@@ -311,7 +311,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
-                                        //new RB_AICheck_IsTargetClose(this, FleeDistance),
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
@@ -353,7 +352,6 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                     {
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
                                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), //when bow attack
-                                        //new RB_AICheck_IsTargetClose(this, HeavyBowRange/1.5f),
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 

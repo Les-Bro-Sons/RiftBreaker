@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CustomEditor(typeof(RB_InputToolTip))]
-public class RB_InputToolTipEditor : UnityEditor.Editor
+public class RB_InputToolTipEditor : Editor
 {
 
     #region Serialized Properties

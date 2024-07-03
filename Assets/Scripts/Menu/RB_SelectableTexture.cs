@@ -2,19 +2,20 @@ using MANAGERS;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEditor;
+using Cinemachine.Editor;
 
 public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     Image _renderer; // Image component to change sprites
 
-    [SerializeField] Sprite _default; // Default sprite when not hovered or selected
-    [SerializeField] Sprite _hoovered; // Sprite when the selectable is hovered
+    [SerializeField] Sprite _defaultSprite; // Default sprite when not hovered or selected
+    [SerializeField] Sprite _hooveredSprite; // Sprite when the selectable is hovered
 
-    [Header("Frame")]
     [SerializeField] bool _isFramed; // Toggle to enable framing
     [SerializeField] Image _frame; // Image component for the frame
-    [SerializeField] Sprite _frameDefault; // Default sprite for the frame
-    [SerializeField] Sprite _frameHoovered; // Sprite for the frame when hovered
+    [SerializeField] Sprite _frameDefaultSprite; // Default sprite for the frame
+    [SerializeField] Sprite _frameHooveredSprite; // Sprite for the frame when hovered
 
     bool _isHoovered; // Flag to track if the selectable is hovered
     bool _isSelectedByNavigation; // Flag to track if the selectable is selected via navigation
@@ -22,7 +23,7 @@ public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointe
     private void Awake()
     {
         _renderer = GetComponent<Image>(); // Get the Image component on the same GameObject
-        _renderer.sprite = _default; // Set the default sprite initially
+        _renderer.sprite = _defaultSprite; // Set the default sprite initially
 
         // Check if this GameObject has a Button component and attach an onClick event listener
         if (gameObject.TryGetComponent(out Button button))
@@ -68,19 +69,80 @@ public class RB_SelectableTexture : MonoBehaviour, IPointerEnterHandler, IPointe
         // Update the visual state based on whether the selectable is hovered or selected via navigation
         if (_isSelectedByNavigation || _isHoovered)
         {
-            _renderer.sprite = _hoovered; // Set hovered sprite
+            _renderer.sprite = _hooveredSprite; // Set hovered sprite
             if (_isFramed)
             {
-                _frame.sprite = _frameHoovered; // Set frame hovered sprite if framing is enabled
+                _frame.sprite = _frameHooveredSprite; // Set frame hovered sprite if framing is enabled
             }
         }
         else
         {
-            _renderer.sprite = _default; // Set default sprite when not hovered or selected
+            _renderer.sprite = _defaultSprite; // Set default sprite when not hovered or selected
             if (_isFramed)
             {
-                _frame.sprite = _frameDefault; // Set default frame sprite if framing is enabled
+                _frame.sprite = _frameDefaultSprite; // Set default frame sprite if framing is enabled
             }
         }
     }
 }
+
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(RB_SelectableTexture))]
+public class RB_SelectableTextureEditor : Editor
+{
+    #region Serialized Properties
+    SerializedProperty _defaultSpriteProperty;
+    SerializedProperty _hooveredSpriteProperty;
+
+    SerializedProperty _isFramedProperty;
+    SerializedProperty _frameProperty;
+    SerializedProperty _frameDefaultSpriteProperty;
+    SerializedProperty _frameHooveredSpriteProperty;
+
+    GUIContent _imageLabel = new GUIContent("Image");
+    GUIContent _frameLabel = new GUIContent("Frame");
+    #endregion
+
+    private void OnEnable()
+    {
+        _defaultSpriteProperty = serializedObject.FindProperty("_defaultSprite");
+        _hooveredSpriteProperty = serializedObject.FindProperty("_hooveredSprite");
+
+        _isFramedProperty = serializedObject.FindProperty("_isFramed");
+        _frameProperty = serializedObject.FindProperty("_frame");
+        _frameDefaultSpriteProperty = serializedObject.FindProperty("_frameDefaultSprite");
+        _frameHooveredSpriteProperty = serializedObject.FindProperty("_frameHooveredSprite");
+    }
+
+    public override void OnInspectorGUI()
+    {
+        // Update the serialized object
+        serializedObject.Update();
+
+        // Draw the default sprite property
+        EditorGUILayout.LabelField(_imageLabel, EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(_defaultSpriteProperty);
+        EditorGUILayout.PropertyField(_hooveredSpriteProperty);
+
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField(_frameLabel, EditorStyles.boldLabel);
+        // Draw the framed property
+        EditorGUILayout.PropertyField(_isFramedProperty);
+
+        // Conditionally draw frame properties
+        if (_isFramedProperty.boolValue)
+        {
+            EditorGUILayout.PropertyField(_frameProperty);
+            EditorGUILayout.PropertyField(_frameDefaultSpriteProperty);
+            EditorGUILayout.PropertyField(_frameHooveredSpriteProperty);
+        }
+
+        // Apply the changes to the serialized object
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+
+#endif

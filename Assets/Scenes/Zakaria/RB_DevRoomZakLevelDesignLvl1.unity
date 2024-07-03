@@ -18832,12 +18832,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 519893648}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 519893650}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbc663634af10c940897ca876d6c4ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &519893650 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8377527384094342296, guid: 1c9e9cc168055a64bbdfaee37e99e77a,
+    type: 3}
+  m_PrefabInstance: {fileID: 519893648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &520049585
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28151,7 +28157,7 @@ PrefabInstance:
     - target: {fileID: 510754635741991097, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 258.49994
+      value: 258.50018
       objectReference: {fileID: 0}
     - target: {fileID: 634720938601107991, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
@@ -33888,6 +33894,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -258.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8414196303364981596, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: testInt1
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414196303364981596, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: testInt2
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414196303364981596, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: testString
+      value: salut
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414196303364981596, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: testGameObject
+      value: 
+      objectReference: {fileID: 519893650}
     - target: {fileID: 8501065723057423468, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_NavMeshData

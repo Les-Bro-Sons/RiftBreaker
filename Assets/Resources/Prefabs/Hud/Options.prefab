@@ -14774,6 +14774,7 @@ GameObject:
   - component: {fileID: 7668130520222257265}
   - component: {fileID: 4490059283040693085}
   - component: {fileID: 6170195405016730778}
+  - component: {fileID: 2731183248854099232}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -14844,6 +14845,20 @@ MonoBehaviour:
   CurrentSelectable: {fileID: 0}
   _audioButton: {fileID: 5436909492423772389}
   SelectableHooveredCount: 0
+--- !u!114 &2731183248854099232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375042032155124033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc2de312c4939414b89cf02e1f97568a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _vibrationSlider: {fileID: 5391637865662089463}
+  _vibartionLevel: {fileID: 5143738451167072273}
 --- !u!1 &4382565660398696038
 GameObject:
   m_ObjectHideFlags: 0

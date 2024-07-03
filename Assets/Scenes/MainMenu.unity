@@ -1050,18 +1050,6 @@ MonoBehaviour:
   _offsetSpeed: 10
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _UnEnabledColor: {r: 0.504043, g: 0.504043, b: 0.504043, a: 0.6901961}
---- !u!114 &459480621 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5391637865662089463, guid: 7d4353a52b5bd0742abe3c7da044ccc6,
-    type: 3}
-  m_PrefabInstance: {fileID: 4947435120835795209}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &475164341
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,18 +1739,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &759686389 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5143738451167072273, guid: 7d4353a52b5bd0742abe3c7da044ccc6,
-    type: 3}
-  m_PrefabInstance: {fileID: 4947435120835795209}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &772765844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3628,7 +3604,6 @@ GameObject:
   - component: {fileID: 1775722175}
   - component: {fileID: 1775722177}
   - component: {fileID: 1775722178}
-  - component: {fileID: 1775722179}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -3815,20 +3790,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: 2be19c4d736fe9f428a04d9670072a42, type: 3}
---- !u!114 &1775722179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775722169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc2de312c4939414b89cf02e1f97568a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _vibrationSlider: {fileID: 459480621}
-  _vibartionLevel: {fileID: 759686389}
 --- !u!1 &1836648813
 GameObject:
   m_ObjectHideFlags: 0

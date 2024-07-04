@@ -86,6 +86,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             newPoint.BoolDictionnary = _btTree.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value); //save the bool value of the bt tree
             if (_btTree.ImageSpotBar) newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount; //save the current spot value
             newPoint.CurrentWaypointIndex = _btTree.CurrentWaypointIndex; //save the current patrol index
+            newPoint.Distractions = _btTree.Distractions.ToList();
         }
         newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
@@ -187,6 +188,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             _btTree.BoolDictionnary = currentP.BoolDictionnary.ToDictionary(entry => entry.Key, entry => entry.Value);
             if (_btTree.ImageSpotBar) _btTree.ImageSpotBar.fillAmount = currentP.SpotValue;
             _btTree.CurrentWaypointIndex = currentP.CurrentWaypointIndex;
+            _btTree.Distractions = currentP.Distractions.ToList();
         }
         foreach (EventInTime timeEvent in currentP.TimeEvents) // EVENTS
         {

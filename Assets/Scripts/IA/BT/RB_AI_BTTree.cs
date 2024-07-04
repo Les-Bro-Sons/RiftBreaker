@@ -77,6 +77,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public GameObject InfSlashParticles;
     [HideInInspector] public UnityEvent EventOnSpotted;
 
+    [Header("Distractions")]
+    public List<RB_Distraction> Distractions = new();
+    public RB_Distraction CurrentDistraction;
+    public float MoveToDistractionSpeed = 6;
+    public float DistractionDistanceNeeded = 1;
+
+
     [Header("Faible")]
     [SerializeField] public float SlashRange;
     [SerializeField] public float SlashDamage;
@@ -275,17 +282,31 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
                     #endregion
 
-                    #region Distracted Sequence
-                    new RB_BTSequence(new List<RB_BTNode>
-                    {
-
-                    }),
-                    #endregion
-
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
                         new RB_AI_PlayerInFov(this, FovRange),
                     }),
+
+                    #region Distracted Sequence
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AICheck_IsDistracted(this),
+                        //new RB_AI_ReverseState(this, new RB_AI_PlayerInFov(this, FovRange)),
+                        new RB_AI_GetHighestPriorityDistraction(this, TARGETMODE.Closest),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            #region Broken Pot Sequence
+                            new RB_BTSequence(new List<RB_BTNode> //broken pot sequence
+                            {
+                                new RB_AICheck_CurrentDistractionType(this, DISTRACTIONTYPE.BrokenPot),
+                                new RB_AI_GoToDistraction(this),
+                                new RB_AICheck_WaitForSeconds(this, 1),
+                                new RB_AI_CompleteDistraction(this),
+                            }),
+                            #endregion
+                        }),
+                    }),
+                    #endregion
 
                     new RB_AI_Task_DefaultPatrol(this),  // task default
                 }),

@@ -198,7 +198,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10))))
+            if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10) | (1 << 2))))
             {
                 _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);

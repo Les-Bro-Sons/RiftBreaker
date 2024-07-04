@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3389546224066527975}
   - component: {fileID: 8723004884906875012}
   - component: {fileID: 7789953178328782131}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,6 +70,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyEntered:
@@ -158,9 +170,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b3e3273f88c8b41b1579fba7755e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventEnterInPortal:
+    m_PersistentCalls:
+      m_Calls: []
   _goToNextSceneID: 1
   _nextSceneName: 
   _nextSceneID: -1
+  _isSwitchingOnPortalOpening: 0
+  _isSaving: 1
   _availableOnPhase: 0
   _phaseNeeded: 1
   _availableOnKill: 0

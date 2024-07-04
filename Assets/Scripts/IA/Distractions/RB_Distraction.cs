@@ -21,9 +21,9 @@ public class RB_Distraction
     {
         foreach (Collider collider in Physics.OverlapSphere(Position, SoundRadius))
         {
-            if (RB_Tools.TryGetComponentInParent<RB_AI_BTTree>(collider.gameObject, out RB_AI_BTTree ai) && !ai.Distractions.Contains(this))
+            if (RB_Tools.TryGetComponentInParent<RB_AI_BTTree>(collider.gameObject, out RB_AI_BTTree ai))
             {
-                ai.Distractions.Add(this);
+                ai.AddDistraction(this);
             }
         }
     }

@@ -158,7 +158,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                         _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetSpotted] = true;
                         if (!_hasFocusedUx)
                         {
-                            _btParent.UxFocus();
+                            _btParent.OnSpotted();
                             _hasFocusedUx = true;
                         }
                         _state = BTNodeState.SUCCESS;
@@ -227,7 +227,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 {
                     if (!_hasFocusedUx)
                     {
-                        _btParent.UxFocus();
+                        _btParent.OnSpotted();
                         _hasFocusedUx = true;
                     }
                     return true;

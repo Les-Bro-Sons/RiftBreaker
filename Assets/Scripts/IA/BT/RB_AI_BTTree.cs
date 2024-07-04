@@ -198,12 +198,18 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         CanvasUi.alpha = Mathf.Clamp(CanvasUi.alpha - Time.deltaTime / DurationAlphaCanvas, 0, 1);
     }
 
-    public void UxFocus()
+    public void OnSpotted()
     {
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
         spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         RB_AudioManager.Instance.PlaySFX("Detection", transform.position, false, 0,1);
         EventOnSpotted?.Invoke();
+    }
+
+    public void OnDistracted()
+    {
+        GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
+        spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
     #endregion
 
@@ -300,6 +306,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             {
                                 new RB_AICheck_CurrentDistractionType(this, DISTRACTIONTYPE.BrokenPot),
                                 new RB_AI_GoToDistraction(this),
+                                new RB_AI_LookAtDistraction(this),
                                 new RB_AICheck_WaitForSeconds(this, 1),
                                 new RB_AI_CompleteDistraction(this),
                             }),
@@ -477,6 +484,17 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     }
 
     #region BT Tools
+    public void AddDistraction(RB_Distraction distraction)
+    {
+        if (!Distractions.Contains(distraction))
+        {
+            Distractions.Add(distraction);
+            OnDistracted();
+        }
+
+    }
+
+
     public void Boost(float boost)
     {
         BoostMultiplier = boost;

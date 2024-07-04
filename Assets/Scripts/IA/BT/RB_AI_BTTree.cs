@@ -158,6 +158,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         }
     }
 
+    #region Spot Visual Functions
     private void SpotCanvasAlpha() //handle the alpha of the spot canvas when needed
     {
         if (!ImageSpotBar) return;
@@ -197,6 +198,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         RB_AudioManager.Instance.PlaySFX("Detection", transform.position, false, 0,1);
         EventOnSpotted?.Invoke();
     }
+    #endregion
 
     protected override RB_BTNode SetupTree()
     {
@@ -226,20 +228,25 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                 
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
+                    #region Touch detection Sequence
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_EnemyTouchDetection(this, true),
                         new RB_AI_DoFailure(),
                     }),
+                    #endregion
 
+                    #region Static AI Sequence
                     new RB_BTSequence(new List<RB_BTNode> //static sequence
                     {
                         new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
                         new RB_AI_StaticWatchOut(this),
                         new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
+                    #endregion
 
-                    new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target
+                    #region AI completely lost sight of target Sequence
+                    new RB_BTSelector(new List<RB_BTNode>
                     {
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
@@ -256,7 +263,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         }),
                         
                     }),
+                    #endregion
 
+                    #region Target Spotted Sequence
                     new RB_BTSequence(new List<RB_BTNode> // Sequence spotted
                     {
                         new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted),
@@ -264,6 +273,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_AI_GoToTarget(this, InfSpottedMoveSpeed, InfSlashRange),
                         new RB_AI_Attack(this, -1),
                     }),
+                    #endregion
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
@@ -438,6 +448,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         return root;
     }
 
+    #region BT Tools
     public void Boost(float boost)
     {
         BoostMultiplier = boost;
@@ -467,6 +478,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         }
     }
 
+    public bool GetBool(BTBOOLVALUES value)
+    {
+        return (BoolDictionnary.ContainsKey(value) && BoolDictionnary[value]);
+    }
+    #endregion
+
+    #region Collision Detection
     private void OnCollisionEnter(Collision collision)
     {
         if (RB_Tools.TryGetComponentInParent<RB_Health>(collision.gameObject, out RB_Health health))
@@ -487,9 +505,5 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         return _characterCollisions;
     }
-
-    public bool GetBool(BTBOOLVALUES value)
-    {
-        return (BoolDictionnary.ContainsKey(value) && BoolDictionnary[value]);
-    }
+    #endregion
 }

@@ -5,7 +5,7 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
 {
     public static RB_SeeThroughWallsManager Instance;
     public Material WallMaterial;
-    public List<Transform> Entities = new(); //player and ennemies
+    public List<RB_SeeThroughWalls> Entities = new(); //player and ennemies
 
     private Texture2D _entityPositionsTexture;
     [SerializeField] private float _divider = 10f;
@@ -30,8 +30,8 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
         {
             int x = i % _entityPositionsTexture.width;
             int y = i / _entityPositionsTexture.width;
-            Vector3 pos = Entities[i].position;
-            float a = Entities[i].GetComponent<RB_SeeThroughWalls>().LastTimeWallTouched;
+            Vector3 pos = Entities[i].ShaderPosition;
+            float a = Entities[i].LastTimeWallTouched;
             _entityPositionsTexture.SetPixel(x, y, new Color(pos.x / _divider, pos.y / _divider, pos.z / _divider, a / _divider));
         }
         _entityPositionsTexture.Apply();
@@ -50,7 +50,7 @@ public class RB_SeeThroughWallsManager : MonoBehaviour
         WallMaterial.SetFloat("_EntityTexWidth", textureSize);
     }
 
-    public void AddEntity(Transform entity)
+    public void AddEntity(RB_SeeThroughWalls entity)
     {
         if (!Entities.Contains(entity)) Entities.Add(entity);
         CreateTexture();

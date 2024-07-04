@@ -275,6 +275,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
                     #endregion
 
+                    #region Distracted Sequence
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+
+                    }),
+                    #endregion
+
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
                         new RB_AI_PlayerInFov(this, FovRange),

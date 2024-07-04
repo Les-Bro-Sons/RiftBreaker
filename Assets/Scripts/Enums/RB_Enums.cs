@@ -133,3 +133,9 @@ public enum BTBOOLVALUES
 
     HeavyAttackSlash,
 }
+
+public enum DISTRACTIONTYPE
+{
+    BrokenPot,
+    DeadBody
+}

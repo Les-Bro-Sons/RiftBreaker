@@ -98,6 +98,15 @@ public class RB_AiMovement : MonoBehaviour
         }
     }
 
+    public void RotateToward(Vector3 direction, float rotationSpeed = 4, float? deltaTime = null)
+    {
+        if (deltaTime == null) deltaTime = Time.deltaTime;
+
+        direction = RB_Tools.GetHorizontalDirection(direction).normalized;
+
+        _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime.Value));
+    }
+
     private void FrictionForce()
     {
         Vector3 frictionForce = (-_rb.velocity) * Time.fixedDeltaTime * _movementFrictionForce;

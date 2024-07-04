@@ -19,7 +19,7 @@ public class RB_AI_LookAtDistraction : RB_BTNode
     {
         if (_btParent.CurrentDistraction == null) return _state = BTNodeState.FAILURE;
 
-        _btParent.AiMovement.RotateToward((_btParent.CurrentDistraction.Position - _rb.position).normalized);
+        _btParent.AiMovement.RotateToward((_btParent.CurrentDistraction.transform.position - _rb.position).normalized);
 
         return _state = BTNodeState.SUCCESS;
     }

@@ -88,7 +88,9 @@ public class RB_Vase : MonoBehaviour
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); // Instantiate life particles based on probability
         }
         _navMeshObstacle.carving = false; // Disable NavMesh carving
-        new RB_Distraction(DISTRACTIONTYPE.BrokenPot, _transform.position, 1, _distractionSoundDistance);
+
+        RB_Distraction.NewDistraction(DISTRACTIONTYPE.BrokenPot, _transform.position, 1, _distractionSoundDistance);
+
         RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 1); // Play breaking sound effect
     }
 

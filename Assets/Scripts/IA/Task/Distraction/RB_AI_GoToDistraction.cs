@@ -17,10 +17,10 @@ public class RB_AI_GoToDistraction : RB_BTNode
         RB_Distraction currentDistraction = _btParent.CurrentDistraction;
         _state = BTNodeState.FAILURE;
 
-        Vector3 distractionDirection = (currentDistraction.Position - _transform.position);
+        Vector3 distractionDirection = (currentDistraction.transform.position - _transform.position);
         if (distractionDirection.magnitude > _btParent.DistractionDistanceNeeded || (Physics.Raycast(_transform.position, distractionDirection.normalized, Mathf.Clamp(distractionDirection.magnitude - 0.5f, 0, float.MaxValue), (1 << 3))))
         {
-            _btParent.AiMovement.MoveToPosition(currentDistraction.Position, _btParent.MoveToDistractionSpeed);
+            _btParent.AiMovement.MoveToPosition(currentDistraction.transform.position, _btParent.MoveToDistractionSpeed);
             return _state = BTNodeState.RUNNING;
         }
         else

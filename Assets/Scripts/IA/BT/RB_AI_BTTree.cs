@@ -79,6 +79,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     [Header("Distractions")]
     public List<RB_Distraction> Distractions = new();
+    public List<RB_Distraction> AlreadySeenDistractions = new();
     public RB_Distraction CurrentDistraction;
     public float MoveToDistractionSpeed = 6;
     public float DistractionDistanceNeeded = 1;
@@ -294,6 +295,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
 
                     #region Distracted Sequence
+
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AICheck_LookForDistractions(this),
+                    }),
+
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_IsDistracted(this),
@@ -301,10 +308,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_AI_GetHighestPriorityDistraction(this, TARGETMODE.Closest),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
-                            #region Broken Pot Sequence
-                            new RB_BTSequence(new List<RB_BTNode> //broken pot sequence
+                            #region Broken Pot / DEFAULT Sequence
+                            new RB_BTSequence(new List<RB_BTNode> //broken pot / DEFAULT sequence
                             {
-                                new RB_AICheck_CurrentDistractionType(this, DISTRACTIONTYPE.BrokenPot),
                                 new RB_AI_GoToDistraction(this),
                                 new RB_AI_LookAtDistraction(this),
                                 new RB_AICheck_WaitForSeconds(this, 1),
@@ -486,7 +492,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     #region BT Tools
     public void AddDistraction(RB_Distraction distraction)
     {
-        if (!Distractions.Contains(distraction))
+        if (!Distractions.Contains(distraction) && !AlreadySeenDistractions.Contains(distraction))
         {
             Distractions.Add(distraction);
             OnDistracted();

@@ -18,6 +18,7 @@ public class RB_AI_CompleteDistraction : RB_BTNode
 
         if (_btParent.CurrentDistraction != null)
         {
+            _btParent.AlreadySeenDistractions.Add(_btParent.CurrentDistraction);
             _btParent.Distractions.Remove(_btParent.CurrentDistraction);
             return _state = BTNodeState.SUCCESS;
         }

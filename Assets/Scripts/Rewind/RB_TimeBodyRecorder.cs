@@ -87,6 +87,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             if (_btTree.ImageSpotBar) newPoint.SpotValue = _btTree.ImageSpotBar.fillAmount; //save the current spot value
             newPoint.CurrentWaypointIndex = _btTree.CurrentWaypointIndex; //save the current patrol index
             newPoint.Distractions = _btTree.Distractions.ToList();
+            newPoint.AlreadySeenDistractions = _btTree.AlreadySeenDistractions.ToList();
         }
         newPoint.TimeEvents = _timeEventForNextPoint.ToList();
 
@@ -189,6 +190,7 @@ public class RB_TimeBodyRecorder : MonoBehaviour
             if (_btTree.ImageSpotBar) _btTree.ImageSpotBar.fillAmount = currentP.SpotValue;
             _btTree.CurrentWaypointIndex = currentP.CurrentWaypointIndex;
             _btTree.Distractions = currentP.Distractions.ToList();
+            _btTree.AlreadySeenDistractions = currentP.AlreadySeenDistractions.ToList();
         }
         foreach (EventInTime timeEvent in currentP.TimeEvents) // EVENTS
         {

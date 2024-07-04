@@ -80,6 +80,9 @@
         },
         {
             "m_Id": "a6dcc32afbce4cf5820dd6109ad0021f"
+        },
+        {
+            "m_Id": "5cf5283436644a9eb784dcdc5faae815"
         }
     ],
     "m_Keywords": [],
@@ -386,6 +389,9 @@
         },
         {
             "m_Id": "d4faa2a54eef4a958d77bf8bb11f6d37"
+        },
+        {
+            "m_Id": "6d4262c271114765aa17ca1c7897a327"
         }
     ],
     "m_GroupDatas": [
@@ -915,6 +921,20 @@
                     "m_Id": "718940c499cd4a0c81959ad5ff8fda53"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "6d4262c271114765aa17ca1c7897a327"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "40a3a27163e542efbff4a75b3d7b7559"
+                },
+                "m_SlotId": 1216633873
             }
         },
         {
@@ -5007,6 +5027,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector3ShaderProperty",
+    "m_ObjectId": "5cf5283436644a9eb784dcdc5faae815",
+    "m_Guid": {
+        "m_GuidSerialized": "ebde39ed-59af-4424-936a-61dbf09286f7"
+    },
+    "m_Name": "SideOffsetTriplanar",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "SideOffsetTriplanar",
+    "m_DefaultReferenceName": "_SideOffsetTriplanar",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "5dfdc410401d42b7a21118882ed735d6",
@@ -5483,6 +5531,42 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "6d4262c271114765aa17ca1c7897a327",
+    "m_Group": {
+        "m_Id": "be1072feb44141768a57bb59b1236c04"
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -2792.0,
+            "y": 9.333320617675782,
+            "width": 180.0,
+            "height": 35.99999237060547
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "a54b80decc0f47718278e314b5769cba"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "5cf5283436644a9eb784dcdc5faae815"
     }
 }
 
@@ -7427,6 +7511,9 @@
         },
         {
             "m_Id": "be6c4e16c06e4bae951831c8a1bc13f5"
+        },
+        {
+            "m_Id": "5cf5283436644a9eb784dcdc5faae815"
         }
     ]
 }
@@ -7620,6 +7707,29 @@
         "x": 0.0,
         "y": 5.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "a54b80decc0f47718278e314b5769cba",
+    "m_Id": 0,
+    "m_DisplayName": "SideOffsetTriplanar",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
 }
 
 {

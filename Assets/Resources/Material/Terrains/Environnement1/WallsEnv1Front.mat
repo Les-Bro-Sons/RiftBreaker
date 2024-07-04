@@ -36,12 +36,17 @@ Material:
   m_LockedProperties: _Scale
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MountainTexture:
+        m_Texture: {fileID: 2800000, guid: d41bd5c791b951c418023601eb13ff8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _DisappearingDuration: 10
     - _DisappearingHeight: -28.2
     - _EndDisappearingHeight: -10.8
+    - _FadeDuration: 1.9
     - _Float: 94.5
     - _RockyEffect: 1
     - _StartDisappearingHeight: -40

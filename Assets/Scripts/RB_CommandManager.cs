@@ -35,7 +35,7 @@ public class RB_CommandManager : MonoBehaviour
         }
         else
         {
-            DestroyImmediate(gameObject);
+            Destroy(gameObject);
             return;
         }
     }

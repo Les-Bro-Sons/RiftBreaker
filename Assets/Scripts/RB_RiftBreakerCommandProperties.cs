@@ -170,6 +170,7 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
     /// </summary>
     public void InitProperties()
     {
+        if (RB_PlayerAction.Instance == null) return; //If there's no player on the scene (exemple : on the main menu)
         FoundItem = FindAnyObjectByType<RB_Items>(); //Set the found item
         GodModeActivatedFeedbackDebugImage.SetActive(false); //Debug feedback god mode
         DefaultHp = LastHp = RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax; //Set the default hp and last hp to the real default

@@ -137,5 +137,6 @@ public enum BTBOOLVALUES
 public enum DISTRACTIONTYPE
 {
     BrokenPot,
-    DeadBody
+    DeadBody,
+    BrokenDoor,
 }

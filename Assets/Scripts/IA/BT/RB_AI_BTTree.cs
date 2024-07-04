@@ -308,10 +308,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_AI_GetHighestPriorityDistraction(this, TARGETMODE.Closest),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
-                            #region Broken Pot Sequence
-                            new RB_BTSequence(new List<RB_BTNode> //broken pot sequence
+                            #region Broken Pot / DEFAULT Sequence
+                            new RB_BTSequence(new List<RB_BTNode> //broken pot / DEFAULT sequence
                             {
-                                new RB_AICheck_CurrentDistractionType(this, DISTRACTIONTYPE.BrokenPot),
                                 new RB_AI_GoToDistraction(this),
                                 new RB_AI_LookAtDistraction(this),
                                 new RB_AICheck_WaitForSeconds(this, 1),

@@ -211,15 +211,19 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         {
             new RB_BTSequence(new List<RB_BTNode> // sequence decoration Infiltration
             {
+                #region Sequence Phase Infiltration Decorative
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_AICheck_Bool(this, IsDecorative),
                 new RB_AI_BecomeDecoration(this),
+                #endregion
             }),
 
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
             {
+                #region Sequence Phase Infiltration
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_AICheck_Bool(this, !IsDecorative),
+                
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
                     new RB_BTSequence(new List<RB_BTNode>
@@ -268,17 +272,18 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                     new RB_AI_Task_DefaultPatrol(this),  // task default
                 }),
-                
+                #endregion
             }),
-
             
             new RB_BTSequence(new List<RB_BTNode> // Sequence COMBAT
             {
+                #region Sequence Phase Combat
                 new RB_AICheck_Phase(_combatPhases),
                 new RB_BTSelector(new List<RB_BTNode>
                 {
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Faible
                     {
+                        #region Sequence Enemy Type Light
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Light),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -295,10 +300,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Moyen
                     {
+                        #region Sequence Enemy Type Medium
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Medium),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -336,10 +343,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Fort
                     {
+                        #region Sequence Enemy Type Heavy
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Heavy),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -377,10 +386,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> //sequence Pawn
                     {
+                        #region Sequence Enemy Type Pawn
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Pawn),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -396,10 +407,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_FollowLeader(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> //sequence Tower
                     {
+                        #region Sequence Enemy Type Tower
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Tower),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -415,10 +428,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_FollowLeader(this),
                             }),
                         }),
+                        #endregion
                     }),
                 }),
+                #endregion
             }),
-        });;
+        });
 
         return root;
     }

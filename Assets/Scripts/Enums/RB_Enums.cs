@@ -122,11 +122,14 @@ public enum MIXERNAME
 public enum BTBOOLVALUES
 {
     IsTargetSpotted,
+    HasACorrectView,
     GoToLastTargetPos,
+    IsDistracted,
+
     PlayerSpottedInCombat,
     IsAttacking,
-    AlreadyAttacked,
-    HeavyAttackSlash,
-    HasACorrectView,
     IsWaitingForAttack,
+    AlreadyAttacked,
+
+    HeavyAttackSlash,
 }

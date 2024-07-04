@@ -30,22 +30,10 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function saves an object to keep it through scenes
-    /// </summary>
-    /// <param name="propertyToSave"> Object to save through scenes </param>
-    /// <param name="idOfTheProperty"> The id of the property saved </param>
-    public void SaveProperties(string idOfTheProperty, object propertyToSave)
-    {
-        if (propertyToSave == null) throw new ArgumentNullException("The object you're trying to save is null"); //If the user wants to save a null object
-        _propertiesToKeepThroughScene.Add(idOfTheProperty, propertyToSave); //Save the object to the properties list
-        print("Saved successfully");
-    }
-
-    /// <summary>
     /// This function saves a list of an object to keep through scenes
     /// </summary>
     /// <param name="propertiesToSave"> List of objects to keep through scenes </param>
-    public void SaveProperties(Dictionary<string, object> propertiesToSave) //Override
+    public void SaveProperties(Dictionary<string, object> propertiesToSave)
     {
         foreach(var property in propertiesToSave)
         {
@@ -82,6 +70,8 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
     /// <returns> The saved properties previously </returns>
     public Dictionary<string, object> LoadSavedProperties()
     {
+        if (_propertiesToKeepThroughScene == null) throw new ArgumentNullException("The list of properties you are trying to load is null");
+        if(_propertiesToKeepThroughScene.Count <= 0) throw new ArgumentException("There's no saved properties");
         print("Loaded successfully");
         return _propertiesToKeepThroughScene;
     }
@@ -92,7 +82,7 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
     /// <typeparam name="T"> The type of the property returned</typeparam>
     /// <param name="id"> The id of the object that you want</param>
     /// <returns> The object wanted with the type wanted</returns>
-    public T LoadSavedProperties<T>(string id)
+    public T LoadSavedProperties<T>(string id) //Override
     {
         if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id is null");
         if (!_propertiesToKeepThroughScene.ContainsKey(id)) throw new InvalidOperationException($"The saved properties does not contain {id}");
@@ -102,47 +92,28 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function removes a property if it's in the list of saved properties and return the new saved properties
+    /// This function gets a list of saved properties asked by the user with ids
     /// </summary>
-    /// <param name="propertyToRemove"> The object you want to remove from the saved properties </param>
-    /// <returns> The list of saved object after the remove of the property </returns>
-    public Dictionary<string, object> RemoveFromSavedProperties(object propertyToRemove)
+    /// <param name="ids"> The ids of the object the user want to load </param>
+    /// <returns> A list of object loaded </returns>
+    public List<object> LoadSavedProperties(params string[] ids) //Override
     {
-        if (_propertiesToKeepThroughScene == null) throw new ArgumentNullException("There's no properties saved"); //If the user wants to remove an object from the saved properties but the list is empty
-        if (propertyToRemove == null) throw new ArgumentNullException("The object you are trying to remove is null"); //If the user wants to remove a null object
-        if (_propertiesToKeepThroughScene.ContainsValue(propertyToRemove)) //If the object is in the saved properties
+        if(ids == null) throw new ArgumentNullException("The ids are null");
+        if (ids.Length <= 0) throw new ArgumentException("There are no ids entered");
+        List<object> propertiesToLoad = new();
+        for(int i = 0; i< ids.Length; i++)
         {
-            foreach(var property in _propertiesToKeepThroughScene)
+            if (string.IsNullOrEmpty(ids[i])) throw new ArgumentException($"the id {i} is invalid");
+            if (_propertiesToKeepThroughScene.ContainsKey(ids[i]))
             {
-                if(property.Value == propertyToRemove)
-                {
-                    _propertiesToKeepThroughScene.Remove(property.Key); //Remove the object from the saved properties
-                }
+                if(_propertiesToKeepThroughScene[ids[i]] == null) throw new ArgumentException("The property you are trying to load is null");
+                propertiesToLoad.Add(_propertiesToKeepThroughScene[ids[i]]);
             }
+            else
+                throw new ArgumentException("The property you are trying to load is not in the saved properties");
+            if (propertiesToLoad.Count <= 0) throw new ArgumentException("You are trying to load 0 properties");
         }
-        else
-            throw new ArgumentException("The object you are trying to remove is not in the saved list"); //If the user wants to remove an object that is not in the saved object
-
-        return _propertiesToKeepThroughScene;
-    }
-
-    /// <summary>
-    /// This function removes a property if it's in the list of saved properties and return the new saved properties
-    /// </summary>
-    /// <param name="propertyToRemove"> The id of the object you want to remove </param>
-    /// <returns> The list of saved object after the remove of the property </returns>
-    public Dictionary<string, object> RemoveFromSavedProperties(string propertyIdToRemove) //Override
-    {
-        if (_propertiesToKeepThroughScene == null) throw new ArgumentNullException("There's no properties saved");
-        if (string.IsNullOrEmpty(propertyIdToRemove)) throw new ArgumentNullException("The object you are trying to remove is null"); //If the user didn't entered any id
-        if (_propertiesToKeepThroughScene.ContainsKey(propertyIdToRemove)) //If the object by id is in the saved object
-        {
-            _propertiesToKeepThroughScene.Remove(propertyIdToRemove); //Remove the object from the saved object
-        }
-        else
-            throw new ArgumentException("The object you are trying to remove is not in the saved list");
-
-        return _propertiesToKeepThroughScene;
+        return propertiesToLoad;
     }
 
     /// <summary>
@@ -150,7 +121,7 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
     /// </summary>
     /// <param name="propertiesToRemove"> A list of object to remove </param>
     /// <returns> The list of saved object after the remove of the properties </returns>
-    public Dictionary<string, object> RemoveFromSavedProperties(List<object> propertiesToRemove) //Override
+    public Dictionary<string, object> RemoveFromSavedProperties(List<object> propertiesToRemove)
     {
         if (_propertiesToKeepThroughScene == null) throw new ArgumentNullException("There's no properties saved");
         if (propertiesToRemove is null) throw new ArgumentNullException("The list of object you want to remove is null");

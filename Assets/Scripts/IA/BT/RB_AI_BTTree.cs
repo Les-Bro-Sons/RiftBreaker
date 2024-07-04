@@ -13,7 +13,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     private List<PHASES> _infiltrationPhases = new();
     private List<PHASES> _combatPhases = new();
 
-    public Dictionary<string, bool> BoolDictionnary = new Dictionary<string, bool>();
+    public Dictionary<BTBOOLVALUES, bool> BoolDictionnary = new Dictionary<BTBOOLVALUES, bool>();
     private List<RB_Health> _characterCollisions = new();
 
     [Header("Main Parameters")]
@@ -76,6 +76,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSpottedMoveSpeed = 11;
     [SerializeField] public GameObject InfSlashParticles;
     [HideInInspector] public UnityEvent EventOnSpotted;
+
+    [Header("Distractions")]
+    public List<RB_Distraction> Distractions = new();
+    public RB_Distraction CurrentDistraction;
+    public float MoveToDistractionSpeed = 6;
+    public float DistractionDistanceNeeded = 1;
+
 
     [Header("Faible")]
     [SerializeField] public float SlashRange;
@@ -158,6 +165,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         }
     }
 
+    #region Spot Visual Functions
     private void SpotCanvasAlpha() //handle the alpha of the spot canvas when needed
     {
         if (!ImageSpotBar) return;
@@ -190,13 +198,20 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         CanvasUi.alpha = Mathf.Clamp(CanvasUi.alpha - Time.deltaTime / DurationAlphaCanvas, 0, 1);
     }
 
-    public void UxFocus()
+    public void OnSpotted()
     {
         GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
         spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         RB_AudioManager.Instance.PlaySFX("Detection", transform.position, false, 0,1);
         EventOnSpotted?.Invoke();
     }
+
+    public void OnDistracted()
+    {
+        GameObject spawnSpriteUxDetected = Instantiate(_prefabUxDetectedReadyMark, transform);
+        spawnSpriteUxDetected.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+    }
+    #endregion
 
     protected override RB_BTNode SetupTree()
     {
@@ -211,74 +226,109 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         {
             new RB_BTSequence(new List<RB_BTNode> // sequence decoration Infiltration
             {
+                #region Sequence Phase Infiltration Decorative
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_AICheck_Bool(this, IsDecorative),
                 new RB_AI_BecomeDecoration(this),
+                #endregion
             }),
 
             new RB_BTSequence(new List<RB_BTNode> // Sequence CHECK PHASE INFILTRATION
             {
+                #region Sequence Phase Infiltration
                 new RB_AICheck_Phase(_infiltrationPhases),
                 new RB_AICheck_Bool(this, !IsDecorative),
+                
                 new RB_BTSelector(new List<RB_BTNode>  // Sequence INFILTRATION
                 {
+                    #region Touch detection Sequence
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_EnemyTouchDetection(this, true),
                         new RB_AI_DoFailure(),
                     }),
+                    #endregion
 
+                    #region Static AI Sequence
                     new RB_BTSequence(new List<RB_BTNode> //static sequence
                     {
-                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
+                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
                         new RB_AI_StaticWatchOut(this),
                         new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
+                    #endregion
 
-                    new RB_BTSelector(new List<RB_BTNode> // selector ai completely lost sight of target
+                    #region AI completely lost sight of target Sequence
+                    new RB_BTSelector(new List<RB_BTNode>
                     {
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
-                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
                             new RB_AI_PlayerInFov(this, FovRange),
-                            new RB_AI_SetBool(this, "GoToLastTargetPos", false)
+                            new RB_AI_SetBool(this, BTBOOLVALUES.GoToLastTargetPos, false)
                         }),
 
                         new RB_BTSequence(new List<RB_BTNode> // sequence go to last target pos
                         {
-                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
                             new RB_AI_GoToLastTargetPos(this, 2, AiMovement.MovementMaxSpeed / 2f, AiMovement.MovementAcceleration / 2f),
-                            new RB_AICheck_WaitForSeconds(this, 2, "GoToLastTargetPos", false) // ADD RANDOM PATROL (Feature)
+                            new RB_AICheck_WaitForSeconds(this, 2, BTBOOLVALUES.GoToLastTargetPos, false) // ADD RANDOM PATROL (Feature)
                         }),
                         
                     }),
+                    #endregion
 
+                    #region Target Spotted Sequence
                     new RB_BTSequence(new List<RB_BTNode> // Sequence spotted
                     {
-                        new RB_AICheck_Bool(this, "IsTargetSpotted"),
+                        new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted),
                         new RB_AI_PlayerInFov(this, SpottedFovRange),
                         new RB_AI_GoToTarget(this, InfSpottedMoveSpeed, InfSlashRange),
                         new RB_AI_Attack(this, -1),
                     }),
+                    #endregion
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
                         new RB_AI_PlayerInFov(this, FovRange),
                     }),
 
+                    #region Distracted Sequence
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AICheck_IsDistracted(this),
+                        //new RB_AI_ReverseState(this, new RB_AI_PlayerInFov(this, FovRange)),
+                        new RB_AI_GetHighestPriorityDistraction(this, TARGETMODE.Closest),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            #region Broken Pot Sequence
+                            new RB_BTSequence(new List<RB_BTNode> //broken pot sequence
+                            {
+                                new RB_AICheck_CurrentDistractionType(this, DISTRACTIONTYPE.BrokenPot),
+                                new RB_AI_GoToDistraction(this),
+                                new RB_AI_LookAtDistraction(this),
+                                new RB_AICheck_WaitForSeconds(this, 1),
+                                new RB_AI_CompleteDistraction(this),
+                            }),
+                            #endregion
+                        }),
+                    }),
+                    #endregion
+
                     new RB_AI_Task_DefaultPatrol(this),  // task default
                 }),
-                
+                #endregion
             }),
-
             
             new RB_BTSequence(new List<RB_BTNode> // Sequence COMBAT
             {
+                #region Sequence Phase Combat
                 new RB_AICheck_Phase(_combatPhases),
                 new RB_BTSelector(new List<RB_BTNode>
                 {
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Faible
                     {
+                        #region Sequence Enemy Type Light
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Light),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -295,23 +345,24 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Moyen
                     {
+                        #region Sequence Enemy Type Medium
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Medium),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
-                                new RB_AICheck_Bool(this, "PlayerSpottedInCombat"),
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.PlayerSpottedInCombat),
                                 new RB_AICheck_IsTargetAlive(this),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
-                                        //new RB_AICheck_IsTargetClose(this, FleeDistance),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
@@ -326,9 +377,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
-                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", false),
+                                new RB_AI_SetBool(this, BTBOOLVALUES.PlayerSpottedInCombat, false),
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest),
-                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", true),
+                                new RB_AI_SetBool(this, BTBOOLVALUES.PlayerSpottedInCombat, true),
                             }),
 
                             new RB_BTSequence(new List<RB_BTNode>
@@ -337,10 +388,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Fort
                     {
+                        #region Sequence Enemy Type Heavy
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Heavy),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -351,22 +404,21 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), //when bow attack
-                                        //new RB_AICheck_IsTargetClose(this, HeavyBowRange/1.5f),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), //when bow attack
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), // to switch attacks
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavyBowRange),
                                         new RB_AI_Attack(this, 0),
                                     }),
                                     
                                     new RB_BTSequence(new List<RB_BTNode> //heavy slash sequence
                                     {
-                                        new RB_AICheck_Bool(this, "HeavyAttackSlash"), // to switch attacks
+                                        new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavySlashRange),
                                         new RB_AI_Attack(this, 1),
                                     }),
@@ -379,10 +431,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_Task_DefaultPatrol(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> //sequence Pawn
                     {
+                        #region Sequence Enemy Type Pawn
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Pawn),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -398,10 +452,12 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_FollowLeader(this),
                             }),
                         }),
+                        #endregion
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> //sequence Tower
                     {
+                        #region Sequence Enemy Type Tower
                         new RB_AICheck_Class(AiType, ENEMYCLASS.Tower),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
@@ -417,13 +473,27 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 new RB_AI_FollowLeader(this),
                             }),
                         }),
+                        #endregion
                     }),
                 }),
+                #endregion
             }),
-        });;
+        });
 
         return root;
     }
+
+    #region BT Tools
+    public void AddDistraction(RB_Distraction distraction)
+    {
+        if (!Distractions.Contains(distraction))
+        {
+            Distractions.Add(distraction);
+            OnDistracted();
+        }
+
+    }
+
 
     public void Boost(float boost)
     {
@@ -454,6 +524,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         }
     }
 
+    public bool GetBool(BTBOOLVALUES value)
+    {
+        return (BoolDictionnary.ContainsKey(value) && BoolDictionnary[value]);
+    }
+    #endregion
+
+    #region Collision Detection
     private void OnCollisionEnter(Collision collision)
     {
         if (RB_Tools.TryGetComponentInParent<RB_Health>(collision.gameObject, out RB_Health health))
@@ -474,9 +551,5 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     {
         return _characterCollisions;
     }
-
-    public bool GetBool(string name)
-    {
-        return (BoolDictionnary.ContainsKey(name) && BoolDictionnary[name]);
-    }
+    #endregion
 }

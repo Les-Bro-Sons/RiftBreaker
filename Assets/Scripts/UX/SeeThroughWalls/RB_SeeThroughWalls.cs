@@ -17,6 +17,8 @@ public class RB_SeeThroughWalls : MonoBehaviour
 
     [SerializeField] private float _unLerpingOffset = 0.1f;
 
+    public Vector3 ShaderPosition;
+
     private void Awake()
     {
         transform = GetComponent<Transform>();
@@ -26,20 +28,25 @@ public class RB_SeeThroughWalls : MonoBehaviour
     {
         _lastRaycastTime += Random.Range(0, _raycastDelay);
         if (RB_SeeThroughWallsManager.Instance == null) this.enabled = false;
-        RB_SeeThroughWallsManager.Instance.AddEntity(transform);
+        RB_SeeThroughWallsManager.Instance.AddEntity(this);
+        ShaderPosition = Vector3.up * 1000;
     }
 
     private void Update()
     {
         bool canShootRaycast = Time.time > _lastRaycastTime + _raycastDelay;
         if (canShootRaycast) _lastRaycastTime = Time.time;
-        if ((canShootRaycast && Physics.Raycast(transform.position, Vector3.back, _raycastLength, (1 << 3))) || (!canShootRaycast && _isTouchingWall))
+        RaycastHit hitInfo;
+        if ((canShootRaycast && Physics.Raycast(transform.position, Vector3.back, out hitInfo, _raycastLength, (1 << 3))) || (_isTouchingWall && Physics.Raycast(transform.position, Vector3.back, out hitInfo, _raycastLength, (1 << 3))))
         {
             if (!_isTouchingWall)
             {
                 LastTimeWallTouched = Time.time;
                 _isTouchingWall = true;
             }
+            
+            
+            ShaderPosition = hitInfo.point;
         }
         else
         {
@@ -52,7 +59,15 @@ public class RB_SeeThroughWalls : MonoBehaviour
             }
             float currentValue = (Time.time + _unLerpingOffset - _lastUntouchedTime) / (RB_SeeThroughWallsManager.Instance.LerpTime);
             LastTimeWallTouched = Mathf.Lerp(_lastTimeWallTouchedOld, _timeTarget, Mathf.Clamp(currentValue, 0, 1));
-            if (currentValue >= 1) _timeTarget = Time.time; 
+            if (currentValue >= 1)
+            {
+                ShaderPosition = Vector3.up * 1000;
+                _timeTarget = Time.time;
+            }
+            else
+            {
+                ShaderPosition = Vector3.Lerp(ShaderPosition, transform.position, 4 * Time.deltaTime);
+            }
         }
     }
 }

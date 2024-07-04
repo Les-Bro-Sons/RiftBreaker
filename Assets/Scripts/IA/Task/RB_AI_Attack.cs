@@ -36,7 +36,7 @@ public class RB_AI_Attack : RB_BTNode
             return _state;
         }
 
-        if (!_btParent.GetBool("IsWaitingForAttack"))
+        if (!_btParent.GetBool(BTBOOLVALUES.IsWaitingForAttack))
         {
             _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation(RB_Tools.GetHorizontalDirection(_target.transform.position - _btParent.transform.position).normalized));
         }
@@ -44,7 +44,7 @@ public class RB_AI_Attack : RB_BTNode
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _btParent.AttackSpeed)
         {
-            _btParent.BoolDictionnary["IsAttacking"] = true;
+            _btParent.BoolDictionnary[BTBOOLVALUES.IsAttacking] = true;
             
 
             switch (_btParent.AiType)
@@ -193,16 +193,16 @@ public class RB_AI_Attack : RB_BTNode
     {
         _waitBeforeAttackCounter += Time.deltaTime;
 
-        if (_waitBeforeAttackCounter > wait / _btParent.BoostMultiplier && !_btParent.GetBool("AlreadyAttacked"))
+        if (_waitBeforeAttackCounter > wait / _btParent.BoostMultiplier && !_btParent.GetBool(BTBOOLVALUES.AlreadyAttacked))
         {
-            _btParent.BoolDictionnary["AlreadyAttacked"] = true;
+            _btParent.BoolDictionnary[BTBOOLVALUES.AlreadyAttacked] = true;
 
             return true;
         }
         else
         {
-            _btParent.BoolDictionnary["IsWaitingForAttack"] = true;
-            if (rotateTowardTarget && (!_btParent.GetBool("AlreadyAttacked") || rotateWhenAttacking))
+            _btParent.BoolDictionnary[BTBOOLVALUES.IsWaitingForAttack] = true;
+            if (rotateTowardTarget && (!_btParent.GetBool(BTBOOLVALUES.AlreadyAttacked) || rotateWhenAttacking))
             {
                 _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((RB_Tools.GetHorizontalDirection(_target.transform.position - _btParent.transform.position).normalized)));
             }
@@ -256,7 +256,7 @@ public class RB_AI_Attack : RB_BTNode
 
         if (_btParent.CurrentHeavySlashCombo >= _btParent.MaxHeavySlashCombo) //check if combo is fully complete
         {
-            _btParent.BoolDictionnary["HeavyAttackSlash"] = false;
+            _btParent.BoolDictionnary[BTBOOLVALUES.HeavyAttackSlash] = false;
             _btParent.CurrentHeavySlashCombo = 0;
         }
         StopAttacking();
@@ -275,7 +275,7 @@ public class RB_AI_Attack : RB_BTNode
             projectile.Speed = _btParent.HeavyArrowSpeed;
             RB_AudioManager.Instance.PlaySFX("bowArrow", RB_PlayerController.Instance.transform.position, false, 0f, 1f);
         }
-        _btParent.BoolDictionnary["HeavyAttackSlash"] = true;
+        _btParent.BoolDictionnary[BTBOOLVALUES.HeavyAttackSlash] = true;
         StopAttacking();
     }
 
@@ -283,9 +283,9 @@ public class RB_AI_Attack : RB_BTNode
     {
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;
-        _btParent.BoolDictionnary["IsAttacking"] = false;
-        _btParent.BoolDictionnary["AlreadyAttacked"] = false;
-        _btParent.BoolDictionnary["IsWaitingForAttack"] = false;
+        _btParent.BoolDictionnary[BTBOOLVALUES.IsAttacking] = false;
+        _btParent.BoolDictionnary[BTBOOLVALUES.AlreadyAttacked] = false;
+        _btParent.BoolDictionnary[BTBOOLVALUES.IsWaitingForAttack] = false;
     }
 
     public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM

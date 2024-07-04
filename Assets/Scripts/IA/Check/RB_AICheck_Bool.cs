@@ -1,27 +1,28 @@
 using BehaviorTree;
 using UnityEngine;
+using static RB_AI_BTTree;
 
 public class RB_AICheck_Bool : RB_BTNode
 {
     private RB_AI_BTTree _btParent;
     private Transform _transform;
 
-    private bool _isString = true;
+    private bool _isEnum = true;
 
-    private string _checkingStringBool;
+    private BTBOOLVALUES _checkingEnumBool;
     private bool _checkingBool;
 
-    public RB_AICheck_Bool(RB_AI_BTTree btParent, string checkingBool)
+    public RB_AICheck_Bool(RB_AI_BTTree btParent, BTBOOLVALUES checkingBool)
     {
-        _isString = true;
+        _isEnum = true;
         _btParent = btParent;
         _transform = _btParent.transform;
-        _checkingStringBool = checkingBool;
+        _checkingEnumBool = checkingBool;
     }
 
     public RB_AICheck_Bool(RB_AI_BTTree btParent, bool checkingBool)
     {
-        _isString = false;
+        _isEnum = false;
         _btParent = btParent;
         _transform = _btParent.transform;
         _checkingBool = checkingBool;
@@ -29,9 +30,9 @@ public class RB_AICheck_Bool : RB_BTNode
 
     public override BTNodeState Evaluate()
     {
-        if (_isString)
+        if (_isEnum)
         {
-            if ((_btParent.BoolDictionnary.ContainsKey(_checkingStringBool) && _btParent.BoolDictionnary[_checkingStringBool])) //check if a bool exist and if it's true
+            if ((_btParent.GetBool(_checkingEnumBool))) //check if a bool exist and if it's true
             {
                 return _state = BTNodeState.SUCCESS;
             }

@@ -123,18 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &292615743 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4261856430790287830, guid: 24ec74371e597bc41bec89689e31652b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1841303693}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7113725ea55c68f4d8d8ab7ad11267b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &332597717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,6 +343,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 498806716}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &542212946 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6990355565124916636, guid: 24ec74371e597bc41bec89689e31652b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1841303693}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &542212950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542212946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5082ae7892a18f04eaefe1cefa2caf5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraMaterial: {fileID: 2100000, guid: 22aaac62191e23c45a4ca6a2120e3fe9, type: 2}
 --- !u!1001 &560023213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1914,6 +1921,11 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4412144041930154366, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4494883647088947079, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -2019,6 +2031,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 6066944621788565356, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 22aaac62191e23c45a4ca6a2120e3fe9, type: 2}
     - target: {fileID: 6164082044970939516, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2239,7 +2256,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 292615743}
+      objectReference: {fileID: 0}
     - target: {fileID: 8258438928455759919, guid: 24ec74371e597bc41bec89689e31652b,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -2346,7 +2363,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1994111311}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6990355565124916636, guid: 24ec74371e597bc41bec89689e31652b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 542212950}
   m_SourcePrefab: {fileID: 100100000, guid: 24ec74371e597bc41bec89689e31652b, type: 3}
 --- !u!1001 &1872608939
 PrefabInstance:

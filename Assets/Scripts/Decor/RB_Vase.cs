@@ -11,6 +11,10 @@ public class RB_Vase : MonoBehaviour
     [Range(0, 100)]
     [SerializeField] private int _probLife;
 
+    [Header("Distraction")]
+    [Range(0, 20)]
+    [SerializeField] private float _distractionSoundDistance = 5;
+
     // Components
     [Header("Components")]
     [SerializeField] private Collider _vaseCollider;
@@ -84,6 +88,7 @@ public class RB_Vase : MonoBehaviour
             Instantiate(_lifeParticlesPrefab, _transform.position, Quaternion.identity); // Instantiate life particles based on probability
         }
         _navMeshObstacle.carving = false; // Disable NavMesh carving
+        new RB_Distraction(DISTRACTIONTYPE.BrokenPot, _transform.position, 1, _distractionSoundDistance);
         RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 1); // Play breaking sound effect
     }
 

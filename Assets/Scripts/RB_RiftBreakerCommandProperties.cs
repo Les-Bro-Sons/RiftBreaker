@@ -54,6 +54,7 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
     //Bools
     [HideInInspector]public bool IsGodMode = false; //If the player is in god mode
     [HideInInspector]public bool IsLoadingNewScene = false; //If the game is currently loading a new scene
+    private bool _noPlayerInScene = false;
 
     //Debug
     [Header("Debug")]
@@ -168,8 +169,15 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
     /// <summary>
     /// This function initialize the properties
     /// </summary>
-    public void InitProperties()
+    /// <returns> If the properties are initialized </returns>
+    public bool InitProperties()
     {
+        if (RB_PlayerAction.Instance == null)//If there's no player on the scene (exemple : on the main menu)
+        {
+            _noPlayerInScene = true;
+            return false; 
+        }
+        _noPlayerInScene = false;
         FoundItem = FindAnyObjectByType<RB_Items>(); //Set the found item
         GodModeActivatedFeedbackDebugImage.SetActive(false); //Debug feedback god mode
         DefaultHp = LastHp = RB_PlayerAction.Instance.GetComponent<RB_Health>().HpMax; //Set the default hp and last hp to the real default
@@ -177,6 +185,7 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
         DefaultRewindAmount = LastRewindAmount = RB_PlayerAction.Instance.RewindLeft; //Set the default rewind amount and last rewind amount to the real default
         LastDamageMultiplier = 1; //Set last damage multiplier to one (default)
         IsGodMode = false; //Set the player to not god mode
+        return true;
     }
 
     /// <summary>
@@ -184,7 +193,7 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
     /// </summary>
     private void KeepStateThroughScenes()
     {
-
+        if (_noPlayerInScene && !InitProperties()) return;  //If the game started on a scene with no player, while there's no player in scene retry to get a player
         PlayerRb = RB_PlayerAction.Instance.GetComponent<Rigidbody>(); //Get the rigidbody of the player
         ItemsOnScene = FindObjectsOfType<RB_Items>().ToList(); //Get the Items on the scene
 

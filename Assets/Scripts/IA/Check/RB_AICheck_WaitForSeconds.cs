@@ -6,7 +6,7 @@ public class RB_AICheck_WaitForSeconds : RB_BTNode
     private RB_AI_BTTree _btParent;
     private Transform _transform;
     private float _waitingForSecond;
-    private string _settingBool;
+    private BTBOOLVALUES _settingBool;
     private bool _boolValue;
 
     private float _timer; 
@@ -19,7 +19,7 @@ public class RB_AICheck_WaitForSeconds : RB_BTNode
         _waitingForSecond = waitingForSecond;
     }
 
-    public RB_AICheck_WaitForSeconds(RB_AI_BTTree btParent, float waitingForSecond, string settingBool, bool boolValue)
+    public RB_AICheck_WaitForSeconds(RB_AI_BTTree btParent, float waitingForSecond, BTBOOLVALUES settingBool, bool boolValue)
     {
         _btParent = btParent;
         _transform = _btParent.transform;

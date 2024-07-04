@@ -42,7 +42,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         switch (RB_LevelManager.Instance.CurrentPhase)
         {
             case PHASES.Infiltration:
-                if (_btParent.GetBool("IsAttacking")) return _state = BTNodeState.SUCCESS;
+                if (_btParent.GetBool(BTBOOLVALUES.IsAttacking)) return _state = BTNodeState.SUCCESS;
                 _state = InfiltrationCheck();
                 break;
             case PHASES.Boss:
@@ -58,7 +58,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
     //////INFILTRATION//////
     public BTNodeState InfiltrationCheck()
     {
-        if (_btParent.GetBool("IsAttacking"))
+        if (_btParent.GetBool(BTBOOLVALUES.IsAttacking))
         {
             _state = BTNodeState.SUCCESS;
             return _state;
@@ -108,7 +108,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             //else
             //    Debug.Log("Cible actuelle: " + t.GetType().Name.ToString());
 
-            if (_btParent.GetBool("IsTargetSpotted"))
+            if (_btParent.GetBool(BTBOOLVALUES.IsTargetSpotted))
             {
                 if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange + 0.5f)
                 {
@@ -116,9 +116,9 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     _btParent.LastTargetPos = target.position;
                     if (_btParent.ImageSpotBar.fillAmount <= 0)
                     {
-                        _btParent.BoolDictionnary["GoToLastTargetPos"] = true;
+                        _btParent.BoolDictionnary[BTBOOLVALUES.GoToLastTargetPos] = true;
                         //UnloadCanvas();
-                        _btParent.BoolDictionnary["IsTargetSpotted"] = false;
+                        _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetSpotted] = false;
                         _state = BTNodeState.FAILURE;
                     }
                     else
@@ -143,7 +143,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                     //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
                     //_btParent.CanvasUi.alpha = 0.0f;
 
-                    if (!_btParent.GetBool("HasACorrectView"))
+                    if (!_btParent.GetBool(BTBOOLVALUES.HasACorrectView))
                     {
                         LoadSpotBar();
                         //look at player
@@ -155,7 +155,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                     if (_btParent.ImageSpotBar.fillAmount >= 1)
                     {
-                        _btParent.BoolDictionnary["IsTargetSpotted"] = true;
+                        _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetSpotted] = true;
                         if (!_hasFocusedUx)
                         {
                             _btParent.UxFocus();
@@ -218,7 +218,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
                 Debug.Log("In View");
 
-                if (!_btParent.GetBool("HasACorrectView"))
+                if (!_btParent.GetBool(BTBOOLVALUES.HasACorrectView))
                 {
                     Debug.Log("loading");
                     LoadSpotBar();
@@ -254,7 +254,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             _btParent.ImageSpotBar.fillAmount = 1.0f;
             _isLoadingSpotBar = false;
-            _btParent.BoolDictionnary["HasACorrectView"] = true;
+            _btParent.BoolDictionnary[BTBOOLVALUES.HasACorrectView] = true;
         }
     }
 
@@ -273,7 +273,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
         {
             _btParent.ImageSpotBar.fillAmount = 0.0f;
             _isUnloadingSpotBar = false;
-            _btParent.BoolDictionnary["HasACorrectView"] = false;
+            _btParent.BoolDictionnary[BTBOOLVALUES.HasACorrectView] = false;
         }
     }
 

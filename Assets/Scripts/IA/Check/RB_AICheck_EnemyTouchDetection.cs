@@ -27,7 +27,7 @@ public class RB_AICheck_EnemyTouchDetection : RB_BTNode
                 if (_setTarget)
                 {
                     _btParent.Root.SetData("target", character.transform);
-                    _btParent.BoolDictionnary["IsTargetSpotted"] = true;
+                    _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetSpotted] = true;
                 }
                 break;
             }

@@ -13,7 +13,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     private List<PHASES> _infiltrationPhases = new();
     private List<PHASES> _combatPhases = new();
 
-    public Dictionary<string, bool> BoolDictionnary = new Dictionary<string, bool>();
+    public Dictionary<BTBOOLVALUES, bool> BoolDictionnary = new Dictionary<BTBOOLVALUES, bool>();
     private List<RB_Health> _characterCollisions = new();
 
     [Header("Main Parameters")]
@@ -230,7 +230,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                     new RB_BTSequence(new List<RB_BTNode> //static sequence
                     {
-                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsTargetSpotted")),
+                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
                         new RB_AI_StaticWatchOut(this),
                         new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
@@ -239,23 +239,23 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     {
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
-                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
                             new RB_AI_PlayerInFov(this, FovRange),
-                            new RB_AI_SetBool(this, "GoToLastTargetPos", false)
+                            new RB_AI_SetBool(this, BTBOOLVALUES.GoToLastTargetPos, false)
                         }),
 
                         new RB_BTSequence(new List<RB_BTNode> // sequence go to last target pos
                         {
-                            new RB_AICheck_Bool(this, "GoToLastTargetPos"),
+                            new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
                             new RB_AI_GoToLastTargetPos(this, 2, AiMovement.MovementMaxSpeed / 2f, AiMovement.MovementAcceleration / 2f),
-                            new RB_AICheck_WaitForSeconds(this, 2, "GoToLastTargetPos", false) // ADD RANDOM PATROL (Feature)
+                            new RB_AICheck_WaitForSeconds(this, 2, BTBOOLVALUES.GoToLastTargetPos, false) // ADD RANDOM PATROL (Feature)
                         }),
                         
                     }),
 
                     new RB_BTSequence(new List<RB_BTNode> // Sequence spotted
                     {
-                        new RB_AICheck_Bool(this, "IsTargetSpotted"),
+                        new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted),
                         new RB_AI_PlayerInFov(this, SpottedFovRange),
                         new RB_AI_GoToTarget(this, InfSpottedMoveSpeed, InfSlashRange),
                         new RB_AI_Attack(this, -1),
@@ -304,13 +304,13 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         {
                             new RB_BTSequence(new List<RB_BTNode> //spot sequence
                             {
-                                new RB_AICheck_Bool(this, "PlayerSpottedInCombat"),
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.PlayerSpottedInCombat),
                                 new RB_AICheck_IsTargetAlive(this),
                                 new RB_BTSelector(new List<RB_BTNode>
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
@@ -325,9 +325,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
                             new RB_BTSequence(new List<RB_BTNode>
                             {
-                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", false),
+                                new RB_AI_SetBool(this, BTBOOLVALUES.PlayerSpottedInCombat, false),
                                 new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest),
-                                new RB_AI_SetBool(this, "PlayerSpottedInCombat", true),
+                                new RB_AI_SetBool(this, BTBOOLVALUES.PlayerSpottedInCombat, true),
                             }),
 
                             new RB_BTSequence(new List<RB_BTNode>
@@ -350,21 +350,21 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "IsAttacking")),
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), //when bow attack
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), //when bow attack
                                         new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, "HeavyAttackSlash")), // to switch attacks
+                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavyBowRange),
                                         new RB_AI_Attack(this, 0),
                                     }),
                                     
                                     new RB_BTSequence(new List<RB_BTNode> //heavy slash sequence
                                     {
-                                        new RB_AICheck_Bool(this, "HeavyAttackSlash"), // to switch attacks
+                                        new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavySlashRange),
                                         new RB_AI_Attack(this, 1),
                                     }),
@@ -473,8 +473,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
         return _characterCollisions;
     }
 
-    public bool GetBool(string name)
+    public bool GetBool(BTBOOLVALUES value)
     {
-        return (BoolDictionnary.ContainsKey(name) && BoolDictionnary[name]);
+        return (BoolDictionnary.ContainsKey(value) && BoolDictionnary[value]);
     }
 }

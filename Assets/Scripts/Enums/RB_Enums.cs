@@ -117,3 +117,16 @@ public enum MIXERNAME
     Music
 }
 
+// BT
+
+public enum BTBOOLVALUES
+{
+    IsTargetSpotted,
+    GoToLastTargetPos,
+    PlayerSpottedInCombat,
+    IsAttacking,
+    AlreadyAttacked,
+    HeavyAttackSlash,
+    HasACorrectView,
+    IsWaitingForAttack,
+}

@@ -354,7 +354,7 @@ public class RB_TutorialManager : MonoBehaviour
     private IEnumerator OnRewindStoppedCoroutine()
     {
         yield return new WaitForEndOfFrame();
-        if (!_enemyToSlowDownTimeByDistance.GetBool("IsTargetSpotted")) //If the player pressed it long enough
+        if (!_enemyToSlowDownTimeByDistance.GetBool(BTBOOLVALUES.IsTargetSpotted)) //If the player pressed it long enough
         {
             OnRewindTutoSuccess();
         }

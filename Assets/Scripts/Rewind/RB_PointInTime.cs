@@ -34,6 +34,7 @@ public struct PointInTime
     //RB_AI_BTTree//
     public Dictionary<BTBOOLVALUES, bool> BoolDictionnary;
     public List<RB_Distraction> Distractions;
+    public List<RB_Distraction> AlreadySeenDistractions;
     public float SpotValue;
     public int CurrentWaypointIndex;
     /////////////

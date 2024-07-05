@@ -13,13 +13,11 @@ public class RB_Distraction : MonoBehaviour
     /// <summary>
     /// Instantiate a new distraction
     /// </summary>
-    /// <param name="soundRadiusWithoutWalls"
-    /// Range a guard hear the distraction if there is no walls between them and the distraction>
-    /// </param>
-    /// <param name="soundRadiusWithWalls"
-    /// Range a guard hear the distraction no matter what. By default it is the normal range divided by two>
-    /// </param>
-    /// 
+    /// <param name="distractionType">Type of the distraction</param>
+    /// <param name="position">Position of the distraction</param>
+    /// <param name="priority">Priority of the distraction</param>
+    /// <param name="soundRadiusWithoutWalls">Range a guard hears the distraction if there are no walls between them and the distraction</param>
+    /// <param name="soundRadiusWithWalls">Range a guard hears the distraction no matter what. By default, it is the normal range divided by two</param>
     public static RB_Distraction NewDistraction(DISTRACTIONTYPE distractionType, Vector3 position, float priority, float soundRadiusWithoutWalls = 10, float? soundRadiusWithWalls = null)
     {
         GameObject distractionObject = new GameObject(distractionType.ToString() + " distraction");

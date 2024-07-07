@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
+
     //Attack
     protected float _lastUsedAttackTime;
     private float _currentDamage;
@@ -15,12 +16,11 @@ public class RB_Items : MonoBehaviour
     public float ChargeTime;
     public float SpecialAttackChargeTime;
 
-    [SerializeField] private float _chargeZoom = 0.85f;
-
+    [SerializeField] protected float _chargeZoom = 0.85f; public float ChargeZoom { get { return _chargeZoom; } set { _chargeZoom = value; } }
     [Header("Cooldowns")]
-    [SerializeField] private float _attackCooldown; [HideInInspector] public float AttackCooldown(float? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
-    [SerializeField] private float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(float? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
-    [SerializeField] private float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(float? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
+    [SerializeField] protected float _attackCooldown; [HideInInspector] public float AttackCooldown(float? amount = null) { if (amount != null) { _attackCooldown = amount.Value; } return _attackCooldown;  }
+    [SerializeField] protected float _chargeAttackCooldown; [HideInInspector] public float ChargeAttackCooldown(float? amount = null) { if (amount != null) { _chargeAttackCooldown = amount.Value; } return _chargeAttackCooldown; }
+    [SerializeField] protected float _specialAttackCooldown; [HideInInspector] public float SpecialAttackCooldown(float? amount = null) { if (amount != null) { _specialAttackCooldown = amount.Value; } return _specialAttackCooldown; }
 
     [Header("Damages")]
     public float AttackDamage = 10;
@@ -28,18 +28,18 @@ public class RB_Items : MonoBehaviour
     public float SpecialAttackDamage = 10;
 
     [Header("Knockback")]
-    [SerializeField] protected float _normalKnockbackForce = 5;
-    [SerializeField] protected float _chargeAttackKnockbackForce = 8;
-    [SerializeField] protected float _specialAttackKnockbackForce = 10;
+    [SerializeField] protected float _normalKnockbackForce; public float NormalKnockbackForce { get { return _normalKnockbackForce; } set{ _normalKnockbackForce = value; } }
+    [SerializeField] protected float _chargeAttackKnockbackForce = 8; public float ChargeAttackKnockbackForce { get { return _chargeAttackKnockbackForce; } set { _chargeAttackKnockbackForce = value; } }
+    [SerializeField] protected float _specialAttackKnockbackForce = 10; public float SpecialAttackKnockbackForce { get { return _specialAttackKnockbackForce; } set { _specialAttackKnockbackForce = value; } }
 
     [Header("Screenshake")]
-    [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f;
-    [SerializeField] protected float _normalHitScreenshakeForce = .1f;
-    [SerializeField] protected float _chargedAttackScreenshakeForce = .3f;
-    [SerializeField] protected float _chargedHitScreenshakeForce = .75f;
-    [SerializeField] protected float _specialAttackScreenshakeForce = .5f;
-    [SerializeField] protected float _specialHitScreenshakeForce = 1;
-    
+    [SerializeField] protected float _normalAttackScreenshakeForce = 0.025f; public float NormalAttackScreenshakeForce { get { return _normalAttackScreenshakeForce; } set { _normalAttackScreenshakeForce = value; } }
+    [SerializeField] protected float _normalHitScreenshakeForce = .1f; public float NormalHitScreenshakeForce { get { return _normalHitScreenshakeForce; } set { _normalHitScreenshakeForce = value; } }
+    [SerializeField] protected float _chargedAttackScreenshakeForce = .3f; public float ChargedAttackScreenshakeForce { get { return _chargedAttackScreenshakeForce; } set { _chargedAttackScreenshakeForce = value; } }
+    [SerializeField] protected float _chargedHitScreenshakeForce = .75f; public float ChargedHitScreenshakeForce { get { return _chargedHitScreenshakeForce; } set { _chargedHitScreenshakeForce = value; } }
+    [SerializeField] protected float _specialAttackScreenshakeForce = .5f; public float SpecialAttackScreenshakeForce { get { return _specialAttackScreenshakeForce; } set { _specialAttackScreenshakeForce = value; } }
+    [SerializeField] protected float _specialHitScreenshakeForce = 1; public float SpecialHitScreenshakeForce { get { return _specialHitScreenshakeForce; } set { _specialHitScreenshakeForce = value; } }
+
 
     //Components
     [Header("Components")]
@@ -128,6 +128,8 @@ public class RB_Items : MonoBehaviour
         {
             _playerAction.AddItemToList(this);
         }
+
+        RB_StatsParser.Instance.SetWeaponStat(this);
     }
 
     

@@ -139,4 +139,5 @@ public enum DISTRACTIONTYPE
     BrokenPot,
     DeadBody,
     BrokenDoor,
+    Dash,
 }

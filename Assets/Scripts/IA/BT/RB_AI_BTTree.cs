@@ -272,7 +272,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                         new RB_BTSequence(new List<RB_BTNode> // sequence go to last target pos
                         {
                             new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
-                            new RB_AI_GoToLastTargetPos(this, 2, AiMovement.MovementMaxSpeed / 2f, AiMovement.MovementAcceleration / 2f),
+                            new RB_AI_GoToLastTargetPos(this, 2, AiMovement.MovementMaxSpeed, AiMovement.MovementAcceleration),
                             new RB_AICheck_WaitForSeconds(this, 2, BTBOOLVALUES.GoToLastTargetPos, false) // ADD RANDOM PATROL (Feature)
                         }),
                         

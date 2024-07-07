@@ -28,6 +28,7 @@ public class RB_PlayerMovement : MonoBehaviour
     [SerializeField] private float _zFadeOffset;
     [SerializeField] private GameObject _spritePrefab;
     [SerializeField] private float _totalDashTime;
+    [SerializeField] private float _dashDistractionSoundDistance = 5;
     private Vector3 _dashDirection;
     private Vector3 _firstDashPosition;
     private bool _canDash = true;
@@ -266,6 +267,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
+        RB_Distraction.NewDistraction(DISTRACTIONTYPE.Dash, _transform.position, 2, false, _dashDistractionSoundDistance);
         RB_AudioManager.Instance.PlaySFX("Dash", RB_PlayerController.Instance.transform.position, false, 0, 1);
         EventDash.Invoke();
     }

@@ -14,6 +14,7 @@ public class RB_Vase : MonoBehaviour
     [Header("Distraction")]
     [Range(0, 20)]
     [SerializeField] private float _distractionSoundDistance = 5;
+    private RB_Distraction _breakDistraction;
 
     // Components
     [Header("Components")]
@@ -89,7 +90,7 @@ public class RB_Vase : MonoBehaviour
         }
         _navMeshObstacle.carving = false; // Disable NavMesh carving
 
-        RB_Distraction.NewDistraction(DISTRACTIONTYPE.BrokenPot, _transform.position + (Vector3.up * 0.6f), 1, _distractionSoundDistance);
+        _breakDistraction = RB_Distraction.NewDistraction(DISTRACTIONTYPE.BrokenPot, _transform.position + (Vector3.up * 0.6f), 1, true,_distractionSoundDistance);
 
         RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 1); // Play breaking sound effect
     }
@@ -101,5 +102,6 @@ public class RB_Vase : MonoBehaviour
     {
         _rb.excludeLayers = _originalExcludeLayer; // Restore original excluded layers for NavMesh carving
         _navMeshObstacle.carving = true; // Enable NavMesh carving
+        if (_breakDistraction) Destroy(_breakDistraction.gameObject);
     }
 }

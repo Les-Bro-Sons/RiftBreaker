@@ -23,11 +23,11 @@ public class RB_AI_GetHighestPriorityDistraction : RB_BTNode
         switch(_targetMode)
         {
             case TARGETMODE.Closest:
-                _btParent.Distractions.OrderBy(x => Vector2.Distance(_transform.position, x.Position)).ToList();
+                _btParent.Distractions.OrderBy(x => Vector2.Distance(_transform.position, x.transform.position)).ToList();
                 _btParent.CurrentDistraction = _btParent.Distractions[0];
                 break;
             case TARGETMODE.Furthest:
-                _btParent.Distractions.OrderBy(x => Vector2.Distance(_transform.position, x.Position)).ToList();
+                _btParent.Distractions.OrderBy(x => Vector2.Distance(_transform.position, x.transform.position)).ToList();
                 _btParent.CurrentDistraction = _btParent.Distractions[_btParent.Distractions.Count - 1];
                 break;
             case TARGETMODE.Random:

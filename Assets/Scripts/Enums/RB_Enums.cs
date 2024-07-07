@@ -140,3 +140,10 @@ public enum DISTRACTIONTYPE
     DeadBody,
     BrokenDoor,
 }
+
+public enum REWINDENTITYTYPE
+{
+    All,
+    AiOnly,
+    PlayerOnly,
+}

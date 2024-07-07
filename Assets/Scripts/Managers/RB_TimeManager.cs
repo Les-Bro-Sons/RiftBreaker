@@ -7,6 +7,8 @@ using UnityEngine.Events;
 public class RB_TimeManager : MonoBehaviour
 {
     public static RB_TimeManager Instance;
+    public static REWINDENTITYTYPE CurrentRewindEntityType = REWINDENTITYTYPE.All;
+
 
     [HideInInspector] public UnityEvent EventRecordFrame;
     [HideInInspector] public UnityEvent EventStartRewinding;
@@ -125,10 +127,11 @@ public class RB_TimeManager : MonoBehaviour
         _isRecording = false;
     }
 
-    public void StartRewinding(bool skipChecks = false, bool fullRewind = false)
+    public void StartRewinding(REWINDENTITYTYPE rewindEntity = REWINDENTITYTYPE.All, bool skipChecks = false, bool fullRewind = false)
     {
         if (IsRewinding) return;
 
+        CurrentRewindEntityType = rewindEntity;
         _startRewindTime = Time.time;
         EventRecordFrame?.Invoke(); // used for interpolation
         IsRewinding = true;

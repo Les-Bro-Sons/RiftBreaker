@@ -216,6 +216,16 @@ public class RB_TimeBodyRecorder : MonoBehaviour
 
     private void StartRewinding()
     {
+        switch (RB_TimeManager.CurrentRewindEntityType)
+        {
+            case REWINDENTITYTYPE.AiOnly:
+                if (_entityType == ENTITYTYPES.Player) return;
+                break;
+            case REWINDENTITYTYPE.PlayerOnly:
+                if (_entityType == ENTITYTYPES.Ai) return;
+                break;
+        }
+
         _oldPointsInTime = _pointsInTime.ToList(); //used for reset rewind
         _isRewinding = true;
         if (_rb)

@@ -19,12 +19,12 @@ public class RB_CustomEditorStatsParser : Editor
 
         if(GUILayout.Button("Encrypt file"))
         {
-            statsParser.EncryptFile(statsParser.Path, statsParser.EncryptedPath);
+            statsParser.EncryptFile(statsParser.ItemsPath, statsParser.EncryptedItemPath);
         }
 
         if(GUILayout.Button("Decrypt file"))
         {
-            statsParser.DecryptFile(statsParser.Path, statsParser.EncryptedPath);
+            statsParser.DecryptFile(statsParser.ItemsPath, statsParser.EncryptedItemPath);
         }
     }
 }
@@ -33,25 +33,30 @@ public class RB_StatsParser : MonoBehaviour
 {
     //File
     Dictionary<string, Dictionary<string, string>> _weaponsStats = new();
-    public string Path = Application.dataPath + "/items.txt";
-    public string EncryptedPath = Application.dataPath + "/items.enc";
+    Dictionary<string, Dictionary<string, string>> _playerStats = new();
+    public string ItemsPath = Application.dataPath + "/items.txt";
+    public string PlayerPath = Application.dataPath + "/player.txt";
+    public string EncryptedItemPath = Application.dataPath + "/items.enc";
+    public string EncryptedPlayerPath = Application.dataPath + "/player.enc";
 
     //Instance
     public static RB_StatsParser Instance;
 
     // Clé de chiffrement et vecteur d'initialisation (IV) fixes (à remplacer par des valeurs sécurisées)
     private static readonly byte[] key = Encoding.UTF8.GetBytes("CleSecrete123456");
-    private static readonly byte[] iv = Encoding.UTF8.GetBytes("VecteurInit123456");
 
     //Awake
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
-        if(File.Exists(Path) && !Application.isEditor)
-            EncryptFile(Path, EncryptedPath);
-        LoadStatsFromFile();
+        if(File.Exists(ItemsPath) && !Application.isEditor)
+            EncryptFile(ItemsPath, EncryptedItemPath);
+        LoadWeaponStatsFromFile();
+        LoadPlayerStatsFromFile();
     }
+
+    #region Encrypting file
 
     public void EncryptFile(string filePath, string encryptedFilePath)
     {
@@ -168,34 +173,34 @@ public class RB_StatsParser : MonoBehaviour
         }
     }
 
+    #endregion
 
+    #region Load from file
 
-    private void LoadStatsFromFile()
+    private void LoadWeaponStatsFromFile()
     {
         string[] lines = { };
         if (Application.isEditor)
         {
-            if (!File.Exists(Path)) throw new Exception("File does not exist");
-            lines = File.ReadAllLines(Path);
+            if (!File.Exists(ItemsPath)) throw new Exception("File does not exist");
+            lines = File.ReadAllLines(ItemsPath);
         }
         else
         {
-            if (!File.Exists(EncryptedPath)) throw new Exception("File does not exist");
-            lines = DecryptFileAndGetLines(EncryptedPath);
+            if (!File.Exists(EncryptedItemPath)) throw new Exception("File does not exist");
+            lines = DecryptFileAndGetLines(EncryptedItemPath);
         }
-        DecryptFileAndGetLines(EncryptedPath);
         if (lines.Length <= 0) throw new NullReferenceException("The file is empty");
         string currentWeaponName = "";
-        Dictionary<string, string> _currentWeaponStats = new();
+        Dictionary<string, string> currentWeaponStats = new();
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i];
             if (line.Length <= 0)
             {
-                if (_currentWeaponStats.Count <= 0) { Debug.LogWarning("Stats is Empty"); continue; }
-                _weaponsStats[currentWeaponName] = _currentWeaponStats.ToDictionary(entry => entry.Key, entry => entry.Value);
-                _currentWeaponStats.Clear();
-                print(_weaponsStats.Count);
+                if (currentWeaponStats.Count <= 0) { Debug.LogWarning("Stats is Empty"); continue; }
+                _weaponsStats[currentWeaponName] = currentWeaponStats.ToDictionary(entry => entry.Key, entry => entry.Value);
+                currentWeaponStats.Clear();
                 continue;
             }
             string[] splittedLine = line.Split(' ');
@@ -209,15 +214,67 @@ public class RB_StatsParser : MonoBehaviour
             }
             if (string.IsNullOrEmpty(currentWeaponName)) { Debug.LogWarning("The weapon has no name"); continue; }
             if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
-            _currentWeaponStats[(splittedLine[0])] = splittedLine[2];
+            currentWeaponStats[(splittedLine[0])] = splittedLine[2];
         }
-        print("loaded");
+        print("weapon loaded");
         
     }
 
+    private void LoadPlayerStatsFromFile()
+    {
+        string[] lines = { };
+        if (Application.isEditor)
+        {
+            if (!File.Exists(PlayerPath)) throw new Exception("File does not exist");
+            lines = File.ReadAllLines(PlayerPath);
+        }
+        else
+        {
+            if (!File.Exists(EncryptedPlayerPath)) throw new Exception("File does not exist");
+            lines = DecryptFileAndGetLines(EncryptedPlayerPath);
+        }
+        if (lines.Length <= 0) throw new NullReferenceException("The file is empty");
+        string currentPlayerStatRegion = "";
+        Dictionary<string, string> currentPlayerStat = new();
+        for (int i = 0; i < lines.Length+1; i++)
+        {
+            string line = "";
+            if (i < lines.Length)
+            {
+                line = lines[i];
+            }
+            if (line.Length <= 0 || i >= line.Length)
+            {
+                if (currentPlayerStat.Count <= 0) { Debug.LogWarning("Stats is Empty"); continue; }
+                print("entered");
+                foreach(string stat in currentPlayerStat.Keys)
+                {
+                    print(stat);
+                }
+                _playerStats[currentPlayerStatRegion] = currentPlayerStat.ToDictionary(entry => entry.Key, entry => entry.Value);
+                currentPlayerStat.Clear();
+                continue;
+            }
+            string[] splittedLine = line.Split(' ');
+            if (splittedLine.Length <= 0) continue;
+            if (splittedLine.Length != 3 && splittedLine.Length != 1) { Debug.LogWarning($"line {i} is not valid"); continue; }
+            if (line[0] == '[')
+            {
+                string subsedLine = splittedLine[0].Substring(1, splittedLine[0].Length - 2);
+                currentPlayerStatRegion = subsedLine;
+                continue;
+            }
+            if (string.IsNullOrEmpty(currentPlayerStatRegion)) { Debug.LogWarning("The weapon has no name"); continue; }
+            if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
+            currentPlayerStat[(splittedLine[0])] = splittedLine[2];
+        }
+        print("player loaded");
+    }
+
+    #endregion
+
     public void SetWeaponStat(RB_Items weapon)
     {
-
         string nameOfWeapon = weapon.GetType().Name.Substring(3);
         if (_weaponsStats.TryGetValue(nameOfWeapon, out Dictionary<string, string> stats))
         {
@@ -240,11 +297,6 @@ public class RB_StatsParser : MonoBehaviour
 
                 try
                 {
-                    
-                    foreach (var prop in weapon.GetType().GetFields())
-                    {
-                        print(prop.Name);
-                    }
                     field.SetValue(weapon, propertyValue);
                 }
                 catch (Exception ex)
@@ -257,109 +309,6 @@ public class RB_StatsParser : MonoBehaviour
         {
             throw new Exception("Weapon is not in database");
         }
-
-
-
-        /*if (File.Exists(_path))
-        {
-            string[] lines = File.ReadAllLines(_path);
-
-            foreach (string line in lines)
-            {
-                
-                if (line == (weapon.name).Substring(3))
-                {
-                    string[] parts = line.Split(' ');
-                    switch (parts[0])
-                    {
-                        case nameof(weapon.ChargeTime):
-                            weapon.ChargeTime = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.SpecialAttackChargeTime):
-                            weapon.SpecialAttackChargeTime = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.ChargeZoom):
-                            weapon.ChargeZoom = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.AttackCooldown):
-                            weapon.AttackCooldown(float.Parse(parts[2]));
-                            break;
-                        case nameof(weapon.ChargeAttackCooldown):
-                            weapon.ChargeAttackCooldown(float.Parse(parts[2]));
-                            break;
-                        case nameof(weapon.SpecialAttackCooldown):
-                            weapon.SpecialAttackCooldown(float.Parse(parts[2]));
-                            break;
-                        case nameof(weapon.AttackDamage):
-                            weapon.AttackDamage = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.ChargedAttackDamage):
-                            weapon.ChargedAttackDamage = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.SpecialAttackDamage):
-                            weapon.SpecialAttackDamage = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.NormalKnockbackForce):
-                            weapon.NormalKnockbackForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.ChargeAttackKnockbackForce):
-                            weapon.ChargeAttackKnockbackForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.SpecialAttackKnockbackForce):
-                            weapon.SpecialAttackKnockbackForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.NormalAttackScreenshakeForce):
-                            weapon.NormalAttackScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.NormalHitScreenshakeForce):
-                            weapon.NormalHitScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.ChargedAttackScreenshakeForce):
-                            weapon.ChargedAttackScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.ChargedHitScreenshakeForce):
-                            weapon.ChargedHitScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.SpecialAttackScreenshakeForce):
-                            weapon.SpecialAttackScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        case nameof(weapon.SpecialHitScreenshakeForce):
-                            weapon.SpecialHitScreenshakeForce = float.Parse(parts[2]);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                };
-            }
-        }
-        else
-        {
-            Console.WriteLine("File not found.");
-        }*/
-    }
-}
-
-public static class RB_GetPropClass
-{
-
-    public static PropertyInfo GetPropValue(this object obj, string name)
-    {
-        if (obj == null) { return null; }
-
-        Type type = obj.GetType();
-        PropertyInfo info = type.GetProperty(name);
-        if (info == null) { return null; }
-        return info;
-    }
-
-    public static T GetPropValue<T>(this object obj, string name)
-    {
-        object retval = GetPropValue(obj, name);
-        if (retval == null) { return default(T); }
-
-        // throws InvalidCastException if types are incompatible
-        return (T)retval;
     }
 }
 

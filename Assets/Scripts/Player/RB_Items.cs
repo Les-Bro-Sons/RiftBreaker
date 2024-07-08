@@ -129,7 +129,7 @@ public class RB_Items : MonoBehaviour
             _playerAction.AddItemToList(this);
         }
 
-        RB_StatsParser.Instance.SetWeaponStat(this);
+        RB_StatsParser.Instance.SetWeaponStats(this);
     }
 
     

@@ -38,7 +38,6 @@ namespace MANAGERS
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {

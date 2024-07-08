@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [CustomEditor(typeof(RB_StatsParser))]
 public class RB_CustomEditorStatsParser : Editor
@@ -19,12 +20,12 @@ public class RB_CustomEditorStatsParser : Editor
 
         if(GUILayout.Button("Encrypt file"))
         {
-            statsParser.EncryptFile(statsParser.ItemsPath, statsParser.EncryptedItemPath);
+            statsParser.EncryptFile(statsParser.StatsPath, statsParser.EncryptedIStatsPath);
         }
 
         if(GUILayout.Button("Decrypt file"))
         {
-            statsParser.DecryptFile(statsParser.ItemsPath, statsParser.EncryptedItemPath);
+            statsParser.DecryptFile(statsParser.StatsPath, statsParser.EncryptedIStatsPath);
         }
     }
 }
@@ -34,10 +35,11 @@ public class RB_StatsParser : MonoBehaviour
     //File
     Dictionary<string, Dictionary<string, string>> _weaponsStats = new();
     Dictionary<string, Dictionary<string, string>> _playerStats = new();
-    public string ItemsPath = Application.dataPath + "/items.txt";
-    public string PlayerPath = Application.dataPath + "/player.txt";
-    public string EncryptedItemPath = Application.dataPath + "/items.enc";
-    public string EncryptedPlayerPath = Application.dataPath + "/player.enc";
+    Dictionary<string, Dictionary<string, string>> _lightStats = new();
+    Dictionary<string, Dictionary<string, string>> _middleStats = new();
+    Dictionary<string, Dictionary<string, string>> _heavyStats = new();
+    public string StatsPath = Application.dataPath + "/stats.txt";
+    public string EncryptedIStatsPath = Application.dataPath + "/stats.enc";
 
     //Instance
     public static RB_StatsParser Instance;
@@ -50,10 +52,29 @@ public class RB_StatsParser : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        if(File.Exists(ItemsPath) && !Application.isEditor)
-            EncryptFile(ItemsPath, EncryptedItemPath);
-        LoadWeaponStatsFromFile();
-        LoadPlayerStatsFromFile();
+        if(File.Exists(StatsPath) && !Application.isEditor)
+            EncryptFile(StatsPath, EncryptedIStatsPath);
+        LoadStats();
+    }
+    private void SetField(object objectToSet, string fieldName, object value)
+    {
+        FieldInfo field = objectToSet.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        if (field == null)
+        {
+            throw new Exception($"Property {fieldName} not found or not part of RB_Items.");
+        }
+
+        Type propertyType = field.FieldType;
+        value = Convert.ChangeType(value, propertyType);
+        if (value == null) { Debug.LogWarning($"{value} is not of type {propertyType} "); }
+        try
+        {
+            field.SetValue(objectToSet, value);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Error setting {fieldName}: {ex.Message}");
+        }
     }
 
     #region Encrypting file
@@ -177,138 +198,120 @@ public class RB_StatsParser : MonoBehaviour
 
     #region Load from file
 
-    private void LoadWeaponStatsFromFile()
-    {
-        string[] lines = { };
-        if (Application.isEditor)
-        {
-            if (!File.Exists(ItemsPath)) throw new Exception("File does not exist");
-            lines = File.ReadAllLines(ItemsPath);
-        }
-        else
-        {
-            if (!File.Exists(EncryptedItemPath)) throw new Exception("File does not exist");
-            lines = DecryptFileAndGetLines(EncryptedItemPath);
-        }
-        if (lines.Length <= 0) throw new NullReferenceException("The file is empty");
-        string currentWeaponName = "";
-        Dictionary<string, string> currentWeaponStats = new();
-        for (int i = 0; i < lines.Length; i++)
-        {
-            string line = lines[i];
-            if (line.Length <= 0)
-            {
-                if (currentWeaponStats.Count <= 0) { Debug.LogWarning("Stats is Empty"); continue; }
-                _weaponsStats[currentWeaponName] = currentWeaponStats.ToDictionary(entry => entry.Key, entry => entry.Value);
-                currentWeaponStats.Clear();
-                continue;
-            }
-            string[] splittedLine = line.Split(' ');
-            if (splittedLine.Length <= 0) continue;
-            if (splittedLine.Length != 3 && splittedLine.Length != 1) { Debug.LogWarning($"line {i} is not valid"); continue; }
-            if (line[0] == '[')
-            {
-                string subsedLine = splittedLine[0].Substring(1, splittedLine[0].Length - 2);
-                currentWeaponName = subsedLine;
-                continue;
-            }
-            if (string.IsNullOrEmpty(currentWeaponName)) { Debug.LogWarning("The weapon has no name"); continue; }
-            if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
-            currentWeaponStats[(splittedLine[0])] = splittedLine[2];
-        }
-        print("weapon loaded");
-        
-    }
 
-    private void LoadPlayerStatsFromFile()
+    private void LoadStats()
     {
         string[] lines = { };
         if (Application.isEditor)
         {
-            if (!File.Exists(PlayerPath)) throw new Exception("File does not exist");
-            lines = File.ReadAllLines(PlayerPath);
+            if (!File.Exists(StatsPath)) throw new Exception("File does not exist");
+            lines = File.ReadAllLines(StatsPath);
         }
         else
         {
-            if (!File.Exists(EncryptedPlayerPath)) throw new Exception("File does not exist");
-            lines = DecryptFileAndGetLines(EncryptedPlayerPath);
+            if (!File.Exists(EncryptedIStatsPath)) throw new Exception("File does not exist");
+            lines = DecryptFileAndGetLines(EncryptedIStatsPath);
         }
         if (lines.Length <= 0) throw new NullReferenceException("The file is empty");
-        string currentPlayerStatRegion = "";
-        Dictionary<string, string> currentPlayerStat = new();
-        for (int i = 0; i < lines.Length+1; i++)
+        string currentRegionName = "";
+        string currentContainerName = "";
+        Dictionary<string, string> currentStat = new();
+        Dictionary<string, Dictionary<string, string>> tempContainer = new();
+        for (int i = 0; i < lines.Length + 1; i++)
         {
             string line = "";
             if (i < lines.Length)
             {
                 line = lines[i];
             }
-            if (line.Length <= 0 || i >= line.Length)
+            if (line.Length <= 0 || i >= lines.Length)
             {
-                if (currentPlayerStat.Count <= 0) { Debug.LogWarning("Stats is Empty"); continue; }
-                print("entered");
-                foreach(string stat in currentPlayerStat.Keys)
-                {
-                    print(stat);
-                }
-                _playerStats[currentPlayerStatRegion] = currentPlayerStat.ToDictionary(entry => entry.Key, entry => entry.Value);
-                currentPlayerStat.Clear();
+                if (currentStat.Count <= 0) { Debug.LogWarning($"Stats at line {i} is Empty "); continue; }
+                if (string.IsNullOrEmpty(currentContainerName)) { Debug.LogWarning("There's no container"); continue; }
+                if (string.IsNullOrEmpty(currentRegionName)) { Debug.LogWarning("There's no region"); continue; }
+                tempContainer[currentRegionName] = currentStat.ToDictionary(entry => entry.Key, entry => entry.Value);
+                if(tempContainer.Count <= 0) { Debug.LogWarning("Something went wrong with the stat sets"); continue; }
+                SetField(this, currentContainerName, tempContainer.ToDictionary(entry => entry.Key, entry => entry.Value));
+                currentStat.Clear();
                 continue;
             }
             string[] splittedLine = line.Split(' ');
             if (splittedLine.Length <= 0) continue;
             if (splittedLine.Length != 3 && splittedLine.Length != 1) { Debug.LogWarning($"line {i} is not valid"); continue; }
-            if (line[0] == '[')
+            string subsedLine = splittedLine[0].Substring(1, splittedLine[0].Length - 2);
+            if (line[0] == '(')
             {
-                string subsedLine = splittedLine[0].Substring(1, splittedLine[0].Length - 2);
-                currentPlayerStatRegion = subsedLine;
+                tempContainer.Clear();
+                currentContainerName = subsedLine;
                 continue;
             }
-            if (string.IsNullOrEmpty(currentPlayerStatRegion)) { Debug.LogWarning("The weapon has no name"); continue; }
+            if (line[0] == '[')
+            {
+                currentRegionName = subsedLine;
+                continue;
+            }
             if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
-            currentPlayerStat[(splittedLine[0])] = splittedLine[2];
+            currentStat[(splittedLine[0])] = splittedLine[2];
         }
-        print("player loaded");
+        foreach(var region in _playerStats.Keys)
+        {
+            print(region);
+        }
+
+        foreach (var region in _weaponsStats.Keys)
+        {
+            print(region);
+        }
+        print("loaded");
     }
 
     #endregion
 
-    public void SetWeaponStat(RB_Items weapon)
+    #region SetStats
+    public void SetStats(object script, Dictionary<string, Dictionary<string, string>> statsToGet)
     {
-        string nameOfWeapon = weapon.GetType().Name.Substring(3);
-        if (_weaponsStats.TryGetValue(nameOfWeapon, out Dictionary<string, string> stats))
+        string nameOfObject = script.GetType().Name.Substring(3);
+        if (statsToGet.TryGetValue(nameOfObject, out Dictionary<string, string> stats))
         {
             foreach (var stat in stats)
             {
                 string statName = stat.Key;
                 string value = stat.Value;
-                Type typeOfWeapon = weapon.GetType();
-                FieldInfo field = typeOfWeapon.GetField(statName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (field == null)
-                {
-                    Debug.LogWarning($"Property {statName} not found or not part of RB_Items.");
-                    continue;
-                }
 
-                Type propertyType = field.FieldType;
-                object propertyValue = Convert.ChangeType(value, propertyType);
-                
-                if(propertyValue == null) { Debug.LogWarning($"{propertyValue} is not of type {propertyType} "); }
-
-                try
-                {
-                    field.SetValue(weapon, propertyValue);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogWarning($"Error setting {statName}: {ex.Message}");
-                }
+                SetField(script, statName, value);
             }
         }
         else
         {
-            throw new Exception("Weapon is not in database");
+            throw new Exception($"stats {nameOfObject} is not in database");
         }
     }
+
+    public void SetWeaponStats(object script)
+    {
+        SetStats(script, _weaponsStats);
+    }
+
+    public void SetPlayerStats(object script)
+    {
+        SetStats(script, _playerStats);
+    }
+
+    public void SetHeavyStats(object script)
+    {
+        SetStats(script, _heavyStats);
+    }
+
+    public void SetMiddleStats(object script)
+    {
+        SetStats(script, _middleStats);
+    }
+
+    public void SetLightStats(object script)
+    {
+        SetStats(script, _lightStats);
+    }
+
+    #endregion
 }
 

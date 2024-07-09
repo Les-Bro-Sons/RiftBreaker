@@ -75,6 +75,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSlashDelay;
     [SerializeField] public float InfSlashCollisionSize = 3;
     [SerializeField] public float InfSpottedMoveSpeed = 11;
+    public float InfSpottingMoveSpeed = 3;
+    public float InfThresholdWalkingToSusPerson = 0.15f;
+    public float InfThresholdRunningToSusPerson = 0.75f;
     [SerializeField] public GameObject InfSlashParticles;
     [HideInInspector] public UnityEvent EventOnSpotted;
 
@@ -261,13 +264,23 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
                     #endregion
 
+                    #region Walking to suspicious person during spotting Sequence
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
+                        new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetInSight),
+                        new RB_AICheck_SpotBarFilled(this, ">=", InfThresholdWalkingToSusPerson),
+                        new RB_AI_ToState(new RB_AI_GoToTarget(this, InfSpottingMoveSpeed, 1), BTNodeState.FAILURE),
+                    }),
+                    #endregion
+
                     #region AI completely lost sight of target Sequence
                     new RB_BTSelector(new List<RB_BTNode>
                     {
                         new RB_BTSequence(new List<RB_BTNode> // sequence spot target again
                         {
                             new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos),
-                            new RB_AI_PlayerInFov(this, FovRange),
+                            new RB_AI_PlayerInFov(this, FovRange, DistractedSpotSpeedMultiplier),
                             new RB_AI_SetBool(this, BTBOOLVALUES.GoToLastTargetPos, false)
                         }),
 
@@ -310,15 +323,23 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             }),
                         }),
                     }),
-                    #endregion  
+                    #endregion
 
-                    #region Distracted Sequence
+                    #region Go to suspicious person position Sequence
+                    new RB_BTSequence(new List<RB_BTNode>
+                    {
+                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.GoToLastTargetPos)),
+                        new RB_AICheck_SpotBarFilled(this, ">=", InfThresholdRunningToSusPerson),
+                        new RB_AI_SetBool(this, BTBOOLVALUES.GoToLastTargetPos, true),
+                    }),
+                    #endregion
 
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_LookForDistractions(this),
                     }),
 
+                    #region Distracted Sequence
                     new RB_BTSequence(new List<RB_BTNode>
                     {
                         new RB_AICheck_IsDistracted(this),

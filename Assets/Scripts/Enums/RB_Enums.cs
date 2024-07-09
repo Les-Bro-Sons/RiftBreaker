@@ -122,6 +122,7 @@ public enum MIXERNAME
 public enum BTBOOLVALUES
 {
     IsTargetSpotted,
+    IsTargetInSight,
     HasACorrectView,
     GoToLastTargetPos,
     IsDistracted,
@@ -140,4 +141,5 @@ public enum DISTRACTIONTYPE
     DeadBody,
     BrokenDoor,
     Dash,
+    SomeoneSuspicious,
 }

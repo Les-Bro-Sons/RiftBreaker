@@ -434,11 +434,20 @@ MonoBehaviour:
   InfSlashDelay: 0.1
   InfSlashCollisionSize: 3
   InfSpottedMoveSpeed: 40
+  InfSpottingMoveSpeed: 3
+  InfThresholdWalkingToSusPerson: 0.15
+  InfThresholdRunningToSusPerson: 0.75
   InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
   EventOnSpotted:
     m_PersistentCalls:
       m_Calls: []
+  Distractions: []
+  AlreadySeenDistractions: []
+  CurrentDistraction: {fileID: 0}
+  MoveToDistractionSpeed: 6
+  DistractionDistanceNeeded: 2
+  DistractedSpotSpeedMultiplier: 2
   SlashRange: 2
   SlashDamage: 10
   SlashKnockback: 10

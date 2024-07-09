@@ -52,7 +52,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float MaxDistDurationToLoadSpotBar = 1f;
     public float DurationToUnloadSpotBar = 1f;
     [HideInInspector] public Vector3 LastTargetPos;
-    public bool IsPlayerInSight = false; //used only by other scripts
+    [HideInInspector] public bool IsPlayerInSight = false; //used only by other scripts
 
     [Header("Spot UI")]
     public CanvasGroup CanvasUi;
@@ -69,16 +69,16 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public NavMeshAgent AiNavMeshAgent;
 
     [Header("Infiltration")]
-    [SerializeField] public float InfSlashRange;
-    [SerializeField] public float InfSlashDamage;
-    [SerializeField] public float InfSlashKnockback;
-    [SerializeField] public float InfSlashDelay;
-    [SerializeField] public float InfSlashCollisionSize = 3;
-    [SerializeField] public float InfSpottedMoveSpeed = 11;
+    public float InfSlashRange;
+    public float InfSlashDamage;
+    public float InfSlashKnockback;
+    public float InfSlashDelay;
+    public float InfSlashCollisionSize = 3;
+    public float InfSpottedMoveSpeed = 11;
     public float InfSpottingMoveSpeed = 3;
     [Range(0, 1)] public float InfThresholdWalkingToSusPerson = 0.15f;
     [Range(0, 1)] public float InfThresholdRunningToSusPerson = 0.75f;
-    [SerializeField] public GameObject InfSlashParticles;
+    public GameObject InfSlashParticles;
     [HideInInspector] public UnityEvent EventOnSpotted;
 
     [Header("Distractions")]
@@ -91,50 +91,50 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
 
     [Header("Faible")]
-    [SerializeField] public float SlashRange;
-    [SerializeField] public float SlashDamage;
-    [SerializeField] public float SlashKnockback;
-    [SerializeField] public float SlashDelay;
-    [SerializeField] public float SlashCollisionSize = 3;
-    [SerializeField] public GameObject SlashParticles;
+    public float SlashRange;
+    public float SlashDamage;
+    public float SlashKnockback;
+    public float SlashDelay;
+    public float SlashCollisionSize = 3;
+    public GameObject SlashParticles;
 
     [Header("Moyen")]
-    [SerializeField] public GameObject ArrowPrefab;
-    [SerializeField] public float BowRange;
-    [SerializeField] public float BowDamage;
-    [SerializeField] public float BowKnockback;
-    [SerializeField] public float BowDelay;
-    [SerializeField] public float ArrowSpeed;
-    [SerializeField] public float ArrowDistance;
+    public GameObject ArrowPrefab;
+    public float BowRange;
+    public float BowDamage;
+    public float BowKnockback;
+    public float BowDelay;
+    public float ArrowSpeed;
+    public float ArrowDistance;
 
     [Header("Fort")]
-    [SerializeField] public GameObject HeavyArrowPrefab;
-    [SerializeField] public float HeavyBowRange;
-    [SerializeField] public float HeavyBowDamage;
-    [SerializeField] public float HeavyBowKnockback;
-    [SerializeField] public float HeavyBowDelay;
-    [SerializeField] public float HeavyBowProjectileNumber = 3;
-    [SerializeField] public float HeavyBowDelayBetweenProjectile = 0.2f;
-    [SerializeField] public float HeavyArrowSpeed;
-    [SerializeField] public float HeavyArrowDistance;
+    public GameObject HeavyArrowPrefab;
+    public float HeavyBowRange;
+    public float HeavyBowDamage;
+    public float HeavyBowKnockback;
+    public float HeavyBowDelay;
+    public float HeavyBowProjectileNumber = 3;
+    public float HeavyBowDelayBetweenProjectile = 0.2f;
+    public float HeavyArrowSpeed;
+    public float HeavyArrowDistance;
 
-    [SerializeField] public float HeavySlashRange;
-    [SerializeField] public float HeavySlashDamage;
-    [SerializeField] public float HeavySlashKnockback;
-    [SerializeField] public float HeavySlashFirstDelay;
-    [SerializeField] public float HeavySlashComboDelay;
-    [SerializeField] public float HeavySlashCollisionSize = 3;
+    public float HeavySlashRange;
+    public float HeavySlashDamage;
+    public float HeavySlashKnockback;
+    public float HeavySlashFirstDelay;
+    public float HeavySlashComboDelay;
+    public float HeavySlashCollisionSize = 3;
     public int CurrentHeavySlashCombo = 0;
-    [SerializeField] public int MaxHeavySlashCombo = 5;
-    [SerializeField] public GameObject HeavySlashParticles;
+    public int MaxHeavySlashCombo = 5;
+    public GameObject HeavySlashParticles;
 
     [Header("Tower")]
-    [SerializeField] public float ExplosionDamage = 30;
-    [SerializeField] public float ExplosionKnockback = 15;
-    [SerializeField] public float ExplosionRadius = 3;
-    [SerializeField] public float ExplosionDelay = 1;
-    [SerializeField] public float ExplosionStartRange = 1;
-    [SerializeField] public GameObject ExplosionParticles;
+    public float ExplosionDamage = 30;
+    public float ExplosionKnockback = 15;
+    public float ExplosionRadius = 3;
+    public float ExplosionDelay = 1;
+    public float ExplosionStartRange = 1;
+    public GameObject ExplosionParticles;
 
     private void Awake()
     {

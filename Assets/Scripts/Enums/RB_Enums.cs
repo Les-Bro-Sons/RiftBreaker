@@ -143,3 +143,10 @@ public enum DISTRACTIONTYPE
     Dash,
     SomeoneSuspicious,
 }
+
+public enum REWINDENTITYTYPE
+{
+    All,
+    AiOnly,
+    PlayerOnly,
+}

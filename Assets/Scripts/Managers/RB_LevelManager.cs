@@ -212,7 +212,7 @@ public class RB_LevelManager : MonoBehaviour
 
     public void FullLevelRewind()
     {
-        RB_TimeManager.Instance.StartRewinding(true, true);
+        RB_TimeManager.Instance.StartRewinding(REWINDENTITYTYPE.All ,true, true);
     }
 
     public void PlayMKBossMusic()

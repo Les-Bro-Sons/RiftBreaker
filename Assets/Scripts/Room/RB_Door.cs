@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RB_Door : MonoBehaviour
-{
+public class RB_Door : MonoBehaviour{
     private Animator _doorAnimator;
-    public bool IsControledByRoom = true;
+
+    public DOORTYPE DoorType;
 
     public UnityEvent EventOpenDoor;
     public UnityEvent EventCloseDoor;
@@ -19,7 +19,7 @@ public class RB_Door : MonoBehaviour
 
     public void Open()
     {
-        _doorAnimator.SetTrigger("Down");
+        _doorAnimator.SetTrigger("Open");
         EventOpenDoor?.Invoke();
 
         EventInTime openDoor = new EventInTime();
@@ -29,11 +29,13 @@ public class RB_Door : MonoBehaviour
 
     public void Close()
     {
-        _doorAnimator.SetTrigger("Up");
+        _doorAnimator.SetTrigger("Close");
         EventCloseDoor?.Invoke();
 
         EventInTime closeDoor = new EventInTime();
         closeDoor.TypeEvent = TYPETIMEEVENT.CloseDoor;
         if (_timeRecorder) _timeRecorder.RecordTimeEvent(closeDoor);
     }
+
+
 }

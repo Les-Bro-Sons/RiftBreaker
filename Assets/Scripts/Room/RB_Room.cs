@@ -46,7 +46,7 @@ public class RB_Room : MonoBehaviour
         _isRoomClosed = false;
         foreach (RB_Door door in Doors)
         {
-            if (door.IsControledByRoom)
+            if (door.DoorType == DOORTYPE.RoomDoor)
                 door.Open();
         }
     }
@@ -56,7 +56,7 @@ public class RB_Room : MonoBehaviour
         _isRoomClosed = true;
         foreach (RB_Door door in Doors)
         {
-            if (door.IsControledByRoom)
+            if (door.DoorType == DOORTYPE.RoomDoor)
                 door.Close();
         }
     }

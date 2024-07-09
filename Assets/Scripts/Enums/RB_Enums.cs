@@ -140,3 +140,9 @@ public enum DISTRACTIONTYPE
     DeadBody,
     BrokenDoor,
 }
+
+public enum DOORTYPE
+{
+    RoomDoor,
+    BreakableDoor
+}

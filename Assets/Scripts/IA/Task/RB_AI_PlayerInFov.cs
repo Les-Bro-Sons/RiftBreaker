@@ -11,11 +11,6 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     private Transform _transform;
     private static int _layerMaskPlayer = 1 << 7;
-    //private Animator _animator;
-
-    [Header("Header")]
-    //private CanvasGroup _canvasUi;
-    //private Image _imageSpotBar;
 
     private bool _hasFocusedUx = false;
 
@@ -27,13 +22,15 @@ public class RB_AI_PlayerInFov : RB_BTNode
     private float _lastTimeCheckTarget = 0;
     private float _checkTargetDelay = 1;
 
-    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range, bool lookAtSuspicious = true)
+    private float _spotSpeedMultiplier = 1;
+
+    public RB_AI_PlayerInFov(RB_AI_BTTree BtParent, float range, float spotSpeedMultiplier = 1,bool lookAtSuspicious = true)
     {
         _btParent = BtParent;
         _rb = _btParent.AiRigidbody;
         _transform = _btParent.transform;
         _lookAtSuspicious = lookAtSuspicious;
-        // _animator = transform.GetComponent<Animator>();
+        _spotSpeedMultiplier = spotSpeedMultiplier;
     }
 
     public override BTNodeState Evaluate()
@@ -113,7 +110,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
                 if (Vector3.Distance(_transform.position, target.position) > _btParent.FovRange + 0.5f)
                 {
                     UnloadSpotBar();
-                    _btParent.LastTargetPos = target.position;
+                    //_btParent.LastTargetPos = target.position;
                     if (_btParent.ImageSpotBar.fillAmount <= 0)
                     {
                         _btParent.BoolDictionnary[BTBOOLVALUES.GoToLastTargetPos] = true;
@@ -137,12 +134,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
             {
                 if (SeesPlayer(target))
                 {
-                    // _animator.SetBool("Attacking", true);
-                    // _animator.SetBool("Walking", false);
-
-                    //_btParent.ImageSpotBar.fillAmount = 0.0f; //DECOMENTER
-                    //_btParent.CanvasUi.alpha = 0.0f;
-
+                    _btParent.LastTargetPos = target.position;
                     if (!_btParent.GetBool(BTBOOLVALUES.HasACorrectView))
                     {
                         LoadSpotBar();
@@ -191,6 +183,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
     bool SeesPlayer(Transform target)
     {
+        _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetInSight] = false;
         _btParent.IsPlayerInSight = false;
         Vector3 targetDir = target.position - _transform.position;
         float angle = Vector3.Angle(targetDir, _transform.forward);
@@ -200,6 +193,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
             if (Physics.Raycast(_transform.position, targetDir, out hit, _btParent.FovRange, ~((1 << 6) | (1 << 10) | (1 << 2))))
             {
+                _btParent.BoolDictionnary[BTBOOLVALUES.IsTargetInSight] = true;
                 _btParent.IsPlayerInSight = true;
                 RB_Tools.TryGetComponentInParent<RB_Health>(hit.transform.gameObject, out RB_Health hitHealth);
                 if (hitHealth && hitHealth.Team != _btParent.AiHealth.Team)
@@ -248,7 +242,7 @@ public class RB_AI_PlayerInFov : RB_BTNode
 
         }
         Transform target = (Transform)_btParent.Root.GetData("target");
-        _btParent.ImageSpotBar.fillAmount += Time.deltaTime / Mathf.Lerp(_btParent.MinDistDurationToLoadSpotBar, _btParent.MaxDistDurationToLoadSpotBar, Vector3.Distance(target.position, _transform.position) / _btParent.FovRange);
+        _btParent.ImageSpotBar.fillAmount += (Time.deltaTime * _spotSpeedMultiplier) / Mathf.Lerp(_btParent.MinDistDurationToLoadSpotBar, _btParent.MaxDistDurationToLoadSpotBar, Vector3.Distance(target.position, _transform.position) / _btParent.FovRange);
 
         if (_btParent.ImageSpotBar.fillAmount >= 1.0f)
         {

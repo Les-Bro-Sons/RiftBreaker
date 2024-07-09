@@ -5,14 +5,14 @@ public class RB_Distraction : MonoBehaviour
 {
     [HideInInspector] public new Transform transform;
 
-    public DISTRACTIONTYPE DistractionType;
     public RB_DistractionData DistractionData;
+
+    public DISTRACTIONTYPE DistractionType;
     public float Priority = 0;
     public float SoundRadiusWithoutWalls = 0;
     public float SoundRadiusWithWalls = 0;
     public bool RemoveSameDistraction = false;
-
-    private bool _isVisible = false;
+    public bool IsVisible = false;
 
     /// <summary>
     /// Instantiate a new distraction
@@ -23,32 +23,20 @@ public class RB_Distraction : MonoBehaviour
     /// <param name="isVisible">Is the distraction visible or audio only</param>
     /// <param name="removeSameDistraction">Will remove distraction of the same type in the AI current distraction list</param>
     /// <param name="soundRadiusWithoutWalls">Range a guard hears the distraction if there are no walls between them and the distraction</param>
-    /// <param name="soundRadiusWithWalls">Range a guard hears the distraction no matter what. By default, it is the normal range divided by two</param>
-    public static RB_Distraction NewDistraction(DISTRACTIONTYPE distractionType, Vector3 position, float priority, bool isVisible = false, bool removeSameDistraction = false, float soundRadiusWithoutWalls = 10, float? soundRadiusWithWalls = null)
+    /// <param name="soundRadiusWithWalls">Range a guard hears the distraction no matter what. By default, it is the normal range divided by 1.5</param>
+    public static RB_Distraction NewDistraction(DISTRACTIONTYPE distractionType, Vector3 position, float priority, bool isVisible = false, bool removeSameDistraction = false, float soundRadiusWithoutWalls = 0, float? soundRadiusWithWalls = null)
     {
-        GameObject distractionObject = new GameObject(distractionType.ToString() + " distraction");
-        RB_Distraction distraction = distractionObject.AddComponent<RB_Distraction>();
+        RB_DistractionData distractionData = new();
         
-        distraction._isVisible = isVisible;
-        if (isVisible)
-        {
-            SphereCollider distractionCollider = distractionObject.AddComponent<SphereCollider>();
-            Rigidbody distractionRb = distractionObject.AddComponent<Rigidbody>();
-            distractionRb.useGravity = false;
-            distractionRb.excludeLayers = ~12;
-            distractionObject.layer = 12;
-        }
+        distractionData.IsVisible = isVisible;
+        distractionData.RemoveSameDistraction = removeSameDistraction;
+        distractionData.DistractionType = distractionType;
+        distractionData.Priority = priority;
+        distractionData.SoundRadiusWithoutWalls = soundRadiusWithoutWalls;
+        if (soundRadiusWithWalls == null) soundRadiusWithWalls = soundRadiusWithoutWalls / 1.5f;
+        distractionData.SoundRadiusWithWalls = soundRadiusWithWalls.Value;
 
-        distraction.transform = distraction.GetComponent<Transform>();
-        distraction.transform.position = position;
-        distraction.RemoveSameDistraction = removeSameDistraction;
-        distraction.DistractionType = distractionType;
-        distraction.Priority = priority;
-        distraction.SoundRadiusWithoutWalls = soundRadiusWithoutWalls;
-        if (soundRadiusWithWalls == null) soundRadiusWithWalls = soundRadiusWithoutWalls / 2f;
-        distraction.SoundRadiusWithWalls = soundRadiusWithWalls.Value;
-
-        return distraction;
+        return NewDistraction(distractionData, position);
     }
 
     public static RB_Distraction NewDistraction(RB_DistractionData distractionData, Vector3 position)
@@ -74,6 +62,12 @@ public class RB_Distraction : MonoBehaviour
 
     private void Start()
     {
+        DistractionType = DistractionData.DistractionType;
+        Priority = DistractionData.Priority;
+        SoundRadiusWithoutWalls = DistractionData.SoundRadiusWithoutWalls;
+        SoundRadiusWithWalls = DistractionData.SoundRadiusWithWalls;
+        RemoveSameDistraction = DistractionData.RemoveSameDistraction;
+        IsVisible = DistractionData.IsVisible;
         OnDistractionSpawned();
     }
 
@@ -94,7 +88,7 @@ public class RB_Distraction : MonoBehaviour
                 }
             }
         }
-        if (!hasDistracted && !_isVisible) Destroy(gameObject);
+        if (!hasDistracted && !IsVisible) Destroy(gameObject);
     }
 
     public void OnDistractionCompleted()

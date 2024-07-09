@@ -60,7 +60,7 @@ public class RB_AI_BTRobertLenec : RB_AI_BTTree
 
             new RB_BTSequence(new List<RB_BTNode> //sequence no enemy in room
             {
-                new RB_AI_ReverseState(this, new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, false)),
+                new RB_AI_ReverseState(new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, false)),
             }),
         });
 

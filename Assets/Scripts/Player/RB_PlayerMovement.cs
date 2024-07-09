@@ -267,7 +267,7 @@ public class RB_PlayerMovement : MonoBehaviour
         _isDashing = true;
         //Starting dash animation
         DashAnim();
-        RB_Distraction.NewDistraction(DISTRACTIONTYPE.Dash, _transform.position, 2, false, _dashDistractionSoundDistance);
+        RB_Distraction.NewDistraction(DISTRACTIONTYPE.Dash, _transform.position, 2, false, true,_dashDistractionSoundDistance);
         RB_AudioManager.Instance.PlaySFX("Dash", RB_PlayerController.Instance.transform.position, false, 0, 1);
         EventDash.Invoke();
     }

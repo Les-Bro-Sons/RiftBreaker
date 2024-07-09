@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using UnityEngine.Splines;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Linq;
 
 public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 {
@@ -83,6 +84,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public RB_Distraction CurrentDistraction;
     public float MoveToDistractionSpeed = 6;
     public float DistractionDistanceNeeded = 1;
+    public float DistractedSpotSpeedMultiplier = 2;
 
 
     [Header("Faible")]
@@ -253,7 +255,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     #region Static AI Sequence
                     new RB_BTSequence(new List<RB_BTNode> //static sequence
                     {
-                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
+                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
                         new RB_AI_StaticWatchOut(this),
                         new RB_AI_ToState(new RB_AI_PlayerInFov(this, FovRange), BTNodeState.SUCCESS),
                     }),
@@ -289,10 +291,26 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                     }),
                     #endregion
 
+                    #region Spot Sequence
                     new RB_BTSequence(new List<RB_BTNode> // Sequence Check Spot
                     {
-                        new RB_AI_PlayerInFov(this, FovRange),
+                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.IsTargetSpotted)),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //distracted spot
+                            {
+                                new RB_AICheck_IsDistracted(this),
+                                new RB_AI_PlayerInFov(this, FovRange, DistractedSpotSpeedMultiplier),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //not distracted spot
+                            {
+                                new RB_AI_ReverseState(new RB_AICheck_IsDistracted(this)),
+                                new RB_AI_PlayerInFov(this, FovRange),
+                            }),
+                        }),
                     }),
+                    #endregion  
 
                     #region Distracted Sequence
 
@@ -318,6 +336,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             }),
                             #endregion
                         }),
+                        new RB_AI_GetPatrolNearestIndex(this),
                     }),
                     #endregion
 
@@ -368,8 +387,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
-                                        new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
+                                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
+                                        new RB_AI_ReverseState(new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //bow sequence
@@ -410,14 +429,14 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                                 {
                                     new RB_BTSequence(new List<RB_BTNode> //flee sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), //when bow attack
-                                        new RB_AI_ReverseState(this, new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
+                                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking)),
+                                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), //when bow attack
+                                        new RB_AI_ReverseState(new RB_AI_FleeFromTarget(this, FleeDistance, MovementSpeedFlee)),
                                     }),
 
                                     new RB_BTSequence(new List<RB_BTNode> //3 projectile sequence
                                     {
-                                        new RB_AI_ReverseState(this, new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), // to switch attacks
+                                        new RB_AI_ReverseState(new RB_AICheck_Bool(this, BTBOOLVALUES.HeavyAttackSlash)), // to switch attacks
                                         new RB_AI_GoToTarget(this, MovementSpeedAggro, HeavyBowRange),
                                         new RB_AI_Attack(this, 0),
                                     }),
@@ -490,16 +509,36 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     }
 
     #region BT Tools
-    public void AddDistraction(RB_Distraction distraction)
+    public bool AddDistraction(RB_Distraction distraction, bool removeDistractionOfSameType = false)
     {
         if (!Distractions.Contains(distraction) && !AlreadySeenDistractions.Contains(distraction))
         {
+            if (removeDistractionOfSameType)
+            {
+                foreach (RB_Distraction otherDistraction in Distractions.ToList())
+                {
+                    if (otherDistraction.DistractionType != distraction.DistractionType) continue;
+                    Distractions.Remove(otherDistraction);
+                    otherDistraction.OnDistractionCompleted();
+                }
+            }
+
             Distractions.Add(distraction);
             OnDistracted();
+            return true;
         }
-
+        return false;
     }
 
+
+    public void OnCompleteDistraction(RB_Distraction distraction)
+    {
+        if (Distractions.Contains(distraction))
+        {
+            AlreadySeenDistractions.Add(distraction);
+            Distractions.Remove(distraction);
+        }
+    }
 
     public void Boost(float boost)
     {

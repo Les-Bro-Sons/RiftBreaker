@@ -90,7 +90,7 @@ public class RB_Vase : MonoBehaviour
         }
         _navMeshObstacle.carving = false; // Disable NavMesh carving
 
-        _breakDistraction = RB_Distraction.NewDistraction(DISTRACTIONTYPE.BrokenPot, _transform.position + (Vector3.up * 0.6f), 1, true,_distractionSoundDistance);
+        _breakDistraction = RB_Distraction.NewDistraction(DISTRACTIONTYPE.BrokenPot, _transform.position + (Vector3.up * 0.6f), 1, true, false,_distractionSoundDistance);
 
         RB_AudioManager.Instance.PlaySFX("BreakingPot", transform.position, false, 0.2f, 1); // Play breaking sound effect
     }

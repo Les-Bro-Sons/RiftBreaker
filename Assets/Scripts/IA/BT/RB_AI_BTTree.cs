@@ -76,8 +76,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [SerializeField] public float InfSlashCollisionSize = 3;
     [SerializeField] public float InfSpottedMoveSpeed = 11;
     public float InfSpottingMoveSpeed = 3;
-    public float InfThresholdWalkingToSusPerson = 0.15f;
-    public float InfThresholdRunningToSusPerson = 0.75f;
+    [Range(0, 1)] public float InfThresholdWalkingToSusPerson = 0.15f;
+    [Range(0, 1)] public float InfThresholdRunningToSusPerson = 0.75f;
     [SerializeField] public GameObject InfSlashParticles;
     [HideInInspector] public UnityEvent EventOnSpotted;
 

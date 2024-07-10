@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class RB_Items : MonoBehaviour
 {
+    public int PickupDialogueId = 0;
+
     //Attack
     protected float _lastUsedAttackTime;
     private float _currentDamage;
@@ -163,6 +165,18 @@ public class RB_Items : MonoBehaviour
         _playerAction.EventItemDropped?.Invoke();
         //RobertShouldTalk = true;
 
+    }
+
+    public void RobertPickupDialogue(int? idOverride = null)
+    {
+        if (RB_PlayerAction.Instance.PickupGathered != null)
+        {
+            int dialogueID = (idOverride != null)? idOverride.Value : PickupDialogueId;
+            RB_PlayerAction.Instance.PickupGathered.StartDialogue(dialogueID);
+            RobertShouldTalk = false;
+            RB_LevelManager.SavedData.HasReachedWeapon = true;
+
+        }
     }
 
     public virtual void ResetAttack()

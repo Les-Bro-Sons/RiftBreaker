@@ -26,10 +26,9 @@ public class RB_Scythe : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
+        if (RobertShouldTalk && !RB_LevelManager.SavedData.HasReachedWeapon)
         {
-            RB_PlayerAction.Instance.PickupGathered.StartDialogue(5);
-            RobertShouldTalk = false;
+            RobertPickupDialogue(5);
         }
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 5);

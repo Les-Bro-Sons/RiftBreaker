@@ -45,10 +45,9 @@ public class RB_MusicBox : RB_Items
     public override void Bind() //Override the bind of the item
     {
         base.Bind();
-        if (RB_PlayerAction.Instance.PickupGathered != null && RobertShouldTalk)
+        if (RobertShouldTalk && !RB_LevelManager.SavedData.HasReachedWeapon)
         {
-            RB_PlayerAction.Instance.PickupGathered.StartDialogue(2);
-            RobertShouldTalk = false;
+            RobertPickupDialogue(2);
         }
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 2);

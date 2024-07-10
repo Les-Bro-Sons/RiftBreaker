@@ -24,6 +24,6 @@ public class RB_BossRushManager : MonoBehaviour
 
     public void StopBossRush()
     {
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 0);
     }
 }

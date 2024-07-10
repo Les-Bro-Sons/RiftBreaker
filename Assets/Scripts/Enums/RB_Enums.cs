@@ -39,6 +39,7 @@ public enum FADETYPE
     BubbleOpen,
     WooshRight,
     WooshUp,
+    Circle,
 }
 
 public enum ZOOMTYPES

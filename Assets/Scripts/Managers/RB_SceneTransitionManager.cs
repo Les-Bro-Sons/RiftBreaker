@@ -68,14 +68,15 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     }
 
-    public void NewTransition(FADETYPE inTransition, int nextSceneIndex, FADETYPE? outTransition = null)
+    public void NewTransition(FADETYPE inTransition, int nextSceneIndex, FADETYPE? outTransition = null, float inDuration = 2, float outDuration = 2, SPEEDTYPES inCurve = SPEEDTYPES.Linear, SPEEDTYPES? outCurve = null)
     {
         if (outTransition == null) outTransition = inTransition;
+        if (outCurve == null) outCurve = inCurve;
         if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings) nextSceneIndex = 0;
         TransitionCanvas.worldCamera = Camera.main;
         if (CurrentTransition == null)
         {
-            CurrentTransition = RB_Transition.OnTransition(transform, nextSceneIndex, 1, inTransition, outTransition.Value);
+            CurrentTransition = RB_Transition.OnTransition(transform, nextSceneIndex, inDuration, outDuration, inTransition, outTransition.Value, inCurve, outCurve.Value);
         }
     }
 

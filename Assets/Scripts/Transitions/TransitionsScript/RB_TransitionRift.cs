@@ -7,18 +7,23 @@ public class RB_TransitionRift : RB_Transition
     [Header("Parameters")]
     [SerializeField] private Material _material;
 
+    [Header("Shader mask")]
+
+    [SerializeField] private float _startAmount = -.1f;
+    [SerializeField] private float _endAmount = 0.7f;
+
     void Start()
     {
-        StartCoroutine(Rift(NextSceneID, Duration));
+        StartCoroutine(Rift(NextSceneID, Duration, SpeedType));
     }
 
     public IEnumerator Rift(int sceneId, float duration, SPEEDTYPES speedType = SPEEDTYPES.Linear)
     {
-        float baseValue = FadeIn ? -.1f : 0.7f;
+        float baseValue = FadeIn ? _startAmount : _endAmount;
         _material.SetFloat("_MaskAmount", baseValue);
-        float targetValue = FadeIn ? 0.7f : -.1f;
+        float targetValue = FadeIn ? _endAmount : _startAmount;
 
-        yield return StartCoroutine(FadeMaterial(_material, targetValue, duration * 0.5f, speedType)); // Fade in for half the duration.
+        yield return StartCoroutine(FadeMaterial(_material, targetValue, duration, speedType)); // Fade in for half the duration.
 
         FinishedTransition = true;
     }
@@ -26,7 +31,7 @@ public class RB_TransitionRift : RB_Transition
     private IEnumerator FadeMaterial(Material material, float targetValue, float duration, SPEEDTYPES speedType)
     {
         
-        float maskAmount = material.GetFloat("_MaxAmount");
+        float maskAmount = material.GetFloat("_MaskAmount");
         float startValue = maskAmount;
         float startTime = Time.unscaledTime;
 

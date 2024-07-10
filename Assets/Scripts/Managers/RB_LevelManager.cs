@@ -203,7 +203,7 @@ public class RB_LevelManager : MonoBehaviour
         RB_Camera.Instance.Zoom(1f, 0.3f);
         FullLevelRewind();
         yield return new WaitForSeconds(3f);
-        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex);
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex, FADETYPE.Circle, 2, 1, SPEEDTYPES.Linear, SPEEDTYPES.Exponential);
         yield return null;
     } 
 

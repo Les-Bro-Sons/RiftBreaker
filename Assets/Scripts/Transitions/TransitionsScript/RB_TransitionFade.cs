@@ -9,7 +9,7 @@ public class RB_TransitionFade : RB_Transition
 
     void Start()
     {
-        StartCoroutine(Fade(NextSceneID, Duration));
+        StartCoroutine(Fade(NextSceneID, Duration, SpeedType));
     }
 
     public IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType = SPEEDTYPES.Linear)
@@ -17,7 +17,7 @@ public class RB_TransitionFade : RB_Transition
         float baseValue = FadeIn ? 0 : 1;
         _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, baseValue);
 
-        yield return StartCoroutine(FadeImage(_fadeImage, FadeIn, duration * 0.5f, speedType)); // Fade in for half the duration.
+        yield return StartCoroutine(FadeImage(_fadeImage, FadeIn, duration, speedType)); // Fade in for half the duration.
 
         FinishedTransition = true;
     }

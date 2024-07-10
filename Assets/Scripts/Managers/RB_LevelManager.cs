@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class RB_LevelManager : MonoBehaviour
 {
+
+    public static RB_LevelSavedData SavedData;
     public static RB_LevelManager Instance;
 
     public PHASES CurrentPhase;
@@ -48,6 +50,8 @@ public class RB_LevelManager : MonoBehaviour
             DestroyImmediate(gameObject);
             return;
         }
+        if (SavedData == null || SavedData.CurrentScene != CurrentScene) SavedData = new RB_LevelSavedData(CurrentScene); //make new save data if the saved scene and current scene are not the same
+
         _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
@@ -57,8 +61,12 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
-        if(_robertTalkLevelBeginning != null)
+
+        if(SavedData.ShouldRobertFirstTalk && _robertTalkLevelBeginning != null)
+        {
             _robertTalkLevelBeginning.StartDialogue((int)CurrentScene);
+            SavedData.ShouldRobertFirstTalk = false;
+        }
         if (CurrentPhase == PHASES.Boss)
         {
             switch (CurrentScene)

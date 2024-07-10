@@ -7,45 +7,58 @@ public class RB_Transition : MonoBehaviour
     [SerializeField] private const string ROOT_PATH = "Prefabs/Transitions";
 
     protected float _currentTime;
-    //public float FadeInTime;
-    //public float FadeOutTime;
     public float Duration;
 
     public int NextSceneID;
 
-    // Start is called before the first frame update
-    void Start()
+    public FADETYPE InTransition;
+    public FADETYPE OutTransition;
+    public SPEEDTYPES SpeedType;
+
+    public bool FadeIn = true;
+
+    public bool FinishedTransition = false;
+    public static RB_Transition OnTransition(Transform parent, int sceneID, float duration, FADETYPE inTransition = FADETYPE.Rift, FADETYPE outTransition = FADETYPE.Rift, SPEEDTYPES speedType = SPEEDTYPES.Linear)
     {
-        //FadeTransition("SampleScene", 5f, speedType: RB_SceneTransitionManager.Instance.SpeedType);
+        GameObject newObject = new GameObject("Transition: IN=" + inTransition.ToString() + " OUT=" + outTransition.ToString());
+        newObject.transform.parent = parent;
+        RB_Transition newTransition = newObject.AddComponent<RB_Transition>();
+
+        newTransition.NextSceneID = sceneID;
+        newTransition.Duration = duration;
+        newTransition.InTransition = inTransition;
+        newTransition.OutTransition = outTransition;
+        newTransition.SpeedType = speedType;
+
+        newTransition.StartCoroutine(newTransition.Transitioning(sceneID, duration, inTransition, outTransition, speedType));
+        return newTransition;
     }
 
-    public virtual IEnumerator Fade(int nameScene, float duration, SPEEDTYPES speedType)
+    private IEnumerator Transitioning(int sceneId, float duration, FADETYPE inTransition, FADETYPE outTransition, SPEEDTYPES speedType)
     {
+        RB_TimescaleManager.Instance.SetModifier(gameObject, "TransitionSceneTimescale", 0, 900, 4);
+        RB_SceneTransitionManager.Instance.TransitionCanvas.worldCamera = Camera.main;
+
+        RB_Transition currentTransition = Instantiate(Resources.Load<GameObject>($"{ROOT_PATH}/{inTransition.ToString()}"), transform.parent).GetComponent<RB_Transition>();
+        currentTransition.FadeIn = true;
+        while (!currentTransition.FinishedTransition) yield return null;
+        
+        RB_SceneTransitionManager.Instance.NewScene(sceneId);
+
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+        yield return new WaitForEndOfFrame(); // Wait for one frame.
+
+        RB_SceneTransitionManager.Instance.TransitionCanvas.worldCamera = Camera.main;
+
+        Destroy(currentTransition.gameObject);
+
+        currentTransition = Instantiate(Resources.Load<GameObject>($"{ROOT_PATH}/{outTransition.ToString()}"), transform.parent).GetComponent<RB_Transition>();
+        currentTransition.FadeIn = false;
+        while (!currentTransition.FinishedTransition) yield return null;
+        Destroy(currentTransition.gameObject);
+        RB_TimescaleManager.Instance.RemoveModifier("TransitionSceneTimescale");
+        Destroy(gameObject);
+
         yield return null;
-    }
-
-    public virtual IEnumerator FadeImage(Image image, bool fadeIn,  float duration, SPEEDTYPES speedType)
-    {
-        float targetAlpha = fadeIn ? 1f : 0f;
-        float startAlpha = image.color.a;
-        float startTime = Time.unscaledTime;
-
-        while (image.color.a < targetAlpha)
-        {
-            if (fadeIn)
-            {
-                RB_TimescaleManager.Instance.SetModifier(gameObject, "TransitionSceneTimescale", 0, 900, 4);
-            }
-            else
-            {
-                RB_TimescaleManager.Instance.RemoveModifier("TransitionSceneTimescale");
-            }
-            float elapsedTime = (Time.unscaledTime - startTime) / duration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, RB_SceneTransitionManager.Instance.SpeedCurves[speedType].Evaluate(elapsedTime));
-            image.color = new Color(image.color.r, image.color.g, image.color.b, newAlpha);
-            yield return null;
-        }
-
-        image.color = new Color(image.color.r, image.color.g, image.color.b, targetAlpha);
     }
 }

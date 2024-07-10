@@ -520,7 +520,7 @@ public class RB_TutorialManager : MonoBehaviour
 
     private void AchieveTuto() //Finish the tutorial 
     {
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 1);
     }
 
     public void StartBrightenBackground() //start the background brightning

@@ -88,6 +88,6 @@ public class RB_Cinematique : MonoBehaviour
     public void QuitCinematique()
     {
         // Transition to the next scene using a fade transition
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1);
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

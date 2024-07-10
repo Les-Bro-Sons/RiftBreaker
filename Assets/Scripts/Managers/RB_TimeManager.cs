@@ -53,6 +53,8 @@ public class RB_TimeManager : MonoBehaviour
 
     private void Start()
     {
+        RB_TimescaleManager.Instance.RemoveModifier("RewindTimescale");
+
         StartRecording();
 
         RB_UxHourglassManager.Instance?.NumberOfHourglass(3);

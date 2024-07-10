@@ -46,6 +46,7 @@ public class RB_Transition : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
 
         AsyncOperation loadingScreenOp = SceneManager.LoadSceneAsync("LOADING", LoadSceneMode.Additive);
+        while (loadingScreenOp.progress < 0.9f) yield return null;
         while (!loadingScreenOp.isDone) yield return null;
         yield return StartCoroutine(RB_LoadingScreen.Instance.OpeningLoadingScreen());
 

@@ -14,10 +14,9 @@ public class RB_MagicWand : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk)
+        if (RobertShouldTalk && !RB_LevelManager.SavedData.HasReachedWeapon)
         {
-            RB_PlayerAction.Instance.PickupGathered.StartDialogue(1);
-            RobertShouldTalk = false;
+            RobertPickupDialogue(1);
         }
         //Set the current weapon to the animator
         _playerAnimator.SetFloat("WeaponID", 1);

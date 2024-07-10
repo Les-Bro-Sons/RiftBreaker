@@ -41,7 +41,7 @@ public class RB_MenuManager : MonoBehaviour
         RB_ButtonSelectioner.Instance.BlockInteraction();  // Block UI interaction
         RB_SaveManager.Instance.ResetSave();  // Reset the game save data
         RB_SaveManager.Instance.SaveObject.IsGameFinish = false;  // Reset game finish flag
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 1);  // Transition to a new scene
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 1);  // Transition to a new scene
         RB_InputManager.Instance.InputEnabled = true;  // Enable input
     }
 
@@ -51,12 +51,12 @@ public class RB_MenuManager : MonoBehaviour
         RB_ButtonSelectioner.Instance.BlockInteraction();  // Block UI interaction
         if (RB_SaveManager.Instance.SaveObject.IsGameFinish)
         {  // Check if the game is finished
-            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 15);  // Transition to a specific scene
+            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 15);  // Transition to a specific scene
             RB_SaveManager.Instance.SaveObject.HpBossRush = 150;  // Reset specific game data
         }
         else
         {
-            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), RB_SaveManager.Instance.SaveObject.CurrentLevel);  // Transition to a saved level
+            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, RB_SaveManager.Instance.SaveObject.CurrentLevel);  // Transition to a saved level
         }
         RB_InputManager.Instance.InputEnabled = true;  // Enable input
     }
@@ -65,7 +65,7 @@ public class RB_MenuManager : MonoBehaviour
     public void MainMenu()
     {
         RB_TimescaleManager.Instance.RemoveModifier("PauseTimescale");
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0);  // Transition to the main menu scene
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 0);  // Transition to the main menu scene
         RB_InputManager.Instance.InputEnabled = true;  // Enable input
     }
 

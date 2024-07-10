@@ -135,17 +135,17 @@ public class RB_LevelExit : MonoBehaviour
             {
                 RB_SaveManager.Instance.SaveToJson();
             }
-            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
+            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
         }
         else
         {
             if (_nextSceneName != "")
             {
-                RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneName); //switch scene by name
+                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneName); //switch scene by name
             }
             else
             {
-                RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), _nextSceneID); //switch scene by ID
+                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneID); //switch scene by ID
             }
         }
     }

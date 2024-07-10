@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class RB_LevelManager : MonoBehaviour
 {
+
+    public static RB_LevelSavedData SavedData;
     public static RB_LevelManager Instance;
 
     public PHASES CurrentPhase;
@@ -47,6 +50,8 @@ public class RB_LevelManager : MonoBehaviour
             DestroyImmediate(gameObject);
             return;
         }
+        if (SavedData == null || SavedData.CurrentScene != CurrentScene) SavedData = new RB_LevelSavedData(CurrentScene); //make new save data if the saved scene and current scene are not the same
+
         _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
@@ -56,8 +61,12 @@ public class RB_LevelManager : MonoBehaviour
     {
         RB_PlayerController.Instance.GetComponent<RB_Health>().EventDeath.AddListener(PlayerLost);
         RB_HUDManager.Instance.PlayAnimation(_phaseInfiltrationWithoutWnim);
-        if(_robertTalkLevelBeginning != null)
+
+        if(SavedData.ShouldRobertFirstTalk && _robertTalkLevelBeginning != null)
+        {
             _robertTalkLevelBeginning.StartDialogue((int)CurrentScene);
+            SavedData.ShouldRobertFirstTalk = false;
+        }
         if (CurrentPhase == PHASES.Boss)
         {
             switch (CurrentScene)
@@ -193,15 +202,16 @@ public class RB_LevelManager : MonoBehaviour
     {
         StartCoroutine(PlayerLostUX());
         EventPlayerLost?.Invoke();
-       
     }
 
     public IEnumerator PlayerLostUX()
     {
         RB_Camera.Instance.Zoom(0.5f, 1);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.5f);
         RB_Camera.Instance.Zoom(1f, 0.3f);
         FullLevelRewind();
+        yield return new WaitForSeconds(3f);
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex, FADETYPE.Circle, 2, 1, SPEEDTYPES.Linear, SPEEDTYPES.Exponential);
         yield return null;
     } 
 
@@ -212,7 +222,7 @@ public class RB_LevelManager : MonoBehaviour
 
     public void FullLevelRewind()
     {
-        RB_TimeManager.Instance.StartRewinding(true, true);
+        RB_TimeManager.Instance.StartRewinding(REWINDENTITYTYPE.All ,true, true);
     }
 
     public void PlayMKBossMusic()

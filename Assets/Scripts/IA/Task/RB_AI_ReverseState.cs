@@ -3,13 +3,11 @@ using UnityEngine;
 
 public class RB_AI_ReverseState : RB_BTNode
 {
-    private RB_AI_BTTree _btParent;
 
     private RB_BTNode _nodeReversed;
 
-    public RB_AI_ReverseState(RB_AI_BTTree btParent, RB_BTNode nodeReversed)
+    public RB_AI_ReverseState(RB_BTNode nodeReversed)
     {
-        _btParent = btParent;
         _nodeReversed = nodeReversed;
     }
 

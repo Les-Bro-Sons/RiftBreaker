@@ -39,6 +39,7 @@ public enum FADETYPE
     BubbleOpen,
     WooshRight,
     WooshUp,
+    Circle,
 }
 
 public enum ZOOMTYPES
@@ -122,6 +123,7 @@ public enum MIXERNAME
 public enum BTBOOLVALUES
 {
     IsTargetSpotted,
+    IsTargetInSight,
     HasACorrectView,
     GoToLastTargetPos,
     IsDistracted,
@@ -139,4 +141,13 @@ public enum DISTRACTIONTYPE
     BrokenPot,
     DeadBody,
     BrokenDoor,
+    Dash,
+    SomeoneSuspicious,
+}
+
+public enum REWINDENTITYTYPE
+{
+    All,
+    AiOnly,
+    PlayerOnly,
 }

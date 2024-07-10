@@ -15,8 +15,6 @@ public class RB_SceneTransitionManager : MonoBehaviour
     [Header("Management")]
     [SerializeField] private const string ROOT_PATH = "Prefabs/Transitions";
 
-    public SPEEDTYPES SpeedType = SPEEDTYPES.Linear; // Default speed type set to LINEAR.
-    public FADETYPE FadeType = FADETYPE.Fade; // Default fade type set to basic fade.
     [HideInInspector] public RB_Transition CurrentTransition;
 
     [Header("Name Scene")]
@@ -70,20 +68,21 @@ public class RB_SceneTransitionManager : MonoBehaviour
         }
     }
 
-    public void NewTransition(string nameTransition, int nextSceneIndex)
+    public void NewTransition(FADETYPE inTransition, int nextSceneIndex, FADETYPE? outTransition = null, float inDuration = 2, float outDuration = 2, SPEEDTYPES inCurve = SPEEDTYPES.Linear, SPEEDTYPES? outCurve = null)
     {
+        if (outTransition == null) outTransition = inTransition;
+        if (outCurve == null) outCurve = inCurve;
         if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings) nextSceneIndex = 0;
         TransitionCanvas.worldCamera = Camera.main;
         if (CurrentTransition == null)
         {
-            CurrentTransition = Instantiate(Resources.Load<GameObject>($"{ROOT_PATH}/{nameTransition}"), transform).GetComponent<RB_Transition>();
-            CurrentTransition.NextSceneID = nextSceneIndex;
+            CurrentTransition = RB_Transition.OnTransition(transform, nextSceneIndex, inDuration, outDuration, inTransition, outTransition.Value, inCurve, outCurve.Value);
         }
     }
 
-    public void NewTransition(string nameTransition, string nextSceneName)
+    public void NewTransition(FADETYPE inTransition, string nextSceneName, FADETYPE? outTransition = null)
     {
-        NewTransition(nameTransition, SceneManager.GetSceneByName(nextSceneName).buildIndex);
+        NewTransition(inTransition, SceneManager.GetSceneByName(nextSceneName).buildIndex, outTransition);
     }
 
     public void NewScene(string nameScene)

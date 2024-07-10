@@ -47,6 +47,7 @@ public class RB_Transition : MonoBehaviour
 
         AsyncOperation loadingScreenOp = SceneManager.LoadSceneAsync("LOADING", LoadSceneMode.Additive);
         while (!loadingScreenOp.isDone) yield return null;
+        yield return StartCoroutine(RB_LoadingScreen.Instance.OpeningLoadingScreen());
 
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentScene);
         while (!unloadOp.isDone) yield return null;
@@ -56,8 +57,10 @@ public class RB_Transition : MonoBehaviour
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneId, LoadSceneMode.Additive);
         loadOp.allowSceneActivation = false;
         while (loadOp.progress < 0.9f) yield return null;
-        loadOp.allowSceneActivation = true;
 
+        yield return StartCoroutine(RB_LoadingScreen.Instance.ClosingLoadingScreen());
+
+        loadOp.allowSceneActivation = true;
         while (!loadOp.isDone) yield return null;
         Scene newScene = SceneManager.GetSceneByBuildIndex(sceneId);
         SceneManager.SetActiveScene(newScene);

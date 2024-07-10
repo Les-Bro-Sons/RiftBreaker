@@ -16,6 +16,7 @@ public class RB_PlayerAction : MonoBehaviour
     [HideInInspector] public bool IsSpecialAttacking;
     [HideInInspector] public bool IsAttacking;
     [HideInInspector] public bool IsOnCooldown; //Cannot attack
+    [HideInInspector] public bool IsRewinding;
 
     private float _currentDashCooldown;
     private float _chargeAttackPressTime;
@@ -325,12 +326,14 @@ public class RB_PlayerAction : MonoBehaviour
         {
             RewindLeft -= 1;
             RB_TimeManager.Instance.StartRewinding(REWINDENTITYTYPE.AiOnly,false, false);
+            IsRewinding = true;
         }
     }
 
     public void StopRewind()
     {
         RB_TimeManager.Instance.StopRewinding(false);
+        IsRewinding = false;
     }
 
     private void TimerChargeAttack()

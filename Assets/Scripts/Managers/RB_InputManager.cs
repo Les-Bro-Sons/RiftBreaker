@@ -87,8 +87,11 @@ public class RB_InputManager : MonoBehaviour
     #region Move
     public void OnMove(InputAction.CallbackContext context)
     {
-        
-        if (!InputEnabled || !MoveEnabled){ MoveValue = Vector2.zero; return; }
+        if (!InputEnabled || !MoveEnabled)
+        { 
+            MoveValue = Vector2.zero; 
+            return; 
+        }
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
@@ -105,8 +108,6 @@ public class RB_InputManager : MonoBehaviour
     #region Attacks
     public void OnDirectionAttackJoystick(InputAction.CallbackContext context)
     {
-
-        print("right stick");
         if (!InputEnabled) return;
         DirectAttackControllerValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)

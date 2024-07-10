@@ -215,7 +215,7 @@ public class RB_PlayerMovement : MonoBehaviour
     public bool CanMove()
     {
         //if is moving, not dashing and not attacking
-        return !_health.Dead && _canMove && _isMoving && !_isDashing && !_playerAction.IsDoingAnyNotNormalAttack() || (_playerAction.IsSpecialAttacking && _playerAction.CurrentItem.CanMoveDuringSpecialAttack);
+        return !_health.Dead && _canMove && _isMoving && !_isDashing && !RB_TimeManager.Instance.IsRewinding && !_playerAction.IsDoingAnyNotNormalAttack() || (_playerAction.IsSpecialAttacking && _playerAction.CurrentItem.CanMoveDuringSpecialAttack);
     }
 
     private void SetSpeed()

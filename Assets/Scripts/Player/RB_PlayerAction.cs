@@ -83,7 +83,9 @@ public class RB_PlayerAction : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<RB_Health>().EventDeath.AddListener(OnDeath);
+        RB_Health playerHealth = GetComponent<RB_Health>();
+        playerHealth.EventDeath.AddListener(OnDeath);
+        RB_StatsParser.Instance.SetPlayerStats(playerHealth);
     }
     //Update
     private void Update()

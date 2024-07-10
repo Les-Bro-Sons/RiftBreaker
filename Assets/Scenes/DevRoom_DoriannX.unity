@@ -361,7 +361,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5082ae7892a18f04eaefe1cefa2caf5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMaterial: {fileID: 2100000, guid: 22aaac62191e23c45a4ca6a2120e3fe9, type: 2}
 --- !u!1001 &560023213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -934,6 +933,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 894554147}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &983760558
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4244062485352682178, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_Name
+      value: Katana
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6793543130408524868, guid: e518f35ff9cbaf645b0638ada8414e59,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e518f35ff9cbaf645b0638ada8414e59, type: 3}
 --- !u!43 &987901752
 Mesh:
   m_ObjectHideFlags: 0
@@ -1334,6 +1401,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2312d13daccd96d4b8c05df2086bd53c, type: 3}
+--- !u!1 &1290795873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290795875}
+  - component: {fileID: 1290795874}
+  m_Layer: 0
+  m_Name: StatsParser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1290795874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290795873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d028396fe8882e4da7425322d3d2e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemsPath: C:/Users/Dodo Xav/Documents/GitHub/RiftBreaker/Assets/items.txt
+  PlayerPath: C:/Users/Dodo Xav/Documents/GitHub/RiftBreaker/Assets/player.txt
+  EncryptedItemPath: C:/Users/Dodo Xav/Documents/GitHub/RiftBreaker/Assets/items.enc
+  EncryptedPlayerPath: C:/Users/Dodo Xav/Documents/GitHub/RiftBreaker/Assets/player.enc
+--- !u!4 &1290795875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290795873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1453018100 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7987884610103417057, guid: 24ec74371e597bc41bec89689e31652b,
@@ -2951,3 +3066,5 @@ SceneRoots:
   - {fileID: 332597717}
   - {fileID: 630774786}
   - {fileID: 609908985}
+  - {fileID: 1290795875}
+  - {fileID: 983760558}

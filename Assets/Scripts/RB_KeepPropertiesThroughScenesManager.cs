@@ -21,7 +21,6 @@ public class RB_KeepPropertiesThroughScenesManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

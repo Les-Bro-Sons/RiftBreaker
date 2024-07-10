@@ -42,7 +42,6 @@ public class RB_MenuInputManager : MonoBehaviour {
     private void Awake() {
         if (Instance == null){
             Instance = this;
-            DontDestroyOnLoad(gameObject);//make this object don't destroy on load
         }
         else {
             DestroyImmediate(gameObject); //destroy if another RB_MenuInputManager is already in the scene

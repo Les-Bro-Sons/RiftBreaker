@@ -210,8 +210,9 @@ public class RB_LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         RB_Camera.Instance.Zoom(1f, 0.3f);
         FullLevelRewind();
-        yield return new WaitForSeconds(3f);
-        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex, FADETYPE.Circle, 2, 1, SPEEDTYPES.Linear, SPEEDTYPES.Exponential);
+        yield return new WaitForSeconds(1.5f);
+        if (RB_TimeManager.Instance.CurrentTime > 5)
+            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex, FADETYPE.Circle, 2, 1, SPEEDTYPES.Linear, SPEEDTYPES.Exponential);
         yield return null;
     } 
 

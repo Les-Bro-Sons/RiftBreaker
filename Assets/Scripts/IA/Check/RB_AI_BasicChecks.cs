@@ -72,3 +72,41 @@ public class RB_AICheck_Comparison : RB_BTNode
         else return _state = BTNodeState.FAILURE;
     }
 }
+
+public class RB_AICheck_Random : RB_BTNode
+{
+    private float _percentage;
+    private float _delay;
+
+    private float _lastTimeChecked;
+
+    /// <summary>
+    /// Check if the random value is below percentage and return success if it is
+    /// </summary>
+    /// <param name="percentage">percentage between 0 & 1</param>
+    /// <param name="delay">delay each time the random is checked</param>
+    public RB_AICheck_Random(float percentage, float delay)
+    {
+        _percentage = percentage;
+        _delay = delay;
+    }
+
+    public override BTNodeState Evaluate()
+    {
+        _state = BTNodeState.FAILURE;
+
+        if (Time.time > _lastTimeChecked + _delay)
+        {
+            float random = Random.value;
+            _lastTimeChecked = Time.time;
+
+            if (random >= _percentage)
+            {
+                _state = BTNodeState.SUCCESS;
+            }
+        }
+
+
+        return _state;
+    }
+}

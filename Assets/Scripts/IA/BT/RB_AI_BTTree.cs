@@ -607,7 +607,7 @@ public class RB_AI_BTTree : RB_BTTree
                                         {
                                             new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, "<="),
                                             new RB_AICheck_IsTargetClose(this, 7),
-                                            new RB_AICheck_IsTargetFar(this, 5),
+                                            new RB_AICheck_IsTargetFar(this, MegaSlashRange),
                                             new RB_AI_Attack(this, 1),
                                         }),
 
@@ -616,6 +616,12 @@ public class RB_AI_BTTree : RB_BTTree
                                             new RB_AICheck_Comparison(this, "Attack3CurrentCooldown", 0, "<="),
                                             new RB_AICheck_IsTargetFar(this, 7),
                                             new RB_AI_Attack(this, 2),
+                                        }),
+
+                                        new RB_BTSequence(new List<RB_BTNode>
+                                        {
+                                            new RB_AICheck_Random(0.4f, 1),
+                                            new RB_AI_Attack(this, new Dictionary<int, float>{{1, 50}, {2, 50} }),
                                         }),
                                     }),
                                 }),

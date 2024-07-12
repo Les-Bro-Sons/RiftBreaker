@@ -2,6 +2,7 @@ using BehaviorTree;
 using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RB_AI_Attack : RB_BTNode
@@ -18,6 +19,9 @@ public class RB_AI_Attack : RB_BTNode
     private string? _variableAttackIndex = null;
 
     private bool _playSoundDamaged;
+
+    private bool _random = false;
+    private Dictionary<int, float> _randomIndex = new();
     
     public RB_AI_Attack(RB_AI_BTTree BtParent, int attackIndex)
     {
@@ -33,11 +37,54 @@ public class RB_AI_Attack : RB_BTNode
         _variableAttackIndex = attackIndex;
     }
 
+    /// <summary>
+    /// Pick a random index each time it begins an attack
+    /// </summary>
+    /// <param name="BtParent">Behavior tree</param>
+    /// <param name="randomIndex">Int: index of attack, float: percentage</param>
+    public RB_AI_Attack(RB_AI_BTTree BtParent, Dictionary<int, float> randomIndex)
+    {
+        _btParent = BtParent;
+        _transform = _btParent.transform;
+        _randomIndex = randomIndex;
+        _random = true;
+
+        float randomSum = 0;
+        foreach(float randomValue in _randomIndex.Values.ToList())
+        {
+            randomSum += randomValue;
+        }
+        float currentSum = 0;
+        foreach (int i in _randomIndex.Keys.ToList())
+        {
+            _randomIndex[i] /= randomSum;
+            float oldRandom = _randomIndex[i];
+            _randomIndex[i] += currentSum;
+            currentSum += oldRandom;
+        }
+    }
+
     public override BTNodeState Evaluate()
     {
         _state = BTNodeState.FAILURE;
         _target = (Transform)GetData("target");
-        if (_variableAttackIndex != null) _attackIndex = (int)_btParent.GetType().GetField(_variableAttackIndex).GetValue(_btParent);
+
+        if (_random)
+        {
+            if(!_btParent.GetBool(BTBOOLVALUES.IsWaitingForAttack) && !_btParent.GetBool(BTBOOLVALUES.IsAttacking))
+            {
+                float randomValue = Random.value;
+                foreach (int i in _randomIndex.Keys.ToList())
+                {
+                    if (randomValue < _randomIndex[i])
+                    {
+                        _attackIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (_variableAttackIndex != null) _attackIndex = (int)_btParent.GetType().GetField(_variableAttackIndex).GetValue(_btParent);
 
         if (_target == null)
         {
@@ -183,7 +230,7 @@ public class RB_AI_Attack : RB_BTNode
                                 RB_AudioManager.Instance.PlaySFX("BigSwooosh", _transform.position, false, 1, 1f);
                                 Slash(_btParent.MegaSlashDamage, _btParent.MegaSlashRange, _btParent.MegaSlashKnockback, _btParent.MegaSlashCollisionSize, _btParent.MegaSlashParticles);
                                 _btParent.Attack1CurrentCooldown = _btParent.Attack1Cooldown;
-                                _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                                _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack/2f;
                                 StopAttacking();
                             }
                             break;
@@ -191,7 +238,7 @@ public class RB_AI_Attack : RB_BTNode
                             if (_btParent.AiEnemyAnimation) _btParent.AiEnemyAnimation.TriggerSecondAttack(); else Debug.LogWarning("No AiEnemyAnimation on " + _transform.name);
                             MegaKickAttack();
                             _btParent.Attack2CurrentCooldown = _btParent.Attack2Cooldown;
-                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack/2f;
                             StopAttacking();
                             break;
                         case 2:

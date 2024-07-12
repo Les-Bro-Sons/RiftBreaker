@@ -5,10 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using UnityEditor;
-using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
+using UnityEngine;
+
+
+#if UNITY_EDITOR
+using UnityEditor;
 [CustomEditor(typeof(RB_StatsParser))]
 public class RB_CustomEditorStatsParser : Editor
 {
@@ -29,7 +31,7 @@ public class RB_CustomEditorStatsParser : Editor
         }
     }
 }
-
+#endif
 public class RB_StatsParser : MonoBehaviour
 {
     //File

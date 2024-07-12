@@ -60,6 +60,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+        speed *= _rb.mass;
 
         direction = direction.normalized;
         direction = RB_Tools.GetHorizontalDirection(direction);
@@ -79,6 +80,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+        speed *= _rb.mass;
 
         if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, _navPath))
         {

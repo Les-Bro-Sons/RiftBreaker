@@ -1,8 +1,7 @@
 using BehaviorTree;
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class RB_AI_Attack : RB_BTNode
@@ -16,6 +15,7 @@ public class RB_AI_Attack : RB_BTNode
     private float _waitBeforeAttackCounter = 0f;
 
     private int _attackIndex = 0;
+    private string? _variableAttackIndex = null;
 
     private bool _playSoundDamaged;
     
@@ -26,9 +26,18 @@ public class RB_AI_Attack : RB_BTNode
         _attackIndex = attackIndex;
     }
 
+    public RB_AI_Attack(RB_AI_BTTree btParent, string attackIndex)
+    {
+        _btParent = btParent;
+        _transform = btParent.transform;
+        _variableAttackIndex = attackIndex;
+    }
+
     public override BTNodeState Evaluate()
     {
+        _state = BTNodeState.FAILURE;
         _target = (Transform)GetData("target");
+        if (_variableAttackIndex != null) _attackIndex = (int)_btParent.GetType().GetField(_variableAttackIndex).GetValue(_btParent);
 
         if (_target == null)
         {
@@ -45,7 +54,8 @@ public class RB_AI_Attack : RB_BTNode
         if (_attackCounter >= _btParent.AttackSpeed)
         {
             _btParent.BoolDictionnary[BTBOOLVALUES.IsAttacking] = true;
-            
+            _btParent.CurrentAttackIndex = _attackIndex;
+            _state = BTNodeState.RUNNING;
 
             switch (_btParent.AiType)
             {
@@ -163,12 +173,47 @@ public class RB_AI_Attack : RB_BTNode
                             break;
                     }
                     break;
+                case ENEMYCLASS.Megaknight:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            if (WaitBeforeAttackCounter(_btParent.MegaSlashDelay))
+                            {
+                                if (_btParent.AiEnemyAnimation) _btParent.AiEnemyAnimation.TriggerBasicAttack(); else Debug.LogWarning("No AiEnemyAnimation on " + _transform.name);
+                                RB_AudioManager.Instance.PlaySFX("BigSwooosh", _transform.position, false, 1, 1f);
+                                Slash(_btParent.MegaSlashDamage, _btParent.MegaSlashRange, _btParent.MegaSlashKnockback, _btParent.MegaSlashCollisionSize, _btParent.MegaSlashParticles);
+                                _btParent.Attack1CurrentCooldown = _btParent.Attack1Cooldown;
+                                _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                                StopAttacking();
+                            }
+                            break;
+                        case 1:
+                            if (_btParent.AiEnemyAnimation) _btParent.AiEnemyAnimation.TriggerSecondAttack(); else Debug.LogWarning("No AiEnemyAnimation on " + _transform.name);
+                            MegaKickAttack();
+                            _btParent.Attack2CurrentCooldown = _btParent.Attack2Cooldown;
+                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                            StopAttacking();
+                            break;
+                        case 2:
+                            if (_btParent.AiEnemyAnimation) _btParent.AiEnemyAnimation.TriggerThirdAttack(); else Debug.LogWarning("No AiEnemyAnimation on " + _transform.name);
+                            if (_btParent.CurrentJumpDuration == 0) StartMegaJumpAttack();
+                            MegaJumpAttack();
+                            _btParent.Attack3CurrentCooldown = _btParent.Attack3Cooldown;
+                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                            break;
+                    }
+                    break;
+                case ENEMYCLASS.RobertLeNec:
+                    break;
+                case ENEMYCLASS.Yog:
+                    break;
             }
         }
 
-        _state = BTNodeState.RUNNING;
+        
         return _state;
     }
+
 
     private void KamikazeExplosion()
     {
@@ -204,9 +249,81 @@ public class RB_AI_Attack : RB_BTNode
             _btParent.BoolDictionnary[BTBOOLVALUES.IsWaitingForAttack] = true;
             if (rotateTowardTarget && (!_btParent.GetBool(BTBOOLVALUES.AlreadyAttacked) || rotateWhenAttacking))
             {
-                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((RB_Tools.GetHorizontalDirection(_target.transform.position - _btParent.transform.position).normalized)));
+                _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation((RB_Tools.GetHorizontalDirection(_target.transform.position - _transform.position).normalized)));
             }
             return false;
+        }
+    }
+
+    public void MegaKickAttack() //ATTACK 2 MegaKnight
+    {
+        _transform.GetComponent<RB_Mega_knight>().AlreadySpikeDamaged.Clear();
+
+        float currentLength = 0;
+        Vector3 placingdir = (_target.position - _transform.position);
+        placingdir = RB_Tools.GetHorizontalDirection(placingdir);
+        Vector3 placingPos = _transform.position + (placingdir * _btParent.SpikesSpaces);
+        placingPos.y = _btParent.Spikes.transform.position.y;
+
+        _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation(placingdir));
+        if (_btParent.AiEnemyAnimation) _btParent.AiEnemyAnimation.TriggerSecondAttack();
+
+        float delay = 0;
+
+        while (currentLength < _btParent.SpikesLength)
+        {
+            placingPos.y = _btParent.Spikes.transform.position.y;
+            RB_Spikes spike = _btParent.SpawnPrefab(_btParent.Spikes, placingPos, Quaternion.identity).GetComponent<RB_Spikes>();
+            spike.MegaKnight = _transform.GetComponent<RB_Mega_knight>();
+            spike.GoingUpDelay = delay;
+
+            delay += _btParent.SpikeDelayIncrementation;
+            placingPos += placingdir * _btParent.SpikesSpaces;
+            currentLength += _btParent.SpikesSpaces;
+        }
+    }
+
+    private void StartMegaJumpAttack() //START ATTACK 3 MegaKnight
+    {
+        _btParent.AiEnemyAnimation.TriggerThirdAttack();
+        _btParent.CurrentJumpDuration = 0;
+        _btParent.JumpStartPos = _transform.position;
+        _btParent.JumpEndPos = _target.position;
+        _btParent.AiRigidbody.velocity = Vector3.zero;
+    }
+
+    public void MegaJumpAttack() //ATTACK 3 MegaKnight
+    {
+        //jump calculation
+        _btParent.CurrentJumpDuration += Time.fixedDeltaTime;
+        float percentComplete = _btParent.CurrentJumpDuration / _btParent.JumpDuration;
+        float yPos = _btParent.JumpAttackCurve.Evaluate(percentComplete) * _btParent.JumpHeight;
+        Vector3 horizontalPos = Vector3.Lerp(_btParent.JumpStartPos, _btParent.JumpEndPos, percentComplete);
+        _btParent.AiRigidbody.MovePosition(new Vector3(horizontalPos.x, yPos, horizontalPos.z));
+
+        if (_btParent.CurrentJumpDuration >= _btParent.JumpDuration) //when landed
+        {
+            List<RB_Health> alreadyDamaged = new();
+            foreach (Collider collider in Physics.OverlapSphere(_transform.position, _btParent.LandingRadius)) //landing collider check
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health enemyHealth))
+                {
+                    if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+                    alreadyDamaged.Add(enemyHealth);
+                    enemyHealth.TakeDamage(_btParent.LandingDamage);
+                    enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(collider.transform.position, _transform.position), _btParent.LandingKnockback);
+                }
+            }
+
+            if (_btParent.LandingParticles)
+            {
+                _btParent.SpawnPrefab(_btParent.LandingParticles, _transform.position, Quaternion.identity);
+            }
+
+            //ENDING STATE ATTACK 3
+            RB_AudioManager.Instance.PlaySFX("Jump_Attack_Viking_Horn", _transform.position, false, 0, 1f);
+            _btParent.CurrentJumpDuration = 0;
+            StopAttacking();
         }
     }
 
@@ -279,13 +396,14 @@ public class RB_AI_Attack : RB_BTNode
         StopAttacking();
     }
 
-    private void StopAttacking() //reset variables
+    private void StopAttacking(bool stateToSuccess = true) //reset variables
     {
         _attackCounter = 0f;
         _waitBeforeAttackCounter = 0f;
         _btParent.BoolDictionnary[BTBOOLVALUES.IsAttacking] = false;
         _btParent.BoolDictionnary[BTBOOLVALUES.AlreadyAttacked] = false;
         _btParent.BoolDictionnary[BTBOOLVALUES.IsWaitingForAttack] = false;
+        if (stateToSuccess) _state = BTNodeState.SUCCESS;
     }
 
     public void LaunchArrow(GameObject arrowPrefab, float damage, float knockback, float speed, float distance) //ATTACK 0 MEDIUM

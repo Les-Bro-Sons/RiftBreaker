@@ -12,6 +12,9 @@ public class RB_Mega_knight : RB_Boss
 
     private float _activationTimer = 0;
 
+    [Header("StateMachine")]
+    [SerializeField] private bool _enableStateMachine = true;
+
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;
     [SerializeField] private float _slashKnockback = 15;
@@ -28,7 +31,7 @@ public class RB_Mega_knight : RB_Boss
     [SerializeField] private float _spikeKnockback = 10;
     [SerializeField] private bool _canSpikeDamageMultipleTime = false;
     [SerializeField] private float _spikeDelayIncrementation = 0.1f;
-    private List<RB_Health> _alreadySpikeDamaged = new();
+    public List<RB_Health> AlreadySpikeDamaged = new();
 
     [Header("Jump (attack3)")]
     public float JumpHeight = 5f;
@@ -73,7 +76,7 @@ public class RB_Mega_knight : RB_Boss
 
     private void FixedUpdate()
     {
-        if (Health.Dead) return;
+        if (!_enableStateMachine || Health.Dead) return;
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
         Room();
@@ -146,7 +149,7 @@ public class RB_Mega_knight : RB_Boss
 
             if (_currentCooldownAttack2 <= 0 && GetTargetDistance() <= 7f && GetTargetDistance() >= 5f) //SWITCH TO ATTACK2
             {
-                _alreadySpikeDamaged.Clear();
+                AlreadySpikeDamaged.Clear();
                 KickAttack();
                 return CurrentState = BOSSSTATES.Attack2;
             }
@@ -253,25 +256,6 @@ public class RB_Mega_knight : RB_Boss
 
     public void KickAttack() //ATTACK 2
     {
-        /*
-        float startX = transform.position.x - _rangeOfAttack.x / 2;
-        float startY = transform.position.y - _rangeOfAttack.y / 2;
-        float spacingX = _rangeOfAttack.x / RowsOfSpikes;
-        float spacingY = _rangeOfAttack.y / ColumnsOfSpikes;
-
-        for (int i = 0; i < RowsOfSpikes; i++)
-        {
-            for (int j = 0; j < ColumnsOfSpikes; j++)
-            {
-                Vector3 SpawnPosition = new Vector3(startX + j * spacingX, startY + i * spacingY, 0);
-                Instantiate(Spikes, SpawnPosition, Quaternion.identity, transform);
-            }
-        }
-        */
-
-        //Animations
-        
-
         float currentLength = 0;
         Vector3 placingdir = (_currentTarget.position - transform.position);
         placingdir = new Vector3(placingdir.x, 0, placingdir.z).normalized;
@@ -300,9 +284,9 @@ public class RB_Mega_knight : RB_Boss
 
     public void ApplySpikeDamage(RB_Health enemyHealth)
     {
-        if (Health.Team == enemyHealth.Team || (_alreadySpikeDamaged.Contains(enemyHealth) && !_canSpikeDamageMultipleTime)) return;
+        if (Health.Team == enemyHealth.Team || (AlreadySpikeDamaged.Contains(enemyHealth) && !_canSpikeDamageMultipleTime)) return;
 
-        _alreadySpikeDamaged.Add(enemyHealth);
+        AlreadySpikeDamaged.Add(enemyHealth);
         enemyHealth.TakeDamage(_spikeDamage);
         enemyHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(enemyHealth.transform.position, transform.position), _spikeKnockback);
     }

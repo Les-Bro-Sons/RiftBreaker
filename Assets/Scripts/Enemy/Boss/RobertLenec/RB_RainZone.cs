@@ -1,14 +1,14 @@
 using MANAGERS;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 
 public class RB_RainZone : MonoBehaviour
 {
-
     public RB_RobertLenec Sylvashot;
     private RB_CollisionDetection _collisionDetection;
-    
+    private RB_Health BossHealth;
 
     [Header("Main Properties")]
     [SerializeField] private float _lifetime = 1;
@@ -21,7 +21,6 @@ public class RB_RainZone : MonoBehaviour
     private float _appearTimer = 0;
     private float _appearAlpha = 0;
 
-
     [HideInInspector] public float DamageCooldown;
     private float _damageTimer = 0;
 
@@ -29,10 +28,15 @@ public class RB_RainZone : MonoBehaviour
 
     [SerializeField] private ParticleSystem _particles;
 
+    private List<RB_Health> _enemies = new();
+    private List<RB_Health> _alreadyAreaDamageZoneDamaged = new();
+    [HideInInspector] public bool CanAreaDamageZoneDamageMultipleTime = false;
+    public float AreaDamageAmount;
+
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
-        //_collisionDetection.EventOnEnemyEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedObjects()[_collisionDetection.GetDetectedObjects().Count - 1]); });
+        BossHealth = Sylvashot.GetComponent<RB_Health>();
         _appearTimer = 0;
         _isAppearing = true;
         _appearAlpha = _sprite.color.a;
@@ -73,7 +77,7 @@ public class RB_RainZone : MonoBehaviour
                 _appearTimer += Time.deltaTime;
             }
         }
-        if (!_isAppearing && _damageTimer >= DamageCooldown) CheckForEnemies(); //collision check
+        if (!_isAppearing && _damageTimer >= DamageCooldown) { _alreadyAreaDamageZoneDamaged.Clear(); CheckForEnemies(); }
 
         if (!_isDisappearing && _lifetime <= _lifetimeTimer) //activate disappearing
         {
@@ -97,36 +101,30 @@ public class RB_RainZone : MonoBehaviour
 
     private void CheckForEnemies()
     {
-        List<RB_Health> enemies = new();
+        List<RB_Health> entities = new();
         foreach (GameObject enemy in _collisionDetection.GetDetectedEntity())
         {
             if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth) && enemyHealth.Team != Team)
             {
-                enemies.Add(enemyHealth);
+                entities.Add(enemyHealth);
             }
         }
 
-        if (Sylvashot && enemies.Count > 0)
+        if (entities.Count > 0)
         {
             _damageTimer = 0;
-            Sylvashot.ApplyRainZoneDamage(enemies);
+            ApplyRainZoneDamage(entities);
         }
     }
 
-    private void EnemyEntered(GameObject enemy)
+    public void ApplyRainZoneDamage(List<RB_Health> enemyHealths)
     {
-        List<RB_Health> enemies = new();
-        if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
+        //Application of damages for the zone attack (attack 2)
+        foreach (RB_Health enemyHealth in enemyHealths)
         {
-            if (Sylvashot)
-            {
-                enemies.Add(enemyHealth);
-                Sylvashot.ApplyRainZoneDamage(enemies);
-            }
+            if (BossHealth.Team == enemyHealth.Team || (_alreadyAreaDamageZoneDamaged.Contains(enemyHealth) && !CanAreaDamageZoneDamageMultipleTime)) continue;
+            _alreadyAreaDamageZoneDamaged.Add(enemyHealth);
+            enemyHealth.TakeDamage(AreaDamageAmount);
         }
-
-        
     }
-
-
 }

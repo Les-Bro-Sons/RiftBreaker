@@ -95,9 +95,9 @@ public class RB_AI_BTTree : RB_BTTree
     [HideInInspector] public UnityEvent EventOnSpotted;
 
     [Header("Distractions")]
-    public List<RB_Distraction> Distractions = new();
-    public List<RB_Distraction> AlreadySeenDistractions = new();
-    public RB_Distraction CurrentDistraction;
+    [HideInInspector] public List<RB_Distraction> Distractions = new();
+    [HideInInspector] public List<RB_Distraction> AlreadySeenDistractions = new();
+    [HideInInspector] public RB_Distraction CurrentDistraction;
     public float MoveToDistractionSpeed = 6;
     public float DistractionDistanceNeeded = 1;
     public float DistractedSpotSpeedMultiplier = 2;
@@ -186,6 +186,32 @@ public class RB_AI_BTTree : RB_BTTree
     [HideInInspector] public float CurrentJumpDuration = 0;
     [HideInInspector] public Vector3 JumpStartPos;
     [HideInInspector] public Vector3 JumpEndPos;
+
+    [Header("Robert Le Nec")]
+    public GameObject RedBall;
+    public float RedBallOffset = 1f;
+
+    public GameObject WoodenPieceRainZone;
+    public float AreaDamageRadius = 1f;
+    public float AreaDamageInterval = 1f;
+    public float AreaDamageAmount = 1f;
+    public float AreaDamageKnockback = 1f;
+    public bool CanAreaDamageZoneDamageMultipleTime = false;
+    public float CurrentCooldownBeforeTakeDamage;
+    [HideInInspector] public List<RB_Health> AlreadyAreaDamageZoneDamaged = new();
+
+    public GameObject Clone;
+    public List<Transform> Waypoints;
+    public Transform TpPoint;
+    public int NumberOfArrow = 1;
+    public float CloneAttackInterval = 0.5f;
+    public float CloneAttackDelay = 1f;
+    public float CloneLifeTime = 1f;
+    public float CooldownForReaparition = 1f;
+    public float MinCooldownForAttack = 10f;
+    public float MaxCooldownForAttack = 30f;
+    [HideInInspector] public Vector3 LastPosition;
+    [HideInInspector] public float CurrentCooldownBeforeReactivate;
 
     private void Awake()
     {
@@ -640,9 +666,72 @@ public class RB_AI_BTTree : RB_BTTree
                     {
                         #region Enemy Type Robert Le Nec
                         new RB_AICheck_Class(AiType, ENEMYCLASS.RobertLeNec),
+                        new RB_AI_CooldownProgress(this),
                         new RB_BTSelector(new List<RB_BTNode>
                         {
+                            new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                            {
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking),
+                                new RB_AI_Attack(this, "CurrentAttackIndex"),
+                            }),
 
+                            new RB_BTSequence(new List<RB_BTNode> //wait in idle sequence
+                            {
+                                new RB_AICheck_Comparison(this, "CurrentWaitInIdle", 0, ">"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //Spot sequence
+                            {
+                                new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
+                                new RB_BTSelector(new List<RB_BTNode>
+                                {
+                                    new RB_BTSequence(new List<RB_BTNode> //flee sequence
+                                    {
+                                        new RB_AICheck_IsTargetClose(this, 5),
+                                        new RB_AI_ToState(new RB_AI_FleeFromTarget(this, 5), BTNodeState.FAILURE),
+                                    }),
+
+                                    new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                                    {
+                                        new RB_AICheck_Comparison(this, "CurrentCooldownBetweenAttacks", 0, "<="),
+                                        new RB_BTSelector(new List<RB_BTNode> //Attack switch
+                                        {
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 1
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack1CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetFar(this, 5),
+                                                new RB_AI_Attack(this, 0),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 2
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetFar(this, 2),
+                                                new RB_AICheck_IsTargetClose(this, 5),
+                                                new RB_AI_Attack(this, 1),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 3
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack3CurrentCooldown", 0, "<="),
+                                                new RB_AI_Attack(this, 2),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode>
+                                            {
+                                                new RB_AICheck_Random(0.5f, 1),
+                                                new RB_AI_Attack(this, new Dictionary<int, float>{{1, 50}, {2, 50}, {3, 50}}),
+                                            }),
+                                        }),
+                                    }),
+                                }),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_ReverseState(new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, false)),
+                                new RB_AI_StaticWatchOut(this),
+                            }),
                         }),
                         #endregion
                     }),

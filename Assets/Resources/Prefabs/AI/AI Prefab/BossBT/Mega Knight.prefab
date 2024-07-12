@@ -268,7 +268,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4025671142016074697}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -308,6 +308,7 @@ MonoBehaviour:
   BoostMultiplier: 1
   BoostParticle: {fileID: 0}
   IsDecorative: 0
+  CurrentAttackIndex: 0
   IsStatic: 0
   StaticLookDirection: {x: 0, y: 0, z: 1}
   StaticPositionOnStart: 1
@@ -349,7 +350,8 @@ MonoBehaviour:
   InfSpottingMoveSpeed: 3
   InfThresholdWalkingToSusPerson: 0.15
   InfThresholdRunningToSusPerson: 0.75
-  InfSlashParticles: {fileID: 0}
+  InfSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
+    type: 3}
   EventOnSpotted:
     m_PersistentCalls:
       m_Calls: []
@@ -397,41 +399,110 @@ MonoBehaviour:
   ExplosionDelay: 1
   ExplosionStartRange: 1
   ExplosionParticles: {fileID: 0}
+  Attack1Cooldown: 1
+  Attack2Cooldown: 1
+  Attack3Cooldown: 2
+  WaitInIdleAfterAttack: 1
   Attack1CurrentCooldown: 0
   Attack2CurrentCooldown: 0
   Attack3CurrentCooldown: 0
   CurrentCooldownBetweenAttacks: 0
   CurrentWaitInIdle: 0
-  MegaSlashRange: 2
-  MegaSlashDamage: 10
+  MegaSlashRange: 4
+  MegaSlashDamage: 40
   MegaSlashKnockback: 10
-  MegaSlashDelay: 1
+  MegaSlashDelay: 0.25
   MegaSlashCollisionSize: 3
   MegaSlashParticles: {fileID: 1087929542498887552, guid: af73ee0a6d25bbb449c99273bb3489b0,
     type: 3}
   Spikes: {fileID: 2961350032249756260, guid: 0622cd3023ddc6042985be73f21414c2, type: 3}
-  SpikesLength: 5
-  SpikesSpaces: 0.75
-  SpikeDamage: 10
+  SpikesLength: 15
+  SpikesSpaces: 1
+  SpikeDamage: 20
   SpikeKnockback: 10
   CanSpikeDamageMultipleTime: 0
-  SpikeDelayIncrementation: 0.1
+  SpikeDelayIncrementation: 0.035
   JumpHeight: 5
-  DamageRadius: 5
   JumpAttackCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.17527674
+    - serializedVersion: 3
+      time: 0.15682787
+      value: 0.63333714
+      inSlope: 2.3872247
+      outSlope: 2.3872247
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.59449035
+      value: 0.95546865
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.87846893
+      value: 0.58780044
+      inSlope: -3.0656655
+      outSlope: -3.0656655
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -5.457627
+      outSlope: -5.457627
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.36435562
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   JumpDuration: 1
-  LandingRadius: 2
+  LandingRadius: 3
   LandingDamage: 20
   LandingKnockback: 10
-  LandingParticles: {fileID: 0}
+  LandingParticles: {fileID: 5863619617303975607, guid: 5016fd15725d98343b6da7d931c9df1b,
+    type: 3}
   CurrentJumpDuration: 0
   JumpStartPos: {x: 0, y: 0, z: 0}
   JumpEndPos: {x: 0, y: 0, z: 0}
+  RedBall: {fileID: 0}
+  RedBallOffset: 1
+  WoodenPieceRainZone: {fileID: 0}
+  AreaDamageRadius: 1
+  AreaDamageInterval: 1
+  AreaDamageAmount: 1
+  AreaDamageKnockback: 1
+  CanAreaDamageZoneDamageMultipleTime: 0
+  CurrentCooldownBeforeTakeDamage: 0
+  AlreadyAreaDamageZoneDamaged: []
+  Clone: {fileID: 0}
+  _waypoints: []
+  _tpPoint: {fileID: 0}
+  _numberOfArrow: 0
+  _cloneAttackInterval: 0.5
+  _cloneAttackDelay: 1
+  _cloneLifeTime: 1
+  _cooldownForReaparition: 1
+  _minCooldownForAttack: 10
+  _maxCooldownForAttack: 30
 --- !u!114 &7123242707287866178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,7 +558,8 @@ MonoBehaviour:
   _spikeKnockback: 10
   _canSpikeDamageMultipleTime: 0
   _spikeDelayIncrementation: 0.1
-  JumpHeight: 5
+  AlreadySpikeDamaged: []
+  JumpHeight: 4
   DamageRadius: 5
   _jumpAttackCurve:
     serializedVersion: 2
@@ -495,35 +567,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 4.1019106
-      outSlope: 4.1019106
+      inSlope: 2.294303
+      outSlope: 2.294303
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.08901722
-      value: 0.36514068
-      inSlope: 2.4915595
-      outSlope: 2.4915595
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.7681282
-      value: 0.963579
-      inSlope: -0.75114936
-      outSlope: -0.75114936
+      time: 0.42086735
+      value: 0.9655972
+      inSlope: 0.36873752
+      outSlope: 0.36873752
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1144994
-      outWeight: 0.30251414
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.83487105
+      value: 0.8989237
+      inSlope: -0.62261194
+      outSlope: -0.62261194
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.66232646
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -4.1556544
-      outSlope: -4.1556544
+      value: 0.0036201477
+      inSlope: -5.421845
+      outSlope: -5.421845
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -610,7 +682,7 @@ MonoBehaviour:
   LastDirection: {x: 0, y: 0, z: 0}
   _movementAcceleration: 150
   _movementMaxSpeed: 5
-  _movementFrictionForce: 75
+  _movementFrictionForce: 150
   MoveSpeedBoost: 1
   _enemyAnimator: {fileID: 6576102615220794748}
 --- !u!1001 &8985682166156045280

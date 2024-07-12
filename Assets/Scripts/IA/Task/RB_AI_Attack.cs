@@ -251,6 +251,27 @@ public class RB_AI_Attack : RB_BTNode
                     }
                     break;
                 case ENEMYCLASS.RobertLeNec:
+                    switch(_attackIndex)
+                    {
+                        case 0:
+                            RobertShootAttack();
+                            _btParent.Attack1CurrentCooldown = _btParent.Attack1Cooldown;
+                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack / 2f;
+                            StopAttacking();
+                            break;
+                        case 1:
+                            WoodenPieceRainZoneAttack();
+                            _btParent.Attack2CurrentCooldown = _btParent.Attack2Cooldown;
+                            _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack / 2f;
+                            StopAttacking();
+                            break;
+                        case 2:
+                            RobertCloneAttack();
+                            _btParent.Attack3CurrentCooldown = _btParent.Attack3Cooldown;
+                            _btParent.CurrentWaitInIdle = _btParent.CloneLifeTime + (_btParent.WaitInIdleAfterAttack / 2f);
+                            StopAttacking();
+                            break;
+                    }
                     break;
                 case ENEMYCLASS.Yog:
                     break;
@@ -302,6 +323,7 @@ public class RB_AI_Attack : RB_BTNode
         }
     }
 
+    #region MegaKnight
     public void MegaKickAttack() //ATTACK 2 MegaKnight
     {
         _transform.GetComponent<RB_Mega_knight>().AlreadySpikeDamaged.Clear();
@@ -342,7 +364,7 @@ public class RB_AI_Attack : RB_BTNode
     public void MegaJumpAttack() //ATTACK 3 MegaKnight
     {
         //jump calculation
-        _btParent.CurrentJumpDuration += Time.fixedDeltaTime;
+        _btParent.CurrentJumpDuration += Time.deltaTime;
         float percentComplete = _btParent.CurrentJumpDuration / _btParent.JumpDuration;
         float yPos = _btParent.JumpAttackCurve.Evaluate(percentComplete) * _btParent.JumpHeight;
         Vector3 horizontalPos = Vector3.Lerp(_btParent.JumpStartPos, _btParent.JumpEndPos, percentComplete);
@@ -373,6 +395,72 @@ public class RB_AI_Attack : RB_BTNode
             StopAttacking();
         }
     }
+    #endregion
+
+    #region Robert Le Nec
+    public void RobertShootAttack() //ATTACK 1
+    {
+        _btParent.AiAnimator.SetTrigger("BasicZone");
+        RB_AudioManager.Instance.PlaySFX("Magic_Ball_Sound", _transform.position, false, 0f, 1f);
+        
+        /*Vector3 randomDirection = Random.insideUnitSphere;
+        randomDirection.y = 0;
+        randomDirection.Normalize();
+
+        float randomDistance = Random.Range(_minMovementBeforeAttackDistance, _maxMovementBeforeAttackDistance);
+
+        Vector3 destination = transform.position + randomDirection * randomDistance;
+
+        _movement.MoveIntoDirection(destination, _dashBeforeAttackSpeed);*/
+
+        //Spawn of projectiles (attack 1)
+        _btParent.AiRigidbody.MoveRotation(Quaternion.LookRotation(RB_Tools.GetHorizontalDirection(_target.position - _transform.position)));
+        Vector3 offset = _transform.forward * _btParent.RedBallOffset;
+        Vector3 spawnProjectile = _transform.position + offset;
+        _btParent.SpawnPrefab(_btParent.RedBall, spawnProjectile, _transform.rotation);
+    }
+
+    public void WoodenPieceRainZoneAttack() //ATTACK 2 robert
+    {
+        //Spawn of the zone attack (attack n°2)
+        _btParent.AiAnimator.SetTrigger("BasicZone");
+        float offset = 0.99f;
+        Vector3 areaDamageSpawn = new Vector3(_target.position.x, _target.position.y - offset, _target.position.z);
+        RB_RainZone rainZone = _btParent.SpawnPrefab(_btParent.WoodenPieceRainZone, areaDamageSpawn, Quaternion.identity).GetComponent<RB_RainZone>();
+        rainZone.DamageCooldown = _btParent.AreaDamageInterval;
+        rainZone.AreaDamageAmount = _btParent.AreaDamageAmount;
+        rainZone.CanAreaDamageZoneDamageMultipleTime = _btParent.CanAreaDamageZoneDamageMultipleTime;
+        rainZone.transform.localScale = new Vector3(_btParent.AreaDamageRadius * 2, _btParent.WoodenPieceRainZone.transform.localScale.y, _btParent.AreaDamageRadius * 2);
+        rainZone.Sylvashot = _transform.GetComponent<RB_RobertLenec>();
+    }
+
+    public void RobertCloneAttack() //ATTACK 3 robert
+    {
+        //Instantiation of clones
+        _btParent.AiAnimator.SetTrigger("Clonage");
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject clone = _btParent.SpawnPrefab(_btParent.Clone, _transform.position, Quaternion.identity);
+            RB_Clones cloneScript = clone.GetComponent<RB_Clones>();
+            cloneScript.TargetPosition = _btParent.Waypoints[i].position;
+            cloneScript.Lifetime = _btParent.CloneLifeTime;
+        }
+
+        //get the position of the boss before the attack
+        _btParent.LastPosition = _transform.position;
+        //tp the boss out of the map
+        _btParent.AiRigidbody.MovePosition(_btParent.TpPoint.position);
+
+        _btParent.StartCoroutine(ReturnToLastPos(_btParent.CloneLifeTime));
+    }
+
+    private IEnumerator ReturnToLastPos(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        _btParent.AiRigidbody.MovePosition(_btParent.LastPosition);
+    }
+    #endregion
 
     public void Slash(float damage, float range, float knockback, float collSize, GameObject particle) //ATTACK 0 LIGHT
     {

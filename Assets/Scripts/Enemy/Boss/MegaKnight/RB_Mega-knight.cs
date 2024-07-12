@@ -12,8 +12,6 @@ public class RB_Mega_knight : RB_Boss
 
     private float _activationTimer = 0;
 
-    [Header("StateMachine")]
-    [SerializeField] private bool _enableStateMachine = true;
 
     [Header("Slash (attack1)")]
     [SerializeField] private float _slashDamage = 30;

@@ -264,6 +264,7 @@ public class RB_AI_BTTree : RB_BTTree
         AiHealth = GetComponent<RB_Health>();
         AiRigidbody = GetComponent<Rigidbody>();
         AiAnimator = GetComponentInChildren<Animator>();
+        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
     }
 
     protected override void Update()

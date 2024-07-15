@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RB_AppearingAI : MonoBehaviour
@@ -10,6 +11,8 @@ public class RB_AppearingAI : MonoBehaviour
     private Material _baseMaterial;
 
     private Material _dissolveMaterial;
+
+    private ParticleSystem _appearingParticle;
 
     public float TimeForAppearing = 1.0f;
 
@@ -22,6 +25,9 @@ public class RB_AppearingAI : MonoBehaviour
         _baseMaterial = new Material(_spriteRenderer.material);
         _dissolveMaterial = new Material(Resources.Load<Material>("Material/DissolveSprite"));
         _spriteRenderer.material = _dissolveMaterial;
+        _appearingParticle = Resources.Load<ParticleSystem>("Prefabs/Particles/AppearingParticle");
+        _appearingParticle = Instantiate(_appearingParticle, transform.position, Quaternion.identity);
+        EnemyGestion();
     }
 
     private void Update()
@@ -48,6 +54,8 @@ public class RB_AppearingAI : MonoBehaviour
             _rb.detectCollisions = true;
             _spriteRenderer.material = _baseMaterial;
             enemyTree.enabled = true;
+            Destroy(_appearingParticle.gameObject, 5);
+            _appearingParticle.Stop();
             Destroy(this);
         }
     }

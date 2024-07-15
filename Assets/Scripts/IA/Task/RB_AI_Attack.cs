@@ -644,10 +644,9 @@ public class RB_AI_Attack : RB_BTNode
 
             GameObject enemy;
             enemy = _btParent.SpawnPrefab(_btParent.SpawnableMinion[randomIndex], spawnPoints[i], Quaternion.identity);
-            enemy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             _btParent.MinionSpawned.Add(enemy);
             RB_AppearingAI appearAI = enemy.AddComponent<RB_AppearingAI>();
-            appearAI.TimeForRescaling = _btParent.TimeForRescalingMinion;
+            appearAI.TimeForAppearing = _btParent.TimeForRescalingMinion;
         }
     }
     #endregion

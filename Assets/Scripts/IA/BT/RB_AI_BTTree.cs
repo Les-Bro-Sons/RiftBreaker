@@ -1,16 +1,27 @@
 using BehaviorTree;
-using System.Collections.Generic;
 using MANAGERS;
-using Unity.VisualScripting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.Splines;
 using UnityEngine.UI;
-using UnityEngine.Events;
-using System.Linq;
 
-public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
+public class RB_AI_BTTree : RB_BTTree
 {
+    [Serializable]
+    public struct Attack
+    {
+        public float Delay;
+        
+        public float Damage;
+        public float Knockback;
+        
+        public float Range;
+    }
+
     private List<PHASES> _infiltrationPhases = new();
     private List<PHASES> _combatPhases = new();
 
@@ -27,6 +38,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float BoostMultiplier = 1f;
     public ParticleSystem BoostParticle;
     public bool IsDecorative = false;
+    [HideInInspector] public int CurrentAttackIndex = 0;
 
     [Header("Static Mode Parameters")]
     public bool IsStatic = false;
@@ -67,6 +79,7 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public Rigidbody AiRigidbody;
     public Animator AiAnimator;
     [HideInInspector] public NavMeshAgent AiNavMeshAgent;
+    public RB_EnemyAnimation AiEnemyAnimation;
 
     [Header("Infiltration")]
     public float InfSlashRange;
@@ -82,9 +95,9 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     [HideInInspector] public UnityEvent EventOnSpotted;
 
     [Header("Distractions")]
-    public List<RB_Distraction> Distractions = new();
-    public List<RB_Distraction> AlreadySeenDistractions = new();
-    public RB_Distraction CurrentDistraction;
+    [HideInInspector] public List<RB_Distraction> Distractions = new();
+    [HideInInspector] public List<RB_Distraction> AlreadySeenDistractions = new();
+    [HideInInspector] public RB_Distraction CurrentDistraction;
     public float MoveToDistractionSpeed = 6;
     public float DistractionDistanceNeeded = 1;
     public float DistractedSpotSpeedMultiplier = 2;
@@ -136,18 +149,122 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
     public float ExplosionStartRange = 1;
     public GameObject ExplosionParticles;
 
+    [Header("Boss")]
+    public float Attack1Cooldown = 1;
+    public float Attack2Cooldown = 1;
+    public float Attack3Cooldown = 1;
+    public float WaitInIdleAfterAttack = 1;
+    [HideInInspector] public float Attack1CurrentCooldown;
+    [HideInInspector] public float Attack2CurrentCooldown;
+    [HideInInspector] public float Attack3CurrentCooldown;
+    [HideInInspector] public float CurrentCooldownBetweenAttacks;
+    [HideInInspector] public float CurrentWaitInIdle;
+
+    [Header("MegaKnight")]
+    public float MegaSlashRange;
+    public float MegaSlashDamage;
+    public float MegaSlashKnockback;
+    public float MegaSlashDelay;
+    public float MegaSlashCollisionSize = 3;
+    public GameObject MegaSlashParticles;
+
+    public GameObject Spikes;
+    public float SpikesLength = 5;
+    public float SpikesSpaces = 0.75f;
+    public float SpikeDamage = 10;
+    public float SpikeKnockback = 10;
+    public bool CanSpikeDamageMultipleTime = false;
+    public float SpikeDelayIncrementation = 0.1f;
+
+    public float JumpHeight = 5f;
+    public AnimationCurve JumpAttackCurve;
+    public float JumpDuration = 1;
+    public float LandingRadius = 2;
+    public float LandingDamage = 20;
+    public float LandingKnockback = 10;
+    public GameObject LandingParticles;
+    [HideInInspector] public float CurrentJumpDuration = 0;
+    [HideInInspector] public Vector3 JumpStartPos;
+    [HideInInspector] public Vector3 JumpEndPos;
+
+    [Header("Robert Le Nec")]
+    public GameObject RedBall;
+    public float RedBallOffset = 1f;
+
+    public GameObject WoodenPieceRainZone;
+    public float AreaDamageRadius = 1f;
+    public float AreaDamageInterval = 1f;
+    public float AreaDamageAmount = 1f;
+    public float AreaDamageKnockback = 1f;
+    public bool CanAreaDamageZoneDamageMultipleTime = false;
+    public float CurrentCooldownBeforeTakeDamage;
+    [HideInInspector] public List<RB_Health> AlreadyAreaDamageZoneDamaged = new();
+
+    public GameObject Clone;
+    public List<Transform> Waypoints;
+    public Transform TpPoint;
+    public int NumberOfArrow = 1;
+    public float CloneAttackInterval = 0.5f;
+    public float CloneAttackDelay = 1f;
+    public float CloneLifeTime = 1f;
+    public float CooldownForReaparition = 1f;
+    public float MinCooldownForAttack = 10f;
+    public float MaxCooldownForAttack = 30f;
+    [HideInInspector] public Vector3 LastPosition;
+    [HideInInspector] public float CurrentCooldownBeforeReactivate;
+
+    [Header("Yog")]
+    public RB_Tentacles YogTentacle;
+    public RB_CollisionDetection YogTentacleCollision;
+    public bool YogTentacleHitFullRange = true;
+    public float YogTentacleHitWidth = 1f;
+    public float YogTentacleHitRange = 1f;
+    public float YogTentacleHitKnockback = 1f;
+    public float YogTentacleHitDamage = 1f;
+    public float YogTentacleHitDelay = 1f;
+    public float YogTentacleHitDuration = 1f;
+    public float YogTentacleRemoveDuration = 0.25f;
+    public AnimationCurve YogTentacleHitCurve;
+    public AnimationCurve YogTentacleRemoveCurve;
+    public float YogTentacleDelayBeforeHit = 0.2f;
+    public int YogTentaclenumberTotalOfAttack = 5;
+    public GameObject YogTentacleHitParticles;
+    public GameObject YogTentacleHitAnimation;
+    [HideInInspector] public int YogTentacleAttackDone;
+    [HideInInspector] public float YogTentacleHitDelayTimer = 0;
+    public float YogTentacleHitFirstDelay = 3;
+    [HideInInspector] public float YogTentacleHitFirstDelayTimer = 0;
+
+    public GameObject YogExplosionZone;
+    public GameObject YogExplosionParticles;
+    public float YogAreaDamageRadius = 1f;
+    public float YogAreaDamageInterval = 1f;
+    public float YogAreaDamageAmount = 1f;
+    public float YogAreaDamageKnockback = 1f;
+    public float YogAreaExpandingTime = 1f;
+    public bool YogCanAreaDamageZoneDamageMultipleTime = false;
+    public AnimationCurve YogAreaExpandCurve;
+    [HideInInspector] public List<RB_Health> YogAlreadyAreaDamageZoneDamaged = new();
+    [HideInInspector] public List<GameObject> YogExplosion = new List<GameObject>();
+
+    public float YogExplosionDamage = 1f;
+    public float YogExplosionKnockback = 1f;
+    public bool YogCanExplosionDamageMultipleTime = false;
+    public List<RB_Health> YogAlreadyExplosionDamaged = new();
+
+    [HideInInspector] public List<GameObject> MinionSpawned = new ();
+    public int NumberOfMinionSpawn = 3;
+    public float TimeForRescalingMinion = 1f;
+    public List<GameObject> SpawnableMinion = new();
+    public Transform YogCenterOfRoom;
+
     private void Awake()
     {
-        /*
-        if (CanvasUi.alpha > 0f)
-            CanvasUi.alpha = 0;*/
-
         AiMovement = GetComponent<RB_AiMovement>();
-        if (AiMovement == null)
-            AiMovement.AddComponent<RB_AiMovement>();
         AiHealth = GetComponent<RB_Health>();
         AiRigidbody = GetComponent<Rigidbody>();
         AiAnimator = GetComponentInChildren<Animator>();
+        if (AiAnimator) AiAnimator.SetFloat("EnemyID", (int)AiType);
     }
 
     protected override void Update()
@@ -161,6 +278,8 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
 
     private void ApplyBoostParticles()
     {
+        if (!BoostParticle) return;
+
         if (BoostMultiplier > 1 && !BoostParticle.isPlaying) 
         {
             BoostParticle.Play();
@@ -518,6 +637,227 @@ public class RB_AI_BTTree : RB_BTTree // phase Inf => Phase Infiltration
                             {
                                 new RB_AI_FollowLeader(this),
                             }),
+                        }),
+                        #endregion
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> //sequence Megaknight
+                    {
+                        #region Enemy Type Megaknight
+                        new RB_AICheck_Class(AiType, ENEMYCLASS.Megaknight),
+                        new RB_AI_CooldownProgress(this),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                            {
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking),
+                                new RB_AI_Attack(this, "CurrentAttackIndex"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //wait in idle sequence
+                            {
+                                new RB_AICheck_Comparison(this, "CurrentWaitInIdle", 0, ">"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //Spot sequence
+                            {
+                                new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
+                                new RB_AI_ToState(new RB_AI_GoToTarget(this, MovementSpeedAggro, MegaSlashRange), BTNodeState.SUCCESS),
+                                new RB_BTSequence(new List<RB_BTNode>
+                                {
+                                    new RB_AICheck_Comparison(this, "CurrentCooldownBetweenAttacks", 0, "<="),
+                                    new RB_BTSelector(new List<RB_BTNode> //Attack sequence
+                                    {
+                                        new RB_BTSequence(new List<RB_BTNode> //Attack 1
+                                        {
+                                            new RB_AICheck_Comparison(this, "Attack1CurrentCooldown", 0, "<="),
+                                            new RB_AICheck_IsTargetClose(this, MegaSlashRange),
+                                            new RB_AI_Attack(this, 0),
+                                        }),
+
+                                        new RB_BTSequence(new List<RB_BTNode> //Attack 2
+                                        {
+                                            new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, "<="),
+                                            new RB_AICheck_IsTargetClose(this, 7),
+                                            new RB_AICheck_IsTargetFar(this, MegaSlashRange),
+                                            new RB_AI_Attack(this, 1),
+                                        }),
+
+                                        new RB_BTSequence(new List<RB_BTNode> //Attack 3
+                                        {
+                                            new RB_AICheck_Comparison(this, "Attack3CurrentCooldown", 0, "<="),
+                                            new RB_AICheck_IsTargetFar(this, 7),
+                                            new RB_AI_Attack(this, 2),
+                                        }),
+
+                                        new RB_BTSequence(new List<RB_BTNode>
+                                        {
+                                            new RB_AICheck_Random(0.4f, 1),
+                                            new RB_AI_Attack(this, new Dictionary<int, float>{{1, 50}, {2, 50} }),
+                                        }),
+                                    }),
+                                }),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_ReverseState(new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, false)),
+                                new RB_AI_StaticWatchOut(this),
+                            }),
+                        }),
+                        #endregion
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> //sequence Robert Le Nec
+                    {
+                        #region Enemy Type Robert Le Nec
+                        new RB_AICheck_Class(AiType, ENEMYCLASS.RobertLeNec),
+                        new RB_AI_CooldownProgress(this),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                            {
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking),
+                                new RB_AI_Attack(this, "CurrentAttackIndex"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //wait in idle sequence
+                            {
+                                new RB_AICheck_Comparison(this, "CurrentWaitInIdle", 0, ">"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //Spot sequence
+                            {
+                                new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
+                                new RB_BTSelector(new List<RB_BTNode>
+                                {
+                                    new RB_BTSequence(new List<RB_BTNode> //flee sequence
+                                    {
+                                        new RB_AICheck_IsTargetClose(this, 5),
+                                        new RB_AI_ToState(new RB_AI_FleeFromTarget(this, 5), BTNodeState.FAILURE),
+                                    }),
+
+                                    new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                                    {
+                                        new RB_AICheck_Comparison(this, "CurrentCooldownBetweenAttacks", 0, "<="),
+                                        new RB_BTSelector(new List<RB_BTNode> //Attack switch
+                                        {
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 1
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack1CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetFar(this, 5),
+                                                new RB_AI_Attack(this, 0),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 2
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetFar(this, 2),
+                                                new RB_AICheck_IsTargetClose(this, 5),
+                                                new RB_AI_Attack(this, 1),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 3
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack3CurrentCooldown", 0, "<="),
+                                                new RB_AI_Attack(this, 2),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode>
+                                            {
+                                                new RB_AICheck_Random(0.5f, 1),
+                                                new RB_AI_Attack(this, new Dictionary<int, float>{{0, 50}, {1, 50}, {2, 50}}),
+                                            }),
+                                        }),
+                                    }),
+                                }),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AI_ReverseState(new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, false)),
+                                new RB_AI_StaticWatchOut(this),
+                            }),
+                        }),
+                        #endregion
+                    }),
+
+                    new RB_BTSequence(new List<RB_BTNode> //sequence Yog
+                    {
+                        #region Enemy Type Yog
+                        new RB_AICheck_Class(AiType, ENEMYCLASS.Yog),
+                        new RB_AI_CooldownProgress(this),
+                        new RB_BTSelector(new List<RB_BTNode>
+                        {
+                            new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                            {
+                                new RB_AICheck_Bool(this, BTBOOLVALUES.IsAttacking),
+                                new RB_AI_Attack(this, "CurrentAttackIndex"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AICheck_Comparison(this, "YogTentacleAttackDone", 0, ">"),
+                                new RB_AI_Attack(this, 0),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode> //wait in idle sequence
+                            {
+                                new RB_AICheck_Comparison(this, "CurrentWaitInIdle", 0, ">"),
+                            }),
+
+                            new RB_BTSequence(new List<RB_BTNode>
+                            {
+                                new RB_AICheck_EnemyInRoom(this, TARGETMODE.Closest, true),
+                                new RB_BTSelector(new List<RB_BTNode>
+                                {
+                                    new RB_BTSequence(new List<RB_BTNode>
+                                    {
+                                        new RB_AICheck_IsTargetClose(this, 3),
+                                        new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, ">="),
+                                        new RB_AI_ToState(new RB_AI_FleeFromTarget(this, 3, MovementSpeed), BTNodeState.FAILURE),
+                                    }),
+
+                                    new RB_BTSequence(new List<RB_BTNode>
+                                    {
+                                        new RB_AICheck_IsTargetFar(this, 5),
+                                        new RB_AI_ToState(new RB_AI_GoToTarget(this, MovementSpeed, 1), BTNodeState.FAILURE),
+                                    }),
+
+                                    new RB_BTSequence(new List<RB_BTNode> //Attack sequence
+                                    {
+                                        new RB_AICheck_Comparison(this, "CurrentCooldownBetweenAttacks", 0, "<="),
+                                        new RB_BTSelector(new List<RB_BTNode> //Attack switch
+                                        {
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 3
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack3CurrentCooldown", 0, "<="),
+                                                new RB_AI_Attack(this, 2),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 1
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack1CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetFar(this, YogAreaDamageRadius/2f),
+                                                new RB_AI_Attack(this, 0),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode> //Attack 2
+                                            {
+                                                new RB_AICheck_Comparison(this, "Attack2CurrentCooldown", 0, "<="),
+                                                new RB_AICheck_IsTargetClose(this, YogAreaDamageRadius/2f),
+                                                new RB_AI_Attack(this, 1),
+                                            }),
+
+                                            new RB_BTSequence(new List<RB_BTNode>
+                                            {
+                                                new RB_AICheck_Random(0.2f, 1),
+                                                new RB_AI_Attack(this, new Dictionary<int, float>{{0, 50}, {1, 50}, {2, 25} }),
+                                            }),
+                                        }),
+                                    }),
+                                }),
+                            })
                         }),
                         #endregion
                     }),

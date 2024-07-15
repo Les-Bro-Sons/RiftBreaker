@@ -83,6 +83,9 @@ public enum ENEMYCLASS
     Heavy,
     Pawn,
     Tower,
+    Megaknight,
+    RobertLeNec,
+    Yog,
 }
 
 public enum TARGETMODE

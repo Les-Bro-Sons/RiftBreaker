@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7043983935662915794}
   - component: {fileID: 7950358798519079587}
+  - component: {fileID: 106719810906937867}
   - component: {fileID: 4403257837153332557}
   - component: {fileID: 263053956299020696}
   - component: {fileID: 7939403144304551523}
@@ -101,7 +102,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3453180199176938183}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -117,9 +118,184 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &106719810906937867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3453180199176938183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401fb56c24b43d04ca5c0340cc9d2658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AiType: 6
+  MovementSpeed: 4
+  MovementSpeedAggro: 8
+  MovementSpeedFlee: 6
+  FleeDistance: 2.5
+  AttackSpeed: 0.2
+  BoostMultiplier: 1
+  BoostParticle: {fileID: 0}
+  IsDecorative: 0
+  CurrentAttackIndex: 0
+  IsStatic: 0
+  StaticLookDirection: {x: 0, y: 0, z: 1}
+  StaticPositionOnStart: 1
+  StaticPosition: {x: 0, y: 0, z: 0}
+  IsOnStaticPoint: 0
+  WaitBeforeToMoveToNextWaypoint: 0.25
+  PatrolSplineIndex: 0
+  HasAnInterval: 0
+  StartWaitingWaypointInterval: 0
+  CurrentWaypointIndex: 0
+  SplineContainer: {fileID: 0}
+  InRange: 0
+  FovRange: 10
+  SpottedFovRange: 10
+  FovAngle: 75
+  MinDistDurationToLoadSpotBar: 0.25
+  MaxDistDurationToLoadSpotBar: 1
+  DurationToUnloadSpotBar: 1
+  LastTargetPos: {x: 0, y: 0, z: 0}
+  IsPlayerInSight: 0
+  CanvasUi: {fileID: 0}
+  ImageSpotBar: {fileID: 0}
+  DurationAlphaCanvas: 0.5
+  LastSpotValue: 0
+  _prefabUxDetectedReadyMark: {fileID: 2153901776240351120, guid: 507c0141ec0e1ec45bc19ba2bf7d24d0,
+    type: 3}
+  AiMovement: {fileID: 0}
+  AiHealth: {fileID: 0}
+  AiRigidbody: {fileID: 0}
+  AiAnimator: {fileID: 7214748225881584283}
+  AiNavMeshAgent: {fileID: 0}
+  AiEnemyAnimation: {fileID: 1590539819019785142}
+  InfSlashRange: 0
+  InfSlashDamage: 0
+  InfSlashKnockback: 0
+  InfSlashDelay: 0
+  InfSlashCollisionSize: 3
+  InfSpottedMoveSpeed: 11
+  InfSpottingMoveSpeed: 3
+  InfThresholdWalkingToSusPerson: 0.15
+  InfThresholdRunningToSusPerson: 0.75
+  InfSlashParticles: {fileID: 0}
+  EventOnSpotted:
+    m_PersistentCalls:
+      m_Calls: []
+  Distractions: []
+  AlreadySeenDistractions: []
+  CurrentDistraction: {fileID: 0}
+  MoveToDistractionSpeed: 6
+  DistractionDistanceNeeded: 1
+  DistractedSpotSpeedMultiplier: 2
+  SlashRange: 0
+  SlashDamage: 0
+  SlashKnockback: 0
+  SlashDelay: 0
+  SlashCollisionSize: 3
+  SlashParticles: {fileID: 0}
+  ArrowPrefab: {fileID: 0}
+  BowRange: 0
+  BowDamage: 0
+  BowKnockback: 0
+  BowDelay: 0
+  ArrowSpeed: 0
+  ArrowDistance: 0
+  HeavyArrowPrefab: {fileID: 0}
+  HeavyBowRange: 0
+  HeavyBowDamage: 0
+  HeavyBowKnockback: 0
+  HeavyBowDelay: 0
+  HeavyBowProjectileNumber: 3
+  HeavyBowDelayBetweenProjectile: 0.2
+  HeavyArrowSpeed: 0
+  HeavyArrowDistance: 0
+  HeavySlashRange: 0
+  HeavySlashDamage: 0
+  HeavySlashKnockback: 0
+  HeavySlashFirstDelay: 0
+  HeavySlashComboDelay: 0
+  HeavySlashCollisionSize: 3
+  CurrentHeavySlashCombo: 0
+  MaxHeavySlashCombo: 5
+  HeavySlashParticles: {fileID: 0}
+  ExplosionDamage: 30
+  ExplosionKnockback: 15
+  ExplosionRadius: 3
+  ExplosionDelay: 1
+  ExplosionStartRange: 1
+  ExplosionParticles: {fileID: 0}
+  Attack1Cooldown: 1
+  Attack2Cooldown: 1
+  Attack3Cooldown: 10
+  WaitInIdleAfterAttack: 1
+  Attack1CurrentCooldown: 0
+  Attack2CurrentCooldown: 0
+  Attack3CurrentCooldown: 0
+  CurrentCooldownBetweenAttacks: 0
+  CurrentWaitInIdle: 0
+  MegaSlashRange: 0
+  MegaSlashDamage: 0
+  MegaSlashKnockback: 0
+  MegaSlashDelay: 0
+  MegaSlashCollisionSize: 3
+  MegaSlashParticles: {fileID: 0}
+  Spikes: {fileID: 0}
+  SpikesLength: 5
+  SpikesSpaces: 0.75
+  SpikeDamage: 10
+  SpikeKnockback: 10
+  CanSpikeDamageMultipleTime: 0
+  SpikeDelayIncrementation: 0.1
+  JumpHeight: 5
+  JumpAttackCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  JumpDuration: 1
+  LandingRadius: 2
+  LandingDamage: 20
+  LandingKnockback: 10
+  LandingParticles: {fileID: 5863619617303975607, guid: 5016fd15725d98343b6da7d931c9df1b,
+    type: 3}
+  CurrentJumpDuration: 0
+  JumpStartPos: {x: 0, y: 0, z: 0}
+  JumpEndPos: {x: 0, y: 0, z: 0}
+  RedBall: {fileID: 2082089089255593965, guid: c33db515c40ac79429f3547156974591, type: 3}
+  RedBallOffset: 0.5
+  WoodenPieceRainZone: {fileID: 4206258448558021486, guid: 3f1ce637d5db8c44bbfc8518f0b95385,
+    type: 3}
+  AreaDamageRadius: 3
+  AreaDamageInterval: 0.1
+  AreaDamageAmount: 5
+  AreaDamageKnockback: 0
+  CanAreaDamageZoneDamageMultipleTime: 0
+  CurrentCooldownBeforeTakeDamage: 0
+  AlreadyAreaDamageZoneDamaged: []
+  Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
+  Waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  TpPoint: {fileID: 0}
+  NumberOfArrow: 1
+  CloneAttackInterval: 0.5
+  CloneAttackDelay: 1
+  CloneLifeTime: 1.75
+  CooldownForReaparition: 1
+  MinCooldownForAttack: 10
+  MaxCooldownForAttack: 30
+  LastPosition: {x: 0, y: 0, z: 0}
+  CurrentCooldownBeforeReactivate: 0
 --- !u!114 &4403257837153332557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +312,7 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 9101173564990518349}
   _animator: {fileID: 7214748225881584283}
   _health: {fileID: 263053956299020696}
-  _enemy: {fileID: 0}
+  _enemy: {fileID: -5315812548548587530}
   _door: {fileID: 0}
 --- !u!114 &263053956299020696
 MonoBehaviour:
@@ -202,7 +378,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3453180199176938183}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 501494f742c15d341a2c7851acdb5152, type: 3}
   m_Name: 
@@ -215,12 +391,13 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 9101173564990518349}
   AiAnimator: {fileID: 7214748225881584283}
   ChargeSpecialAttackAmount: 0
-  EventAllyTeam:
+  EventJoinAllyTeam:
     m_PersistentCalls:
       m_Calls: []
-  EventEnemyTeam:
+  EventJoinEnemyTeam:
     m_PersistentCalls:
       m_Calls: []
+  _enableStateMachine: 0
   AttackRange: 1.5
   AttackSpeed: 2
   DistanceFromPlayer: 0
@@ -257,7 +434,11 @@ MonoBehaviour:
   _areaDamageKnockback: 1
   _canAreaDamageZoneDamageMultipleTime: 1
   Clone: {fileID: 3453180199176938183, guid: 9e34f58ce86d746448b6816697d7260f, type: 3}
-  _waypoints: []
+  _waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _tpPoint: {fileID: 0}
   _numberOfArrow: 0
   _cloneAttackInterval: 0.5

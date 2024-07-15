@@ -274,6 +274,36 @@ public class RB_AI_Attack : RB_BTNode
                     }
                     break;
                 case ENEMYCLASS.Yog:
+                    switch (_attackIndex)
+                    {
+                        case 0:
+                            if ((_btParent.YogTentacleAttackDone == 0 && WaitBeforeAttackCounter(_btParent.YogTentacleHitFirstDelay)) || (_btParent.YogTentacleAttackDone != 0 && WaitBeforeAttackCounter(_btParent.YogTentacleHitDelay + _btParent.YogTentacleHitDuration + _btParent.YogTentacleRemoveDuration)))
+                            {
+                                TentacleHit();
+                                if (_btParent.YogTentacleAttackDone >= _btParent.YogTentaclenumberTotalOfAttack)
+                                {
+                                    _btParent.Attack1CurrentCooldown = _btParent.Attack1Cooldown;
+                                    _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+                                    _btParent.YogTentacleAttackDone = 0;
+                                    StopAttacking();
+                                }
+                            }
+                            
+                            break;
+                        case 1:
+                            YogAreaBeforeExplosionAttack();
+                            _btParent.StartCoroutine(YogExplosion(_btParent.YogAreaExpandingTime));
+                            _btParent.Attack2CurrentCooldown = _btParent.Attack2Cooldown + _btParent.YogAreaExpandingTime;
+                            _btParent.CurrentWaitInIdle = _btParent.YogAreaExpandingTime + (_btParent.WaitInIdleAfterAttack / 2f);
+                            StopAttacking();
+                            break;
+                        case 2:
+                            YogSpawnEnemies();
+                            _btParent.Attack3CurrentCooldown = _btParent.Attack3Cooldown;
+                            _btParent.CurrentWaitInIdle = (_btParent.WaitInIdleAfterAttack / 2f);
+                            StopAttacking();
+                            break;
+                    }
                     break;
             }
         }
@@ -462,6 +492,165 @@ public class RB_AI_Attack : RB_BTNode
     }
     #endregion
 
+    #region Yog
+    public void TentacleHit()
+    {
+        _btParent.YogTentacleAttackDone += 1;
+        RB_AudioManager.Instance.PlaySFX("Tentacle_Hit_Sound", _transform.position, false, 1f, 1f);
+        _btParent.StopCoroutine(TentacleHitCoroutine());
+        _btParent.StartCoroutine(TentacleHitCoroutine());
+    }
+
+    public void StopTentacleHit()
+    {
+        _btParent.Attack1CurrentCooldown = _btParent.Attack1Cooldown;
+        _btParent.CurrentWaitInIdle = _btParent.WaitInIdleAfterAttack;
+        _btParent.YogTentacleAttackDone = 0;
+        StopAttacking();
+    }
+
+    IEnumerator TentacleHitCoroutine() //ATTACK 1
+    {
+        _transform.forward = _target.position - _transform.position;
+        float playerDistance = Vector3.Distance(_target.position, _transform.position);
+
+        //yield return new WaitForSeconds(_btParent.YogTentacleDelayBeforeHit);
+
+        _btParent.AiEnemyAnimation.TriggerBasicAttack();
+        float rangeForward = (_btParent.YogTentacleHitFullRange) ? _btParent.YogTentacleHitRange : Mathf.Clamp(playerDistance + 1, 0, _btParent.YogTentacleHitRange);
+        Vector3 fullSize = new Vector3(_btParent.YogTentacleHitWidth, 1, rangeForward);
+        _btParent.YogTentacle.transform.eulerAngles = new Vector3(0, _transform.eulerAngles.y, 0);
+        if (_btParent.YogTentacleHitParticles)
+        {
+            _btParent.SpawnPrefab(_btParent.YogTentacleHitParticles, _transform.position + (_transform.forward * rangeForward / 2), _transform.rotation);
+        }
+
+        Vector3 baseSize = new Vector3(fullSize.x, fullSize.y, fullSize.normalized.z);
+        float tentacleTimer = 0;
+        List<RB_Health> alreadyDamaged = new();
+        while (tentacleTimer < _btParent.YogTentacleHitDuration)
+        {
+            tentacleTimer += Time.deltaTime;
+
+            _btParent.YogTentacle.Size = Mathf.Lerp(0, rangeForward, _btParent.YogTentacleHitCurve.Evaluate(tentacleTimer / _btParent.YogTentacleHitDuration));
+            foreach (GameObject enemy in _btParent.YogTentacleCollision.GetDetectedEntity())
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
+                {
+
+                    if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                    alreadyDamaged.Add(enemyHealth);
+                    enemyHealth.TakeDamage(_btParent.YogTentacleHitDamage);
+                    enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.YogTentacleHitKnockback);
+                }
+            }
+            yield return null;
+        }
+
+        tentacleTimer = 0;
+        Vector3 endSize = new Vector3(fullSize.x, fullSize.y, 0);
+        while (tentacleTimer < _btParent.YogTentacleRemoveDuration)
+        {
+            tentacleTimer += Time.deltaTime;
+
+
+            _btParent.YogTentacle.Size = Mathf.Lerp(rangeForward, 0, _btParent.YogTentacleRemoveCurve.Evaluate(tentacleTimer / _btParent.YogTentacleRemoveDuration));
+            foreach (GameObject enemy in _btParent.YogTentacleCollision.GetDetectedEntity())
+            {
+                if (RB_Tools.TryGetComponentInParent<RB_Health>(enemy, out RB_Health enemyHealth))
+                {
+
+                    if (enemyHealth.Team == _btParent.AiHealth.Team || alreadyDamaged.Contains(enemyHealth)) continue;
+
+                    alreadyDamaged.Add(enemyHealth);
+                    enemyHealth.TakeDamage(_btParent.YogTentacleHitDamage);
+                    enemyHealth.TakeKnockback(enemyHealth.transform.position - _transform.position, _btParent.YogTentacleHitKnockback);
+                }
+            }
+            yield return null;
+        }
+
+        if(_btParent.YogTentacleAttackDone >= _btParent.YogTentaclenumberTotalOfAttack)
+        {
+            StopTentacleHit();
+        }
+        else
+        {
+            TentacleHit();
+        }
+    }
+
+    private void YogAreaBeforeExplosionAttack() //ATTACK 2
+    {
+        //Spawn of the zone attack (attack n°2)
+        _btParent.AiAnimator.SetTrigger("ZoneAttack");
+        GameObject Bomb = _btParent.SpawnPrefab(_btParent.YogExplosionZone, _transform.position, Quaternion.identity);
+        RB_ExplosionZone explosionZone = Bomb.GetComponent<RB_ExplosionZone>();
+        explosionZone.ExpandCurve = _btParent.YogAreaExpandCurve;
+        explosionZone.AreaExpandingTime = _btParent.YogAreaExpandingTime;
+        explosionZone.FinalScale = Vector3.one * _btParent.YogAreaDamageRadius * 2;
+        Bomb.transform.localScale = Vector3.zero;
+    }
+
+    private IEnumerator YogExplosion(float wait = 0)
+    {
+        //Application of damages for the explosion of zone attack (attack 2 part 2)
+        yield return new WaitForSeconds(wait);
+
+        List<RB_Health> enemyHealth = new();
+        foreach(Collider collider in Physics.OverlapSphere(_transform.position, _btParent.YogAreaDamageRadius))
+        {
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(collider.gameObject, out RB_Health eHealth))
+            {
+                enemyHealth.Add(eHealth);
+            }
+        }
+        List<RB_Health> alreadyDamaged = new();
+        foreach (RB_Health eHealth in enemyHealth)
+        {
+            if (_btParent.AiHealth.Team == eHealth.Team || (alreadyDamaged.Contains(eHealth) && !_btParent.YogCanExplosionDamageMultipleTime)) continue;
+
+            alreadyDamaged.Add(eHealth);
+            eHealth.TakeDamage(_btParent.YogExplosionDamage);
+            eHealth.TakeKnockback(RB_Tools.GetHorizontalDirection(eHealth.transform.position - _transform.position), _btParent.YogExplosionKnockback);
+        }
+
+        if (_btParent.YogExplosionParticles)
+            _btParent.SpawnPrefab(_btParent.YogExplosionParticles, _transform.position, _transform.rotation);
+
+        yield return null;
+    }
+
+    public void YogSpawnEnemies()
+    {
+        List<Vector3> spawnPoints = new List<Vector3>();
+
+        for (int i = 0; i < _btParent.NumberOfMinionSpawn; i++)
+        {
+            //Set a random spawn inside a sphere around the boss
+            Vector3 randomDirection = Random.insideUnitSphere;
+            randomDirection.y = 0;
+            randomDirection.Normalize();
+
+            float randomDistance = Random.Range(0, 5f);
+
+            Vector3 spawnPoint = _btParent.YogCenterOfRoom.position + randomDirection * randomDistance;
+
+            spawnPoints.Add(spawnPoint);
+
+            //Instantiate random type of enemy present in a list
+            int randomIndex = Random.Range(0, _btParent.SpawnableMinion.Count);
+
+            GameObject enemy;
+            enemy = _btParent.SpawnPrefab(_btParent.SpawnableMinion[randomIndex], spawnPoints[i], Quaternion.identity);
+            enemy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            _btParent.MinionSpawned.Add(enemy);
+            RB_AppearingAI appearAI = enemy.AddComponent<RB_AppearingAI>();
+            appearAI.TimeForRescaling = _btParent.TimeForRescalingMinion;
+        }
+    }
+    #endregion
     public void Slash(float damage, float range, float knockback, float collSize, GameObject particle) //ATTACK 0 LIGHT
     {
         _playSoundDamaged = false;

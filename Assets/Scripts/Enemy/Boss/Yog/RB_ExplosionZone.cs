@@ -18,7 +18,7 @@ public class RB_ExplosionZone : MonoBehaviour
     private void Awake()
     {
         _collisionDetection = GetComponent<RB_CollisionDetection>();
-        _collisionDetection.EventOnEntityEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEntity()[_collisionDetection.GetDetectedEntity().Count - 1]); });
+        //_collisionDetection.EventOnEntityEntered.AddListener(delegate { EnemyEntered(_collisionDetection.GetDetectedEntity()[_collisionDetection.GetDetectedEntity().Count - 1]); });
         _baseScale = transform.localScale;
     }
 
@@ -28,7 +28,6 @@ public class RB_ExplosionZone : MonoBehaviour
     }
     private void Update()
     {
-        //CheckForEnemies();
         UpdateExplosionZone();
         _lifetimeTimer += Time.deltaTime;
     }
@@ -74,7 +73,7 @@ public class RB_ExplosionZone : MonoBehaviour
                 enemyList.Add(enemyHealth);
             }
         }
-        if (Yog) Yog.Explosion(enemyList);
+        //if (Yog) Yog.Explosion(enemyList);
         Destroy(gameObject);
     }
 }

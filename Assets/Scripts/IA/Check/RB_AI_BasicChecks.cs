@@ -1,6 +1,5 @@
 using BehaviorTree;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class RB_AICheck_Comparison : RB_BTNode
@@ -39,10 +38,10 @@ public class RB_AICheck_Comparison : RB_BTNode
     {
         _state = BTNodeState.FAILURE;
 
-        float floatA = (float)_btParent.GetType().GetField(_variableA).GetValue(_btParent);
+        float floatA = Convert.ToSingle(_btParent.GetType().GetField(_variableA).GetValue(_btParent));
         float floatB = 0;
         if (_variableBfloat != null) floatB = _variableBfloat.Value;
-        else floatB = (float)_btParent.GetType().GetField(_variableB).GetValue(_btParent);
+        else floatB = Convert.ToSingle(_btParent.GetType().GetField(_variableB).GetValue(_btParent));
 
 
         bool result = false;
@@ -97,7 +96,7 @@ public class RB_AICheck_Random : RB_BTNode
 
         if (Time.time > _lastTimeChecked + _delay)
         {
-            float random = Random.value;
+            float random = UnityEngine.Random.value;
             _lastTimeChecked = Time.time;
 
             if (random >= _percentage)

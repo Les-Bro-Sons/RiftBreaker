@@ -62,7 +62,7 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
 
     //UI
     [Header("UI")]
-    public CanvasGroup CardInformationInput;
+    public RB_CardParser CardParser;
 
     //Awake
     private void Awake()

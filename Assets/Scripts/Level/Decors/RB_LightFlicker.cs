@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class RB_LightFlicker : MonoBehaviour
 {
+    private new Transform transform;
+
     private Light _light;
     private float _baseIntensity;
     private Color _baseColor;
@@ -16,6 +18,7 @@ public class RB_LightFlicker : MonoBehaviour
 
     private void Awake()
     {
+        transform = GetComponent<Transform>();
         _light = GetComponent<Light>();
         if (_light == null)
         {
@@ -32,8 +35,11 @@ public class RB_LightFlicker : MonoBehaviour
 
     private void Update()
     {
-        // Simulate flickering by varying the light intensity and color over time
-        _light.intensity = Mathf.Lerp(_minIntensityVariation, _maxIntensityVariation, Mathf.PerlinNoise(Time.time * _flickerSpeed + _seed.x, _seed.y));
-        _light.color = Color.Lerp(_baseColor, _flickerColor, Mathf.PerlinNoise(Time.time * _flickerSpeed + (_seed.x / 2f), (_seed.y / 2f)));
+        if (RB_Tools.GetPlayerDistance(transform.position) < 20)
+        {
+            // Simulate flickering by varying the light intensity and color over time
+            _light.intensity = Mathf.Lerp(_minIntensityVariation, _maxIntensityVariation, Mathf.PerlinNoise(Time.time * _flickerSpeed + _seed.x, _seed.y));
+            _light.color = Color.Lerp(_baseColor, _flickerColor, Mathf.PerlinNoise(Time.time * _flickerSpeed + (_seed.x / 2f), (_seed.y / 2f)));
+        }
     }
 }

@@ -354,7 +354,7 @@ public class RB_PlayerAction : MonoBehaviour
         if (CanRewind())
         {
             RewindLeft -= 1;
-            RB_TimeManager.Instance.StartRewinding(REWINDENTITYTYPE.AiOnly,false, false);
+            RB_TimeManager.Instance.StartRewinding(REWINDENTITYTYPE.All, false, false);
             IsRewinding = true;
         }
     }

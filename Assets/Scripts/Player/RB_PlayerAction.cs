@@ -211,12 +211,14 @@ public class RB_PlayerAction : MonoBehaviour
     {
         RB_InputManager.Instance.InputEnabled = false;
         float timer = 0;
+        float duration = 1;
         GameObject showedWeapon = new GameObject();
         SpriteRenderer showedSpriteRenderer = showedWeapon.AddComponent<SpriteRenderer>();
         showedWeapon.transform.localScale = Vector3.one * 4;
         showedSpriteRenderer.sprite = itemGathered.CurrentSprite;
         GameObject weaponRay = Instantiate(Resources.Load<GameObject>("Prefabs/Player/ShowWeaponRay"), showedWeapon.transform.position, Quaternion.identity);
-        while (timer < 1)
+        _impulseSource.GenerateImpulseAtPositionWithVelocity(showedWeapon.transform.position, Vector3.up);
+        while (timer < duration)
         {
             showedWeapon.transform.position = _transform.position + Vector3.up * 1.5f;
             weaponRay.transform.position = showedWeapon.transform.position;
@@ -225,7 +227,7 @@ public class RB_PlayerAction : MonoBehaviour
         }
         RB_InputManager.Instance.InputEnabled = true;
         Destroy(showedWeapon);
-        Destroy(weaponRay);
+        Destroy(weaponRay, 5);
         yield return null;
     }
 

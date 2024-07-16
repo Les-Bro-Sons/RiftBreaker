@@ -215,14 +215,17 @@ public class RB_PlayerAction : MonoBehaviour
         SpriteRenderer showedSpriteRenderer = showedWeapon.AddComponent<SpriteRenderer>();
         showedWeapon.transform.localScale = Vector3.one * 4;
         showedSpriteRenderer.sprite = itemGathered.CurrentSprite;
+        GameObject weaponRay = Instantiate(Resources.Load<GameObject>("Prefabs/Player/ShowWeaponRay"), showedWeapon.transform.position, Quaternion.identity);
         while (timer < 1)
         {
             showedWeapon.transform.position = _transform.position + Vector3.up * 1.5f;
+            weaponRay.transform.position = showedWeapon.transform.position;
             timer += Time.deltaTime;
             yield return null;
         }
         RB_InputManager.Instance.InputEnabled = true;
         Destroy(showedWeapon);
+        Destroy(weaponRay);
         yield return null;
     }
 

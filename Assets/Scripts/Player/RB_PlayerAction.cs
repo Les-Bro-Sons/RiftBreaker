@@ -181,15 +181,12 @@ public class RB_PlayerAction : MonoBehaviour
                 
 
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
-
-               
                 
-
-
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
                 timeEvent.ItemTook = itemGathered;
                 _timeRecorder.RecordTimeEvent(timeEvent);
+                OnPickUpWeaponUX(itemGathered);
 
                 if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
                 {
@@ -202,6 +199,36 @@ public class RB_PlayerAction : MonoBehaviour
             //if there's no item around then attack
             _playerController.OnChargeAttackStart();
         }
+    }
+
+    private void OnPickUpWeaponUX(RB_Items itemGathered)
+    {
+        PlayerAnimator.SetTrigger("ShowingWeapon");
+        StartCoroutine(OnPickupWeaponAnimation(itemGathered));
+    }
+
+    private IEnumerator OnPickupWeaponAnimation(RB_Items itemGathered)
+    {
+        RB_InputManager.Instance.InputEnabled = false;
+        float timer = 0;
+        float duration = 1;
+        GameObject showedWeapon = new GameObject();
+        SpriteRenderer showedSpriteRenderer = showedWeapon.AddComponent<SpriteRenderer>();
+        showedWeapon.transform.localScale = Vector3.one * 4;
+        showedSpriteRenderer.sprite = itemGathered.CurrentSprite;
+        GameObject weaponRay = Instantiate(Resources.Load<GameObject>("Prefabs/Player/ShowWeaponRay"), showedWeapon.transform.position, Quaternion.identity);
+        _impulseSource.GenerateImpulseAtPositionWithVelocity(showedWeapon.transform.position, Vector3.up);
+        while (timer < duration)
+        {
+            showedWeapon.transform.position = _transform.position + Vector3.up * 1.5f;
+            weaponRay.transform.position = showedWeapon.transform.position;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        RB_InputManager.Instance.InputEnabled = true;
+        Destroy(showedWeapon);
+        Destroy(weaponRay, 5);
+        yield return null;
     }
 
     public void ChargedAttack()

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -7,7 +9,39 @@ public class RB_InputManager : MonoBehaviour
 {
     public static RB_InputManager Instance;
 
-    public bool InputEnabled = true;
+    public enum INPUTSTATE
+    {
+        Started,
+        Performed,
+        Canceled,
+    }
+    public enum INPUTACTIONNAME
+    {
+        Move,
+        Attack,
+        DirectAttackController,
+        SpecialAttack,
+        Dash,
+        Rewind,
+        Item1,
+        Item2,
+        Item3,
+    }
+
+    public Dictionary<INPUTACTIONNAME, INPUTSTATE> ActionsState = new();
+
+
+    private bool _inputEnabled = true;
+    public bool InputEnabled
+    {
+        get { return _inputEnabled; }
+        set
+        {
+            _inputEnabled = value;
+            if (_inputEnabled == false)
+                CancelAllActiveInput();
+        }
+    }
 
     #region EventAction
     [Header("Move")]
@@ -75,6 +109,48 @@ public class RB_InputManager : MonoBehaviour
         else
         {
             DestroyImmediate(gameObject); //destroy if another RB_InputManager is already in the scene
+            return;
+        }
+    }
+
+    public void CancelAllActiveInput()
+    {
+        foreach (INPUTACTIONNAME actionName in ActionsState.Keys.ToList())
+        {
+            if (ActionsState[actionName] != INPUTSTATE.Canceled)
+            {
+                switch(actionName)
+                {
+                    case INPUTACTIONNAME.Move:
+                        EventMoveCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Attack:
+                        EventAttackCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.DirectAttackController: 
+                        EventDirectAttackControllerCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.SpecialAttack:
+                        EventSpecialAttackCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Dash:
+                        EventDashCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Rewind:
+                        EventRewindCanceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Item1:
+                        EventItem1Canceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Item2:
+                        EventItem2Canceled?.Invoke();
+                        break;
+                    case INPUTACTIONNAME.Item3:
+                        EventItem3Canceled?.Invoke();
+                        break;
+                }
+                ActionsState[actionName] = INPUTSTATE.Canceled;
+            }
         }
     }
 
@@ -83,25 +159,32 @@ public class RB_InputManager : MonoBehaviour
         if (context.started)
             ConsoleToggleInputEvent?.Invoke(); //Invoke the event that will open / close the console
     }
-    
+
     #region Move
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!InputEnabled || !MoveEnabled)
-        { 
-            MoveValue = Vector2.zero; 
-            return; 
+        {
+            MoveValue = Vector2.zero;
+            return;
         }
 
         MoveValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
         {
+            ActionsState[INPUTACTIONNAME.Move] = INPUTSTATE.Started;
             EventMoveStarted?.Invoke();
         }
         else if (context.performed)
+        {
+            ActionsState[INPUTACTIONNAME.Move] = INPUTSTATE.Performed;
             EventMovePerformed?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Move] = INPUTSTATE.Canceled;
             EventMoveCanceled?.Invoke();
+        }
     }
     #endregion
 
@@ -112,19 +195,29 @@ public class RB_InputManager : MonoBehaviour
         DirectAttackControllerValue = context.ReadValue<Vector2>(); //make the value available for PlayerMovement
         if (context.started)
         {
+            ActionsState[INPUTACTIONNAME.DirectAttackController] = INPUTSTATE.Started;
             EventDirectAttackControllerStarted?.Invoke();
         }
         else if (context.performed)
+        {
+            ActionsState[INPUTACTIONNAME.DirectAttackController] = INPUTSTATE.Performed;
             EventDirectAttackControllerPerformed?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.DirectAttackController] = INPUTSTATE.Canceled;
             EventDirectAttackControllerCanceled?.Invoke();
+        }
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (!InputEnabled) return;
-        if (context.started) 
+        if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Attack] = INPUTSTATE.Started;
             EventAttackStartedEvenIfDisabled?.Invoke();
+        }
 
         IsMouse = (context.action.activeControl.device.name == "Mouse");
         if (!AttackEnabled) return;
@@ -132,7 +225,10 @@ public class RB_InputManager : MonoBehaviour
         if (context.started)
             EventAttackStarted?.Invoke();
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Attack] = INPUTSTATE.Canceled;
             EventAttackCanceled?.Invoke();
+        }
     }
 
     public void OnSpecialAttack(InputAction.CallbackContext context)
@@ -140,9 +236,15 @@ public class RB_InputManager : MonoBehaviour
         if (!InputEnabled || !SpecialAttackEnabled) return;
 
         if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.SpecialAttack] = INPUTSTATE.Started;
             EventSpecialAttackStarted?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.SpecialAttack] = INPUTSTATE.Canceled;
             EventSpecialAttackCanceled?.Invoke();
+        }
     }
     #endregion
 
@@ -150,11 +252,16 @@ public class RB_InputManager : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         if (!InputEnabled || !DashEnabled) return;
-        if (context.started) {
+        if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Dash] = INPUTSTATE.Started;
             EventDashStarted?.Invoke();
         }
         else if (context.canceled)
-        EventDashCanceled?.Invoke();
+        {
+            ActionsState[INPUTACTIONNAME.Dash] = INPUTSTATE.Canceled;
+            EventDashCanceled?.Invoke();
+        }
     }
     #endregion
 
@@ -164,11 +271,17 @@ public class RB_InputManager : MonoBehaviour
         if (!InputEnabled || !RewindEnabled) return;
 
         if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Rewind] = INPUTSTATE.Started;
             EventRewindStarted?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Rewind] = INPUTSTATE.Canceled;
             EventRewindCanceled?.Invoke();
+        }
     }
-#endregion
+    #endregion
 
     #region Items
     public void OnItem1(InputAction.CallbackContext context)
@@ -176,29 +289,50 @@ public class RB_InputManager : MonoBehaviour
         if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Item1] = INPUTSTATE.Started;
             EventItem1Started?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Item1] = INPUTSTATE.Canceled;
             EventItem1Canceled?.Invoke();
+        }
     }
 
-    public void OnItem2(InputAction.CallbackContext context) {
+    public void OnItem2(InputAction.CallbackContext context)
+    {
         if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Item2] = INPUTSTATE.Started;
             EventItem2Started?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Item2] = INPUTSTATE.Canceled;
             EventItem2Canceled?.Invoke();
+        }
     }
 
-    public void OnItem3(InputAction.CallbackContext context) {
+    public void OnItem3(InputAction.CallbackContext context)
+    {
         if (!InputEnabled || !ItemsEnabled) return;
 
         if (context.started)
+        {
+            ActionsState[INPUTACTIONNAME.Item3] = INPUTSTATE.Started;
             EventItem3Started?.Invoke();
+        }
         else if (context.canceled)
+        {
+            ActionsState[INPUTACTIONNAME.Item3] = INPUTSTATE.Canceled;
             EventItem3Canceled?.Invoke();
+        }
     }
- #endregion
+    #endregion
+
 
     public Vector3 GetMouseDirection()
     {

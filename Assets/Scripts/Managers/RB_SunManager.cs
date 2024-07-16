@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -75,5 +76,24 @@ public class RB_SunManager : MonoBehaviour
         _isSwitching = true;
         _timer = 0;
         _currentPhase = RB_LevelManager.Instance.CurrentPhase;
+    }
+
+    public IEnumerator OnLightningStrike(float intensity = 20, float duration = 0.5f)
+    {
+        GameObject lightning = new GameObject("Lightning Strike");
+        Light lightningLight = lightning.AddComponent<Light>();
+        lightningLight.type = UnityEngine.LightType.Directional;
+        lightningLight.intensity = intensity;
+        lightning.transform.rotation = transform.rotation;
+
+        float timer = 0;
+        while (timer < duration)
+        {
+            lightningLight.intensity = Mathf.Lerp(intensity, 0, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(lightning);
+        yield return null;
     }
 }

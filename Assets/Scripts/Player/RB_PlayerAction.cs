@@ -219,6 +219,7 @@ public class RB_PlayerAction : MonoBehaviour
         showedSpriteRenderer.sprite = itemGathered.CurrentSprite;
         GameObject weaponRay = Instantiate(Resources.Load<GameObject>("Prefabs/Player/ShowWeaponRay"), showedWeapon.transform.position, Quaternion.identity);
         _impulseSource.GenerateImpulseAtPositionWithVelocity(showedWeapon.transform.position, Vector3.up);
+        StartCoroutine(RB_SunManager.Instance.OnLightningStrike(5, 0.5f));
         while (timer < duration)
         {
             showedWeapon.transform.position = _transform.position + Vector3.up * 1.5f;

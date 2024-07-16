@@ -238,5 +238,12 @@ public static class RB_Commands
             _properties.ItemsOnScene[i].SpecialAttackChargeTime = _properties.DefaultItemProperties[i].DefaultSpecialAttackChargeTime;
         }
     }
+
+    public static void CmdCfc(string[] args = null)
+    {
+        InitInstances();
+
+        _properties.CardInformationInput.alpha = 1;
+    }
     #endregion
 }

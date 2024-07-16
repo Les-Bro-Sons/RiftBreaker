@@ -60,6 +60,10 @@ public class RB_RiftBreakerCommandProperties : MonoBehaviour
     [Header("Debug")]
     public GameObject GodModeActivatedFeedbackDebugImage; //God mode debug feedback
 
+    //UI
+    [Header("UI")]
+    public CanvasGroup CardInformationInput;
+
     //Awake
     private void Awake()
     {

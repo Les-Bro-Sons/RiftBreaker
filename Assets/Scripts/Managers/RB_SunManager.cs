@@ -34,7 +34,7 @@ public class RB_SunManager : MonoBehaviour
             foreach (Light light in lights)
             {
                 if (light != _light)
-                    Destroy(light);
+                    light.enabled = false;
             }
         }
     }

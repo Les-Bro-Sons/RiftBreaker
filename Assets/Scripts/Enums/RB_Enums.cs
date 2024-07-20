@@ -30,6 +30,19 @@ public enum SCENENAMES
     BossRush3,
 }
 
+public enum DIFFICULTY
+{
+    Easy,
+    Normal,
+    Hard,
+}
+
+public enum DIFFICULTYTYPE
+{
+    InfiltrationDifficulty,
+    CombatDifficulty,
+}
+
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~
 
 public enum FADETYPE

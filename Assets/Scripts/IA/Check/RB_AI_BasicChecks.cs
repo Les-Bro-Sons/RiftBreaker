@@ -109,3 +109,49 @@ public class RB_AICheck_Random : RB_BTNode
         return _state;
     }
 }
+
+public class RB_AICheck_MinimumDifficultyCheck : RB_BTNode
+{
+    private DIFFICULTY _minimumDifficulty;
+    private string _difficultyName;
+
+    public RB_AICheck_MinimumDifficultyCheck(DIFFICULTY minimumDifficulty, DIFFICULTYTYPE difficultyName) 
+    {
+        _minimumDifficulty = minimumDifficulty;
+        _difficultyName = difficultyName.ToString();
+    }
+
+    public override BTNodeState Evaluate()
+    {
+        _state = BTNodeState.FAILURE;
+        RB_SaveObject saveObject = RB_SaveManager.Instance.SaveObject;
+        DIFFICULTY difficultyCheck = (DIFFICULTY)saveObject.GetType().GetField(_difficultyName).GetValue(saveObject);
+
+        if((int)difficultyCheck >= (int)_minimumDifficulty) _state = BTNodeState.SUCCESS;
+
+        return _state;
+    }
+}
+
+public class RB_AICheck_MaximumDifficultyCheck : RB_BTNode
+{
+    private DIFFICULTY _maximumDifficulty;
+    private string _difficultyName;
+
+    public RB_AICheck_MaximumDifficultyCheck(DIFFICULTY maximumDifficulty, DIFFICULTYTYPE difficultyName)
+    {
+        _maximumDifficulty = maximumDifficulty;
+        _difficultyName = difficultyName.ToString();
+    }
+
+    public override BTNodeState Evaluate()
+    {
+        _state = BTNodeState.FAILURE;
+        RB_SaveObject saveObject = RB_SaveManager.Instance.SaveObject;
+        DIFFICULTY difficultyCheck = (DIFFICULTY)saveObject.GetType().GetField(_difficultyName).GetValue(saveObject);
+
+        if ((int)difficultyCheck <= (int)_maximumDifficulty) _state = BTNodeState.SUCCESS;
+
+        return _state;
+    }
+}

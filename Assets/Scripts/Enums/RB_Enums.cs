@@ -37,6 +37,12 @@ public enum DIFFICULTY
     Hard,
 }
 
+public enum DIFFICULTYTYPE
+{
+    InfiltrationDifficulty,
+    CombatDifficulty,
+}
+
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~
 
 public enum FADETYPE

@@ -115,10 +115,10 @@ public class RB_AICheck_MinimumDifficultyCheck : RB_BTNode
     private DIFFICULTY _minimumDifficulty;
     private string _difficultyName;
 
-    public RB_AICheck_MinimumDifficultyCheck(DIFFICULTY minimumDifficulty, string difficultyName) 
+    public RB_AICheck_MinimumDifficultyCheck(DIFFICULTY minimumDifficulty, DIFFICULTYTYPE difficultyName) 
     {
         _minimumDifficulty = minimumDifficulty;
-        _difficultyName = difficultyName;
+        _difficultyName = difficultyName.ToString();
     }
 
     public override BTNodeState Evaluate()
@@ -138,10 +138,10 @@ public class RB_AICheck_MaximumDifficultyCheck : RB_BTNode
     private DIFFICULTY _maximumDifficulty;
     private string _difficultyName;
 
-    public RB_AICheck_MaximumDifficultyCheck(DIFFICULTY maximumDifficulty, string difficultyName)
+    public RB_AICheck_MaximumDifficultyCheck(DIFFICULTY maximumDifficulty, DIFFICULTYTYPE difficultyName)
     {
         _maximumDifficulty = maximumDifficulty;
-        _difficultyName = difficultyName;
+        _difficultyName = difficultyName.ToString();
     }
 
     public override BTNodeState Evaluate()

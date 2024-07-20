@@ -69,4 +69,9 @@ public class RB_Tools
     {
         return new Vector3(vector.x, 0, vector.z).normalized;
     }
+
+    public static float GetPlayerDistance(Vector3 position)
+    {
+        return Vector3.Distance(position, RB_PlayerController.Instance.transform.position);
+    }
 }

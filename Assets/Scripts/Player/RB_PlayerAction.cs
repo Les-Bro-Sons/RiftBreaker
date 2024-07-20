@@ -181,6 +181,7 @@ public class RB_PlayerAction : MonoBehaviour
                 
 
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
+                RB_AudioManager.Instance.PlaySFX("LightningStrike", false, false, 0, 0.75f);
                 
                 EventInTime timeEvent = new EventInTime(); //create a time event so the item will be dropped when rewinding
                 timeEvent.TypeEvent = TYPETIMEEVENT.TookWeapon;
@@ -218,6 +219,7 @@ public class RB_PlayerAction : MonoBehaviour
         showedSpriteRenderer.sprite = itemGathered.CurrentSprite;
         GameObject weaponRay = Instantiate(Resources.Load<GameObject>("Prefabs/Player/ShowWeaponRay"), showedWeapon.transform.position, Quaternion.identity);
         _impulseSource.GenerateImpulseAtPositionWithVelocity(showedWeapon.transform.position, Vector3.up);
+        StartCoroutine(RB_SunManager.Instance.OnLightningStrike(5, 0.5f));
         while (timer < duration)
         {
             showedWeapon.transform.position = _transform.position + Vector3.up * 1.5f;

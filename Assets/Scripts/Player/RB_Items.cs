@@ -131,7 +131,7 @@ public class RB_Items : MonoBehaviour
             _playerAction.AddItemToList(this);
         }
         STATSREGION currentWeapon = (STATSREGION)Enum.Parse(typeof(STATSREGION), GetType().ToString().Substring(3));
-        RB_StatsParser.Instance.SetStats(this, STATSCONTAINER._weaponsStats, currentWeapon, DIFFICULTY.Hard);
+        RB_StatsParser.Instance.SetStats(this, STATSCONTAINER._weaponsStats, currentWeapon, RB_DifficultyManager.Instance.GetCurrentDifficulty());
     }
 
     

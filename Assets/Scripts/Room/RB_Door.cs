@@ -19,6 +19,7 @@ public class RB_Door : MonoBehaviour{
 
     public void Open()
     {
+        Debug.Log("Open");
         _doorAnimator.SetTrigger("Open");
         EventOpenDoor?.Invoke();
 
@@ -29,6 +30,7 @@ public class RB_Door : MonoBehaviour{
 
     public void Close()
     {
+        Debug.Log("Close");
         _doorAnimator.SetTrigger("Close");
         EventCloseDoor?.Invoke();
 

@@ -40,8 +40,8 @@ public class RB_StatsParser : MonoBehaviour
     Dictionary<string, Dictionary<string, string>> _lightStats = new();
     Dictionary<string, Dictionary<string, string>> _middleStats = new();
     Dictionary<string, Dictionary<string, string>> _heavyStats = new();
-    public string StatsPath = Application.dataPath + "/stats.txt";
-    public string EncryptedIStatsPath = Application.dataPath + "/stats.enc";
+    public string StatsPath;
+    public string EncryptedIStatsPath;
 
     //Instance
     public static RB_StatsParser Instance;
@@ -52,6 +52,8 @@ public class RB_StatsParser : MonoBehaviour
     //Awake
     private void Awake()
     {
+        StatsPath = Application.dataPath + "/stats.txt";
+        EncryptedIStatsPath = Application.dataPath + "/stats.enc";
         if (Instance == null)
             Instance = this;
         if(File.Exists(StatsPath) && !Application.isEditor)
@@ -206,7 +208,7 @@ public class RB_StatsParser : MonoBehaviour
         string[] lines = { };
         if (Application.isEditor)
         {
-            if (!File.Exists(StatsPath)) throw new Exception("File does not exist");
+            if (!File.Exists(StatsPath)) throw new Exception($"File : {StatsPath} does not exist");
             lines = File.ReadAllLines(StatsPath);
         }
         else

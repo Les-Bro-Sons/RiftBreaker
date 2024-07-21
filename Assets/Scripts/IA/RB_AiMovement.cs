@@ -60,6 +60,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+        speed *= _rb.mass;
 
         direction = direction.normalized;
         direction = RB_Tools.GetHorizontalDirection(direction);
@@ -79,6 +80,7 @@ public class RB_AiMovement : MonoBehaviour
         if (speed == null) speed = _movementMaxSpeed;
         if (acceleration == null) acceleration = _movementAcceleration;
         if (deltaTime == null) deltaTime = Time.deltaTime;
+        speed *= _rb.mass;
 
         if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, _navPath))
         {
@@ -96,6 +98,37 @@ public class RB_AiMovement : MonoBehaviour
 
             LastDirection = direction;
         }
+    }
+
+    public NavMeshPath? GetPath(Vector3 targetPos)
+    {
+        NavMeshPath navMeshPath = new NavMeshPath();
+
+        if (NavMesh.CalculatePath(_transform.position, targetPos, NavMesh.AllAreas, navMeshPath))
+        {
+            if (_navPath.corners.Length <= 1) return null; //1 because navpath sucks
+            
+            return navMeshPath;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public float GetPathLength(NavMeshPath path)
+    {
+        float length = 0.0f;
+
+        if ((path.status != NavMeshPathStatus.PathInvalid) && (path.corners.Length > 1))
+        {
+            for (int i = 1; i < path.corners.Length; ++i)
+            {
+                length += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+        }
+
+        return length;
     }
 
     public void RotateToward(Vector3 direction, float rotationSpeed = 4, float? deltaTime = null)

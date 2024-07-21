@@ -30,6 +30,19 @@ public enum SCENENAMES
     BossRush3,
 }
 
+public enum DIFFICULTY
+{
+    Easy,
+    Normal,
+    Hard,
+}
+
+public enum DIFFICULTYTYPE
+{
+    InfiltrationDifficulty,
+    CombatDifficulty,
+}
+
 // ~~~~~~~~~~ TYPES ~~~~~~~~~~
 
 public enum FADETYPE
@@ -39,6 +52,7 @@ public enum FADETYPE
     BubbleOpen,
     WooshRight,
     WooshUp,
+    Circle,
 }
 
 public enum ZOOMTYPES
@@ -82,6 +96,9 @@ public enum ENEMYCLASS
     Heavy,
     Pawn,
     Tower,
+    Megaknight,
+    RobertLeNec,
+    Yog,
 }
 
 public enum TARGETMODE
@@ -122,6 +139,7 @@ public enum MIXERNAME
 public enum BTBOOLVALUES
 {
     IsTargetSpotted,
+    IsTargetInSight,
     HasACorrectView,
     GoToLastTargetPos,
     IsDistracted,
@@ -139,10 +157,20 @@ public enum DISTRACTIONTYPE
     BrokenPot,
     DeadBody,
     BrokenDoor,
+    Dash,
+    SomeoneSuspicious,
 }
+
 
 public enum DOORTYPE
 {
     RoomDoor,
     BreakableDoor
+}
+
+public enum REWINDENTITYTYPE
+{
+    All,
+    AiOnly,
+    PlayerOnly,
 }

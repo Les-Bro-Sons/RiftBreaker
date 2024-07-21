@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RB_Katana : RB_Items
 {
+
     public override void Attack() {
         base.Attack();
         RB_AudioManager.Instance.PlaySFX("LittleSwoosh", RB_PlayerController.Instance.transform.position,false, 0, 1);
@@ -12,11 +13,9 @@ public class RB_Katana : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk && RB_PlayerAction.Instance.PickupGathered != null)
+        if (RobertShouldTalk && !RB_LevelManager.SavedData.HasReachedWeapon)
         {
-            RB_PlayerAction.Instance.PickupGathered.StartDialogue(0);
-            RobertShouldTalk = false;
-            
+            RobertPickupDialogue(0);
         }
         //Set the current weapon on the animators
         _playerAnimator.SetFloat("WeaponID", 0);

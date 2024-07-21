@@ -80,21 +80,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a2af8c374782e41a94b7c6f02fcec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 20
+  _speed: 15
   _totalDistance: 90
   _projectileType: 1
   _launchForce: {x: 0, y: 0, z: 0}
-  _totalLifeTime: 5
+  _totalLifeTime: 1000
   Team: 0
   _destroyOnWall: 0
   _wallDetectionLength: 1
+  _spriteRenderer: {fileID: 0}
+  _alphaCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _followParticles: {fileID: 7898988374659876222, guid: 535f9f1f762d8ea49b850fd7e54caac6,
     type: 3}
   _destroyParticles: {fileID: 6352902967013658006, guid: 0f4ad2d03643a4a4581c2407d1dc16ed,
     type: 3}
   _continuousForceScreenshake: 0
   _continuousDelayScreenshake: 0
-  _damage: 10
+  _damage: 20
   _knocbackExplosionForce: 0
   _knockback: {x: 0, y: 0, z: 5}
   _isDealingDamageMultipleTime: 0
@@ -105,7 +112,7 @@ MonoBehaviour:
   _damageOnExplosion: 0
   _explosionRadius: 1
   _isBouncing: 1
-  _maxBounces: 3
+  _maxBounces: 20
   _explosionSounds: 
   _projectileAnimator: {fileID: 0}
   SpawnDistanceFromPlayer: 0
@@ -152,6 +159,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EventOnObjectExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  EventOnEntityExit:
     m_PersistentCalls:
       m_Calls: []
   EventOnEnemyEntered:

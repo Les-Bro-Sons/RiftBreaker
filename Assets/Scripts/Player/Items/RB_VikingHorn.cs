@@ -31,10 +31,9 @@ public class RB_VikingHorn : RB_Items
     public override void Bind()
     {
         base.Bind();
-        if (RobertShouldTalk && RB_PlayerAction.Instance.PickupGathered != null)
+        if (RobertShouldTalk && !RB_LevelManager.SavedData.HasReachedWeapon)
         {
-            RB_PlayerAction.Instance.PickupGathered.StartDialogue(3);
-            RobertShouldTalk = false;
+            RobertPickupDialogue(3);
         }
         _rb = RB_PlayerAction.Instance.GetComponent<Rigidbody>();
         //Set the current weapon to the animator

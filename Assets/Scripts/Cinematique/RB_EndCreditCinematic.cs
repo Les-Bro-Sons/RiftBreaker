@@ -28,7 +28,7 @@ public class RB_EndCreditCinematic : MonoBehaviour
         // Check if the credits have scrolled past a certain point
         if (_creditTransform.localPosition.y > 4000)
         {
-            RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), 0); // Transition to another scene (assuming scene index 0)
+            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, 0); // Transition to another scene (assuming scene index 0)
             RB_SaveManager.Instance.ResetSave(); // Reset save data
             RB_SaveManager.Instance.SaveObject.IsGameFinish = true; // Mark the game as finished in the save data
             RB_SaveManager.Instance.SaveToJson(); //Save that the game is finish

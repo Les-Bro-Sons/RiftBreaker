@@ -98,7 +98,7 @@ public class RB_RobertLenec : RB_Boss
 
     private void FixedUpdate()
     {
-        if (Health.Dead) return;
+        if (!_enableStateMachine || Health.Dead) return;
 
         int? bossRoom = RB_RoomManager.Instance.GetEntityRoom(Health.Team, gameObject);
         int? playerRoom = RB_RoomManager.Instance.GetPlayerCurrentRoom();
@@ -291,9 +291,6 @@ public class RB_RobertLenec : RB_Boss
             _alreadyAreaDamageZoneDamaged.Add(enemyHealth);
             enemyHealth.TakeDamage(_areaDamageAmount);
         }
-        
-        //Cooldown
-        //_currentCooldownBeforeTakeDamage = _areaDamageInterval;
     }
     public void CloneAttack()
     {

@@ -11,6 +11,9 @@ public enum BOSSSTATES
 }
 public class RB_Boss : RB_Enemy
 {
+    [Header("StateMachine")]
+    [SerializeField] protected bool _enableStateMachine = false;
+
     [Header("Main Parameters")]
     public float AttackRange = 1f;
     public float AttackSpeed = 2f;

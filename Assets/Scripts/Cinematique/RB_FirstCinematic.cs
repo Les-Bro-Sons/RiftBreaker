@@ -66,6 +66,6 @@ public class RB_FirstCinematic : MonoBehaviour
     /// </summary>
     public void NextScene()
     {
-        RB_SceneTransitionManager.Instance.NewTransition(RB_SceneTransitionManager.Instance.FadeType.ToString(), SceneManager.GetActiveScene().buildIndex + 1);   // Transition to the next scene
+        RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1);   // Transition to the next scene
     }
 }

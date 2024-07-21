@@ -1,3 +1,4 @@
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -245,8 +246,10 @@ public static class RB_Commands
     public static void CmdCfc(string[] args = null)
     {
         InitInstances();
-
-        _properties.CardParser.OpenCardMenu();
+        if (_properties.CardParser != null)
+            _properties.CardParser.OpenCardMenu();
+        else
+            Debug.Log("You ordered a cfc");
     }
     #endregion
 }

@@ -167,3 +167,49 @@ public enum REWINDENTITYTYPE
     AiOnly,
     PlayerOnly,
 }
+
+public enum STATSCONTAINER
+{
+    _playerStats,
+    _weaponsStats
+}
+
+public enum STATSREGION
+{
+    PlayerMovement,
+    PlayerAction,
+    Health,
+    Katana,
+    Scythe,
+    ChessQueen,
+    MagicWand,
+    MusicBox,
+    VikingHorn,
+    PatrickShuriken,
+    MultiGun
+}
+
+public enum STATS
+{
+    _dashCooldown,
+    _hp,
+    HpMax,
+    ChargeTime,
+    SpecialAttackChargeTime,
+    _chargeZoom,
+    _attackCooldown,
+    _chargeAttackCooldown,
+    _specialAttackCooldown,
+    AttackDamage,
+    ChargedAttackDamage,
+    SpecialAttackDamage,
+    _normalKnockbackForce,
+    _chargeAttackKnockbackForce,
+    _specialAttackKnockbackForce,
+    _normalAttackScreenshakeForce,
+    _normalHitScreenshakeForce,
+    _chargedAttackScreenshakeForce,
+    _chargedHitScreenshakeForce,
+    _specialAttackScreenshakeForce,
+    _specialHitScreenshakeForce
+}

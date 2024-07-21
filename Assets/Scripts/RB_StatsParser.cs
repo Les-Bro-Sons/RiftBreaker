@@ -7,6 +7,12 @@ using System.Security.Cryptography;
 using System.Text;
 
 using UnityEngine;
+using Unity.VisualScripting;
+using JetBrains.Annotations;
+using System.Net;
+
+
+
 
 
 #if UNITY_EDITOR
@@ -34,12 +40,9 @@ public class RB_CustomEditorStatsParser : Editor
 #endif
 public class RB_StatsParser : MonoBehaviour
 {
+
     //File
-    Dictionary<string, Dictionary<string, string>> _weaponsStats = new();
-    Dictionary<string, Dictionary<string, string>> _playerStats = new();
-    Dictionary<string, Dictionary<string, string>> _lightStats = new();
-    Dictionary<string, Dictionary<string, string>> _middleStats = new();
-    Dictionary<string, Dictionary<string, string>> _heavyStats = new();
+    Dictionary<STATSCONTAINER, Dictionary<STATSREGION, Dictionary<DIFFICULTY, Dictionary<STATS, string>>>> _stats = new();
     public string StatsPath;
     public string EncryptedIStatsPath;
 
@@ -217,10 +220,9 @@ public class RB_StatsParser : MonoBehaviour
             lines = DecryptFileAndGetLines(EncryptedIStatsPath);
         }
         if (lines.Length <= 0) throw new NullReferenceException("The file is empty");
-        string currentRegionName = "";
-        string currentContainerName = "";
-        Dictionary<string, string> currentStat = new();
-        Dictionary<string, Dictionary<string, string>> tempContainer = new();
+        STATSREGION currentRegionName = new();
+        STATSCONTAINER currentContainerName = new();
+        Dictionary<DIFFICULTY, Dictionary<STATS, string>> currentStat = new();
         for (int i = 0; i < lines.Length + 1; i++)
         {
             string line = "";
@@ -231,11 +233,8 @@ public class RB_StatsParser : MonoBehaviour
             if (line.Length <= 0 || i >= lines.Length)
             {
                 if (currentStat.Count <= 0) { Debug.LogWarning($"Stats at line {i} is Empty "); continue; }
-                if (string.IsNullOrEmpty(currentContainerName)) { Debug.LogWarning("There's no container"); continue; }
-                if (string.IsNullOrEmpty(currentRegionName)) { Debug.LogWarning("There's no region"); continue; }
-                tempContainer[currentRegionName] = currentStat.ToDictionary(entry => entry.Key, entry => entry.Value);
-                if(tempContainer.Count <= 0) { Debug.LogWarning("Something went wrong with the stat sets"); continue; }
-                SetField(this, currentContainerName, tempContainer.ToDictionary(entry => entry.Key, entry => entry.Value));
+
+                _stats[currentContainerName][currentRegionName] = currentStat.ToDictionary(entry => entry.Key, entry => entry.Value);
                 currentStat.Clear();
                 continue;
             }
@@ -245,26 +244,48 @@ public class RB_StatsParser : MonoBehaviour
             string subsedLine = splittedLine[0].Substring(1, splittedLine[0].Length - 2);
             if (line[0] == '(')
             {
-                tempContainer.Clear();
-                currentContainerName = subsedLine;
+                currentContainerName = (STATSCONTAINER)Enum.Parse(typeof(STATSCONTAINER), subsedLine);
+                if(!_stats.ContainsKey(currentContainerName))
+                    _stats[currentContainerName] = new();
                 continue;
             }
             if (line[0] == '[')
             {
-                currentRegionName = subsedLine;
+                currentRegionName = (STATSREGION)Enum.Parse(typeof(STATSREGION), subsedLine);
                 continue;
             }
+            string lastOfSplittedLine = splittedLine[splittedLine.Length - 1];
             if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
-            currentStat[(splittedLine[0])] = splittedLine[2];
+            string[] statsSplittedByDifficulty = lastOfSplittedLine.Split('|');
+            print(statsSplittedByDifficulty.Length);
+            List<DIFFICULTY> difficulties = new();
+            difficulties.AddRange(Enum.GetValues(typeof(DIFFICULTY)));
+            int statsSplittedByDifficultyIndex = 0;
+            for (int j = 0; j < difficulties.Count; j++)
+            {
+                if (!currentStat.ContainsKey(difficulties[j]))
+                    currentStat[difficulties[j]] = new();
+                if (statsSplittedByDifficulty.Length > j)
+                {
+                    statsSplittedByDifficultyIndex = j;
+                }
+                if (Enum.TryParse(typeof(STATS), splittedLine[0].ToString(), out var stat))
+                {
+                    currentStat[difficulties[j]][(STATS)stat] = statsSplittedByDifficulty[statsSplittedByDifficultyIndex].ToString();
+                }
+            }
         }
-        foreach(var region in _playerStats.Keys)
+        foreach(var container in _stats.Keys)
         {
-            print(region);
+            //print(container);
         }
 
-        foreach (var region in _weaponsStats.Keys)
+        foreach (var statsValue in _stats.Values)
         {
-            print(region);
+            foreach(var region in  statsValue.Keys)
+            {
+                //print(region);
+            }
         }
         print("loaded");
     }
@@ -272,48 +293,19 @@ public class RB_StatsParser : MonoBehaviour
     #endregion
 
     #region SetStats
-    public void SetStats(object script, Dictionary<string, Dictionary<string, string>> statsToGet)
+    public void SetStats(object script, STATSCONTAINER statsContainer, STATSREGION statsRegion, DIFFICULTY difficulty)
     {
         string nameOfObject = script.GetType().Name.Substring(3);
-        if (statsToGet.TryGetValue(nameOfObject, out Dictionary<string, string> stats))
+        Dictionary<STATS, string> statsToGet = new();
+        statsToGet = _stats[statsContainer][statsRegion][difficulty];
+
+        foreach (var stat in statsToGet)
         {
-            foreach (var stat in stats)
-            {
-                string statName = stat.Key;
-                string value = stat.Value;
+            string statName = stat.Key.ToString();
+            string value = stat.Value;
 
-                SetField(script, statName, value);
-            }
+            SetField(script, statName, value);
         }
-        else
-        {
-            throw new Exception($"stats {nameOfObject} is not in database");
-        }
-    }
-
-    public void SetWeaponStats(object script)
-    {
-        SetStats(script, _weaponsStats);
-    }
-
-    public void SetPlayerStats(object script)
-    {
-        SetStats(script, _playerStats);
-    }
-
-    public void SetHeavyStats(object script)
-    {
-        SetStats(script, _heavyStats);
-    }
-
-    public void SetMiddleStats(object script)
-    {
-        SetStats(script, _middleStats);
-    }
-
-    public void SetLightStats(object script)
-    {
-        SetStats(script, _lightStats);
     }
 
     #endregion

@@ -69,7 +69,7 @@ public class RB_PlayerMovement : MonoBehaviour
     }
     private void Start()
     {
-        RB_StatsParser.Instance.SetPlayerStats(this);
+        RB_StatsParser.Instance.SetStats(this, STATSCONTAINER._playerStats, STATSREGION.PlayerMovement, DIFFICULTY.Easy);
         Invoke("DebugSpeed", 0);
     }
 

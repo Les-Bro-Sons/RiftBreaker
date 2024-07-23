@@ -179,9 +179,9 @@ public class RB_LevelExit : MonoBehaviour
 
         RB_Camera.Instance.VirtualCam.Follow = transform;
 
-        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim)) playerAnim.ForceWalking = true;
+        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim)) playerAnim.ForceWalking = true; //force walking animation
 
-        while (timer < moveDuration)
+        while (timer < moveDuration) //move to portal
         {
             objectRB.MovePosition(Vector3.Lerp(enterStartPosition, destination, timer / moveDuration));
             timer += Time.deltaTime;
@@ -190,14 +190,14 @@ public class RB_LevelExit : MonoBehaviour
         objectRB.MovePosition(destination);
         timer = 0;
 
-        if (playerAnim) playerAnim.ForceWalking = false;
+        if (playerAnim) playerAnim.ForceWalking = false; //stoping walking animation
 
         float disappearDuration = 1;
-        RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>();
+        RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>(); //adding disolve component
         appearingScript.TargetDissolveAmount = 1;
         appearingScript.StartDissolveAmount = 0;
         appearingScript.TimeForAppearing = disappearDuration;
-        while (timer < disappearDuration)
+        while (timer < disappearDuration) //disolve
         {
             timer += Time.deltaTime;
             yield return null;
@@ -210,7 +210,7 @@ public class RB_LevelExit : MonoBehaviour
         }
 
         float switchSceneDuration = 0.75f;
-        while (timer < switchSceneDuration)
+        while (timer < switchSceneDuration) //wait before switching scene
         {
             timer += Time.deltaTime;
             yield return null;

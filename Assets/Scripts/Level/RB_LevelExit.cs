@@ -161,11 +161,14 @@ public class RB_LevelExit : MonoBehaviour
     {
         if (closePortal) _isDoingEndCutscene = true;
 
+        SpriteRenderer entitySpriteRenderer = null;
         Rigidbody objectRB = enteringObject.GetComponent<Rigidbody>();
         if (enteringObject == RB_PlayerController.Instance.transform)
         {
             RB_PlayerController.Instance.enabled = false;
             RB_PlayerMovement.Instance.enabled = false;
+            RB_PlayerMovement.Instance.SetVelocity(Vector3.zero);
+            entitySpriteRenderer = RB_PlayerController.Instance.PlayerSpriteRenderer;
         }
         if (enteringObject.TryGetComponent<Rigidbody>(out Rigidbody objectRigidbody))
         {
@@ -182,10 +185,10 @@ public class RB_LevelExit : MonoBehaviour
 
         RB_Camera.Instance.VirtualCam.Follow = transform;
 
-        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim))
+        if (entitySpriteRenderer.TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim))
         {
             playerAnim.ForceWalking = true; //force walking animation
-            playerAnim.LockRotation = true;
+            playerAnim.LockRotation = false;
         }
 
         while (timer < moveDuration) //move to portal
@@ -195,6 +198,7 @@ public class RB_LevelExit : MonoBehaviour
             yield return null;
         }
         objectRB.MovePosition(destination);
+        objectRB.MoveRotation(Quaternion.LookRotation(Vector3.back));
         timer = 0;
 
         if (playerAnim)

@@ -233,6 +233,11 @@ public class RB_PlayerMovement : MonoBehaviour
         return _currentVelocity;
     }
 
+    public void SetVelocity(Vector3 velocity)
+    {
+        _currentVelocity = velocity;
+    }
+
     public void DashAnim()
     {
         //Create animation for dashing

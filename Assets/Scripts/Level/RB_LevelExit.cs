@@ -161,11 +161,10 @@ public class RB_LevelExit : MonoBehaviour
     {
         if (closePortal) _isDoingEndCutscene = true;
 
-        SpriteRenderer entitySpriteRenderer = RB_PlayerController.Instance.PlayerSpriteRenderer;
+        Rigidbody objectRB = enteringObject.GetComponent<Rigidbody>();
         if (enteringObject == RB_PlayerController.Instance.transform)
         {
             RB_PlayerController.Instance.enabled = false;
-            entitySpriteRenderer = RB_PlayerController.Instance.PlayerSpriteRenderer;
         }
         if (enteringObject.TryGetComponent<Rigidbody>(out Rigidbody objectRigidbody))
         {
@@ -180,29 +179,48 @@ public class RB_LevelExit : MonoBehaviour
 
         RB_Camera.Instance.VirtualCam.Follow = transform;
 
+        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim)) playerAnim.ForceWalking = true;
+
         while (timer < moveDuration)
         {
-            enteringObject.position = Vector3.Lerp(enterStartPosition, destination, timer / moveDuration);
+            objectRB.MovePosition(Vector3.Lerp(enterStartPosition, destination, timer / moveDuration));
             timer += Time.deltaTime;
             yield return null;
         }
-        enteringObject.position = destination;
+        objectRB.MovePosition(destination);
         timer = 0;
+
+        if (playerAnim) playerAnim.ForceWalking = false;
 
         float disappearDuration = 1;
         RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>();
         appearingScript.TargetDissolveAmount = 1;
         appearingScript.StartDissolveAmount = 0;
         appearingScript.TimeForAppearing = disappearDuration;
-        while (timer < disappearDuration + 0.5f)
+        while (timer < disappearDuration)
         {
             timer += Time.deltaTime;
             yield return null;
         }
+        timer = 0;
 
-        ClosePortal();
+        if (closePortal)
+        {
+            ClosePortal();
+        }
 
-        SwitchScene();
+        float switchSceneDuration = 0.75f;
+        while (timer < switchSceneDuration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        timer = 0;
+
+        if (closePortal)
+        {
+            SwitchScene();
+        }
 
         yield return null;
     }

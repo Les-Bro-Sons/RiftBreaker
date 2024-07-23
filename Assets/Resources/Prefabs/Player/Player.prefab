@@ -546,8 +546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc75fefb1bcd1e543a486542f6c3a51f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerSpriteRenderer: {fileID: 1323381627611396866}
   CurrentState: 0
-  _spriteR: {fileID: 1323381627611396866}
 --- !u!114 &9054077203260257630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,6 +575,7 @@ MonoBehaviour:
   _spritePrefab: {fileID: 3992129241645934838, guid: 45f13f2e2fb7cae41992addd80f3f556,
     type: 3}
   _totalDashTime: 0.2
+  _dashDistractionSoundDistance: 12.5
   EventDash:
     m_PersistentCalls:
       m_Calls: []
@@ -597,6 +598,7 @@ MonoBehaviour:
   IsSpecialAttacking: 0
   IsAttacking: 0
   IsOnCooldown: 0
+  IsRewinding: 0
   PlayerAnimator: {fileID: 461484540895704965}
   ColliderAnimator: {fileID: 7873082402642551729}
   CollisionDetection: {fileID: 1560718448460901250}

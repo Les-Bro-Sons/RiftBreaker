@@ -13,6 +13,7 @@ public class RB_PlayerAnim : MonoBehaviour
     private bool _prefabSpawned = false;
 
     public bool ForceWalking = false;
+    public bool LockRotation = false;
 
     private void Awake()
     {
@@ -27,8 +28,11 @@ public class RB_PlayerAnim : MonoBehaviour
     private void UpdateAnimation()
     {
         //Constantly set the speed and direction of the player to the player animator
-        _playerAnimator.SetFloat("Horizontal", _playerTransform.forward.x);
-        _playerAnimator.SetFloat("Vertical", _playerTransform.forward.z);
+        if (!LockRotation)
+        {
+            _playerAnimator.SetFloat("Horizontal", _playerTransform.forward.x);
+            _playerAnimator.SetFloat("Vertical", _playerTransform.forward.z);
+        }
         _playerAnimator.SetFloat("Speed", (ForceWalking)? 10: _playerMovement.GetVelocity().magnitude);
 
     }

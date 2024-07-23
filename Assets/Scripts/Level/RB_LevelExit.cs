@@ -165,11 +165,14 @@ public class RB_LevelExit : MonoBehaviour
         if (enteringObject == RB_PlayerController.Instance.transform)
         {
             RB_PlayerController.Instance.enabled = false;
+            RB_PlayerMovement.Instance.enabled = false;
         }
         if (enteringObject.TryGetComponent<Rigidbody>(out Rigidbody objectRigidbody))
         {
             objectRigidbody.velocity = Vector3.zero;
+            objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
+        enteringObject.rotation = Quaternion.LookRotation((transform.position - enteringObject.position));
 
         float moveDuration = 0.5f;
         float timer = 0;
@@ -179,7 +182,11 @@ public class RB_LevelExit : MonoBehaviour
 
         RB_Camera.Instance.VirtualCam.Follow = transform;
 
-        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim)) playerAnim.ForceWalking = true; //force walking animation
+        if (TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim))
+        {
+            playerAnim.ForceWalking = true; //force walking animation
+            playerAnim.LockRotation = true;
+        }
 
         while (timer < moveDuration) //move to portal
         {
@@ -190,7 +197,10 @@ public class RB_LevelExit : MonoBehaviour
         objectRB.MovePosition(destination);
         timer = 0;
 
-        if (playerAnim) playerAnim.ForceWalking = false; //stoping walking animation
+        if (playerAnim)
+        {
+            playerAnim.ForceWalking = false; //stoping walking animation
+        }
 
         float disappearDuration = 1;
         RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>(); //adding disolve component

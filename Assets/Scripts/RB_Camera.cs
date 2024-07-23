@@ -7,7 +7,7 @@ public class RB_Camera : MonoBehaviour
 
     //Components
     private Transform _transform;
-    private CinemachineVirtualCamera _virtualCam;
+    public CinemachineVirtualCamera VirtualCam;
     private CinemachineRecomposer _recomposer;
 
     private float _currentZoomValue = 1;
@@ -21,13 +21,13 @@ public class RB_Camera : MonoBehaviour
         }
 
         _transform = transform;
-        _virtualCam = GetComponentInChildren<CinemachineVirtualCamera>();
-        _recomposer = _virtualCam.GetComponent<CinemachineRecomposer>();
+        VirtualCam = GetComponentInChildren<CinemachineVirtualCamera>();
+        _recomposer = VirtualCam.GetComponent<CinemachineRecomposer>();
     }
 
     private void Start()
     {
-        _virtualCam.Follow = RB_PlayerController.Instance.transform;
+        VirtualCam.Follow = RB_PlayerController.Instance.transform;
     }
 
     private void Update() 

@@ -7,7 +7,7 @@ public class RB_AppearingAI : MonoBehaviour
 {
     private new Transform transform;
     private Rigidbody _rb;
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer EntitySpriteRenderer;
     private Material _baseMaterial;
 
     private Material _dissolveMaterial;
@@ -18,15 +18,30 @@ public class RB_AppearingAI : MonoBehaviour
 
     private float _appearingTimer = 0;
 
+    public float StartDissolveAmount = 1;
+    public float TargetDissolveAmount = 0;
+
     private void Awake()
     {
         transform = GetComponent<Transform>();
-        _spriteRenderer = GetComponent<RB_Enemy>().SpriteRenderer;
-        _baseMaterial = new Material(_spriteRenderer.material);
+        if (TryGetComponent<RB_Enemy>(out RB_Enemy enemyComponent))
+        {
+            EntitySpriteRenderer = enemyComponent.SpriteRenderer;
+        }
+        else if (TryGetComponent<RB_PlayerController>(out RB_PlayerController playerComponent))
+        {
+            EntitySpriteRenderer = playerComponent.PlayerSpriteRenderer;
+        }
+        _baseMaterial = new Material(EntitySpriteRenderer.material);
         _dissolveMaterial = new Material(Resources.Load<Material>("Material/DissolveSprite"));
-        _spriteRenderer.material = _dissolveMaterial;
+        EntitySpriteRenderer.material = _dissolveMaterial;
         _appearingParticle = Resources.Load<ParticleSystem>("Prefabs/Particles/AppearingParticle");
         _appearingParticle = Instantiate(_appearingParticle, transform.position, Quaternion.identity);
+        EnemyGestion();
+    }
+
+    private void Start()
+    {
         EnemyGestion();
     }
 
@@ -38,22 +53,32 @@ public class RB_AppearingAI : MonoBehaviour
 
     public void EnemyGestion()
     {
-        RB_AI_BTTree enemyTree = GetComponent<RB_AI_BTTree>();
+
+        RB_AI_BTTree enemyTree = null;
+        if (TryGetComponent<RB_AI_BTTree>(out enemyTree));
 
         if (_appearingTimer < TimeForAppearing)
         {
-            _rb = GetComponent<Rigidbody>();
-            _rb.constraints = RigidbodyConstraints.FreezeAll;
-            _rb.detectCollisions = false;
-            enemyTree.enabled = false;
-            _dissolveMaterial.SetFloat("_DissolveAmount", Mathf.Lerp(1, 0, _appearingTimer / TimeForAppearing));
+            if (enemyTree != null)
+            {
+                _rb = GetComponent<Rigidbody>();
+                _rb.constraints = RigidbodyConstraints.FreezeAll;
+                _rb.detectCollisions = false;
+                enemyTree.enabled = false;
+            }
+            
+            _dissolveMaterial.SetFloat("_DissolveAmount", Mathf.Lerp(StartDissolveAmount, TargetDissolveAmount, _appearingTimer / TimeForAppearing));
         }
         else
         {
-            _rb.constraints = RigidbodyConstraints.FreezeRotation;
-            _rb.detectCollisions = true;
-            _spriteRenderer.material = _baseMaterial;
-            enemyTree.enabled = true;
+            if (enemyTree != null)
+            {
+                _rb.constraints = RigidbodyConstraints.FreezeRotation;
+                _rb.detectCollisions = true;
+                EntitySpriteRenderer.material = _baseMaterial;
+                enemyTree.enabled = true;
+            }
+            
             Destroy(_appearingParticle.gameObject, 5);
             _appearingParticle.Stop();
             Destroy(this);

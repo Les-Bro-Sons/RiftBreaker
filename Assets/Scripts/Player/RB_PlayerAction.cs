@@ -85,7 +85,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         RB_Health playerHealth = GetComponent<RB_Health>();
         playerHealth.EventDeath.AddListener(OnDeath);
-        RB_StatsParser.Instance.SetPlayerStats(playerHealth);
+        RB_StatsParser.Instance.SetStats(playerHealth, STATSCONTAINER._playerStats, STATSREGION.Health, RB_DifficultyManager.Instance.GetCurrentDifficulty());
     }
     //Update
     private void Update()

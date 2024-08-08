@@ -1,6 +1,7 @@
+using MANAGERS;
 using System.Collections;
 using System.Collections.Generic;
-using MANAGERS;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -40,6 +41,7 @@ public class RB_LevelExit : MonoBehaviour
     [SerializeField] private Light _portalLight;
 
     private bool _isOpened = false; //for entering the portal
+    private bool _isDoingEndCutscene = false;
 
     private void Awake()
     {
@@ -113,7 +115,7 @@ public class RB_LevelExit : MonoBehaviour
     {
         foreach(GameObject obj in objects)
         {
-            if (RB_Tools.TryGetComponentInParent<RB_PlayerController>(obj, out RB_PlayerController playerController)) //check if collider is the player
+            if (!_isDoingEndCutscene && RB_Tools.TryGetComponentInParent<RB_PlayerController>(obj, out RB_PlayerController playerController)) //check if collider is the player
             {
                 if (_isOpened)
                 {
@@ -129,6 +131,11 @@ public class RB_LevelExit : MonoBehaviour
     {
         EventEnterInPortal?.Invoke();
 
+        StartCoroutine(EnterPortalAnimation(RB_PlayerController.Instance.transform, true));
+    }
+
+    private void SwitchScene()
+    {
         if (_goToNextSceneID) //switch scene to next build index
         {
             if (_isSaving)
@@ -148,6 +155,88 @@ public class RB_LevelExit : MonoBehaviour
                 RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneID); //switch scene by ID
             }
         }
+    }
+
+    private IEnumerator EnterPortalAnimation(Transform enteringObject, bool closePortal = true)
+    {
+        if (closePortal) _isDoingEndCutscene = true;
+
+        SpriteRenderer entitySpriteRenderer = null;
+        Rigidbody objectRB = enteringObject.GetComponent<Rigidbody>();
+        if (enteringObject == RB_PlayerController.Instance.transform)
+        {
+            RB_PlayerController.Instance.enabled = false;
+            RB_PlayerMovement.Instance.enabled = false;
+            RB_PlayerMovement.Instance.SetVelocity(Vector3.zero);
+            entitySpriteRenderer = RB_PlayerController.Instance.PlayerSpriteRenderer;
+        }
+        if (enteringObject.TryGetComponent<Rigidbody>(out Rigidbody objectRigidbody))
+        {
+            objectRigidbody.velocity = Vector3.zero;
+            objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        enteringObject.rotation = Quaternion.LookRotation((transform.position - enteringObject.position));
+
+        float moveDuration = 0.5f;
+        float timer = 0;
+        Vector3 enterStartPosition = enteringObject.position;
+        Vector3 destination = transform.position;
+        destination += Vector3.back * 0.15f;
+
+        RB_Camera.Instance.VirtualCam.Follow = transform;
+
+        if (entitySpriteRenderer.TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim))
+        {
+            playerAnim.ForceWalking = true; //force walking animation
+            playerAnim.LockRotation = false;
+        }
+
+        while (timer < moveDuration) //move to portal
+        {
+            objectRB.MovePosition(Vector3.Lerp(enterStartPosition, destination, timer / moveDuration));
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        objectRB.MovePosition(destination);
+        objectRB.MoveRotation(Quaternion.LookRotation(Vector3.back));
+        timer = 0;
+
+        if (playerAnim)
+        {
+            playerAnim.ForceWalking = false; //stoping walking animation
+        }
+
+        float disappearDuration = 1;
+        RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>(); //adding disolve component
+        appearingScript.TargetDissolveAmount = 1;
+        appearingScript.StartDissolveAmount = 0;
+        appearingScript.TimeForAppearing = disappearDuration;
+        while (timer < disappearDuration) //disolve
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        timer = 0;
+
+        if (closePortal)
+        {
+            ClosePortal();
+        }
+
+        float switchSceneDuration = 0.75f;
+        while (timer < switchSceneDuration) //wait before switching scene
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        timer = 0;
+
+        if (closePortal)
+        {
+            SwitchScene();
+        }
+
+        yield return null;
     }
 
     public void OpenPortal()

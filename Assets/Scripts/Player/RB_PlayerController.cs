@@ -9,6 +9,7 @@ public class RB_PlayerController : MonoBehaviour
     RB_PlayerAction _playerAction;
     RB_Items _item;
     RB_Health _health;
+    public SpriteRenderer PlayerSpriteRenderer;
 
     //States
     [HideInInspector] public PLAYERSTATES CurrentState;
@@ -50,13 +51,12 @@ public class RB_PlayerController : MonoBehaviour
 
         _playerAction.EventItemGathered.AddListener(BindToAttack);
     }
-
-    [SerializeField] SpriteRenderer _spriteR; //PLACEHOLDER
+    
     private void LateUpdate()
     {
         if (_health.Dead)
         {
-            _spriteR.sprite = Resources.Load<Sprite>("Sprites/dead_joueur"); //PLACEHOLDER, REPLACE IN ANIMATION
+            PlayerSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/dead_joueur"); //PLACEHOLDER, REPLACE IN ANIMATION
         }
     }
 

@@ -9,10 +9,10 @@ HpMax = 150
 
 (_weaponsStats)
 [Katana]
-ChargeTime = 1|5|10
+ChargeTime = 0,1
 SpecialAttackChargeTime = 2
 _chargeZoom = 3
-_attackCooldown = 4
+_attackCooldown = 0
 _chargeAttackCooldown = 5
 _specialAttackCooldown = 6
 AttackDamage = 7
@@ -73,6 +73,26 @@ ChargeTime = 19
 SpecialAttackChargeTime = 20
 _chargeZoom = 21
 _attackCooldown = 22
+_chargeAttackCooldown = 23
+_specialAttackCooldown = 24
+AttackDamage = 25
+ChargedAttackDamage = 26
+SpecialAttackDamage = 27
+_normalKnockbackForce = 28
+_chargeAttackKnockbackForce = 29
+_specialAttackKnockbackForce = 30
+_normalAttackScreenshakeForce = 31
+_normalHitScreenshakeForce = 32
+_chargedAttackScreenshakeForce = 33
+_chargedHitScreenshakeForce = 34
+_specialAttackScreenshakeForce = 35
+_specialHitScreenshakeForce = 36
+
+[ShurikenPatrick]
+ChargeTime = 0,1
+SpecialAttackChargeTime = 20
+_chargeZoom = 21
+_attackCooldown = 0
 _chargeAttackCooldown = 23
 _specialAttackCooldown = 24
 AttackDamage = 25

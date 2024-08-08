@@ -185,7 +185,7 @@ public enum STATSREGION
     MagicWand,
     MusicBox,
     VikingHorn,
-    PatrickShuriken,
+    ShurikenPatrick,
     MultiGun
 }
 

@@ -171,7 +171,7 @@ public static class RB_Commands
     public static void CmdBeginning(string[] args = null)
     {
         InitInstances();
-        _properties.PlayerRb.position = RB_LevelManager.Instance.BeginningPos; //Set the position of the player to the beginning position
+        RB_PlayerMovement.Instance.PlayerRb.position = RB_LevelManager.Instance.BeginningPos; //Set the position of the player to the beginning position
     }
 
     /// <summary>
@@ -182,7 +182,7 @@ public static class RB_Commands
     {
         InitInstances();
         RB_Items foundItem = _properties.FoundItem; //Get the item of the level
-        if (foundItem) _properties.PlayerRb.position = foundItem.transform.position; //If there's any weapon on the level, set the player position to its position
+        if (foundItem) RB_PlayerMovement.Instance.PlayerRb.position = foundItem.transform.position; //If there's any weapon on the level, set the player position to its position
     }
 
     /// <summary>

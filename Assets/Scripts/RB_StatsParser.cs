@@ -257,7 +257,6 @@ public class RB_StatsParser : MonoBehaviour
             string lastOfSplittedLine = splittedLine[splittedLine.Length - 1];
             if (splittedLine.Length != 3 || splittedLine[1] != "=") { Debug.LogWarning($"line {i} is not valid"); continue; }
             string[] statsSplittedByDifficulty = lastOfSplittedLine.Split('|');
-            print(statsSplittedByDifficulty.Length);
             List<DIFFICULTY> difficulties = new();
             difficulties.AddRange(Enum.GetValues(typeof(DIFFICULTY)));
             int statsSplittedByDifficultyIndex = 0;
@@ -287,7 +286,6 @@ public class RB_StatsParser : MonoBehaviour
                 //print(region);
             }
         }
-        print("loaded");
     }
 
     #endregion

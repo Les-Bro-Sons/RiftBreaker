@@ -144,7 +144,7 @@ PrefabInstance:
     - target: {fileID: 7043983935662915794, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.97
+      value: -7.8
       objectReference: {fileID: 0}
     - target: {fileID: 7043983935662915794, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
         type: 3}
@@ -377,7 +377,7 @@ PrefabInstance:
     - target: {fileID: 7043983935662915794, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 5.24
       objectReference: {fileID: 0}
     - target: {fileID: 7043983935662915794, guid: 4282f6fa72dbe1c4b908892a8f7ee124,
         type: 3}
@@ -2991,6 +2991,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vase
       objectReference: {fileID: 0}
+    - target: {fileID: 149526877743022921, guid: 18480ca5c88eef24496b77b96b9ea7fb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7673193861743324794, guid: 18480ca5c88eef24496b77b96b9ea7fb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3131,8 +3136,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -3176,6 +3181,7 @@ MonoBehaviour:
   CanMoveDuringSpecialAttack: 0
   CanAttackDuringAttack: 0
   RobertShouldTalk: 1
+  BindedOnPlayer: 0
   EventOnEndOfAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -3184,6 +3190,7 @@ MonoBehaviour:
       m_Calls: []
   SpecialAttackCharge: 100
   _patrickRange: 0
+  _patrickSpeed: 0
 --- !u!1 &6785550778592562028
 GameObject:
   m_ObjectHideFlags: 0

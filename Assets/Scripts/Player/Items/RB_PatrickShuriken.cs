@@ -1,17 +1,19 @@
 using MANAGERS;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RB_ShurikenPatrick : RB_Items
 {
     [SerializeField] private float _patrickRange; public float PatrickRange { get { return _patrickRange; } set { _patrickRange = value; } }
-    [SerializeField] private float _patrickFOV; public float PatrickFOV { get { return _patrickFOV; } set { _patrickFOV = value; } }
     [SerializeField] private float _patrickSpeed; public float PatrickSpeed{ get { return _patrickSpeed; } set { _patrickSpeed = value; } }
 
     private bool _patrickShouldMove = false;
     private Transform _currentTarget = null;
+    private Vector3 _mouseDirection = new();
     private Vector3 _currentStartPos = new();
     private Rigidbody _rb;
+    private List<RB_Health> _touchedEnemies = new();
 
     protected override void Awake()
     {
@@ -22,7 +24,7 @@ public class RB_ShurikenPatrick : RB_Items
     protected override void Update()
     {
         base.Update();
-        MovePatrick();
+        MovePatrickToTarget();
         StayWithPlayer();
     }
     public override void Attack() {
@@ -35,22 +37,32 @@ public class RB_ShurikenPatrick : RB_Items
     {
         if(RB_Tools.TryGetComponentInParent<RB_Health>(other.transform, out RB_Health entity))
         {
-            if (_patrickShouldMove && _currentTarget == entity.transform)
+            if (_patrickShouldMove)
             {
                 print("target reached");
-                if(entity == RB_PlayerController.Instance.PlayerHealth)
+                _touchedEnemies.Add(entity);
+                if(entity.Team == TEAMS.Ai)
                 {
-                    _patrickShouldMove = false;
-                    RB_PlayerAction.Instance.Interact();
+                    entity.TakeDamage(AttackDamage);
                 }
-                else
+                if(!(entity == RB_PlayerController.Instance.PlayerHealth && _currentTarget == null))
                 {
-                    GoTo(RB_PlayerController.Instance.PlayerHealth);
+                    if (entity == RB_PlayerController.Instance.PlayerHealth && _currentTarget == entity.transform)
+                    {
+                        _patrickShouldMove = false;
+                        _currentTarget = null;
+                        _touchedEnemies.Clear();
+                        _transform.parent = _transform;
+                        RB_PlayerAction.Instance.GetItem(this);
+                        //RB_PlayerAction.Instance.Interact();
+                    }
+                    else
+                    {
+                        GoTo(GetNearestValidEnemyOrPlayer());
+                    }
                 }
             }
         }
-
-        
     }
 
     public void StayWithPlayer()
@@ -61,18 +73,27 @@ public class RB_ShurikenPatrick : RB_Items
         }
     }
 
-    public void MovePatrick()
+    public void MovePatrickToTarget()
     {
         if (_patrickShouldMove)
         {
-            _rb.position += (_currentTarget.position - _currentStartPos) * Time.deltaTime * _patrickSpeed;
-            if (Vector3.Distance(_currentStartPos, _currentTarget.position) < Vector3.Distance(_rb.position, _currentStartPos))
+            Vector3 directionToGo = new();
+            if (_currentTarget != null)
             {
-                print("target not reached");
+                directionToGo = (_currentTarget.position - _rb.position).normalized;
+                
+            }
+            else
+            {
+                directionToGo = _mouseDirection;
+            }
+            _rb.position += directionToGo * Time.deltaTime * _patrickSpeed;
+            if (Vector3.Distance(_rb.position, _currentStartPos) > _patrickRange)
+            {
                 GoTo(RB_PlayerController.Instance.PlayerHealth);
             }
+
         }
-        
     }
 
     public void GoTo(RB_Health target)
@@ -85,30 +106,36 @@ public class RB_ShurikenPatrick : RB_Items
         }
     }
 
+    public void GoBy()
+    {
+        _patrickShouldMove = true;
+        _currentTarget = null;
+        _mouseDirection = RB_InputManager.Instance.GetMouseDirection().normalized;
+    }
+
     public void ThrowPatrick()
     {
         Drop();
-        GoTo(GetNearestValidEnemy());
+        GoBy();
     }
 
     /// <summary>
     /// This function detect all the enemies around the player and check if the enemy is valid. It means that the enemy is within the range and unsude the field of view of the player.
     /// </summary>
     /// <returns> The nerest enemy valid</returns>
-    public RB_Health GetNearestValidEnemy()
+    public RB_Health GetNearestValidEnemyOrPlayer()
     {
-        RB_Health nearestEnemy = null;
         Collider[] hitEnemies = Physics.OverlapSphere(_transform.position, _patrickRange);
 
         foreach (var hitEnemy in hitEnemies)
         {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(hitEnemy.transform, out RB_Health entity) && entity.Team == TEAMS.Ai && Mathf.Abs(Vector3.Angle(RB_InputManager.Instance.GetMouseDirection().normalized, (entity.transform.position - _playerAction.transform.position))) < _patrickFOV)
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(hitEnemy.transform, out RB_Health entity) && !_touchedEnemies.Contains(entity))
             {
-                nearestEnemy = entity;
+                return entity;
             }
         }
 
-        return nearestEnemy;
+        return RB_PlayerController.Instance.PlayerHealth;
     }
     
     public override void Bind()

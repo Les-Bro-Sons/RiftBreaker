@@ -165,6 +165,12 @@ public class RB_PlayerAction : MonoBehaviour
         EventItemGathered?.Invoke();
     }
 
+    public void GetItem(RB_Items itemGathered)
+    {
+        itemGathered.transform.parent = _transform;
+        AddItemToList(itemGathered);
+    }
+
     public void Interact()
     {
         IsItemNearby = false;
@@ -174,10 +180,11 @@ public class RB_PlayerAction : MonoBehaviour
             {
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
-                itemGathered.transform.parent = _transform;
-                
+                GetItem(itemGathered);
+
+
                 IsItemNearby = true;
-                AddItemToList(itemGathered);
+                
                 
 
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);

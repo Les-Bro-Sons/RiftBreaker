@@ -8,7 +8,7 @@ public class RB_PlayerController : MonoBehaviour
     RB_PlayerMovement _playerMovement;
     RB_PlayerAction _playerAction;
     RB_Items _item;
-    RB_Health _health;
+    public RB_Health PlayerHealth;
     public SpriteRenderer PlayerSpriteRenderer;
 
     //States
@@ -24,7 +24,7 @@ public class RB_PlayerController : MonoBehaviour
         _playerMovement = GetComponent<RB_PlayerMovement>();
         _playerAction = GetComponent<RB_PlayerAction>();
         _item = GetComponentInChildren<RB_Items>();
-        _health = GetComponent<RB_Health>();
+        PlayerHealth = GetComponent<RB_Health>();
     }
 
     private void Start()
@@ -54,7 +54,7 @@ public class RB_PlayerController : MonoBehaviour
     
     private void LateUpdate()
     {
-        if (_health.Dead)
+        if (PlayerHealth.Dead)
         {
             PlayerSpriteRenderer.sprite = Resources.Load<Sprite>("Sprites/dead_joueur"); //PLACEHOLDER, REPLACE IN ANIMATION
         }
@@ -151,8 +151,8 @@ public class RB_PlayerController : MonoBehaviour
     private bool CanDoInput(bool ignoreRewind = false)
     {
         if (!ignoreRewind)
-            return (!_health.Dead && !RB_TimeManager.Instance.IsRewinding);
+            return (!PlayerHealth.Dead && !RB_TimeManager.Instance.IsRewinding);
         else
-            return (!_health.Dead);
+            return (!PlayerHealth.Dead);
     }
 }

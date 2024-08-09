@@ -188,6 +188,7 @@ public class RB_PlayerAction : MonoBehaviour
                 timeEvent.ItemTook = itemGathered;
                 _timeRecorder.RecordTimeEvent(timeEvent);
                 OnPickUpWeaponUX(itemGathered);
+                print("item gathered");
 
                 if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
                 {
@@ -293,7 +294,10 @@ public class RB_PlayerAction : MonoBehaviour
                 //Otherwise do the charged attack
                 ChargedAttack();
             }
-            Item.StopChargingAttack();
+            if(Item != null)
+            {
+                Item.StopChargingAttack();
+            }
             IsChargingAttack = false;
             _shouldStartCharging = false;
             _chargeAttackPressTime = 0;

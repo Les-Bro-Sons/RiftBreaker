@@ -211,5 +211,8 @@ public enum STATS
     _chargedAttackScreenshakeForce,
     _chargedHitScreenshakeForce,
     _specialAttackScreenshakeForce,
-    _specialHitScreenshakeForce
+    _specialHitScreenshakeForce,
+    _patrickRange,
+    _patrickFOV,
+    _patrickSpeed
 }

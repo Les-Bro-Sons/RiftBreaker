@@ -48,7 +48,7 @@ public class RB_Items : MonoBehaviour
     protected Animator _playerAnimator;
     protected Animator _colliderAnimator;
     private RB_CollisionDetection _collisionDetection;
-    [SerializeField] private GameObject _objectToRemove;
+    [SerializeField] protected GameObject _objectToRemove;
     protected Transform _transform;
     protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
@@ -63,6 +63,7 @@ public class RB_Items : MonoBehaviour
     public bool CanMoveDuringSpecialAttack;
     public bool CanAttackDuringAttack;
     public bool RobertShouldTalk = true;
+    public bool BindedOnPlayer = false;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
@@ -150,6 +151,7 @@ public class RB_Items : MonoBehaviour
         EventOnItemGathered?.Invoke();
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
+        BindedOnPlayer = true;
 
     }
 
@@ -166,6 +168,7 @@ public class RB_Items : MonoBehaviour
         }
         _playerAction.EventItemDropped?.Invoke();
         //RobertShouldTalk = true;
+        BindedOnPlayer = false;
 
     }
 

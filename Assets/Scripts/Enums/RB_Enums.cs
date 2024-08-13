@@ -214,5 +214,6 @@ public enum STATS
     _specialHitScreenshakeForce,
     _patrickRange,
     _patrickFOV,
-    _patrickSpeed
+    _patrickSpeed,
+    _patrickAttackMaxBounce
 }

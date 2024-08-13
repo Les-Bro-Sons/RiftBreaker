@@ -7,6 +7,7 @@ public class RB_ShurikenPatrick : RB_Items
 {
     [SerializeField] private float _patrickRange; public float PatrickRange { get { return _patrickRange; } set { _patrickRange = value; } }
     [SerializeField] private float _patrickSpeed; public float PatrickSpeed{ get { return _patrickSpeed; } set { _patrickSpeed = value; } }
+    [SerializeField] private int _patrickAttackMaxBounce; public int PatrickAttackMaxBounce { get { return _patrickAttackMaxBounce; } set { _patrickAttackMaxBounce = value; } }
 
     private bool _patrickShouldMove = false;
     private Transform _currentTarget = null;
@@ -14,6 +15,8 @@ public class RB_ShurikenPatrick : RB_Items
     private Vector3 _currentStartPos = new();
     private Rigidbody _rb;
     private List<RB_Health> _touchedEnemies = new();
+    private bool _shouldCurrentlyBounceBackToPlayer = false;
+    private int _currentMaxBounce = 0;
 
     protected override void Awake()
     {
@@ -25,52 +28,78 @@ public class RB_ShurikenPatrick : RB_Items
     {
         base.Update();
         MovePatrickToTarget();
-        StayWithPlayer();
     }
     public override void Attack() {
         base.Attack();
         RB_AudioManager.Instance.PlaySFX("LittleSwoosh", RB_PlayerController.Instance.transform.position,false, 0, 1);
+        _currentMaxBounce = _patrickAttackMaxBounce;
+        _shouldCurrentlyBounceBackToPlayer = true;
         ThrowPatrick();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(RB_Tools.TryGetComponentInParent<RB_Health>(other.transform, out RB_Health entity))
+        BounceOrStopPatrick(other.transform, _currentMaxBounce, _shouldCurrentlyBounceBackToPlayer);
+    }
+    /// <summary>
+    /// This function is called when there's a collision detected with patrick, then it checks if it's an enemy or the player. If it's an enemy, it deals damage to it then bounce to the next 
+    /// </summary>
+    /// <param name="entityTouchedTransform"></param>
+    public void BounceOrStopPatrick(Transform entityTouchedTransform, int maxBounce, bool shouldBounceBackToPlayer)
+    {
+        if (_patrickShouldMove && RB_Tools.TryGetComponentInParent<RB_Health>(entityTouchedTransform, out RB_Health entityTouchedHealth))
         {
-            if (_patrickShouldMove)
+            if (entityTouchedHealth == RB_PlayerController.Instance.PlayerHealth && _currentTarget != null) //If the entity touched is the player make him gather patrick
             {
-                print("target reached");
-                _touchedEnemies.Add(entity);
-                if(entity.Team == TEAMS.Ai)
+                MakePlayerGatherPatrick();
+            }
+            else if (entityTouchedHealth.Team == TEAMS.Ai)  //If the entity touched is an enemy
+            {
+                _touchedEnemies.Add(entityTouchedHealth);
+                entityTouchedHealth.TakeDamage(AttackDamage);
+                if (_touchedEnemies.Count >= maxBounce)
                 {
-                    entity.TakeDamage(AttackDamage);
+                    StopPatrick(shouldBounceBackToPlayer);
+                    print(_touchedEnemies.Count);
                 }
-                if(!(entity == RB_PlayerController.Instance.PlayerHealth && _currentTarget == null))
+                else
                 {
-                    if (entity == RB_PlayerController.Instance.PlayerHealth && _currentTarget == entity.transform)
+                    RB_Health nearestValidEnemy = GetNearestValidEnemy();
+                    if (nearestValidEnemy != null)
                     {
-                        _patrickShouldMove = false;
-                        _currentTarget = null;
-                        _touchedEnemies.Clear();
-                        _transform.parent = _transform;
-                        RB_PlayerAction.Instance.GetItem(this);
-                        //RB_PlayerAction.Instance.Interact();
+                        GoTo(nearestValidEnemy);
                     }
                     else
                     {
-                        GoTo(GetNearestValidEnemyOrPlayer());
+                        print("no enemy nearby");
+                        StopPatrick(shouldBounceBackToPlayer);
                     }
                 }
             }
         }
     }
 
-    public void StayWithPlayer()
+    public void StopPatrick(bool shouldBounceBackToPlayer)
     {
-        if (!_patrickShouldMove && BindedOnPlayer)
+        if (shouldBounceBackToPlayer)
         {
-            _rb.position = _playerTransform.position;
+            GoTo(RB_PlayerController.Instance.PlayerHealth);
         }
+        else
+        {
+            _patrickShouldMove = false;
+            _currentTarget = null;
+        }
+        
+    }
+
+    public void MakePlayerGatherPatrick()
+    {
+        _patrickShouldMove = false;
+        _currentTarget = null;
+        _touchedEnemies.Clear();
+        _transform.parent = _transform;
+        RB_PlayerAction.Instance.GetItem(this);
     }
 
     public void MovePatrickToTarget()
@@ -111,6 +140,7 @@ public class RB_ShurikenPatrick : RB_Items
         _patrickShouldMove = true;
         _currentTarget = null;
         _mouseDirection = RB_InputManager.Instance.GetMouseDirection().normalized;
+        _transform.position = RB_PlayerAction.Instance.transform.position;
     }
 
     public void ThrowPatrick()
@@ -123,19 +153,19 @@ public class RB_ShurikenPatrick : RB_Items
     /// This function detect all the enemies around the player and check if the enemy is valid. It means that the enemy is within the range and unsude the field of view of the player.
     /// </summary>
     /// <returns> The nerest enemy valid</returns>
-    public RB_Health GetNearestValidEnemyOrPlayer()
+    public RB_Health GetNearestValidEnemy()
     {
         Collider[] hitEnemies = Physics.OverlapSphere(_transform.position, _patrickRange);
 
         foreach (var hitEnemy in hitEnemies)
         {
-            if (RB_Tools.TryGetComponentInParent<RB_Health>(hitEnemy.transform, out RB_Health entity) && !_touchedEnemies.Contains(entity))
+            if (RB_Tools.TryGetComponentInParent<RB_Health>(hitEnemy.transform, out RB_Health entity) && entity.Team == TEAMS.Ai && !_touchedEnemies.Contains(entity))
             {
                 return entity;
             }
         }
-
-        return RB_PlayerController.Instance.PlayerHealth;
+        print("no enemies found");
+        return null;
     }
     
     public override void Bind()

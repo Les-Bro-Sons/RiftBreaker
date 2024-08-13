@@ -158,7 +158,13 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 9101173564990518349}
   AiAnimator: {fileID: 7214748225881584283}
   ChargeSpecialAttackAmount: 5
-  DeathSpawnPrefabName: Dummy
+  EventJoinAllyTeam:
+    m_PersistentCalls:
+      m_Calls: []
+  EventJoinEnemyTeam:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathDummyPrefab: {fileID: 7043983935662915794}
 --- !u!114 &263053956299020696
 MonoBehaviour:
   m_ObjectHideFlags: 0

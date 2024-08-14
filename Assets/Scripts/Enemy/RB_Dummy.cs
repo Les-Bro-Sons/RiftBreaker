@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RB_Dummy : RB_Enemy
 {
-    [SerializeField] private string DeathSpawnPrefabName;
+    [SerializeField] private Transform DeathDummyPrefab;
 
     /// <summary>
     /// Handles the death of the dummy enemy.
@@ -13,7 +13,7 @@ public class RB_Dummy : RB_Enemy
 
         // Instantiate the death spawn prefab at a random position near the current position.
         Instantiate(
-            Resources.Load<GameObject>("Prefabs/Enemies/" + DeathSpawnPrefabName),
+            DeathDummyPrefab,
             new Vector3(Random.Range(-3, 3), transform.position.y, Random.Range(-3, 3)),
             transform.rotation
         );

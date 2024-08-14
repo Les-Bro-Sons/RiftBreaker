@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,7 +48,7 @@ public class RB_Items : MonoBehaviour
     protected Animator _playerAnimator;
     protected Animator _colliderAnimator;
     private RB_CollisionDetection _collisionDetection;
-    [SerializeField] private GameObject _objectToRemove;
+    [SerializeField] protected GameObject _objectToRemove;
     protected Transform _transform;
     protected RB_PlayerAction _playerAction;
     public Sprite HudSprite;
@@ -62,6 +63,7 @@ public class RB_Items : MonoBehaviour
     public bool CanMoveDuringSpecialAttack;
     public bool CanAttackDuringAttack;
     public bool RobertShouldTalk = true;
+    public bool BindedOnPlayer = false;
 
     //Events
     public UnityEvent EventOnEndOfAttack;
@@ -129,8 +131,8 @@ public class RB_Items : MonoBehaviour
         {
             _playerAction.AddItemToList(this);
         }
-
-        RB_StatsParser.Instance.SetWeaponStats(this);
+        STATSREGION currentWeapon = (STATSREGION)Enum.Parse(typeof(STATSREGION), GetType().ToString().Substring(3));
+        RB_StatsParser.Instance.SetStats(this, STATSCONTAINER._weaponsStats, currentWeapon, RB_DifficultyManager.Instance.GetCurrentDifficulty());
     }
 
     
@@ -149,6 +151,7 @@ public class RB_Items : MonoBehaviour
         EventOnItemGathered?.Invoke();
         if (RB_Tools.TryGetComponentInParent<CinemachineImpulseSource>(gameObject, out CinemachineImpulseSource impulseSource))
             _impulseSource = impulseSource;
+        BindedOnPlayer = true;
 
     }
 
@@ -165,6 +168,7 @@ public class RB_Items : MonoBehaviour
         }
         _playerAction.EventItemDropped?.Invoke();
         //RobertShouldTalk = true;
+        BindedOnPlayer = false;
 
     }
 
@@ -213,7 +217,7 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         if (_impulseSource)
-            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_normalAttackScreenshakeForce * 0.9f, _normalAttackScreenshakeForce * 1.1f));
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * UnityEngine.Random.Range(_normalAttackScreenshakeForce * 0.9f, _normalAttackScreenshakeForce * 1.1f));
         _currentHitScreenshakeForce = _normalHitScreenshakeForce;
         //Degats
         //KBs
@@ -238,7 +242,7 @@ public class RB_Items : MonoBehaviour
 
                 /////UX/////
                 if (_impulseSource)
-                    _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_currentHitScreenshakeForce * 0.9f, _currentHitScreenshakeForce * 1.1f));
+                    _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * UnityEngine.Random.Range(_currentHitScreenshakeForce * 0.9f, _currentHitScreenshakeForce * 1.1f));
             }
         }
     }
@@ -268,7 +272,7 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         if (_impulseSource)
-            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_chargedAttackScreenshakeForce * 0.9f, _chargedAttackScreenshakeForce * 1.1f));
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * UnityEngine.Random.Range(_chargedAttackScreenshakeForce * 0.9f, _chargedAttackScreenshakeForce * 1.1f));
         RB_Camera.Instance.Zoom(1);
         _currentHitScreenshakeForce = _chargedHitScreenshakeForce;
         //A COMPLETER
@@ -287,7 +291,7 @@ public class RB_Items : MonoBehaviour
 
         /////UX/////
         if (_impulseSource)
-            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * Random.Range(_specialAttackScreenshakeForce * 0.9f, _specialAttackScreenshakeForce * 1.1f));
+            _impulseSource.GenerateImpulse(RB_Tools.GetRandomVector(-1, 1, true, true, false) * UnityEngine.Random.Range(_specialAttackScreenshakeForce * 0.9f, _specialAttackScreenshakeForce * 1.1f));
         _currentHitScreenshakeForce = _specialHitScreenshakeForce;
 
         //A COMPLETER

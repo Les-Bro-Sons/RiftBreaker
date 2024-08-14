@@ -38,7 +38,7 @@ public class RB_PlayerMovement : MonoBehaviour
 
     //Components
     [Header("Components")]
-    private Rigidbody _rb;
+    [HideInInspector] public Rigidbody PlayerRb;
     private Transform _transform;
     private RB_PlayerAction _playerAction;
     private RB_AudioManager _audioManager;
@@ -60,7 +60,7 @@ public class RB_PlayerMovement : MonoBehaviour
     private void Awake()
     {   
         Instance = this;
-        _rb = GetComponentInChildren<Rigidbody>();
+        PlayerRb = GetComponentInChildren<Rigidbody>();
         _transform = transform;
         _playerAction = GetComponent<RB_PlayerAction>();
         ResetDirection();
@@ -69,13 +69,13 @@ public class RB_PlayerMovement : MonoBehaviour
     }
     private void Start()
     {
-        RB_StatsParser.Instance.SetPlayerStats(this);
+        RB_StatsParser.Instance.SetStats(this, STATSCONTAINER._playerStats, STATSREGION.PlayerMovement, RB_DifficultyManager.Instance.GetCurrentDifficulty());
         Invoke("DebugSpeed", 0);
     }
 
     private void Update()
     {
-        if (!_rb.isKinematic)
+        if (!PlayerRb.isKinematic)
         {
             //Set the direction
             UpdateDirection();
@@ -126,7 +126,7 @@ public class RB_PlayerMovement : MonoBehaviour
         //Constantly set the direction of the player to the right direction
         if (ForwardDirection != Vector3.zero)
         {
-            _rb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
+            PlayerRb.MoveRotation(Quaternion.LookRotation(ForwardDirection));
         }
     }
 
@@ -186,21 +186,21 @@ public class RB_PlayerMovement : MonoBehaviour
 
     public void ResetDirection()
     {
-        _rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
+        PlayerRb.MoveRotation(Quaternion.LookRotation(Vector3.back));
     }
 
     private void ClampingSpeed()
     {
         //Clamping to max speed in the x and z axes
-        Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+        Vector3 horizontalVelocity = new Vector3(PlayerRb.velocity.x, 0, PlayerRb.velocity.z);
         horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, MovementMaxSpeed);
-        if (!_rb.isKinematic) _rb.velocity = new Vector3(horizontalVelocity.x, _rb.velocity.y, horizontalVelocity.z);
+        if (!PlayerRb.isKinematic) PlayerRb.velocity = new Vector3(horizontalVelocity.x, PlayerRb.velocity.y, horizontalVelocity.z);
     }
 
     private void FrictionForce()
     {
-        Vector3 frictionForce = (-_rb.velocity) * Time.fixedDeltaTime * _movementFrictionForce;
-        _rb.AddForce(new Vector3(frictionForce.x, 0, frictionForce.z)); //Friction force (stop the movement)
+        Vector3 frictionForce = (-PlayerRb.velocity) * Time.fixedDeltaTime * _movementFrictionForce;
+        PlayerRb.AddForce(new Vector3(frictionForce.x, 0, frictionForce.z)); //Friction force (stop the movement)
     }
 
     //Moving the player
@@ -209,7 +209,7 @@ public class RB_PlayerMovement : MonoBehaviour
         if(_currentVelocity.magnitude < MovementMaxSpeed)
         {
             //Adding velocity to player
-            _rb.AddForce(DirectionToMove * MovementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
+            PlayerRb.AddForce(DirectionToMove * MovementMaxSpeed * Time.fixedDeltaTime * _movementAcceleration);
         }
     }
 
@@ -295,7 +295,7 @@ public class RB_PlayerMovement : MonoBehaviour
             {
                 StopDash();
             }
-            _rb.velocity = _dashSpeed * _dashDirection.normalized;
+            PlayerRb.velocity = _dashSpeed * _dashDirection.normalized;
         }
     }
 

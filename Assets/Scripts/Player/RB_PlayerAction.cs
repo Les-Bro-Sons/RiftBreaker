@@ -85,7 +85,7 @@ public class RB_PlayerAction : MonoBehaviour
     {
         RB_Health playerHealth = GetComponent<RB_Health>();
         playerHealth.EventDeath.AddListener(OnDeath);
-        RB_StatsParser.Instance.SetPlayerStats(playerHealth);
+        RB_StatsParser.Instance.SetStats(playerHealth, STATSCONTAINER._playerStats, STATSREGION.Health, RB_DifficultyManager.Instance.GetCurrentDifficulty());
     }
     //Update
     private void Update()
@@ -165,6 +165,12 @@ public class RB_PlayerAction : MonoBehaviour
         EventItemGathered?.Invoke();
     }
 
+    public void GetItem(RB_Items itemGathered)
+    {
+        itemGathered.transform.parent = _transform;
+        AddItemToList(itemGathered);
+    }
+
     public void Interact()
     {
         IsItemNearby = false;
@@ -174,10 +180,11 @@ public class RB_PlayerAction : MonoBehaviour
             {
                 //For each object around the player, verify if it's an item
                 //If it is then put it in the player child
-                itemGathered.transform.parent = _transform;
-                
+                GetItem(itemGathered);
+
+
                 IsItemNearby = true;
-                AddItemToList(itemGathered);
+                
                 
 
                 RB_AudioManager.Instance.PlaySFX("Pick_Object", RB_PlayerController.Instance.transform.position, false, 0, 1);
@@ -188,6 +195,7 @@ public class RB_PlayerAction : MonoBehaviour
                 timeEvent.ItemTook = itemGathered;
                 _timeRecorder.RecordTimeEvent(timeEvent);
                 OnPickUpWeaponUX(itemGathered);
+                print("item gathered");
 
                 if (RB_LevelManager.Instance.CurrentPhase == PHASES.Infiltration)
                 {
@@ -293,7 +301,10 @@ public class RB_PlayerAction : MonoBehaviour
                 //Otherwise do the charged attack
                 ChargedAttack();
             }
-            Item.StopChargingAttack();
+            if(Item != null)
+            {
+                Item.StopChargingAttack();
+            }
             IsChargingAttack = false;
             _shouldStartCharging = false;
             _chargeAttackPressTime = 0;

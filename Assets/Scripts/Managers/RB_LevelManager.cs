@@ -15,6 +15,11 @@ public class RB_LevelManager : MonoBehaviour
     [HideInInspector] public PHASES LastPhase;
     public SCENENAMES CurrentScene;
 
+    [Header("weapon")]
+    public WEAPONS CurrentWeapon;
+    [SerializeField] private Transform _weapon;
+    private string _weaponsPrefabPath;
+
     [HideInInspector] public UnityEvent EventPlayerLost;
     [HideInInspector] public UnityEvent EventPlayerWon;
     [HideInInspector] public UnityEvent EventSwitchPhase;
@@ -41,6 +46,8 @@ public class RB_LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        _weaponsPrefabPath = "Prefabs/Weapons/";
+        SpawnWeaponAtStart();
         if (Instance == null)
         {
             Instance = this;
@@ -93,6 +100,21 @@ public class RB_LevelManager : MonoBehaviour
 
         BeginningPos = RB_PlayerAction.Instance.transform.position;
 
+    }
+
+    private void SpawnWeaponAtStart()
+    {
+        string currentWeaponPath =  _weaponsPrefabPath + CurrentWeapon.ToString();
+        Transform weaponToSpawn =  Resources.Load<Transform>(currentWeaponPath);
+        try
+        {
+            Instantiate(weaponToSpawn, _weapon.transform.position, Quaternion.identity);
+            _weapon.gameObject.SetActive(false);
+        }catch(System.Exception e)
+        {
+            print(e);
+            print(currentWeaponPath);
+        }
     }
 
     public void SwitchPhase()

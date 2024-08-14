@@ -15,6 +15,11 @@ public class RB_LevelManager : MonoBehaviour
     [HideInInspector] public PHASES LastPhase;
     public SCENENAMES CurrentScene;
 
+    [Header("weapon")]
+    public WEAPONS CurrentWeapon;
+    [SerializeField] private Transform _weapon;
+    private string _weaponsPrefabPath;
+
     [HideInInspector] public UnityEvent EventPlayerLost;
     [HideInInspector] public UnityEvent EventPlayerWon;
     [HideInInspector] public UnityEvent EventSwitchPhase;
@@ -55,6 +60,7 @@ public class RB_LevelManager : MonoBehaviour
         _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
+        _weaponsPrefabPath = "Prefabs/Weapons/";
     }
 
     private void Start()
@@ -92,7 +98,22 @@ public class RB_LevelManager : MonoBehaviour
         }
 
         BeginningPos = RB_PlayerAction.Instance.transform.position;
+        SpawnWeaponAtStart();
 
+    }
+
+    private void SpawnWeaponAtStart()
+    {
+        string currentWeaponPath =  _weaponsPrefabPath + CurrentWeapon.ToString();
+        GameObject weaponToSpawn =  Resources.Load<GameObject>(currentWeaponPath);
+        try
+        {
+            Instantiate(weaponToSpawn, _weapon.transform.position, Quaternion.identity);
+        }catch(System.Exception e)
+        {
+            print(e);
+            print(currentWeaponPath);
+        }
     }
 
     public void SwitchPhase()

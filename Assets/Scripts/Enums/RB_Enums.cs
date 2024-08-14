@@ -217,3 +217,16 @@ public enum STATS
     _patrickSpeed,
     _patrickAttackMaxBounce
 }
+
+public enum WEAPONS
+{
+    Katana,
+    MagicWand,
+    MusicBox,
+    VikingHorn,
+    ChessQueen,
+    Scythe,
+    LightSaber,
+    PatrickShuriken,
+    MultiGun
+}

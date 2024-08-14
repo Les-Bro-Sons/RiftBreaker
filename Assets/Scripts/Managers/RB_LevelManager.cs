@@ -46,6 +46,8 @@ public class RB_LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        _weaponsPrefabPath = "Prefabs/Weapons/";
+        SpawnWeaponAtStart();
         if (Instance == null)
         {
             Instance = this;
@@ -60,7 +62,6 @@ public class RB_LevelManager : MonoBehaviour
         _savedEnemiesInPhase[PHASES.Infiltration] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Boss] = new List<GameObject>();
         _savedEnemiesInPhase[PHASES.Combat] = new List<GameObject>();
-        _weaponsPrefabPath = "Prefabs/Weapons/";
     }
 
     private void Start()
@@ -98,17 +99,17 @@ public class RB_LevelManager : MonoBehaviour
         }
 
         BeginningPos = RB_PlayerAction.Instance.transform.position;
-        SpawnWeaponAtStart();
 
     }
 
     private void SpawnWeaponAtStart()
     {
         string currentWeaponPath =  _weaponsPrefabPath + CurrentWeapon.ToString();
-        GameObject weaponToSpawn =  Resources.Load<GameObject>(currentWeaponPath);
+        Transform weaponToSpawn =  Resources.Load<Transform>(currentWeaponPath);
         try
         {
             Instantiate(weaponToSpawn, _weapon.transform.position, Quaternion.identity);
+            _weapon.gameObject.SetActive(false);
         }catch(System.Exception e)
         {
             print(e);

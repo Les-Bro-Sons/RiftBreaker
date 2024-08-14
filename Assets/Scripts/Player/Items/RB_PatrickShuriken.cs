@@ -27,6 +27,11 @@ public class RB_ShurikenPatrick : RB_Items
     protected override void Update()
     {
         base.Update();
+        
+    }
+
+    private void FixedUpdate()
+    {
         MovePatrickToTarget();
     }
     public override void Attack() {
@@ -47,34 +52,51 @@ public class RB_ShurikenPatrick : RB_Items
     /// <param name="entityTouchedTransform"></param>
     public void BounceOrStopPatrick(Transform entityTouchedTransform, int maxBounce, bool shouldBounceBackToPlayer)
     {
-        if (_patrickShouldMove && RB_Tools.TryGetComponentInParent<RB_Health>(entityTouchedTransform, out RB_Health entityTouchedHealth))
+        if (_patrickShouldMove)
         {
-            if (entityTouchedHealth == RB_PlayerController.Instance.PlayerHealth && _currentTarget != null) //If the entity touched is the player make him gather patrick
+            if(RB_Tools.TryGetComponentInParent<RB_Health>(entityTouchedTransform, out RB_Health entityTouchedHealth))
             {
-                MakePlayerGatherPatrick();
-            }
-            else if (entityTouchedHealth.Team == TEAMS.Ai)  //If the entity touched is an enemy
-            {
-                _touchedEnemies.Add(entityTouchedHealth);
-                entityTouchedHealth.TakeDamage(AttackDamage);
-                if (_touchedEnemies.Count >= maxBounce)
+                if (entityTouchedHealth == RB_PlayerController.Instance.PlayerHealth && _currentTarget != null) //If the entity touched is the player make him gather patrick
                 {
-                    StopPatrick(shouldBounceBackToPlayer);
-                    print(_touchedEnemies.Count);
+                    MakePlayerGatherPatrick();
                 }
-                else
+                else if (entityTouchedHealth.Team == TEAMS.Ai)  //If the entity touched is an enemy
                 {
-                    RB_Health nearestValidEnemy = GetNearestValidEnemy();
-                    if (nearestValidEnemy != null)
+                    _touchedEnemies.Add(entityTouchedHealth);
+                    entityTouchedHealth.TakeDamage(AttackDamage);
+                    if (_touchedEnemies.Count >= maxBounce)
                     {
-                        GoTo(nearestValidEnemy);
+                        StopPatrick(shouldBounceBackToPlayer);
+                        print(_touchedEnemies.Count);
                     }
                     else
                     {
-                        print("no enemy nearby");
-                        StopPatrick(shouldBounceBackToPlayer);
+                        RB_Health nearestValidEnemy = GetNearestValidEnemy();
+                        if (nearestValidEnemy != null)
+                        {
+                            GoTo(nearestValidEnemy);
+                        }
+                        else
+                        {
+                            print("no enemy nearby");
+                            StopPatrick(shouldBounceBackToPlayer);
+                        }
                     }
                 }
+            }
+            else
+            {
+                Ray ray = new Ray(_transform.position, _mouseDirection);
+                if (_currentTarget != null) ray.direction = (_currentTarget.position - _rb.position).normalized;
+                foreach (RaycastHit hitInfo in Physics.RaycastAll(ray, 2))
+                {
+                    if(hitInfo.collider.gameObject.layer == 3)
+                    {
+                        print("wall touched : " + hitInfo.collider.name);
+                        StopPatrick(false);
+                    }
+                }
+                Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
             }
         }
     }
@@ -116,7 +138,7 @@ public class RB_ShurikenPatrick : RB_Items
             {
                 directionToGo = _mouseDirection;
             }
-            _rb.position += directionToGo * Time.deltaTime * _patrickSpeed;
+            _rb.position += directionToGo * Time.fixedDeltaTime * _patrickSpeed;
             if (Vector3.Distance(_rb.position, _currentStartPos) > _patrickRange)
             {
                 GoTo(RB_PlayerController.Instance.PlayerHealth);

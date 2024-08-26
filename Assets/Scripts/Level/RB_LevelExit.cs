@@ -6,18 +6,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class RB_LevelExit : MonoBehaviour
+public class RB_LevelExit : RB_Portal
 {
     public static RB_LevelExit Instance;
-
-    [HideInInspector] public UnityEvent EventEnterInPortal;
-
-    [Header("General")]
-    [SerializeField] private bool _goToNextSceneID = true;
-    [SerializeField] private string _nextSceneName = "";
-    [SerializeField] private int _nextSceneID = -1;
-    [SerializeField] private bool _isSwitchingOnPortalOpening = false;
-    [SerializeField] private bool _isSaving = true;
 
     [Header("Phase")]
     [SerializeField] private bool _availableOnPhase = false;
@@ -27,22 +18,6 @@ public class RB_LevelExit : MonoBehaviour
     [SerializeField] private bool _availableOnKill = false;
     [SerializeField] private List<RB_Health> _enemyToKill = new();
 
-    [Header("Visual")]
-    [SerializeField] private Vector3 _openedSize;
-    [SerializeField] private Vector3 _closedSize;
-    [SerializeField] private float _openedLightIntensity;
-    [SerializeField] private float _closedLightIntensity;
-    [SerializeField] private bool _showRobert = true;
-
-    [Header("Component")]
-    [SerializeField] private RB_CollisionDetection _collisionDetection;
-    [SerializeField] private Transform _portalTransform;
-    [SerializeField] private GameObject _robert;
-    [SerializeField] private Light _portalLight;
-
-    private bool _isOpened = false; //for entering the portal
-    private bool _isDoingEndCutscene = false;
-
     private void Awake()
     {
         if (Instance == null)
@@ -51,13 +26,13 @@ public class RB_LevelExit : MonoBehaviour
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         ClosePortal();
 
         _collisionDetection.EventOnEntityEntered.AddListener(delegate { CheckForPlayerEntered(_collisionDetection.GetDetectedEntity()); });
-
-        _robert.SetActive(_showRobert);
 
         if (_availableOnKill)
         {
@@ -127,157 +102,14 @@ public class RB_LevelExit : MonoBehaviour
         }
     }
 
-    private void EnterPortal()
+    protected override IEnumerator EnterPortalAnimation(Transform enteringObject, bool closePortal = true)
     {
-        EventEnterInPortal?.Invoke();
-
-        StartCoroutine(EnterPortalAnimation(RB_PlayerController.Instance.transform, true));
-    }
-
-    private void SwitchScene()
-    {
-        if (_goToNextSceneID) //switch scene to next build index
-        {
-            if (_isSaving)
-            {
-                RB_SaveManager.Instance.SaveToJson();
-            }
-            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
-        }
-        else
-        {
-            if (_nextSceneName != "")
-            {
-                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneName); //switch scene by name
-            }
-            else
-            {
-                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneID); //switch scene by ID
-            }
-        }
-    }
-
-    private IEnumerator EnterPortalAnimation(Transform enteringObject, bool closePortal = true)
-    {
-        if (closePortal) _isDoingEndCutscene = true;
-
-        SpriteRenderer entitySpriteRenderer = null;
-        Rigidbody objectRB = enteringObject.GetComponent<Rigidbody>();
-        if (enteringObject == RB_PlayerController.Instance.transform)
-        {
-            RB_PlayerController.Instance.enabled = false;
-            RB_PlayerMovement.Instance.enabled = false;
-            RB_PlayerMovement.Instance.SetVelocity(Vector3.zero);
-            entitySpriteRenderer = RB_PlayerController.Instance.PlayerSpriteRenderer;
-        }
-        if (enteringObject.TryGetComponent<Rigidbody>(out Rigidbody objectRigidbody))
-        {
-            objectRigidbody.velocity = Vector3.zero;
-            objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        }
-        enteringObject.rotation = Quaternion.LookRotation((transform.position - enteringObject.position));
-
-        float moveDuration = 0.5f;
-        float timer = 0;
-        Vector3 enterStartPosition = enteringObject.position;
-        Vector3 destination = transform.position;
-        destination += Vector3.back * 0.15f;
-
-        RB_Camera.Instance.VirtualCam.Follow = transform;
-
-        if (entitySpriteRenderer.TryGetComponent<RB_PlayerAnim>(out RB_PlayerAnim playerAnim))
-        {
-            playerAnim.ForceWalking = true; //force walking animation
-            playerAnim.LockRotation = false;
-        }
-
-        while (timer < moveDuration) //move to portal
-        {
-            objectRB.MovePosition(Vector3.Lerp(enterStartPosition, destination, timer / moveDuration));
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        objectRB.MovePosition(destination);
-        objectRB.MoveRotation(Quaternion.LookRotation(Vector3.back));
-        timer = 0;
-
-        if (playerAnim)
-        {
-            playerAnim.ForceWalking = false; //stoping walking animation
-        }
-
-        float disappearDuration = 1;
-        RB_AppearingAI appearingScript = enteringObject.AddComponent<RB_AppearingAI>(); //adding disolve component
-        appearingScript.TargetDissolveAmount = 1;
-        appearingScript.StartDissolveAmount = 0;
-        appearingScript.TimeForAppearing = disappearDuration;
-        while (timer < disappearDuration) //disolve
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        timer = 0;
-
-        if (closePortal)
-        {
-            ClosePortal();
-        }
-
-        float switchSceneDuration = 0.75f;
-        while (timer < switchSceneDuration) //wait before switching scene
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        timer = 0;
+        yield return base.EnterPortalAnimation(enteringObject, closePortal);
 
         if (closePortal)
         {
             SwitchScene();
         }
-
-        yield return null;
-    }
-
-    public void OpenPortal()
-    {
-        _isOpened = true;
-        StartCoroutine(OpenPortalAnim());
-    }
-
-    public void ClosePortal()
-    {
-        _isOpened = false;
-        RB_AudioManager.Instance.PlaySFX("rift_closing", RB_PlayerController.Instance.transform.position, false, 0, 1);
-        StartCoroutine(ClosePortalAnim());
-    }
-
-    private IEnumerator OpenPortalAnim(float duration = 0.5f)
-    {
-        float timer = 0;
-        while (timer < duration)
-        {
-            _portalTransform.localScale = Vector3.Lerp(_closedSize, _openedSize, timer / duration);
-            _portalLight.intensity = Mathf.Lerp(_closedLightIntensity, _openedLightIntensity, timer / duration);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        _portalTransform.localScale = _openedSize;
-
-        yield return null;
-    }
-
-    private IEnumerator ClosePortalAnim(float duration = 0.5f)
-    {
-        float timer = 0;
-        while (timer < duration)
-        {
-            _portalTransform.localScale = Vector3.Lerp(_openedSize, _closedSize, timer / duration);
-            _portalLight.intensity = Mathf.Lerp(_openedLightIntensity, _closedLightIntensity, timer / duration);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        _portalTransform.localScale = _closedSize;
 
         yield return null;
     }

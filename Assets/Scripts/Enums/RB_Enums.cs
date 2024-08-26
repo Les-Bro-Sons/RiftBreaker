@@ -28,6 +28,8 @@ public enum SCENENAMES
     BossRush1,
     BossRush2,
     BossRush3,
+
+    HUB,
 }
 
 public enum DIFFICULTY

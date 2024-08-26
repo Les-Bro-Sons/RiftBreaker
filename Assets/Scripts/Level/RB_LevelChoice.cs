@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RB_LevelChoice : RB_Portal
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Component")]
+    [SerializeField] private TextMeshProUGUI _levelNameDisplay;
 
-    // Update is called once per frame
-    void Update()
+    protected override void Start()
     {
-        
+        base.Start();
+
+        OpenPortal();
+        _levelNameDisplay.text = _nextSceneName.ToString();
     }
 }

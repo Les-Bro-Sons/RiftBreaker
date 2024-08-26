@@ -9,9 +9,16 @@ public class RB_Portal : MonoBehaviour
 {
     [HideInInspector] public UnityEvent EventEnterInPortal;
 
+    public enum NEXTSCENETYPE
+    {
+        NextBuildIndex,
+        SceneName,
+        SceneID
+    }
+
     [Header("General")]
-    [SerializeField] protected bool _goToNextSceneID = true;
-    [SerializeField] protected string _nextSceneName = "";
+    [SerializeField] protected NEXTSCENETYPE _nextSceneSwitchType = NEXTSCENETYPE.NextBuildIndex;
+    [SerializeField] protected SCENENAMES _nextSceneName = SCENENAMES.Level1;
     [SerializeField] protected int _nextSceneID = -1;
     [SerializeField] protected bool _isSwitchingOnPortalOpening = false;
     [SerializeField] protected bool _isSaving = true;
@@ -52,24 +59,19 @@ public class RB_Portal : MonoBehaviour
 
     protected void SwitchScene()
     {
-        if (_goToNextSceneID) //switch scene to next build index
+        if (_isSaving) RB_SaveManager.Instance.SaveToJson();
+
+        switch (_nextSceneSwitchType)
         {
-            if (_isSaving)
-            {
-                RB_SaveManager.Instance.SaveToJson();
-            }
-            RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
-        }
-        else
-        {
-            if (_nextSceneName != "")
-            {
-                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneName); //switch scene by name
-            }
-            else
-            {
+            case NEXTSCENETYPE.NextBuildIndex:
+                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, SceneManager.GetActiveScene().buildIndex + 1); //go to next scene ID
+                break;
+            case NEXTSCENETYPE.SceneName:
+                RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneName.ToString()); //switch scene by name
+                break;
+            case NEXTSCENETYPE.SceneID:
                 RB_SceneTransitionManager.Instance.NewTransition(FADETYPE.Rift, _nextSceneID); //switch scene by ID
-            }
+                break;
         }
     }
 

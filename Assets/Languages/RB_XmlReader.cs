@@ -7,14 +7,15 @@ public class RB_XmlReader : MonoBehaviour
 {
     public TextAsset Dictionary;
 
-    public string DefaultLanguage = "francais";
+    [Tooltip("Choisissez la langue par défaut dans la liste")]
+    public LANGUAGES DefaultLanguage = LANGUAGES.Francais;
     public string LanguageName;
     public int CurrentLanguage;
 
     public TMP_Dropdown SelectDropdown;
 
-    private List<Dictionary<string, string>> _languages = new();
     private Dictionary<string, string> _obj;
+    private List<Dictionary<string, string>> _languages = new();
 
     private TMP_Text[] _allTextElements;
     private string[] _originalKeys;
@@ -27,10 +28,32 @@ public class RB_XmlReader : MonoBehaviour
         
         _originalKeys = new string[_allTextElements.Length]; // Initialiser le tableau des clés originales
         StoreOriginalKeys(); // Stocke les clés originales
-        
-        _languages[CurrentLanguage].TryGetValue(DefaultLanguage, out LanguageName);
-        ValueChangeCheck();
+
+        LoadDefaultLanguage();
+        PopulateDropdown();
+
+        SelectDropdown.value = CurrentLanguage;
+
+
+        SelectDropdown.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
+
+    private void PopulateDropdown()
+    {
+        SelectDropdown.ClearOptions(); // Efface les options existantes
+        List<string> options = new();
+
+        foreach (var language in _languages)
+        {
+            if (language.TryGetValue("Name", out string langName))
+            {
+                options.Add(langName); // Ajoute le nom de la langue à la liste des options
+            }
+        }
+
+        SelectDropdown.AddOptions(options); // Ajoute les options au dropdown
+    }
+
 
     private void Reader()
     {
@@ -59,6 +82,30 @@ public class RB_XmlReader : MonoBehaviour
             _originalKeys[i] = _allTextElements[i].text; // Sauvegarde la clé originale
     }
 
+    private void LoadDefaultLanguage()
+    {
+        // Recherche la langue par défaut dans _languages
+
+
+        CurrentLanguage = (int)DefaultLanguage;
+
+        if (_languages.Count > CurrentLanguage)
+        {
+            _languages[CurrentLanguage].TryGetValue("Name", out LanguageName);
+        }
+
+        /*// sans l'enum
+
+        for (int i = 0; i < _languages.Count; i++)
+        {
+            if (_languages[i].TryGetValue("Name", out string language) && language.ToLower() == DefaultLanguage.ToLower())
+            {
+                CurrentLanguage = i; // Définit l'index de la langue par défaut
+                LanguageName = language; // Sauvegarde le nom de la langue
+                break;
+            }
+        }*/
+    }
     private void UpdateAllTexts()
     {
         for (int i = 0; i < _allTextElements.Length; i++)
@@ -69,10 +116,9 @@ public class RB_XmlReader : MonoBehaviour
     {
         if (_languages[CurrentLanguage].TryGetValue(originalKey, out string translateValue))
             tmpText.text = translateValue; // remplace par la valeur traduite
-        else
-            Debug.Log($"Key '{originalKey}' not found in the dictionary for the language {LanguageName}");
+        /*else
+            Debug.Log($"Key '{originalKey}' not found in the dictionary for the language {LanguageName}");*/
     }
-
 
     public void ValueChangeCheck()
     {

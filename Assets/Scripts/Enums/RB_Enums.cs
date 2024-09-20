@@ -118,7 +118,7 @@ public enum MIXERNAME
     Music
 }
 
-// BT
+// ~~~~~~~~~~ BT ~~~~~~~~~~
 
 public enum BTBOOLVALUES
 {
@@ -150,4 +150,13 @@ public enum REWINDENTITYTYPE
     All,
     AiOnly,
     PlayerOnly,
+}
+
+
+// ~~~~~~~~~~ languages ~~~~~~~~~~
+
+public enum LANGUAGES
+{
+    Francais,
+    English,
 }

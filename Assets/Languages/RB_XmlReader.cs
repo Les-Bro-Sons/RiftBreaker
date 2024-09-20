@@ -1,43 +1,35 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml;
 using TMPro;
+using UnityEngine;
 
 public class RB_XmlReader : MonoBehaviour
 {
     public TextAsset Dictionary;
 
+    public string DefaultLanguage = "francais";
     public string LanguageName;
     public int CurrentLanguage;
 
-    private string _bonjour;
-    private string _aurevoir;
-
-    // Variables specifique (affichage UI)
-    public TMP_Text TextBonjour;
-    public TMP_Text TextAurevoir;
     public TMP_Dropdown SelectDropdown;
 
     private List<Dictionary<string, string>> _languages = new();
     private Dictionary<string, string> _obj;
 
+    private TMP_Text[] _allTextElements;
+    private string[] _originalKeys;
+
+
     void Awake()
     {
         Reader();
+        _allTextElements = FindObjectsOfType<TMP_Text>();
         
-    }
-
-    void Update()
-    {
-        _languages[CurrentLanguage].TryGetValue("Name", out LanguageName);
-        _languages[CurrentLanguage].TryGetValue("bonjour", out _bonjour);
-        _languages[CurrentLanguage].TryGetValue("aurevoir", out _aurevoir);
-
-        TextBonjour.text = _bonjour;
-        TextAurevoir.text = _aurevoir;
+        _originalKeys = new string[_allTextElements.Length]; // Initialiser le tableau des clés originales
+        StoreOriginalKeys(); // Stocke les clés originales
+        
+        _languages[CurrentLanguage].TryGetValue(DefaultLanguage, out LanguageName);
+        ValueChangeCheck();
     }
 
     private void Reader()
@@ -60,8 +52,33 @@ public class RB_XmlReader : MonoBehaviour
         }
     }
 
+    private void StoreOriginalKeys()
+    {
+        // Stocke les clés originales à partir du texte initial dans chaque TMP_Text
+        for (int i = 0; i < _allTextElements.Length; i++)
+            _originalKeys[i] = _allTextElements[i].text; // Sauvegarde la clé originale
+    }
+
+    private void UpdateAllTexts()
+    {
+        for (int i = 0; i < _allTextElements.Length; i++)
+            UpdateText(_allTextElements[i], _originalKeys[i]);
+    }
+
+    private void UpdateText(TMP_Text tmpText, string originalKey)
+    {
+        if (_languages[CurrentLanguage].TryGetValue(originalKey, out string translateValue))
+            tmpText.text = translateValue; // remplace par la valeur traduite
+        else
+            Debug.Log($"Key '{originalKey}' not found in the dictionary for the language {LanguageName}");
+    }
+
+
     public void ValueChangeCheck()
     {
         CurrentLanguage = SelectDropdown.value;
+        //_languages[CurrentLanguage].TryGetValue("Name", out LanguageName);
+
+        UpdateAllTexts();
     }
 }

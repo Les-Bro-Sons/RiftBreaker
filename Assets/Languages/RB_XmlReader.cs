@@ -33,8 +33,8 @@ public class RB_XmlReader : MonoBehaviour
         PopulateDropdown();
 
         SelectDropdown.value = CurrentLanguage;
-
-
+        UpdateAllTexts();
+        
         SelectDropdown.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 

@@ -872,6 +872,9 @@ public class RB_AI_BTTree : RB_BTTree
     #region BT Tools
     public bool AddDistraction(RB_Distraction distraction, bool removeDistractionOfSameType = false)
     {
+        if (AiHealth.Dead || GetBool(BTBOOLVALUES.IsTargetInSight)) return false;
+
+        
         if (!Distractions.Contains(distraction) && !AlreadySeenDistractions.Contains(distraction))
         {
             if (removeDistractionOfSameType)
